@@ -68,14 +68,14 @@ class Noah
      *
      * @var string
      */
-    private $_app_name;
+    private $_root_space_name;
 
     /**
      * 应用根目录
      *
      * @var string
      */
-    private $_assembly_dir;
+    private $_root_space_dir;
 
     /**
      * 控制器根目录
@@ -140,32 +140,41 @@ class Noah
     /**
      * 配置文件缓存目录
      *
-     * @param $path
-     * @param bool $caching
-     * @param null $cache_path
+     * @param string $path
      * @return $this
      */
-    function setProfile($path, $caching = false, $cache_path = null)
+    function setProfile($path)
     {
         $this->_profile_path = $path;
-        $this->_profile_caching = $caching;
-        $this->_profile_cachingdir = $cache_path;
         return $this;
     }
 
     /**
-     * 设置APP
+     * 缓存配置数据
      *
-     * @param string $app_name
-     * @param string $assembly_dir
+     * @param null $save_path
      * @return $this
      */
-    function setApp($app_name, $assembly_dir)
+    function cacheProfileTo($save_path = null)
     {
-        $this->_app_name = ucfirst($app_name);
-        $this->_assembly_dir = $assembly_dir;
-        $this->_controller_dir = $this->_assembly_dir. DIRECTORY_SEPARATOR. 'Controller';
-        Loader::setNameSpace($this->_app_name, $this->_assembly_dir);
+        $this->_profile_caching = true;
+        $this->_profile_cachingdir = $save_path;
+        return $this;
+    }
+
+    /**
+     * 设置APP根命名空间及其基本路径
+     *
+     * @param string $space_name
+     * @param string $space_dir
+     * @return $this
+     */
+    function setRootSpace($space_name, $space_dir)
+    {
+        $this->_root_space_name = ucfirst($space_name);
+        $this->_root_space_dir = $space_dir;
+        $this->_controller_dir = $this->_root_space_dir. DIRECTORY_SEPARATOR. 'Controller';
+        Loader::setNameSpace($this->_root_space_name, $this->_root_space_dir);
         return $this;
     }
 
@@ -186,9 +195,9 @@ class Noah
      *
      * @return string
      */
-    function getAppName()
+    function getRootSpace()
     {
-        return $this->_app_name;
+        return $this->_root_space_name;
     }
 
     /**
@@ -196,9 +205,9 @@ class Noah
      *
      * @return string
      */
-    function getAssemblyDir()
+    function getRootSpaceDir()
     {
-        return $this->_assembly_dir;
+        return $this->_root_space_dir;
     }
 
     /**
@@ -226,6 +235,74 @@ class Noah
     }
 
     /**
+     * 获取配置信息
+     *
+     * @return array|mixed
+     * @throws RuntimeException
+     */
+    function getProfile()
+    {
+        //获取配置文件目录
+        $profile_path = '';
+        //如果配置文件目录是匿名函数
+        if ($this->_profile_path && $this->_profile_path instanceof Closure) {
+            $getter = $this->_profile_path;
+            $result = $getter();
+            if (is_string($result) && is_dir($result)) {
+                $profile_path = $result;
+            }
+        } elseif ($this->_profile_path && is_dir($this->_profile_path)) {
+            $profile_path = $this->_profile_path;
+        }
+        if (!$profile_path) {
+            throw new RuntimeException($this->language->get('core.invalid_config_dir'));
+        }
+        //如果配置文件允许缓存
+        $config = array();
+        if ($this->_profile_caching) {
+            //默认配置文件缓存目录为WEB根目录
+            $profile_cachingdir = PATH_APP;
+            //重新获取配置文件目录
+            if ($this->_profile_cachingdir && $this->_profile_cachingdir instanceof Closure) {
+                $getter = $this->_profile_cachingdir;
+                $result = $getter();
+                if (is_string($result) && is_dir($result)) {
+                    $profile_cachingdir = $result;
+                }
+            } elseif ($this->_profile_cachingdir && is_dir($this->_profile_cachingdir)) {
+                $profile_cachingdir = $this->_profile_cachingdir;
+            }
+            //取配置文件
+            $cache = new FileCache($profile_cachingdir, array('allow_format' => false));
+            //取不到缓存则重获取并重新缓存之
+            if (!$config = $cache->get(basename($profile_path))) {
+                $config_files = glob($profile_path . '/*.php');
+                foreach ($config_files as $file) {
+                    $result = include($file);
+                    $key = strtolower(basename($file));
+                    $key = preg_replace('/\.php$/', '', $key);
+                    if ($result) {
+                        $config[$key] = $result;
+                    }
+                }
+                $cache->set(basename($profile_path), $config, 8640000);
+            }
+            unset($cache);
+        } else {
+            $config_files = glob($profile_path . '/*.php');
+            foreach ($config_files as $file) {
+                $result = include($file);
+                $key = strtolower(basename($file));
+                $key = preg_replace('/\.php$/', '', $key);
+                if ($result) {
+                    $config[$key] = $result;
+                }
+            }
+        }
+        return $config;
+    }
+
+    /**
      * 启动框架
      *
      * @access public
@@ -243,63 +320,13 @@ class Noah
         //后续类文件自动加载
         Loader::addAutoLoader(array('\\Ark\\Core\\Loader', 'autoLoad'));
         //初始化CLI模式
-        if (Server::isCli()) {
-            Server::initCli();
-        }
+        Server::isCli() && Server::initCli();
         //检测必要应用配置
-        if (!$this->_app_name || !$this->_assembly_dir) {
+        if (!$this->_root_space_name || !$this->_root_space_dir) {
             throw new RuntimeException($this->language->get('core.invalid_app_property'));
-        } elseif (strpos($this->_controller_dir, $this->_assembly_dir) === false) {
+        } elseif (strpos($this->_controller_dir, $this->_root_space_dir) === false) {
             throw new RuntimeException($this->language->get('core.invalid_assembly_dir'));
-        }
-        //获取配置
-        $profile_path = '';
-        //配置文件目录
-        if ($this->_profile_path && $this->_profile_path instanceof Closure) {
-            $getter = $this->_profile_path;
-            $result = $getter();
-            if (is_string($result) && is_dir($result)) {
-                $profile_path = $result;
-            }
-        } elseif ($this->_profile_path && is_dir($this->_profile_path)) {
-            $profile_path = $this->_profile_path;
-        }
-        if (!$profile_path) {
-            throw new RuntimeException($this->language->get('core.invalid_config_dir'));
-        }
-        //配置文件缓存目录
-        $profile_cachingdir = PATH_APP;
-        if ($this->_profile_cachingdir && $this->_profile_cachingdir instanceof Closure) {
-            $getter = $this->_profile_cachingdir;
-            $result = $getter();
-            if (is_string($result) && is_dir($result)) {
-                $profile_cachingdir = $result;
-            }
-        } elseif ($this->_profile_cachingdir && is_dir($this->_profile_cachingdir)) {
-            $profile_cachingdir = $this->_profile_cachingdir;
-        }
-        //取配置文件
-        $cache = new FileCache($profile_cachingdir, array('allow_format'=> false));
-        $config = array();
-        if ($this->_profile_caching) {
-            $config = $cache->get(basename($profile_path));
-        }
-        if (!$config) {
-            $config_files = glob($profile_path . '/*.php');
-            foreach ($config_files as $file) {
-                $result = include($file);
-                $key = strtolower(basename($file));
-                $key = preg_replace('/\.php$/', '', $key);
-                if ($result) {
-                    $config[$key] = $result;
-                }
-            }
-            if ($this->_profile_caching) {
-                $cache->set(basename($profile_path), $config, 8640000);
-            }
-        }
-        unset($cache);
-        if (!$config) {
+        } elseif (!$config = $this->getProfile()) {
             throw new RuntimeException($this->language->get('core.invalid_configuration'));
         }
         $this->_config = new Container($config);

@@ -9,7 +9,7 @@ use Ark\Core\Loader;
 
 //实例化框架
 Noah::getInstance()
-    ->setApp('App', Loader::realPath('./assembly'))
+    ->setRootSpace('App', Loader::realPath('./assembly'))
     ->addPrepare(function() {
         Noah::getInstance()->router
             ->addRouter('/index/index/honghu/\w+/?', '/index/index/name/honghu/age/123');

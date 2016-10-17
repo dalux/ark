@@ -9,6 +9,6 @@ use Ark\Core\Loader;
 
 //实例化框架
 Noah::getInstance()
-    ->setApp('App', Loader::realPath('./assembly'))
+    ->setRootSpace('App', Loader::realPath('./assembly'))
     ->setControllerDir(Loader::realPath('./assembly/Controller/Admin'))
     ->run();

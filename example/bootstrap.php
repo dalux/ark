@@ -23,7 +23,8 @@ Noah::getInstance()
             return $dir;
         }
         return $path. '/localhost';
-    }, false)
+    })
+    ->cacheProfileTo(Loader::realPath('./runtime'))
     ->addPrepare(function() {
 
         EventAdapter::addListener('event.query.before', function($data) {
