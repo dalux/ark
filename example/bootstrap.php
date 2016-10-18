@@ -14,7 +14,7 @@ use Ark\Com\Cache\Adapter as CacheAdapter;
 
 //实例化框架
 Noah::getInstance()
-    ->setProfile(function() {
+    ->setConfigDir(function() {
         $path = Loader::realPath('./profile');
         $host = Server::getDomain();
         $full = Server::getDomain(false);
@@ -24,7 +24,7 @@ Noah::getInstance()
         }
         return $path. '/localhost';
     })
-    ->cacheProfileTo(Loader::realPath('./runtime'))
+    ->cacheConfigTo(Loader::realPath('./runtime'))
     ->addPrepare(function() {
 
         EventAdapter::addListener('event.query.before', function($data) {

@@ -40,21 +40,21 @@ class Noah
      *
      * @var Closure
      */
-    private $_profile_path;
+    private $_config_dir;
 
     /**
      * 是否缓存配置项
      *
      * @var bool
      */
-    private $_profile_caching = false;
+    private $_config_caching = false;
 
     /**
      * 配置项缓存目录
      *
      * @var string
      */
-    private $_profile_cachingdir = '';
+    private $_config_cache_dir = '';
 
     /**
      * 预处理逻辑
@@ -143,9 +143,9 @@ class Noah
      * @param string $path
      * @return $this
      */
-    function setProfile($path)
+    function setConfigDir($path)
     {
-        $this->_profile_path = $path;
+        $this->_config_dir = $path;
         return $this;
     }
 
@@ -155,10 +155,10 @@ class Noah
      * @param null $save_path
      * @return $this
      */
-    function cacheProfileTo($save_path = null)
+    function cacheConfigTo($save_path = null)
     {
-        $this->_profile_caching = true;
-        $this->_profile_cachingdir = $save_path;
+        $this->_config_caching = true;
+        $this->_config_cache_dir = $save_path;
         return $this;
     }
 
@@ -240,43 +240,43 @@ class Noah
      * @return array|mixed
      * @throws RuntimeException
      */
-    function getProfile()
+    function getConfig()
     {
         //获取配置文件目录
-        $profile_path = '';
+        $config_path = '';
         //如果配置文件目录是匿名函数
-        if ($this->_profile_path && $this->_profile_path instanceof Closure) {
-            $getter = $this->_profile_path;
+        if ($this->_config_dir && $this->_config_dir instanceof Closure) {
+            $getter = $this->_config_dir;
             $result = $getter();
             if (is_string($result) && is_dir($result)) {
-                $profile_path = $result;
+                $config_path = $result;
             }
-        } elseif ($this->_profile_path && is_dir($this->_profile_path)) {
-            $profile_path = $this->_profile_path;
+        } elseif ($this->_config_dir && is_dir($this->_config_dir)) {
+            $config_path = $this->_config_dir;
         }
-        if (!$profile_path) {
+        if (!$config_path) {
             throw new RuntimeException($this->language->get('core.invalid_config_dir'));
         }
         //如果配置文件允许缓存
         $config = array();
-        if ($this->_profile_caching) {
+        if ($this->_config_caching) {
             //默认配置文件缓存目录为WEB根目录
-            $profile_cachingdir = PATH_APP;
+            $config_cache_dir = PATH_APP;
             //重新获取配置文件目录
-            if ($this->_profile_cachingdir && $this->_profile_cachingdir instanceof Closure) {
-                $getter = $this->_profile_cachingdir;
+            if ($this->_config_cache_dir && $this->_config_cache_dir instanceof Closure) {
+                $getter = $this->_config_cache_dir;
                 $result = $getter();
                 if (is_string($result) && is_dir($result)) {
-                    $profile_cachingdir = $result;
+                    $config_cache_dir = $result;
                 }
-            } elseif ($this->_profile_cachingdir && is_dir($this->_profile_cachingdir)) {
-                $profile_cachingdir = $this->_profile_cachingdir;
+            } elseif ($this->_config_cache_dir && is_dir($this->_config_cache_dir)) {
+                $config_cache_dir = $this->_config_cache_dir;
             }
             //取配置文件
-            $cache = new FileCache($profile_cachingdir, array('allow_format' => false));
+            $cache = new FileCache($config_cache_dir, array('allow_format' => false));
             //取不到缓存则重获取并重新缓存之
-            if (!$config = $cache->get(basename($profile_path))) {
-                $config_files = glob($profile_path . '/*.php');
+            if (!$config = $cache->get(basename($config_path))) {
+                $config_files = glob($config_path . '/*.php');
                 foreach ($config_files as $file) {
                     $result = include($file);
                     $key = strtolower(basename($file));
@@ -285,11 +285,11 @@ class Noah
                         $config[$key] = $result;
                     }
                 }
-                $cache->set(basename($profile_path), $config, 8640000);
+                $cache->set(basename($config_path), $config, 8640000);
             }
             unset($cache);
         } else {
-            $config_files = glob($profile_path . '/*.php');
+            $config_files = glob($config_path . '/*.php');
             foreach ($config_files as $file) {
                 $result = include($file);
                 $key = strtolower(basename($file));
@@ -326,7 +326,7 @@ class Noah
             throw new RuntimeException($this->language->get('core.invalid_app_property'));
         } elseif (strpos($this->_controller_dir, $this->_root_space_dir) === false) {
             throw new RuntimeException($this->language->get('core.invalid_assembly_dir'));
-        } elseif (!$config = $this->getProfile()) {
+        } elseif (!$config = $this->getConfig()) {
             throw new RuntimeException($this->language->get('core.invalid_configuration'));
         }
         $this->_config = new Container($config);
