@@ -353,28 +353,20 @@ class Noah
             ->set('router', function() { return RouterAdapter::getDriver(); })
             ->set('session', function() { return SessionAdapter::getDriver(); });
 
-        //注册框架内置事件
-        EventAdapter::addListener('event.ark.startup', function($data) {
-            //开启debug模式
-            if ($tracker = Noah::getInstance()->config->global->tracker) {
-                list($name, $pass) = array($tracker->name, $tracker->pass);
-                $token = Noah::getInstance()->request->cookie($name);
-                if ($token == $pass && !Server::isCli()) {
-                    Noah::getInstance()->config->global->debug = true;
-                }
+        //外部组件加载
+        $list_addons = glob($this->config->global->addon. '/*/register.php');
+        $prepares = array();
+        foreach ($list_addons as $item) {
+            $result = include($item);
+            if ($result instanceof Closure) {
+                $prepares[] = $result;
             }
-            //Debug内容
-            $debug = new Debug();
-            return $debug->handle($data);
-        });
+        }
 
-        //框架结束事件
-        EventAdapter::addListener('event.ark.shutdown', function($data) {
-            $debug = new Debug();
-            return $debug->handle($data);
-        });
+        //合并预处理程序
+        $this->_prepare = array_merge($prepares, $this->_prepare);
 
-        //预处理
+        //执行各个预处理
         if ($this->_prepare) {
             foreach ($this->_prepare as $val) {
                 $val();
@@ -503,6 +495,11 @@ class Noah
      */
     function __destruct()
     {
+        //结束时间点
+        Timer::mark('sys_shutdown');
+        //内存占用
+        Trace::set('memory', memory_get_usage());
+        //结束事件
         EventAdapter::onListening('event.ark.shutdown');
     }
 

@@ -11,9 +11,6 @@ return array(
     'show_error'=> true,
     //错误报告级别
     'error_reporting'=> E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED,
-    //通过cookie启用debug模式
-    'tracker'=> array(
-        'name'=> 'test',
-        'pass'=> '12345678'
-    ),
+    //附加组件目录
+    'addon'=> \Ark\Core\Loader::realPath('./addon'),
 );

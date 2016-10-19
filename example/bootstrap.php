@@ -21,7 +21,7 @@ Noah::getInstance()
     ->setAssembly('App', Loader::realPath('./assembly'))
     //设置配置文件夹路径
     ->setConfigDir(function() {
-        $path = Loader::realPath('./profile');
+        $path = Loader::realPath('./config');
         $host = Server::getDomain();
         $full = Server::getDomain(false);
         if (is_dir($dir = $path. '/'. $full)
@@ -31,7 +31,7 @@ Noah::getInstance()
         return $path. '/localhost';
     })
     //将配置文件解析结果缓存起来
-    ->cacheConfigTo(Loader::realPath('./runtime'))
+    //->cacheConfigTo(Loader::realPath('./runtime'))
     //框架启动前的预处理逻辑,可以于此添加一些全局性事务
     ->addPrepare(function() {
 
