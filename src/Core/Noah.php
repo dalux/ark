@@ -68,14 +68,14 @@ class Noah
      *
      * @var string
      */
-    private $_root_space_name;
+    private $_assembly_name;
 
     /**
      * 应用根目录
      *
      * @var string
      */
-    private $_root_space_dir;
+    private $_assembly_dir;
 
     /**
      * 控制器根目录
@@ -163,19 +163,39 @@ class Noah
     }
 
     /**
-     * 设置APP根命名空间及其基本路径
+     * 设置应用程序集根命名空间及其基本路径
      *
-     * @param string $space_name
-     * @param string $space_dir
+     * @param string $name
+     * @param string $path
      * @return $this
      */
-    function setRootSpace($space_name, $space_dir)
+    function setAssembly($name, $path)
     {
-        $this->_root_space_name = ucfirst($space_name);
-        $this->_root_space_dir = $space_dir;
-        $this->_controller_dir = $this->_root_space_dir. DIRECTORY_SEPARATOR. 'Controller';
-        Loader::setNameSpace($this->_root_space_name, $this->_root_space_dir);
+        $this->_assembly_name = ucfirst($name);
+        $this->_assembly_dir = $path;
+        $this->_controller_dir = $this->_assembly_dir. DIRECTORY_SEPARATOR. 'Controller';
+        Loader::setNameSpace($this->_assembly_name, $this->_assembly_dir);
         return $this;
+    }
+
+    /**
+     * 获取App名称
+     *
+     * @return string
+     */
+    function getAssemblyName()
+    {
+        return $this->_assembly_name;
+    }
+
+    /**
+     * 获取应用根目录地址
+     *
+     * @return string
+     */
+    function getAssemblyDir()
+    {
+        return $this->_assembly_dir;
     }
 
     /**
@@ -188,26 +208,6 @@ class Noah
     {
         $this->_controller_dir = $controller_dir;
         return $this;
-    }
-
-    /**
-     * 获取App名称
-     *
-     * @return string
-     */
-    function getRootSpace()
-    {
-        return $this->_root_space_name;
-    }
-
-    /**
-     * 获取应用根目录地址
-     *
-     * @return string
-     */
-    function getRootSpaceDir()
-    {
-        return $this->_root_space_dir;
     }
 
     /**
@@ -322,9 +322,9 @@ class Noah
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
-        if (!$this->_root_space_name || !$this->_root_space_dir) {
+        if (!$this->_assembly_name || !$this->_assembly_dir) {
             throw new RuntimeException($this->language->get('core.invalid_app_property'));
-        } elseif (strpos($this->_controller_dir, $this->_root_space_dir) === false) {
+        } elseif (strpos($this->_controller_dir, $this->_assembly_dir) === false) {
             throw new RuntimeException($this->language->get('core.invalid_assembly_dir'));
         } elseif (!$config = $this->getConfig()) {
             throw new RuntimeException($this->language->get('core.invalid_configuration'));
