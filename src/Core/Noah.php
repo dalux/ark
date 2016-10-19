@@ -166,13 +166,13 @@ class Noah
      * 设置应用程序集根命名空间及其基本路径
      *
      * @param string $name
-     * @param string $path
+     * @param string $dir
      * @return $this
      */
-    function setAssembly($name, $path)
+    function setAssembly($name, $dir)
     {
         $this->_assembly_name = ucfirst($name);
-        $this->_assembly_dir = $path;
+        $this->_assembly_dir = $dir;
         $this->_controller_dir = $this->_assembly_dir. DIRECTORY_SEPARATOR. 'Controller';
         Loader::setNameSpace($this->_assembly_name, $this->_assembly_dir);
         return $this;
