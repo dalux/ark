@@ -354,17 +354,20 @@ class Noah
             ->set('session', function() { return SessionAdapter::getDriver(); });
 
         //外部组件加载
-        $list_addons = glob($this->config->global->addon. '/*/register.php');
-        $prepares = array();
-        foreach ($list_addons as $item) {
-            $result = include($item);
-            if ($result instanceof Closure) {
-                $prepares[] = $result;
+        $addon_dir = $this->config->global->addon;
+        if (is_dir($addon_dir)) {
+            $list_addons = glob($addon_dir. '/*/register.php');
+            $prepares = array();
+            foreach ($list_addons as $item) {
+                $result = include($item);
+                if ($result instanceof Closure) {
+                    $prepares[] = $result;
+                }
             }
-        }
 
-        //合并预处理程序
-        $this->_prepare = array_merge($prepares, $this->_prepare);
+            //合并为预处理程序
+            $this->_prepare = array_merge($prepares, $this->_prepare);
+        }
 
         //执行各个预处理
         if ($this->_prepare) {
