@@ -356,7 +356,12 @@ class Noah
         //外部组件加载
         $addon_dir = $this->config->global->addon;
         if (is_dir($addon_dir)) {
-            $list_addons = glob($addon_dir. '/*/register.php');
+            if (is_file($custom_register = $addon_dir. '/register.php')) {
+                $list_addons = include($custom_register);
+                is_array($list_addons) || $list_addons = array();
+            } else {
+                $list_addons = glob($addon_dir . '/*/register.php');
+            }
             $prepares = array();
             foreach ($list_addons as $item) {
                 $result = include($item);
