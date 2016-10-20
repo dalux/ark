@@ -11,7 +11,7 @@ use Ark\Contract\CacheProxy;
 use Ark\Com\Cache\Proxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\DatabaseDriver;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Oci implements DatabaseDriver, CacheProxy
 {

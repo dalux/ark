@@ -13,11 +13,11 @@ use Ark\Toolbox\SQLBuilder\Select;
 use Ark\Toolbox\SQLBuilder\Update;
 use Ark\Toolbox\SQLBuilder\Insert;
 use Ark\Toolbox\SQLBuilder\Delete;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Pdo extends \PDO implements DatabaseDriver, CacheProxy
 {
-    
+
     /**
     * 数据库取值方式
     *
@@ -25,10 +25,10 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
     * @var string
     */
     protected $_fetch_mode = \PDO::FETCH_ASSOC;
-    
+
     /**
      * SQL语句执行后影响到的行数
-     * 
+     *
      * @access protected
      * @var integer
      */
@@ -80,7 +80,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param array $options
      * @throws PdoException
      */
-	function __construct($dsn = null, $user = null, $pass = null, array $options = array()) 
+	function __construct($dsn = null, $user = null, $pass = null, array $options = array())
 	{
 		try {
             Timer::mark('db_connect_begin');
@@ -99,7 +99,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @return \PDOStatement
      * @throws PdoException
      */
-    protected function _query($sql, $bind = array()) 
+    protected function _query($sql, $bind = array())
     {
         try {
             Timer::mark('db_query_begin');
@@ -161,7 +161,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @return mixed
      * @throws PdoException
      */
-    function fetchAll($sql, array $bind = array()) 
+    function fetchAll($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -209,7 +209,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @return mixed
      * @throws PdoException
      */
-    function fetch($sql, array $bind = array()) 
+    function fetch($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -236,7 +236,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
 
     /**
      * 返回上一次插入的数据ID
-     * 
+     *
      * @access public
      * @param string $seq
      * @return integer
@@ -245,7 +245,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
     {
         return parent::lastInsertId($seq);
     }
-	
+
 	/**
 	 * 返回受影响的行数
 	 *

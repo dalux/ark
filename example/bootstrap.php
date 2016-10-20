@@ -7,8 +7,8 @@ require_once __DIR__. '/../src/Core/Noah.php';
 use Ark\Core\Noah;
 use Ark\Core\Loader;
 use Ark\Com\Http\Server;
-use Ark\Event\Adapter as EventAdapter;
-use Ark\Event\RuntimeException;
+use Ark\Com\Event\Adapter as EventAdapter;
+use Ark\Com\Event\RuntimeException;
 use Ark\Com\Database\Adapter as DbAdapter;
 use Ark\Com\Cache\Adapter as CacheAdapter;
 

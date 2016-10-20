@@ -2,7 +2,7 @@
 
 use Ark\Core\Noah;
 use Ark\Com\Http\Server;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 return function() {
 

@@ -3,32 +3,32 @@
 namespace Ark\Com\Http;
 
 use Ark\Toolbox\Struct;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Request
 {
 
     /**
      * GET类型
-     * 
+     *
      * @var int
      */
     const FLAG_GET = 1;
-    
+
     /**
      * POST类型
-     * 
+     *
      * @var int
      */
     const FLAG_POST = 2;
-    
+
     /**
      * FILE类型
-     * 
+     *
      * @var int
      */
     const FLAG_FILE = 3;
-    
+
     /**
      * 请求对象实例
      *
@@ -38,31 +38,31 @@ class Request
 
 	/**
 	 * 所有请求数据
-	 * 
+	 *
 	 * @access private
 	 * @var array
 	 */
 	private $_request = array();
-	
+
 	/**
 	 * get请求数据
-	 * 
+	 *
 	 * @access private
 	 * @var array
 	 */
 	private $_get = array();
-	
+
 	/**
 	 * post请求数据
-	 * 
+	 *
 	 * @access private
 	 * @var array
 	 */
 	private $_post = array();
-	
+
     /**
      * 文件上传数据
-     * 
+     *
      * @access private
      * @var array
      */
@@ -115,7 +115,7 @@ class Request
         }
         return $ispost;
 	}
-    
+
     /**
      * 当前请求是否ajax请求
      *
@@ -230,10 +230,10 @@ class Request
         $value = $this->_files[$name];
         return is_null($value) ? $default : $value;
     }
-    
+
     /**
      * 新增请求数据
-     * 
+     *
      * @param string $name
      * @param mixed $value
      * @param int $flag

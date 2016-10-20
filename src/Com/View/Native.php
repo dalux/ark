@@ -7,7 +7,7 @@ use Ark\Core\Noah;
 use Ark\Core\Sailor;
 use Ark\Toolbox\Struct;
 use Ark\Contract\ViewDriver;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Native extends Sailor implements ViewDriver
 {

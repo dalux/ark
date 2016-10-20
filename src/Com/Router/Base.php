@@ -5,7 +5,7 @@ namespace  Ark\Com\Router;
 use Ark\Core\Noah;
 use Ark\Toolbox\Struct;
 use Ark\Contract\RouterDriver;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Base implements RouterDriver
 {

@@ -2,7 +2,7 @@
 
 use Ark\Core\Noah;
 use Ark\Com\Http\Server;
-use Ark\Event\Adapter as EventAdapter;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 return function() {
 
@@ -25,14 +25,14 @@ return function() {
             }
         }
         //Debug内容
-        $debug = new Tracker();
-        return $debug->handle($data);
+        $tracker = new Tracker();
+        return $tracker->handle($data);
     });
 
     //框架结束事件
     EventAdapter::addListener('event.ark.shutdown', function($data) {
-        $debug = new Tracker();
-        return $debug->handle($data);
+        $tracker = new Tracker();
+        return $tracker->handle($data);
     });
 
 };
