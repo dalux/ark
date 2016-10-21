@@ -7,6 +7,7 @@ use Ark\Toolbox\Struct;
 use Ark\Com\Http\Server;
 use Ark\Com\Http\Request;
 use Ark\Com\Http\Response;
+use Ark\Toolbox\Spanner;
 use Ark\Com\Cache\Driver\File as FileCache;
 use Ark\Com\Event\Adapter as EventAdapter;
 use Ark\Com\View\Adapter as ViewAdapter;
@@ -116,6 +117,7 @@ class Noah
         require_once __DIR__. '/RuntimeException.php';
         require_once __DIR__. '/Trace.php';
         require_once __DIR__. '/Loader.php';
+        require_once __DIR__. '/../Toolbox/Spanner.php';
         require_once __DIR__. '/../Com/Http/Request.php';
         //初始化内存占用
         $memory_usage = memory_get_usage();
@@ -308,7 +310,7 @@ class Noah
      * @return Noah
      * @throws RuntimeException
      */
-    function run()
+    function run($init = false)
     {
         //注册框架类库地址
         Loader::setNameSpace('Ark', PATH_LIB);
@@ -318,6 +320,10 @@ class Noah
         Exception::setHandler();
         //后续类文件自动加载
         Loader::addAutoLoader(array('\\Ark\\Core\\Loader', 'autoLoad'));
+        //初始化
+        if ($init) {
+            $this->_init();
+        }
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
@@ -508,6 +514,37 @@ class Noah
         Trace::set('memory', memory_get_usage());
         //结束事件
         EventAdapter::onListening('event.ark.shutdown');
+    }
+
+    /**
+     * 初始化应用程序目录
+     *
+     * @return Noah
+     */
+    private function _init()
+    {
+        if (is_file(Loader::realPath('./inited'))) {
+            trigger_error('应用程序目录初始化完成，请关闭初始化参数', E_USER_NOTICE);
+        }
+        $tasks = array(
+            array('from'=> Loader::realPath('*/Config'), 'to'=> Loader::realPath('./Config')),
+            array('from'=> Loader::realPath('*/Plugin'), 'to'=> Loader::realPath('./Plugin')),
+            Loader::realPath('./Controller'),
+            Loader::realPath('./Helper'),
+            Loader::realPath('./Model'),
+            Loader::realPath('./View'),
+            Loader::realPath('./Vendor'),
+            Loader::realPath('./Toolbox'),
+        );
+        foreach ($tasks as $task) {
+            if (is_array($task) && !is_dir($task['to'])) {
+                Spanner::copyDir($task['from'], $task['to']);
+            } elseif (is_string($task) && !is_dir($task)) {
+                Spanner::mkDir($task);
+            }
+        }
+        file_put_contents(Loader::realPath('./inited'), 'delete me.');
+        return $this;
     }
 
 }

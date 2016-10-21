@@ -148,6 +148,28 @@ class Spanner
     }
 
     /**
+     * 递归拷贝目录
+     *
+     * @param $src
+     * @param $dst
+     */
+    static function copyDir($src, $dst)
+    {
+        $handle = opendir($src);
+        self::mkDir($dst);
+        while (false !== ($file = readdir($handle))) {
+            if (($file != '.') && ($file != '..')) {
+                if (is_dir($src. DIRECTORY_SEPARATOR. $file)) {
+                    self::copyDir($src. DIRECTORY_SEPARATOR. $file, $dst. DIRECTORY_SEPARATOR. $file);
+                } else {
+                    copy($src. DIRECTORY_SEPARATOR. $file, $dst. DIRECTORY_SEPARATOR. $file);
+                }
+            }
+        }
+        closedir($handle);
+    }
+
+    /**
      * 转换编码
      *
      * @access public
