@@ -71,13 +71,6 @@ class Noah
     private $_app_name;
 
     /**
-     * 应用根目录
-     *
-     * @var string
-     */
-    private $_app_dir;
-
-    /**
      * 控制器根目录
      *
      * @var string
@@ -169,12 +162,9 @@ class Noah
      * @param string $name
      * @return $this
      */
-    function setApp($name)
+    function setAppName($name)
     {
         $this->_app_name = ucfirst($name);
-        $this->_app_dir = PATH_APP;
-        $this->_controller_dir = $this->_app_dir. DIRECTORY_SEPARATOR. 'Controller';
-        Loader::setNameSpace($this->_app_name, $this->_app_dir);
         return $this;
     }
 
@@ -195,7 +185,7 @@ class Noah
      */
     function getAppDir()
     {
-        return $this->_app_dir;
+        return PATH_APP;
     }
 
     /**
@@ -312,7 +302,7 @@ class Noah
      */
     function run($init = false)
     {
-        //注册框架类库地址
+        //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
         $this->set('language', function() { return new Language(); });
@@ -327,14 +317,22 @@ class Noah
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
-        if (!$this->_app_name || !$this->_app_dir) {
+        if (!$this->_app_name) {
             throw new RuntimeException($this->language->get('core.invalid_app_property'));
-        } elseif (strpos($this->_controller_dir, $this->_app_dir) === false) {
-            throw new RuntimeException($this->language->get('core.invalid_controller_dir'));
-        } elseif (!$config = $this->getConfig()) {
+        }
+        //注册应用程序基地址
+        Loader::setNameSpace($this->_app_name, PATH_APP);
+        //配置文件
+        if (!$config = $this->getConfig()) {
             throw new RuntimeException($this->language->get('core.invalid_configuration'));
         }
         $this->_config = new Container($config);
+        //控制器地址检测
+        if (!$this->_controller_dir) {
+            $this->_controller_dir = PATH_APP . DIRECTORY_SEPARATOR . 'Controller';
+        } elseif (strpos($this->_controller_dir, PATH_APP) === false) {
+            throw new RuntimeException($this->language->get('core.invalid_controller_dir'));
+        }
         //时区设置
         $timezone = 'Asia/Shanghai';
         if ($this->_config->global->timezone) {
