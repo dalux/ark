@@ -10,5 +10,5 @@ use Ark\Core\Loader;
 //以便跟其他域的目录分开
 
 Noah::getInstance()
-    ->setControllerDir(Loader::realPath('./assembly/Controller/Admin'))
+    ->setControllerDir(Loader::realPath('./Controller/Admin'))
     ->run();

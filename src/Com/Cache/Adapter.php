@@ -3,8 +3,8 @@
 namespace Ark\Com\Cache;
 
 use Ark\Core\Noah;
-use Ark\Contract\CacheDriver;
 use Ark\Core\Trace;
+use Ark\Contract\CacheDriver;
 
 class Adapter
 {
@@ -29,7 +29,7 @@ class Adapter
             $driver = $config['driver'];
             $save_path = $config['save_path'];
             $option = $config['option'];
-            $class_name = sprintf('\\Ark\\Com\\Cache\\'. ucfirst($driver));
+            $class_name = sprintf('\\Ark\\Com\\Cache\\Driver\\'. ucfirst($driver));
             if (!class_exists($class_name)) {
                 throw new RuntimeException(sprintf(Noah::getInstance()->language->get('cache.driver_not_found'), $class_name));
             }

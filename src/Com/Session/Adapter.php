@@ -24,7 +24,7 @@ class Adapter
         $name = sprintf('__base_session_%s__', $driver);
         $instance = Noah::getInstance()->container->$name;
         if (!$instance || !$instance instanceof SessionDriver) {
-            $class_name = sprintf('\\Ark\\Com\\Session\\'. ucfirst($driver));
+            $class_name = sprintf('\\Ark\\Com\\Session\\Driver\\'. ucfirst($driver));
             if (!class_exists($class_name)) {
                 throw new RuntimeException(sprintf(Noah::getInstance()->language->get('sess.driver_not_found'), $class_name));
             }

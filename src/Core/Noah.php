@@ -7,8 +7,7 @@ use Ark\Toolbox\Struct;
 use Ark\Com\Http\Server;
 use Ark\Com\Http\Request;
 use Ark\Com\Http\Response;
-use Ark\Com\Event\Listener\Debug;
-use Ark\Com\Cache\File as FileCache;
+use Ark\Com\Cache\Driver\File as FileCache;
 use Ark\Com\Event\Adapter as EventAdapter;
 use Ark\Com\View\Adapter as ViewAdapter;
 use Ark\Com\Session\Adapter as SessionAdapter;
@@ -68,14 +67,14 @@ class Noah
      *
      * @var string
      */
-    private $_assembly_name;
+    private $_app_name;
 
     /**
      * 应用根目录
      *
      * @var string
      */
-    private $_assembly_dir;
+    private $_app_dir;
 
     /**
      * 控制器根目录
@@ -169,12 +168,12 @@ class Noah
      * @param string $dir
      * @return $this
      */
-    function setAssembly($name, $dir)
+    function setApp($name, $dir)
     {
-        $this->_assembly_name = ucfirst($name);
-        $this->_assembly_dir = $dir;
-        $this->_controller_dir = $this->_assembly_dir. DIRECTORY_SEPARATOR. 'Controller';
-        Loader::setNameSpace($this->_assembly_name, $this->_assembly_dir);
+        $this->_app_name = ucfirst($name);
+        $this->_app_dir = $dir;
+        $this->_controller_dir = $this->_app_dir. DIRECTORY_SEPARATOR. 'Controller';
+        Loader::setNameSpace($this->_app_name, $this->_app_dir);
         return $this;
     }
 
@@ -183,9 +182,9 @@ class Noah
      *
      * @return string
      */
-    function getAssemblyName()
+    function getAppName()
     {
-        return $this->_assembly_name;
+        return $this->_app_name;
     }
 
     /**
@@ -193,9 +192,9 @@ class Noah
      *
      * @return string
      */
-    function getAssemblyDir()
+    function getAppDir()
     {
-        return $this->_assembly_dir;
+        return $this->_app_dir;
     }
 
     /**
@@ -322,10 +321,10 @@ class Noah
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
-        if (!$this->_assembly_name || !$this->_assembly_dir) {
+        if (!$this->_app_name || !$this->_app_dir) {
             throw new RuntimeException($this->language->get('core.invalid_app_property'));
-        } elseif (strpos($this->_controller_dir, $this->_assembly_dir) === false) {
-            throw new RuntimeException($this->language->get('core.invalid_assembly_dir'));
+        } elseif (strpos($this->_controller_dir, $this->_app_dir) === false) {
+            throw new RuntimeException($this->language->get('core.invalid_controller_dir'));
         } elseif (!$config = $this->getConfig()) {
             throw new RuntimeException($this->language->get('core.invalid_configuration'));
         }
@@ -354,16 +353,16 @@ class Noah
             ->set('session', function() { return SessionAdapter::getDriver(); });
 
         //外部组件加载
-        $addon_dir = $this->config->global->addon;
-        if (is_dir($addon_dir)) {
-            if (is_file($custom_register = $addon_dir. '/register.php')) {
-                $list_addons = include($custom_register);
-                is_array($list_addons) || $list_addons = array();
+        $plugin_dir = $this->config->global->plugin_dir;
+        if (is_dir($plugin_dir)) {
+            if (is_file($custom_register = $plugin_dir. '/register.php')) {
+                $list_plugins = include($custom_register);
+                is_array($list_plugins) || $list_plugins = array();
             } else {
-                $list_addons = glob($addon_dir . '/*/register.php');
+                $list_plugins = glob($plugin_dir . '/*/register.php');
             }
             $prepares = array();
-            foreach ($list_addons as $item) {
+            foreach ($list_plugins as $item) {
                 $result = include($item);
                 if ($result instanceof Closure) {
                     $prepares[] = $result;

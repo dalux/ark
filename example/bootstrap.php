@@ -18,10 +18,10 @@ use Ark\Com\Cache\Adapter as CacheAdapter;
 //实例化框架
 Noah::getInstance()
     //设置应用程序根空间名称及基本路径
-    ->setAssembly('App', Loader::realPath('./assembly'))
+    ->setApp('App', Loader::realPath('./'))
     //设置配置文件夹路径
     ->setConfigDir(function() {
-        $path = Loader::realPath('./config');
+        $path = Loader::realPath('./Config');
         $host = Server::getDomain();
         $full = Server::getDomain(false);
         if (is_dir($dir = $path. '/'. $full)

@@ -24,7 +24,7 @@ class Adapter
         $name = sprintf('__base_router_%s__', $driver);
         $instance = Noah::getInstance()->container->$name;
         if (!$instance || !$instance instanceof RouterDriver) {
-            $class_name = sprintf('\\Ark\\Com\\Router\\'. ucfirst($driver));
+            $class_name = sprintf('\\Ark\\Com\\Router\\Driver\\'. ucfirst($driver));
             if (!class_exists($class_name)) {
                 throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.driver_not_found'), $class_name));
             }

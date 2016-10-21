@@ -10,7 +10,7 @@ use Ark\Core\Loader;
 //以便跟其他域的目录分开,并且可以于此文件中继续调用addPrepare()方法,指定框架运行前的预处理动作
 
 Noah::getInstance()
-    ->setControllerDir(Loader::realPath('./assembly/Controller/User'))
+    ->setControllerDir(Loader::realPath('./Controller/User'))
     ->addPrepare(function() {
         Noah::getInstance()->router->setAllowModule(true);
     })

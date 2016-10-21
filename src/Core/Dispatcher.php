@@ -112,9 +112,9 @@ class Dispatcher
         } elseif (!$this->_action) {
             throw new RuntimeException(Noah::getInstance()->language->get('core.invalid_action_name'));
         }
-        $app_name = Noah::getInstance()->getAssemblyName();
+        $app_name = Noah::getInstance()->getAppName();
         $controller_dir = Noah::getInstance()->getControllerDir();
-        $app_dir = Noah::getInstance()->getAssemblyDir();
+        $app_dir = Noah::getInstance()->getAppDir();
         $path_now = $controller_dir;
         $part = str_replace($app_dir, '', $controller_dir);
         $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');

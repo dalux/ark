@@ -24,7 +24,7 @@ class Adapter
         $name = sprintf('__base_view_%s__', $driver);
         $instance = Noah::getInstance()->container->$name;
         if (!$instance || !$instance instanceof ViewDriver) {
-            $class_name = sprintf('\\Ark\\Com\\View\\'. ucfirst($driver));
+            $class_name = sprintf('\\Ark\\Com\\View\\Driver\\'. ucfirst($driver));
             if (!class_exists($class_name)) {
                 throw new RuntimeException(sprintf(Noah::getInstance()->language->get('view.driver_not_found'), $class_name));
             }
