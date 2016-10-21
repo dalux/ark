@@ -533,6 +533,7 @@ class Noah
             Loader::realPath('./View'),
             Loader::realPath('./Vendor'),
             Loader::realPath('./Toolbox'),
+            Loader::realPath('./Runtime'),
         );
         foreach ($tasks as $task) {
             if (is_array($task) && !is_dir($task['to'])) {

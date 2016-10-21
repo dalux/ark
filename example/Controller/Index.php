@@ -9,7 +9,7 @@ class Index extends Controller
 
     function index()
     {
-        return $this->display();
+        echo 'hello';
     }
 
 }

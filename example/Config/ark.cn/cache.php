@@ -3,7 +3,7 @@
 return array(
     'file'=> array(
         'driver'=> 'file',      //文件缓存引擎
-        'save_path'=> \Ark\Core\Loader::realPath('./data/cache/'),    //缓存文件保存地址
+        'save_path'=> \Ark\Core\Loader::realPath('./Runtime/Cache/'),    //缓存文件保存地址
         'option'=> array('ext_name'=> '.cache'),
     ),
     'memcache'=> array(
