@@ -9,10 +9,7 @@ use Ark\Com\Cache\Proxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\CacheProxy;
 use Ark\Contract\DatabaseDriver;
-use Ark\Toolbox\SQLBuilder\Select;
-use Ark\Toolbox\SQLBuilder\Update;
-use Ark\Toolbox\SQLBuilder\Insert;
-use Ark\Toolbox\SQLBuilder\Delete;
+use Ark\Com\Database\SQLBuilder;
 use Ark\Com\Event\Adapter as EventAdapter;
 
 class Pdo extends \PDO implements DatabaseDriver, CacheProxy
@@ -287,11 +284,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * select对象
      *
      * @access public
-     * @return Select
+     * @return SQLBuilder\Select;
      */
     function select()
     {
-        $class = '\\Ark\\Toolbox\\SQLBuilder\\Select\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Select\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -300,11 +297,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * update对象
      *
      * @access public
-     * @return Update
+     * @return SQLBuilder\Update;
      */
     function update()
     {
-        $class = '\\Ark\\Toolbox\\SQLBuilder\\Update\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Update\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -313,11 +310,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * insert对象
      *
      * @access public
-     * @return Insert
+     * @return SQLBuilder\Insert
      */
     function insert()
     {
-        $class = '\\Ark\\Toolbox\\SQLBuilder\\Insert\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Insert\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -326,11 +323,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * delete对象
      *
      * @access public
-     * @return Delete
+     * @return SQLBuilder\Delete
      */
     function delete()
     {
-        $class = '\\Ark\\Toolbox\\SQLBuilder\\Delete\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Delete\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -340,11 +337,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      *
      * @access public
      * @param $expr
-     * @return Expr
+     * @return SQLBuilder\Expr
      */
     function expr($expr)
     {
-        return new Expr($expr);
+        return new SQLBuilder\Expr($expr);
     }
 
 }

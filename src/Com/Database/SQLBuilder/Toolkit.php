@@ -3,6 +3,7 @@
 namespace Ark\Com\Database\SQLBuilder;
 
 use Ark\Core\Noah;
+use Ark\Com\Database\RuntimeException;
 
 class Toolkit
 {

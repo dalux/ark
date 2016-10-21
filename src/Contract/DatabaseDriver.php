@@ -2,11 +2,7 @@
 
 namespace Ark\Contract;
 
-use Ark\Com\Database\Expr;
-use Ark\Toolbox\SQLBuilder\Select;
-use Ark\Toolbox\SQLBuilder\Update;
-use Ark\Toolbox\SQLBuilder\Insert;
-use Ark\Toolbox\SQLBuilder\Delete;
+use Ark\Com\Database\SQLBuilder;
 
 interface DatabaseDriver
 {
@@ -102,28 +98,28 @@ interface DatabaseDriver
     /**
      * 获取select助手
      *
-     * @return Select
+     * @return SQLBuilder\Select
      */
     function select();
 
     /**
      * 获取update助手
      *
-     * @return Update
+     * @return SQLBuilder\Update
      */
     function update();
 
     /**
      * 获取insert助手
      *
-     * @return Insert
+     * @return SQLBuilder\Insert
      */
     function insert();
 
     /**
      * 获取delete助手
      *
-     * @return Delete
+     * @return SQLBuilder\Delete
      */
     function delete();
 
@@ -131,7 +127,7 @@ interface DatabaseDriver
      * 获取表达式助手
      *
      * @param $expr
-     * @return Expr
+     * @return SQLBuilder\Expr
      */
     function expr($expr);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Toolbox\SQLBuilder\Insert;
+namespace Ark\Com\Database\SQLBuilder\Insert;
 
 use Ark\Com\Database\SQLBuilder\Insert;
 

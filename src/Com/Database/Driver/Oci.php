@@ -6,11 +6,12 @@ use Ark\Core\Noah;
 use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Toolbox\Struct;
-use Ark\Toolbox\Database;
 use Ark\Contract\CacheProxy;
 use Ark\Com\Cache\Proxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\DatabaseDriver;
+use Ark\Com\Database\SQLBuilder;
+use Ark\Com\Database\SQLBuilder\Toolkit;
 use Ark\Com\Event\Adapter as EventAdapter;
 
 class Oci implements DatabaseDriver, CacheProxy
@@ -96,7 +97,7 @@ class Oci implements DatabaseDriver, CacheProxy
         if (!function_exists('oci_connect')) {
             throw new OciException(Noah::getInstance()->language->get('db.extension_load_failed'), 'oci8');
         }
-        $database = Database::parseConnectUrl($dsn);
+        $database = Toolkit::parseConnectUrl($dsn);
         $dbstring = $database['host'];
         if ($database['host'] && $database['name']) {
             $database['port'] || $database['port'] = 1521;
@@ -342,11 +343,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * select对象
      *
      * @access public
-     * @return \Ark\Toolbox\SQLBuilder\Select\Oci
+     * @return SQLBuilder\Select\Oci
      */
     function select()
     {
-        $instance = new \Ark\Toolbox\SQLBuilder\Select\Oci();
+        $instance = new SQLBuilder\Select\Oci();
         return $instance->invoke($this);
     }
 
@@ -354,11 +355,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * update对象
      *
      * @access public
-     * @return \Ark\Toolbox\SQLBuilder\Update\Oci()
+     * @return SQLBuilder\Update\Oci()
      */
     function update()
     {
-        $instance = new \Ark\Toolbox\SQLBuilder\Update\Oci();
+        $instance = new SQLBuilder\Update\Oci();
         return $instance->invoke($this);
     }
 
@@ -366,11 +367,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * insert对象
      *
      * @access public
-     * @return \Ark\Toolbox\SQLBuilder\Insert\Oci
+     * @return SQLBuilder\Insert\Oci
      */
     function insert()
     {
-        $instance = new \Ark\Toolbox\SQLBuilder\Insert\Oci();
+        $instance = new SQLBuilder\Insert\Oci();
         return $instance->invoke($this);
     }
 
@@ -378,11 +379,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * delete对象
      *
      * @access public
-     * @return \Ark\Toolbox\SQLBuilder\Delete\Oci
+     * @return SQLBuilder\Delete\Oci
      */
     function delete()
     {
-        $instance = new \Ark\Toolbox\SQLBuilder\Delete\Oci();
+        $instance = new SQLBuilder\Delete\Oci();
         return $instance->invoke($this);
     }
 
@@ -395,7 +396,7 @@ class Oci implements DatabaseDriver, CacheProxy
      */
     function expr($expr)
     {
-        return new Expr($expr);
+        return new SQLBuilder\Expr($expr);
     }
 
     /**

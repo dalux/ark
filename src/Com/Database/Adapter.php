@@ -40,7 +40,7 @@ class Adapter
             }
             $dsn = $config['dsn'];
             $option = $config['option'];
-            $class_name = sprintf('\\Ark\\Com\\Database\\'. $driver_path);
+            $class_name = sprintf('\\Ark\\Com\\Database\\Driver\\'. $driver_path);
             if (!class_exists($class_name)) {
                 throw new RuntimeException(sprintf(Noah::getInstance()->language->get('db.driver_not_found'), $class_name));
             }
