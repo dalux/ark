@@ -167,13 +167,12 @@ class Noah
      * 设置应用程序集根命名空间及其基本路径
      *
      * @param string $name
-     * @param string $dir
      * @return $this
      */
-    function setApp($name, $dir)
+    function setApp($name)
     {
         $this->_app_name = ucfirst($name);
-        $this->_app_dir = $dir;
+        $this->_app_dir = PATH_APP;
         $this->_controller_dir = $this->_app_dir. DIRECTORY_SEPARATOR. 'Controller';
         Loader::setNameSpace($this->_app_name, $this->_app_dir);
         return $this;
@@ -307,6 +306,7 @@ class Noah
      * 启动框架
      *
      * @access public
+     * @param bool $init
      * @return Noah
      * @throws RuntimeException
      */
