@@ -9,9 +9,9 @@ use Ark\Toolbox\Struct;
 use Ark\Contract\CacheProxy;
 use Ark\Com\Cache\Proxy;
 use Ark\Contract\CacheDriver;
+use Ark\Com\Database\Toolkit;
 use Ark\Contract\DatabaseDriver;
 use Ark\Com\Database\SQLBuilder;
-use Ark\Com\Database\SQLBuilder\Toolkit;
 use Ark\Com\Event\Adapter as EventAdapter;
 
 class Oci implements DatabaseDriver, CacheProxy
@@ -200,7 +200,7 @@ class Oci implements DatabaseDriver, CacheProxy
      * @param array $bind
      * @return mixed
      */
-    function fetchOne($sql, array $bind = array())
+    function fetchScalar($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -224,7 +224,7 @@ class Oci implements DatabaseDriver, CacheProxy
      * @param array $bind
      * @return mixed
      */
-    function fetch($sql, array $bind = array())
+    function fetchRow($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -385,18 +385,6 @@ class Oci implements DatabaseDriver, CacheProxy
     {
         $instance = new SQLBuilder\Delete\Oci();
         return $instance->invoke($this);
-    }
-
-    /**
-     * expr表达式对象
-     *
-     * @access public
-     * @param $expr
-     * @return Expr
-     */
-    function expr($expr)
-    {
-        return new SQLBuilder\Expr($expr);
     }
 
     /**

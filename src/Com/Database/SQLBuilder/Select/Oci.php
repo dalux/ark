@@ -6,7 +6,16 @@ use Ark\Com\Database\SQLBuilder\Select;
 
 class Oci extends Select
 {
-   
+
+
+    /**
+     * 数据库类型
+     *
+     * @var string
+     */
+    protected $_db_type = 'oci';
+
+
     /**
      * 获取where片段
      *

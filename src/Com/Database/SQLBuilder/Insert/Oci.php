@@ -2,13 +2,19 @@
 
 namespace Ark\Com\Database\SQLBuilder\Insert;
 
-use Ark\Com\Database\SQLBuilder\Expr;
+use Ark\Com\Database\Toolkit;
 use Ark\Com\Database\SQLBuilder\Insert;
 use Ark\Com\Database\SQLBuilder\Select;
-use Ark\Com\Database\SQLBuilder\Toolkit;
 
 class Oci extends Insert
 {
+
+    /**
+     * 数据库类型
+     *
+     * @var string
+     */
+    protected $_db_type = 'oci';
 
     /**
      * 取得VALUES片段
@@ -26,10 +32,12 @@ class Oci extends Insert
             if (is_array($val)) {
                 $result.= 'VALUES';
                 foreach ($val as $k=> $v) {
-                    if (is_object($v) && $v instanceof Expr) {
+                    $v = trim($v);
+                    if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+                        $v = str_replace(array('{{', '}}'), '', $v);
                         $val[$k] = $v;
                     } else {
-                        $val[$k] = Toolkit::quote($v);
+                        $val[$k] = Toolkit::quote($v, $this->_db_type);
                     }
                 }
                 $result.= '('. implode(', ', $val). ')';
@@ -37,15 +45,17 @@ class Oci extends Insert
                 $result.= '('. $val->getSQL(). ')';
             }
             return $result;
-        } elseif ($count > 1) { //多数据            
+        } elseif ($count > 1) { //多数据
             $part = array();
             foreach ($values as $key=> $val) {
                 if (is_array($val)) {
                     foreach ($val as $k=> $v) {
-                        if (is_object($v) && $v instanceof Expr) {
+                        $v = trim($v);
+                        if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+                            $v = str_replace(array('{{', '}}'), '', $v);
                             $val[$k] = $v;
                         } else {
-                            $val[$k] = Toolkit::quote($v);
+                            $val[$k] = Toolkit::quote($v, $this->_db_type);
                         }
                     }
                     $part[] = 'SELECT '. implode(', ', $val). ' FROM DUAL';
@@ -57,4 +67,5 @@ class Oci extends Insert
         }
         return $result;
     }
+
 }

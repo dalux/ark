@@ -2,6 +2,8 @@
 
 namespace Ark\Com\Database\SQLBuilder;
 
+use Ark\Com\Database\Toolkit;
+
 class Update extends Father
 {
 
@@ -11,7 +13,7 @@ class Update extends Father
      * @access public
      * @param mixed $table 要更新的表
      * @param array $updates 要更新的字段及其值
-     * @return Father
+     * @return Update
      */
     function set($table, array $updates = array()) 
     {
@@ -43,10 +45,13 @@ class Update extends Father
                     $update[] = $v. ' '. $alias;
                 }
                 foreach ($set_part[$key] as $_key=> $_val) {
-                    $_val = is_object($_val) && $_val instanceof Expr
-                        ? $_val
-                        : Toolkit::quote($_val);
-                    $set[] = $alias 
+                    $_val = trim($_val);
+                    if (preg_match('/^\{\{.*?\}\}$/', $_val) || preg_match('/.*?\(.*?\)/', $_val)) {
+                        $_val = str_replace(array('{{', '}}'), '', $_val);
+                    } else {
+                        $_val = Toolkit::quote($_val, $this->_db_type);
+                    }
+                    $set[] = $alias
                         ? $alias. '.'. $_key. '='. $_val
                         : $_key. '='. $_val;
                 }

@@ -10,7 +10,7 @@ class Delete extends Father
      *
      * @access public
      * @param string $table
-     * @return Father
+     * @return Delete
      */
     function from($table) 
     {

@@ -1,30 +1,38 @@
 <?php
 
-namespace Ark\Com\Database\SQLBuilder;
-
-use Ark\Core\Noah;
-use Ark\Com\Database\RuntimeException;
+namespace Ark\Com\Database;
 
 class Toolkit
 {
 
     /**
-     * 格式化范围参数值
+     * 在范围参数内
      *
      * @access public
-     * @param string  $column
-     * @param mixed   $value
-     * @param boolean $in  范围内?
-     * @return object
+     * @param string $column
+     * @param array $value
+     * @param string $dbtype
+     * @return string
      */
-    static function quoteIn($column, $value, $in = true)
+    static function whereIn($column, array $value, $dbtype = 'mysql')
     {
-        if (is_array($value)) {
-            $value = array_map('trim', $value);
-            count($value) == 1 && $value = current($value);
-        }
-        $expr = $column. (is_array($value) ? (($in ? '' : ' NOT'). ' IN (?)') : (($in ? '' : '!'). '=?'));
-        return str_replace('?', self::quote($value), $expr);
+        $expr = $column. ' IN (?)';
+        return str_replace('?', self::quote($value, $dbtype), $expr);
+    }
+
+    /**
+     * 不在范围参数内
+     *
+     * @access public
+     * @param string $column
+     * @param array $value
+     * @param string $dbtype
+     * @return string
+     */
+    static function whereNotIn($column, array $value, $dbtype = 'mysql')
+    {
+        $expr = $column. ' NOT IN (?)';
+        return str_replace('?', self::quote($value, $dbtype), $expr);
     }
 
     /**
@@ -32,17 +40,26 @@ class Toolkit
      *
      * @access public
      * @param mixed $value
+     * @param string $dbtype
      * @return mixed
      */
-    static function quote($value)
+    static function quote($value, $dbtype = 'mysql')
     {
         if (is_array($value)) {
-            foreach ($value as $key=> $val) { $value[$key] = self::quote($val); }
+            foreach ($value as $key=> $val) { $value[$key] = self::quote($val, $dbtype); }
             return implode(',', $value);
         } elseif (is_int($value) || is_float($value)) {
             return $value;
-        } else {
-            return "'" . addslashes($value) . "'";
+        }
+        switch ($dbtype) {
+            case 'oci':
+                return "'" . str_replace("'", "''", $value) . "'";
+            case 'mysql':
+            case 'pgsql':
+            case 'sqlite':
+            case 'sqlsrv':
+            default:
+                return "'" . addslashes($value) . "'";
         }
     }
 
@@ -88,7 +105,7 @@ class Toolkit
     static function parseConnectUrl($url)
     {
         if (!$parsed = parse_url($url)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('tbox.invalid_db_connstr'), $url));
+            throw new RuntimeException(sprintf('无效的数据库连接字符串："%s"', $url));
         }
         $config = array(
             'type'=> $parsed['scheme'],

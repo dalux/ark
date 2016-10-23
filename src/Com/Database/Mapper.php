@@ -3,7 +3,7 @@
 namespace Ark\Com\Database;
 
 use Ark\Core\Sailor;
-use Ark\Toolbox\Database;
+use Ark\Com\Database\Toolkit;
 use Ark\Contract\CacheProxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\DatabaseDriver;
@@ -145,7 +145,7 @@ class Mapper extends Sailor implements CacheProxy
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $update->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = Database::quote($vv);
+                        $vv = Toolkit::quote($vv, $this->_db->getDriverName());
                         $update->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $update->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -153,7 +153,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $update->where(Database::quoteIn($k, $v));
+            $update->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
         }
         return $update->query();
     }
@@ -181,7 +181,7 @@ class Mapper extends Sailor implements CacheProxy
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $delete->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = Database::quote($vv);
+                        $vv = Toolkit::quote($vv, $this->_db->getDriverName());
                         $delete->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $delete->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -189,7 +189,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $delete->where(Database::quoteIn($k, $v));
+            $delete->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
         }
         return $delete->query();
     }
@@ -204,7 +204,7 @@ class Mapper extends Sailor implements CacheProxy
      * @param array $fields 取值字段
      * @return array
      */
-    function fetch($condition = array(), $fields = array('*'))
+    function fetchRow($condition = array(), $fields = array('*'))
     {
         $select = $this->_db
             ->select()
@@ -219,7 +219,7 @@ class Mapper extends Sailor implements CacheProxy
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = Database::quote($vv);
+                        $vv = Toolkit::quote($vv, $this->_db->getDriverName());
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -227,7 +227,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $select->where(Database::quoteIn($k, $v));
+            $select->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
         }
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
@@ -244,7 +244,7 @@ class Mapper extends Sailor implements CacheProxy
      * @param array $fields
      * @return mixed
      */
-    function fetchOne($condition = array(), $fields = array('count(*)'))
+    function fetchScalar($condition = array(), $fields = array('count(*)'))
     {
         $select = $this->_db
             ->select()
@@ -259,7 +259,7 @@ class Mapper extends Sailor implements CacheProxy
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = Database::quote($vv);
+                        $vv = Toolkit::quote($vv, $this->_db->getDriverName());
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -267,7 +267,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $select->where(Database::quoteIn($k, $v));
+            $select->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
         }
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
@@ -306,7 +306,7 @@ class Mapper extends Sailor implements CacheProxy
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = Database::quote($vv);
+                        $vv = Toolkit::quote($vv, $this->_db->getDriverName());
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -314,7 +314,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $select->where(Database::quoteIn($k, $v));
+            $select->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
         }
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);

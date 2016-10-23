@@ -11,7 +11,7 @@ class Select extends Father
      * @access public
      * @param array $table
      * @param array $columns
-     * @return Father
+     * @return Select
      */
     function from($table, array $columns = array('*')) 
     {
@@ -25,7 +25,7 @@ class Select extends Father
      *
      * @access public
      * @param mixed $column
-     * @return Father
+     * @return Select
      */
     function group($column)
     {
@@ -43,7 +43,7 @@ class Select extends Father
      * @param $cond
      * @param null $value
      * @param bool $and
-     * @return Father
+     * @return Select
      */
     function having($cond, $value = null, $and = true)
     {
@@ -63,7 +63,7 @@ class Select extends Father
      * @access public
      * @param int $count
      * @param int $offset
-     * @return Father
+     * @return Select
      */
     function limit($count = 0, $offset = 0) 
     {
@@ -78,7 +78,7 @@ class Select extends Father
      * @access public
      * @param string $col
      * @param boolean $asc
-     * @return Father
+     * @return Select
      */
     function order($col, $asc = true) 
     {
@@ -93,7 +93,7 @@ class Select extends Father
      * @param array $table
      * @param string $cond
      * @param array $fetch
-     * @return Father
+     * @return Select
      */
     function joinLeft($table, $cond, $fetch = array('*')) 
     {
@@ -107,7 +107,7 @@ class Select extends Father
      * @param array $table
      * @param string $cond
      * @param array $fetch
-     * @return Father
+     * @return Select
      */
     function joinInner($table, $cond, $fetch = array('*')) 
     {
@@ -121,7 +121,7 @@ class Select extends Father
      * @param array $table
      * @param string $cond
      * @param array $fetch
-     * @return Father
+     * @return Select
      */
     function joinRight($table, $cond, $fetch = array('*')) 
     {
@@ -136,7 +136,7 @@ class Select extends Father
      * @param string $cond 联接条件
      * @param array $fetch 当前表取值字段
      * @param string $jointype 联接类型
-     * @return Father
+     * @return Select
      */
     protected function _join($table, $cond, $fetch, $jointype) 
     {
@@ -154,11 +154,12 @@ class Select extends Father
      */
     function pickSelectPart()
     {
-        $fields = $table = $join = array(); 
+        $fields = $table = $join = array();
         if ($from_part = $this->_parts['from']) {
             foreach ($from_part as $key=> $val) {
+                //表名及名称
                 list($k, $v) = each($val[0]);
-                //判断是否加别名
+                //判断表是否需要加别名
                 if (is_integer($k)) {
                     $alias = '';
                     $table[] = $v;
@@ -166,33 +167,20 @@ class Select extends Father
                     $alias = $k;
                     $table[] = $v. ' '. $alias;
                 }
-                //遍历from中要读取的列名
+                //遍历取值字段名及别名
                 foreach ($val[1] as $k=> $v) {
-                    //如果是否统计函数之类
-					if (!preg_match('/.*?\(.*?\)/', $v)) {
-                        //判断字段是否需要别名
+                    $v = trim($v);
+                    //系统函数或对象调用
+                    if (preg_match('/.*?\(.*?\)/', $v) || preg_match('/^\{\{.*?\}\}$/', $v)) {
+                        $v = str_replace(array('{{', '}}'), '', $v);
+                        $val[1][$k] = is_integer($k) ? $v : $v. ' '. $k;
+                    } else {
                         if (is_integer($k)) {
-                            if (is_object($v)) {
-                                $val[1][$k] = $v;
-                            } else {
-                                $val[1][$k] = $alias ? $alias. '.'. $v : $v;
-                            }
+                            $val[1][$k] = $alias ? $alias. '.'. $v : $v;
                         } else {
-                            if (is_object($v)) {
-                                $val[1][$k] = $v. ' '. $k;
-                            } else {
-                                $val[1][$k] = $alias 
-                                    ? $alias. '.'. $v. ' '. $k
-                                    : $v. ' '. $k;
-                            }
+                            $val[1][$k] = $alias ? $alias. '.'. $v. ' '. $k : $v. ' '. $k;
                         }
-					} else {    //统计函数之类
-                        if (is_integer($k)) {
-                            $val[1][$k] = $v;
-                        } else {
-                            $val[1][$k] = $v. ' '. $k;
-                        }
-					}
+                    }
                     $fields[] = $val[1][$k];
                 }
             }
@@ -217,28 +205,17 @@ class Select extends Father
                         }
                         //字段别名检测
                         foreach ($join_fields as $k=> $v) {
-                            //是否统计函数
-                            if (!preg_match('/.*?\(.*?\)/', $v)) {
-                                //判断字段是否需要别名
+                            $v = trim($v);
+                            //系统函数或对象调用
+                            if (preg_match('/.*?\(.*?\)/', $v) || preg_match('/^\{\{.*?\}\}$/', $v)) {
+                                $v = str_replace(array('{{', '}}'), '', $v);
+                                $join_fields[$k] = is_integer($k) ? $v : $v. ' '. $k;
+                            } else {
                                 if (is_integer($k)) {
-                                    if (is_object($v)) {
-                                        $join_fields[$k] = $v;
-                                    } else {
-                                        $join_fields[$k] = $alias ? $alias. '.'. $v : $v;
-                                    }
+                                    $join_fields[$k] = $alias ? $alias. '.'. $v : $v;
                                 } else {
-                                    if (is_object($v)) {
-                                        $join_fields[$k] = $v. ' '. $k;
-                                    } else {
-                                        $join_fields[$k] = $alias 
-                                            ? $alias. '.'. $v. ' '. $k
-                                            : $v. ' '. $k;
-                                    }
+                                    $join_fields[$k] = $alias ? $alias. '.'. $v. ' '. $k : $v. ' '. $k;
                                 }
-                            } else {    //统计函数
-                                $join_fields[$k] = is_integer($k) 
-                                    ? $v
-                                    : $v . ' '. $k;
                             }
                             $fields[] = $join_fields[$k];
                         }

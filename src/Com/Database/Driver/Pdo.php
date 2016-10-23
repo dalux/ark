@@ -182,7 +182,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @return mixed
      * @throws PdoException
      */
-    function fetchOne($sql, array $bind = array())
+    function fetchScalar($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -206,7 +206,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @return mixed
      * @throws PdoException
      */
-    function fetch($sql, array $bind = array())
+    function fetchRow($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -330,18 +330,6 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
         $class = '\\Ark\\Com\\Database\\SQLBuilder\\Delete\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
-    }
-
-    /**
-     * expr表达式对象
-     *
-     * @access public
-     * @param $expr
-     * @return SQLBuilder\Expr
-     */
-    function expr($expr)
-    {
-        return new SQLBuilder\Expr($expr);
     }
 
 }

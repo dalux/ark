@@ -5,6 +5,7 @@ namespace Ark\Com\Database\SQLBuilder;
 use Ark\Core\Noah;
 use Ark\Core\Sailor;
 use Ark\Contract\CacheProxy;
+use Ark\Com\Database\Toolkit;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\DatabaseDriver;
 use Ark\Toolbox\RuntimeException;
@@ -17,7 +18,7 @@ abstract class Father extends Sailor implements CacheProxy
      *
      * @var string
      */
-    protected $_scheme;
+    protected $_db_type;
 
     /**
      * 语句组成部分初始值
@@ -162,7 +163,7 @@ abstract class Father extends Sailor implements CacheProxy
      * @return string
      * @throws RuntimeException
      */
-    function fetch($bind = array())
+    function fetchRow($bind = array())
     {
         if (!$this->_db) {
             throw new RuntimeException(Noah::getInstance()->language->get('tbox.no_db_instance'));
@@ -202,7 +203,7 @@ abstract class Father extends Sailor implements CacheProxy
      * @return string
      * @throws RuntimeException
      */
-    function fetchOne($bind = array())
+    function fetchScalar($bind = array())
     {
         if (!$this->_db) {
             throw new RuntimeException(Noah::getInstance()->language->get('tbox.no_db_instance'));
@@ -283,10 +284,10 @@ abstract class Father extends Sailor implements CacheProxy
                 if ($v == '?') {
                     if (is_object($value) && $value instanceof self) {
                         $value = $value->getSQL();
-                    } elseif (is_object($value) && $value instanceof Expr) {
-                        $value = (string)$value;
+                    } elseif (preg_match('/^\{\{.*?\}\}$/', $value) || preg_match('/.*?\(.*?\)/', $value)) {
+                        $value = str_replace(array('{{', '}}'), '', $value);
                     } else {
-                        $value = Toolkit::quote($value);
+                        $value = Toolkit::quote($value, $this->_db_type);
                     }
                     $expr = preg_replace('/\?/', $value, $expr, 1);
                 } elseif ($v == ':int:' || $v == ':integer:') {
@@ -294,7 +295,7 @@ abstract class Father extends Sailor implements CacheProxy
                 } elseif ($v == ':float:' || $v == ':double:') {
                     $expr = preg_replace('/:(float|double):/', (float)$value, $expr, 1);
                 } elseif ($v == ':string:' || $v == ':str:') {
-                    $expr = preg_replace('/:(string|str):/', Toolkit::quote($value), $expr, 1);
+                    $expr = preg_replace('/:(string|str):/', Toolkit::quote($value, $this->_db_type), $expr, 1);
                 } elseif (preg_match('/:(float|double)\.(\d):/', $v)) {
                     $expr = preg_replace('/:(float|double)\.(\d):/e', "number_format(floatval('$value'), $2, '.', '')", $expr, 1);
                 } elseif ($v == ':bool:' || $v == ':boolean:') {

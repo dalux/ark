@@ -2,6 +2,8 @@
 
 namespace Ark\Com\Database\SQLBuilder;
 
+use Ark\Com\Database\Toolkit;
+
 class Insert extends Father
 {
     
@@ -11,7 +13,7 @@ class Insert extends Father
      * @access public
      * @param string $table 要插入的表
      * @param array $fields 表字段
-     * @return Father
+     * @return Insert
      */
     function into($table, array $fields) 
     {
@@ -24,7 +26,7 @@ class Insert extends Father
      * 要插入数据的表
      *
      * @param $values
-     * @return Father
+     * @return Insert
      */
     function values($values)
     {
@@ -35,7 +37,7 @@ class Insert extends Father
     /**
      * 清空已写入的数据
      *
-     * @return Father
+     * @return Insert
      */
     function clearValues()
     {
@@ -80,10 +82,12 @@ class Insert extends Father
             if (is_array($val)) {
                 $result.= 'VALUES';
                 foreach ($val as $k=> $v) {
-                    if (is_object($v) && $v instanceof Expr) {
+                    $v = trim($v);
+                    if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+                        $v = str_replace(array('{{', '}}'), '', $v);
                         $val[$k] = $v;
                     } else {
-                        $val[$k] = Toolkit::quote($v);
+                        $val[$k] = Toolkit::quote($v, $this->_db_type);
                     }
                 }
                 $result.= '('. implode(', ', $val). ')';
@@ -96,10 +100,12 @@ class Insert extends Father
             foreach ($values as $key=> $val) {
                 if (is_array($val)) {
                     foreach ($val as $k=> $v) {
-                        if (is_object($v) && $v instanceof Expr) {
+                        $v = trim($v);
+                        if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+                            $v = str_replace(array('{{', '}}'), '', $v);
                             $val[$k] = $v;
                         } else {
-                            $val[$k] = Toolkit::quote($v);
+                            $val[$k] = Toolkit::quote($v, $this->_db_type);
                         }
                     }
                     $part[] = '('. implode(', ', $val). ')';

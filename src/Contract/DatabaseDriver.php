@@ -35,7 +35,7 @@ interface DatabaseDriver
      * @param array $bind
      * @return array
      */
-    function fetch($sql, array $bind = array());
+    function fetchRow($sql, array $bind = array());
 
     /**
      * 获取第一行第一列数据，一般用在聚合函数中
@@ -45,7 +45,7 @@ interface DatabaseDriver
      * @param array $bind
      * @return int
      */
-    function fetchOne($sql, array $bind = array());
+    function fetchScalar($sql, array $bind = array());
 
     /**
      * 开启事务处理
@@ -122,13 +122,5 @@ interface DatabaseDriver
      * @return SQLBuilder\Delete
      */
     function delete();
-
-    /**
-     * 获取表达式助手
-     *
-     * @param $expr
-     * @return SQLBuilder\Expr
-     */
-    function expr($expr);
 
 }
