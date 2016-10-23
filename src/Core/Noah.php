@@ -108,7 +108,7 @@ class Noah
         require_once __DIR__. '/RuntimeException.php';
         require_once __DIR__. '/Trace.php';
         require_once __DIR__. '/Loader.php';
-        require_once __DIR__. '/../Toolbox/Spanner.php';
+        require_once __DIR__. '/Spanner.php';
         require_once __DIR__. '/../Com/Http/Request.php';
         //初始化内存占用
         $memory_usage = memory_get_usage();
