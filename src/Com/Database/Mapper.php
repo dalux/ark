@@ -3,7 +3,6 @@
 namespace Ark\Com\Database;
 
 use Ark\Core\Sailor;
-use Ark\Com\Database\Toolkit;
 use Ark\Contract\CacheProxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\DatabaseDriver;

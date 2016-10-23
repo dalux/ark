@@ -321,7 +321,7 @@ class Oci implements DatabaseDriver, CacheProxy
      */
     function getDriverName()
     {
-        return 'Oci';
+        return 'oci';
     }
 
     /**

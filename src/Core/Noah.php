@@ -164,7 +164,7 @@ class Noah
      */
     function setAppName($name)
     {
-        $this->_app_name = ucfirst($name);
+        $this->_app_name = $name;
         return $this;
     }
 
