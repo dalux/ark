@@ -4,7 +4,7 @@ namespace Ark\Com\Event;
 
 use Closure;
 use Ark\Core\Noah;
-use Ark\Toolbox\Struct;
+use Ark\Core\Struct;
 
 class Adapter
 {

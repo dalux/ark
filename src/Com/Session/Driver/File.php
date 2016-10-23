@@ -3,7 +3,7 @@
 namespace Ark\Com\Session\Driver;
 
 use Ark\Core\Noah;
-use Ark\Toolbox\Spanner;
+use Ark\Core\Spanner;
 
 class File extends Father
 {

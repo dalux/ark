@@ -3,7 +3,7 @@
 namespace  Ark\Com\Router\Driver;
 
 use Ark\Core\Noah;
-use Ark\Toolbox\Struct;
+use Ark\Core\Struct;
 use Ark\Contract\RouterDriver;
 use Ark\Com\Event\Adapter as EventAdapter;
 

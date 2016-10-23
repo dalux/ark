@@ -5,7 +5,7 @@ namespace Ark\Com\View\Driver;
 use Ark\Core\Loader;
 use Ark\Core\Noah;
 use Ark\Core\Sailor;
-use Ark\Toolbox\Struct;
+use Ark\Core\Struct;
 use Ark\Contract\ViewDriver;
 use Ark\Com\Event\Adapter as EventAdapter;
 

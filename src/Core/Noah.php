@@ -3,11 +3,9 @@
 namespace Ark\Core;
 
 use Closure;
-use Ark\Toolbox\Struct;
 use Ark\Com\Http\Server;
 use Ark\Com\Http\Request;
 use Ark\Com\Http\Response;
-use Ark\Toolbox\Spanner;
 use Ark\Com\Cache\Driver\File as FileCache;
 use Ark\Com\Event\Adapter as EventAdapter;
 use Ark\Com\View\Adapter as ViewAdapter;

@@ -1,9 +1,6 @@
 <?php
 
-namespace Ark\Toolbox;
-
-use Ark\Core\Loader;
-use Ark\Core\Noah;
+namespace Ark\Core;
 
 class Struct
 {

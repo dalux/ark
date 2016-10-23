@@ -2,7 +2,7 @@
 
 namespace Ark\Com\Http;
 
-use Ark\Toolbox\Struct;
+use Ark\Core\Struct;
 use Ark\Com\Event\Adapter as EventAdapter;
 
 class Request

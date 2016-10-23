@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Toolbox;
-
-use Ark\Core\Noah;
+namespace Ark\Core;
 
 class Spanner
 {

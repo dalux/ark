@@ -3,7 +3,7 @@
 namespace Ark\Com\Cache\Driver;
 
 use Ark\Core\Noah;
-use Ark\Toolbox\Spanner;
+use Ark\Core\Spanner;
 use Ark\Com\Cache\Signal;
 use Ark\Contract\CacheDriver;
 

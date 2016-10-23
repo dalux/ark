@@ -4,7 +4,7 @@ namespace Ark\Com\Database\Driver;
 
 use Ark\Core\Trace;
 use Ark\Core\Timer;
-use Ark\Toolbox\Struct;
+use Ark\Core\Struct;
 use Ark\Com\Cache\Proxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\CacheProxy;
