@@ -2,7 +2,7 @@
 
 namespace Ark\Contract;
 
-use Ark\Com\Database\SQLBuilder;
+use Ark\Com\Database\SqlBuilder;
 
 interface DatabaseDriver
 {
@@ -98,28 +98,28 @@ interface DatabaseDriver
     /**
      * 获取select助手
      *
-     * @return SQLBuilder\Select
+     * @return SqlBuilder\Select
      */
     function select();
 
     /**
      * 获取update助手
      *
-     * @return SQLBuilder\Update
+     * @return SqlBuilder\Update
      */
     function update();
 
     /**
      * 获取insert助手
      *
-     * @return SQLBuilder\Insert
+     * @return SqlBuilder\Insert
      */
     function insert();
 
     /**
      * 获取delete助手
      *
-     * @return SQLBuilder\Delete
+     * @return SqlBuilder\Delete
      */
     function delete();
 

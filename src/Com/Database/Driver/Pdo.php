@@ -9,7 +9,7 @@ use Ark\Com\Cache\Proxy;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\CacheProxy;
 use Ark\Contract\DatabaseDriver;
-use Ark\Com\Database\SQLBuilder;
+use Ark\Com\Database\SqlBuilder;
 use Ark\Com\Event\Adapter as EventAdapter;
 
 class Pdo extends \PDO implements DatabaseDriver, CacheProxy
@@ -284,11 +284,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * select对象
      *
      * @access public
-     * @return SQLBuilder\Select;
+     * @return SqlBuilder\Select;
      */
     function select()
     {
-        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Select\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Select\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -297,11 +297,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * update对象
      *
      * @access public
-     * @return SQLBuilder\Update;
+     * @return SqlBuilder\Update;
      */
     function update()
     {
-        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Update\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Update\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -310,11 +310,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * insert对象
      *
      * @access public
-     * @return SQLBuilder\Insert
+     * @return SqlBuilder\Insert
      */
     function insert()
     {
-        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Insert\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Insert\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -323,11 +323,11 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * delete对象
      *
      * @access public
-     * @return SQLBuilder\Delete
+     * @return SqlBuilder\Delete
      */
     function delete()
     {
-        $class = '\\Ark\\Com\\Database\\SQLBuilder\\Delete\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Delete\\'. ucfirst($this->getDriverName());
         $instance = new $class();
         return $instance->invoke($this);
     }
