@@ -231,7 +231,7 @@ class Mapper extends Sailor implements CacheProxy
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
         }
-        return $select->fetch();
+        return $select->fetchRow();
     }
 
     /**
@@ -271,7 +271,7 @@ class Mapper extends Sailor implements CacheProxy
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
         }
-        return $select->fetchOne();
+        return $select->fetchScalar();
     }
 
     /**

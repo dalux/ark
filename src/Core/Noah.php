@@ -233,13 +233,13 @@ class Noah
         //获取配置文件目录
         $config_path = '';
         //如果配置文件目录是匿名函数
-        if ($this->_config_dir && $this->_config_dir instanceof Closure) {
+        if ($this->_config_dir instanceof Closure) {
             $getter = $this->_config_dir;
-            $result = $getter();
-            if (is_string($result) && is_dir($result)) {
+            $result = (string)$getter();
+            if (is_dir($result)) {
                 $config_path = $result;
             }
-        } elseif ($this->_config_dir && is_dir($this->_config_dir)) {
+        } elseif (is_dir($this->_config_dir)) {
             $config_path = $this->_config_dir;
         }
         if (!$config_path) {
@@ -251,13 +251,7 @@ class Noah
             //默认配置文件缓存目录为WEB根目录
             $config_cache_dir = PATH_APP;
             //重新获取配置文件目录
-            if ($this->_config_cache_dir && $this->_config_cache_dir instanceof Closure) {
-                $getter = $this->_config_cache_dir;
-                $result = $getter();
-                if (is_string($result) && is_dir($result)) {
-                    $config_cache_dir = $result;
-                }
-            } elseif ($this->_config_cache_dir && is_dir($this->_config_cache_dir)) {
+            if (is_dir($this->_config_cache_dir)) {
                 $config_cache_dir = $this->_config_cache_dir;
             }
             //取配置文件
@@ -294,11 +288,10 @@ class Noah
      * 启动框架
      *
      * @access public
-     * @param bool $init
      * @return Noah
      * @throws RuntimeException
      */
-    function run($init = false)
+    function run()
     {
         //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
@@ -308,10 +301,6 @@ class Noah
         Exception::setHandler();
         //后续类文件自动加载
         Loader::addAutoLoader(array('\\Ark\\Core\\Loader', 'autoLoad'));
-        //初始化
-        if ($init) {
-            $this->_init();
-        }
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
@@ -510,38 +499,6 @@ class Noah
         Trace::set('memory', memory_get_usage());
         //结束事件
         EventAdapter::onListening('event.ark.shutdown');
-    }
-
-    /**
-     * 初始化应用程序目录
-     *
-     * @return Noah
-     */
-    private function _init()
-    {
-        if (is_file(Loader::realPath('./inited'))) {
-            trigger_error('应用程序目录初始化完成，请关闭初始化参数', E_USER_NOTICE);
-        }
-        $tasks = array(
-            array('from'=> Loader::realPath('*/Config'), 'to'=> Loader::realPath('./Config')),
-            array('from'=> Loader::realPath('*/Plugin'), 'to'=> Loader::realPath('./Plugin')),
-            Loader::realPath('./Controller'),
-            Loader::realPath('./Helper'),
-            Loader::realPath('./Model'),
-            Loader::realPath('./View'),
-            Loader::realPath('./Vendor'),
-            Loader::realPath('./Toolbox'),
-            Loader::realPath('./Runtime'),
-        );
-        foreach ($tasks as $task) {
-            if (is_array($task) && !is_dir($task['to'])) {
-                Spanner::copyDir($task['from'], $task['to']);
-            } elseif (is_string($task) && !is_dir($task)) {
-                Spanner::mkDir($task);
-            }
-        }
-        file_put_contents(Loader::realPath('./inited'), 'delete me.');
-        return $this;
     }
 
 }
