@@ -2,9 +2,13 @@
 
 namespace  Ark\Com\Router\Driver;
 
+use Ark\Core\Controller;
+use Ark\Core\Loader;
 use Ark\Core\Noah;
 use Ark\Core\Struct;
+use Ark\Com\Http\Request;
 use Ark\Contract\RouterDriver;
+use Ark\Com\Router\RuntimeException;
 use Ark\Com\Event\Adapter as EventAdapter;
 
 class Base implements RouterDriver
@@ -54,6 +58,27 @@ class Base implements RouterDriver
      * @var int
      */
     private $_url_mode = 1;
+
+    /**
+     * 控制器
+     *
+     * @var string
+     */
+    private $_controller;
+
+    /**
+     * 行为
+     *
+     * @var string
+     */
+    private $_action;
+
+    /**
+     * 模块
+     *
+     * @var string
+     */
+    private $_module;
 
     /**
      * 构造器
@@ -127,6 +152,72 @@ class Base implements RouterDriver
     }
 
     /**
+     * 设置控制器名
+     *
+     * @param $controller
+     * @return $this
+     */
+    function setController($controller)
+    {
+        $this->_controller = $controller;
+        return $this;
+    }
+
+    /**
+     * 获取当前控制器名称
+     *
+     * @return string
+     */
+    function getController()
+    {
+        return $this->_controller;
+    }
+
+    /**
+     * 设置行为名称
+     *
+     * @param $action
+     * @return $this
+     */
+    function setAction($action)
+    {
+        $this->_action = $action;
+        return $this;
+    }
+
+    /**
+     * 获取当前行为名称
+     *
+     * @return string
+     */
+    function getAction()
+    {
+        return $this->_action;
+    }
+
+    /**
+     * 设置模块名称
+     *
+     * @param $module
+     * @return $this
+     */
+    function setModule($module)
+    {
+        $this->_module = $module;
+        return $this;
+    }
+
+    /**
+     * 获取当前模块名称
+     *
+     * @return string
+     */
+    function getModule()
+    {
+        return $this->_module;
+    }
+
+    /**
      * 添加路径规则
      *
      * @param $rule
@@ -137,6 +228,108 @@ class Base implements RouterDriver
     {
         $this->_router[$rule] = $redirect;
         return $this;
+    }
+
+    /**
+     * 执行路由解析
+     *
+     * @param string $uri
+     * @return mixed
+     * @throws RuntimeException
+     */
+    function doAction($uri)
+    {
+        //调用路由组件，解析URI
+        $struct = new Struct();
+        $struct->setRule(array(
+            'module'=> array(
+                Struct::FLAG_REQUIRED   => false,
+                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
+            ),
+            'controller'=> array(
+                Struct::FLAG_REQUIRED   => true,
+                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
+                Struct::FLAG_DEFAULT    => Noah::getInstance()->config->router->default->controller,
+            ),
+            'action'=> array(
+                Struct::FLAG_REQUIRED   => true,
+                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
+                Struct::FLAG_DEFAULT    => Noah::getInstance()->config->router->default->action,
+            ),
+            'getdata'=> array(
+                Struct::FLAG_REQUIRED   => false,
+                Struct::FLAG_TYPE       => Struct::TYPE_ARRAY,
+            ),
+        ));
+        $struct->setData($this->parseUri($uri));
+        if (!$result = $struct->checkOut()) {
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.router_parse_failed'), $struct->getMessage()));
+        }
+        if ($result['getdata']) {
+            Noah::getInstance()->request->del(Request::FLAG_GET);
+            foreach ($result['getdata'] as $key=> $val) {
+                Noah::getInstance()->request->add($key, $val, Request::FLAG_GET);
+            }
+        }
+
+        //控制器调度
+        $this->setModule($result['module']);
+        $this->setController($result['controller']);
+        $this->setAction($result['action']);
+        return $this->dispatch();
+
+    }
+
+    /**
+     * 目标调度
+     *
+     * @return mixed
+     * @throws RuntimeException
+     */
+    function dispatch()
+    {
+        if (!$this->_controller) {
+            throw new RuntimeException(Noah::getInstance()->language->get('core.invalid_controller_name'));
+        } elseif (!$this->_action) {
+            throw new RuntimeException(Noah::getInstance()->language->get('core.invalid_action_name'));
+        }
+        $app_name = Noah::getInstance()->getAppName();
+        $controller_dir = Noah::getInstance()->getControllerDir();
+        $app_dir = Noah::getInstance()->getAppDir();
+        $path_now = $controller_dir;
+        $part = str_replace($app_dir, '', $controller_dir);
+        $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');
+        $part = array_map('ucfirst', explode('\\', $part));
+        $part = implode('\\', $part);
+        $namespace = $app_name. '\\'. $part;
+        if ($this->_module) {
+            $namespace.= '\\'. ucfirst($this->_module);
+            $path_now.= DIRECTORY_SEPARATOR. $this->_module;
+        }
+        $namespace.= '\\'. ucfirst($this->_controller);
+        if (!class_exists($namespace)) {
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.controller_not_found'), $namespace));
+        }
+        //定义PATH_NOW常量
+        defined('PATH_NOW') || define('PATH_NOW', $path_now);
+        Loader::setAlias('~', PATH_NOW);
+        //
+        $instance = new $namespace();
+        if (!$instance instanceof Controller) {
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.controller_extends_error'), '\\Ark\\Core\\Controller'));
+        } elseif (!method_exists($instance, $this->_action)) {
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.action_not_found'), $namespace, $this->_action));
+        }
+        $output = null;
+        //自动化类
+        if (method_exists($instance, '__init')) {
+            $output = $instance->__init();
+        }
+        //目标控制器行为
+        if (is_null($output)) {
+            $output = $instance->{$this->_action}();
+        }
+        return $output;
     }
 
     /**

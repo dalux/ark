@@ -339,7 +339,6 @@ class Noah
             ->set('response', function() { return new Response(); })
             ->set('request', function() { return Request::getInstance(); })
             ->set('view', function() { return ViewAdapter::getDriver(); })
-            ->set('dispatcher', function() { return new Dispatcher(); })
             ->set('router', function() { return RouterAdapter::getDriver(); })
             ->set('session', function() { return SessionAdapter::getDriver(); });
 
@@ -371,47 +370,10 @@ class Noah
             }
         }
 
-        //调用路由组件，解析URI
-        $struct = new Struct();
-        $struct->setRule(array(
-            'module'=> array(
-                Struct::FLAG_REQUIRED   => false,
-                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
-            ),
-            'controller'=> array(
-                Struct::FLAG_REQUIRED   => true,
-                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
-                Struct::FLAG_DEFAULT    => $this->_config->router->default->controller,
-            ),
-            'action'=> array(
-                Struct::FLAG_REQUIRED   => true,
-                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
-                Struct::FLAG_DEFAULT    => $this->_config->router->default->action,
-            ),
-            'getdata'=> array(
-                Struct::FLAG_REQUIRED   => false,
-                Struct::FLAG_TYPE       => Struct::TYPE_ARRAY,
-            ),
-        ));
-        $struct->setData($this->router->parseUri($_SERVER['REQUEST_URI']));
-        if (!$result = $struct->checkOut()) {
-            throw new RuntimeException(sprintf($this->language->get('core.router_parse_failed'), $struct->getMessage()));
-        }
-        if ($result['getdata']) {
-            $this->request->del(Request::FLAG_GET);
-            foreach ($result['getdata'] as $key=> $val) {
-                $this->request->add($key, $val, Request::FLAG_GET);
-            }
-        }
-
         //监听系统启动事件
         EventAdapter::onListening('event.ark.startup');
 
-        //控制器调度
-        $this->dispatcher->setModule($result['module']);
-        $this->dispatcher->setController($result['controller']);
-        $this->dispatcher->setAction($result['action']);
-        echo $this->dispatcher->doAction();
+        echo $this->router->doAction($_SERVER['REQUEST_URI']);
 
     }
 
