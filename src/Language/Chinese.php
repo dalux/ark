@@ -6,17 +6,10 @@ return array(
     'core.invalid_controller_dir'       => '控制器目录必须位于应用程序集目录下',
     'core.invalid_config_dir'           => '无效的配置文件目录',
     'core.invalid_configuration'        => '未找到有效的配置信息',
-    'core.router_parse_failed'          => '路由解析失败[%s]',
     'core.object_not_found'             => '无法找到成员[%s]',
     'core.deny_alias_redeclare'         => '不能重定义系统保留别名[%s]',
     'core.invalid_autoloader'           => '自动加载器不可调用',
     'core.format_path_failed'           => '无法格式化指定的路径',
-
-    'core.invalid_controller_name'      => '无有效的控制器名称',
-    'core.invalid_action_name'          => '无有效的行为名称',
-    'core.controller_not_found'         => '请求的控制器类[%s]不存在',
-    'core.controller_extends_error'     => '控制器必须继承自类[%s]',
-    'core.action_not_found'             => '控制器类[%s]中不存在行为[%s]',
 
     'com.invalid_view_template'         => '无有效的视图模板文件',
 
@@ -38,11 +31,18 @@ return array(
     'db.driver_implement_error'         => '数据库驱动器类[%s]须实现[%s]及[%s]接口',
     'db.extension_load_failed'          => '加载扩展[%s]失败',
 
+    'router.uri_parse_failed'           => '路由解析失败[%s]',
+    'router.action_not_found'           => '控制器类[%s]中不存在行为[%s]',
+    'router.controller_extends_error'   => '控制器必须继承自类[%s]',
+    'router.invalid_action_name'        => '无有效的行为名称',
+    'router.invalid_controller_name'    => '无有效的控制器名称',
+    'router.controller_not_found'       => '请求的控制器类[%s]不存在',
     'router.invalid_driver_name'        => '无有效的路由驱动器名称',
     'router.driver_not_found'           => '路由驱动器类[%s]不存在',
     'router.driver_implement_error'     => '路由驱动器类[%s]必须实现[%s]接口',
     'router.call_func_failed'           => '无法调用自定义Uri重写函数[%s]',
     'router.uri_must_string'            => '重写后的Uri必须是一个字符串',
+    'router.controller_is_protected'    => '访问了非公开的控制器[%s]',
 
     'sess.invalid_driver_name'          => '无有效的会话驱动器名称',
     'sess.driver_not_found'             => '会话驱动器类[%s]不存在',

@@ -200,7 +200,7 @@ class Loader
 	{
         if (!is_string($namespace) 
               || !in_array($namespace[0], array_keys(self::$_alias))
-              || $namespace[1] != '/') {
+              || strlen($namespace) > 1 && $namespace[1] != '/') {
             return false;
         }
         return array($namespace[0], substr($namespace, 1));

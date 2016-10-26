@@ -20,13 +20,13 @@ return array(
 );
 */
 
-//模拟原始PHP程序路由
+//原生PHP路由器
 return array(
     'driver'=> 'native',
     'urlsuffix'=> '.html',
     'urlsep'=> '/',
     'default'=> array(
         'controller'=> 'index',
-        'action'=> 'startup'
+        'action'=> 'index'
     ),
 );

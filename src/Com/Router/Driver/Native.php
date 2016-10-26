@@ -2,6 +2,7 @@
 
 namespace Ark\Com\Router\Driver;
 
+use ReflectionClass;
 use Ark\Com\Http\Request;
 use Ark\Core\Controller;
 use Ark\Core\Loader;
@@ -46,7 +47,6 @@ class Native implements RouterDriver
             $query = str_replace(array('&', '='), '/', $query);
             $query = explode('/', $query);
             $query = array_chunk($query, 2);
-            Noah::getInstance()->request->del(Request::FLAG_GET);
             foreach ($query as $key=> $val) {
                 Noah::getInstance()->request->add($val[0], $val[1], Request::FLAG_GET);
             }
@@ -63,13 +63,13 @@ class Native implements RouterDriver
         $controller_dir = Noah::getInstance()->getControllerDir();
         $app_dir = Noah::getInstance()->getAppDir();
         $path_now = $controller_dir;
-        $controller = '';
         if ($uri == '') {
             $controller = ucfirst(Noah::getInstance()->config->router->default->controller);
         } else {
             $controllers = array_map('ucfirst', explode($urlsep, $uri));
             $controller = implode('\\', $controllers);
             $path_now.= DIRECTORY_SEPARATOR. implode(DIRECTORY_SEPARATOR, $controllers);
+            $path_now = dirname($path_now);
         }
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
@@ -79,13 +79,17 @@ class Native implements RouterDriver
         $part = implode('\\', $part);
         $namespace = $app_name. '\\'. $part. '\\'. $controller;
         if (!class_exists($namespace)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.controller_not_found'), $namespace));
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.controller_not_found'), $namespace));
+        }
+        $ref = new ReflectionClass($namespace);
+        if ($ref->isAbstract()) {
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.controller_is_protected'), $namespace));
         }
         $instance = new $namespace();
         if (!$instance instanceof Controller) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.controller_extends_error'), '\\Ark\\Core\\Controller'));
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.controller_extends_error'), '\\Ark\\Core\\Controller'));
         } elseif (!method_exists($instance, $action)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.action_not_found'), $namespace, $action));
+            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.action_not_found'), $namespace, $action));
         }
         $output = null;
         //自动化类
