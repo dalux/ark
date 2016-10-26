@@ -1,5 +1,5 @@
 <?php
-
+/*
 return array(
     'driver'=> 'base',
     'urlmode'=> \Ark\Com\Router\Driver\Base::URL_MODE_REWRITE,
@@ -14,5 +14,16 @@ return array(
         'module'=> '',
         'controller'=> 'index',
         'action'=> 'index',
+    ),
+);
+*/
+
+return array(
+    'driver'=> 'native',
+    'urlsuffix'=> '',
+    'urlsep'=> '/',
+    'default'=> array(
+        'controller'=> 'index',
+        'action'=> 'startup'
     ),
 );
