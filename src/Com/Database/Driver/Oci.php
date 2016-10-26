@@ -249,7 +249,7 @@ class Oci implements DatabaseDriver, CacheProxy
      */
     function lastInsertId($seq = null)
     {
-        return $this->fetchOne("select $seq.currval from dual");
+        return $this->fetchScalar("select $seq.currval from dual");
     }
 
     /**
@@ -261,7 +261,7 @@ class Oci implements DatabaseDriver, CacheProxy
      */
     function nextInsertId($seq = null)
     {
-        return $this->fetchOne("select $seq.nextval from dual");
+        return $this->fetchScalar("select $seq.nextval from dual");
     }
 
     /**

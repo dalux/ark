@@ -8,7 +8,7 @@ use Ark\Contract\CacheProxy;
 use Ark\Com\Database\Toolkit;
 use Ark\Contract\CacheDriver;
 use Ark\Contract\DatabaseDriver;
-use Ark\Toolbox\RuntimeException;
+use Ark\Com\Database\RuntimeException;
 
 abstract class Father extends Sailor implements CacheProxy
 {
@@ -172,7 +172,7 @@ abstract class Father extends Sailor implements CacheProxy
         if ($this->_allow_cache && $this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetch($this->getSQL(), $bind);
+        return $instance->fetchRow($this->getSQL(), $bind);
     }
 
     /**
@@ -196,7 +196,7 @@ abstract class Father extends Sailor implements CacheProxy
     }
 
     /**
-     * 调用数据库fetchOne方法
+     * 调用数据库fetchScalar方法
      *
      * @access public
      * @param array $bind
@@ -212,7 +212,7 @@ abstract class Father extends Sailor implements CacheProxy
         if ($this->_allow_cache && $this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchOne($this->getSQL(), $bind);
+        return $instance->fetchScalar($this->getSQL(), $bind);
     }
 
     /**
