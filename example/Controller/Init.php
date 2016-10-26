@@ -9,12 +9,8 @@ abstract class Init extends Controller
 
     function __init()
     {
-        var_dump('inited');
-    }
-
-    function index()
-    {
-        var_dump('done');
+        //这里是自动化类行为
+        echo 'hello,';
     }
 
 }
