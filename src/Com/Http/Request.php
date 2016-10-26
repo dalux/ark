@@ -2,9 +2,6 @@
 
 namespace Ark\Com\Http;
 
-use Ark\Core\Struct;
-use Ark\Com\Event\Adapter as EventAdapter;
-
 class Request
 {
 
@@ -87,15 +84,9 @@ class Request
      */
     private function __construct()
     {
-        $request = array('get'=> $_GET, 'post'=> $_POST);
-        $rule = array(
-            'get'   => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-            'post'  => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        );
-        $request = EventAdapter::onListening('event.request.init', $request, $rule);
-        $this->_get = $request['get'];
-        $this->_post = $request['post'];
-        $this->_request = array_merge($_GET, $_POST);
+        $this->_get = $_GET;
+        $this->_post = $_POST;
+        $this->_request = $_REQUEST;
         $this->_files = $_FILES;
         $_GET = $_POST = $_REQUEST = $_FILES = array();
     }

@@ -31,7 +31,7 @@ return array(
     'db.driver_implement_error'         => '数据库驱动器类[%s]须实现[%s]及[%s]接口',
     'db.extension_load_failed'          => '加载扩展[%s]失败',
 
-    'router.uri_parse_failed'           => '路由解析失败[%s]',
+    'router.uri_parse_failed'           => '路由解析结果异常[%s]',
     'router.action_not_found'           => '控制器类[%s]中不存在行为[%s]',
     'router.controller_extends_error'   => '控制器必须继承自类[%s]',
     'router.invalid_action_name'        => '无有效的行为名称',

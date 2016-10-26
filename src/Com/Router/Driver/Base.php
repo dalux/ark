@@ -11,6 +11,7 @@ use Ark\Core\Struct;
 use Ark\Com\Http\Request;
 use Ark\Contract\RouterDriver;
 use Ark\Com\Router\RuntimeException;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Base implements RouterDriver
 {
@@ -243,44 +244,42 @@ class Base implements RouterDriver
      */
     function doAction($uri)
     {
+        //解析前事件
+        $data = array('driver'=> 'Base', 'uri'=> $uri);
+        $rule = array(
+            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+            'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+        );
+        $data = EventAdapter::onListening('event.routing.before', $data, $rule);
+        $uri = $data['uri'];
         //调用路由组件，解析URI
+        $result = $this->parseUri($uri);
+        //解析后事件
+        $data = array('driver'=> 'Base', 'result'=> $result);
+        $rule = array(
+            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+            'result'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
+        );
+        $data = EventAdapter::onListening('event.routing.finish', $data, $rule);
+        $result = $data['result'];
+        $def_controller = Noah::getInstance()->config->router->default->controller;
+        $def_action = Noah::getInstance()->config->router->default->action;
+        //校验result结构
         $struct = new Struct();
         $struct->setRule(array(
-            'module'=> array(
-                Struct::FLAG_REQUIRED   => false,
-                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
-            ),
-            'controller'=> array(
-                Struct::FLAG_REQUIRED   => true,
-                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
-                Struct::FLAG_DEFAULT    => Noah::getInstance()->config->router->default->controller,
-            ),
-            'action'=> array(
-                Struct::FLAG_REQUIRED   => true,
-                Struct::FLAG_TYPE       => Struct::TYPE_STRING,
-                Struct::FLAG_DEFAULT    => Noah::getInstance()->config->router->default->action,
-            ),
-            'getdata'=> array(
-                Struct::FLAG_REQUIRED   => false,
-                Struct::FLAG_TYPE       => Struct::TYPE_ARRAY,
-            ),
+            'module'=> array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+            'controller'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING, Struct::FLAG_DEFAULT=> $def_controller),
+            'action'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING, Struct::FLAG_DEFAULT=> $def_action),
         ));
-        $struct->setData($this->parseUri($uri));
+        $struct->setData($result);
         if (!$result = $struct->checkOut()) {
             throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.uri_parse_failed'), $struct->getMessage()));
         }
-        if ($result['getdata']) {
-            foreach ($result['getdata'] as $key=> $val) {
-                Noah::getInstance()->request->add($key, $val, Request::FLAG_GET);
-            }
-        }
-
         //控制器调度
         $this->setModule($result['module']);
         $this->setController($result['controller']);
         $this->setAction($result['action']);
         return $this->dispatch();
-
     }
 
     /**
@@ -378,13 +377,16 @@ class Base implements RouterDriver
                 $_GET = array();
                 break;
         }
-        $result = array(
+        if ($getdata) {
+            foreach ($getdata as $key=> $val) {
+                Noah::getInstance()->request->add($key, $val, Request::FLAG_GET);
+            }
+        }
+        return array(
             'module'        => $module,
             'controller'    => $controller,
             'action'        => $action,
-            'getdata'       => $getdata,
         );
-        return $result;
     }
 
     /**

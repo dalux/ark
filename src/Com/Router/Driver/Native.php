@@ -3,12 +3,14 @@
 namespace Ark\Com\Router\Driver;
 
 use ReflectionClass;
+use Ark\Core\Struct;
 use Ark\Com\Http\Request;
 use Ark\Core\Controller;
 use Ark\Core\Loader;
 use Ark\Core\Noah;
 use Ark\Contract\RouterDriver;
 use Ark\Com\Router\RuntimeException;
+use Ark\Com\Event\Adapter as EventAdapter;
 
 class Native implements RouterDriver
 {
@@ -42,6 +44,15 @@ class Native implements RouterDriver
      */
     function doAction($uri)
     {
+        //解析前事件
+        $data = array('driver'=> 'Native', 'uri'=> $uri);
+        $rule = array(
+            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+            'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+        );
+        $data = EventAdapter::onListening('event.routing.before', $data, $rule);
+        $uri = $data['uri'];
+        //解析URI
         if (strpos($uri, '?') !== false) {
             $query = substr($uri, strpos($uri, '?') + 1);
             $query = str_replace(array('&', '='), '/', $query);
@@ -52,7 +63,17 @@ class Native implements RouterDriver
             }
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
+        //重写
         $uri = trim($this->_rewrite($uri), '/');
+        //解析后事件
+        $data = array('driver'=> 'Native', 'uri'=> $uri);
+        $rule = array(
+            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+            'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
+        );
+        $data = EventAdapter::onListening('event.routing.finish', $data, $rule);
+        $uri = $data['uri'];
+        //处理URI,组装控制器类
         $urlsep = Noah::getInstance()->config->router->urlsep;
         $url_suffix = Noah::getInstance()->config->router->urlsuffix;
         $action = Noah::getInstance()->config->router->default->action;
