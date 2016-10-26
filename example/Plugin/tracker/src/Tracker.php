@@ -3,7 +3,7 @@
 use Ark\Core\Noah;
 use Ark\Core\Timer;
 use Ark\Core\Trace;
-use Ark\Toolbox\Spanner;
+use Ark\Core\Spanner;
 use Ark\Com\Http\Server;
 
 class Tracker
