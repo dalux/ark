@@ -55,7 +55,6 @@ class Tracker
                     $usedinfo[] = array('all time', $all_time. 's');
                     $usedinfo[] = array('dbconnect time', $dbconnect_time. 's');
                     $usedinfo[] = array('memory', Spanner::formatSize($memusage[1]-$memusage[0]));
-                    $usedinfo[] = array('url mode', Noah::getInstance()->router->getUrlModeName());
                     $custom = array(array('name', 'value'));
                     $_custom = Trace::get('custom');
                     if ($_custom) {

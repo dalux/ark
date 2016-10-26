@@ -10,6 +10,7 @@ use Ark\Com\Http\Request;
 use Ark\Contract\RouterDriver;
 use Ark\Com\Router\RuntimeException;
 use Ark\Com\Event\Adapter as EventAdapter;
+use Ark\Core\Trace;
 
 class Base implements RouterDriver
 {
@@ -50,7 +51,7 @@ class Base implements RouterDriver
      *
      * @var array
      */
-    private $_router = array();
+    private $_rules = array();
 
     /**
      * 当前URL模式
@@ -86,9 +87,12 @@ class Base implements RouterDriver
      */
     function __construct()
     {
-        if ($url_mode = Noah::getInstance()->config->router->urlmode) {
-            $this->setUrlMode($url_mode);
+        $url_mode = self::URL_MODE_COMMON;
+        if ($mode = Noah::getInstance()->config->router->urlmode) {
+            $url_mode = $mode;
         }
+        $this->setUrlMode($url_mode);
+        Trace::set('custom', array('name'=> 'url_mode', 'value'=> $url_mode));
     }
 
     /**
@@ -224,9 +228,9 @@ class Base implements RouterDriver
      * @param $redirect
      * @return $this
      */
-    function addRouter($rule, $redirect)
+    function addRule($rule, $redirect)
     {
-        $this->_router[$rule] = $redirect;
+        $this->_rules[$rule] = $redirect;
         return $this;
     }
 
@@ -376,7 +380,7 @@ class Base implements RouterDriver
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('/%s$/', addslashes($urlsuffix)), '', $uri);
+                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
                 $uri_params = explode($urlsep, $uri);
                 if ($this->isAllowModule()) {
                     $module = array_shift($uri_params);
@@ -395,7 +399,7 @@ class Base implements RouterDriver
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('/%s$/', addslashes($urlsuffix)), '', $uri);
+                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
                 $uri_params = explode($urlsep, $uri);
                 if ($this->isAllowModule()) {
                     $module = array_shift($uri_params);
@@ -418,7 +422,7 @@ class Base implements RouterDriver
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('/%s$/', addslashes($urlsuffix)), '', $uri);
+                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
                 $uri_params = explode($urlsep, $uri);
                 foreach ($_GET as $k=> $v) {
                     $uri_params[$k] = $v;
@@ -522,7 +526,7 @@ class Base implements RouterDriver
      */
     private function _rewrite($uri)
     {
-        foreach ($this->_router as $key=> $val) {
+        foreach ($this->_rules as $key=> $val) {
             $key = '~'. $key. '~i';
             if (preg_match($key, $uri)) {
                 if (is_string($val)) {
