@@ -21,10 +21,10 @@ class Native implements RouterDriver
     private $_rules = array();
 
     /**
-     * 添加路径规则
+     * 添加路由规则
      *
-     * @param $rule
-     * @param $redirect
+     * @param string $rule
+     * @param string $redirect
      * @return $this
      */
     function addRule($rule, $redirect)
