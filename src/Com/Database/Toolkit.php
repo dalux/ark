@@ -6,36 +6,6 @@ class Toolkit
 {
 
     /**
-     * 在范围参数内
-     *
-     * @access public
-     * @param string $column
-     * @param array $value
-     * @param string $dbtype
-     * @return string
-     */
-    static function whereIn($column, array $value, $dbtype = 'mysql')
-    {
-        $expr = $column. ' IN (?)';
-        return str_replace('?', self::quote($value, $dbtype), $expr);
-    }
-
-    /**
-     * 不在范围参数内
-     *
-     * @access public
-     * @param string $column
-     * @param array $value
-     * @param string $dbtype
-     * @return string
-     */
-    static function whereNotIn($column, array $value, $dbtype = 'mysql')
-    {
-        $expr = $column. ' NOT IN (?)';
-        return str_replace('?', self::quote($value, $dbtype), $expr);
-    }
-
-    /**
      * 为值添加引号
      *
      * @access public

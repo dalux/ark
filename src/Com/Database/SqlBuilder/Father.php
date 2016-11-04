@@ -122,13 +122,113 @@ abstract class Father extends Sailor implements CacheProxy
     function where($cond, $value = null, $and = true)
     {
         if (is_null($value)
-            || $cond instanceof self) {
+                || $cond instanceof self) {
             $_part = $cond;
         } else {
             $_part = $this->_parseExpr($cond, $value);
         }
         $this->_parts['where'][] = array($_part, $and);
         return $this;
+    }
+
+    /**
+     * 查询in条件
+     *
+     * @access public
+     * @param string $field
+     * @param array $value
+     * @param bool $and
+     * @return Father
+     */
+    function whereIn($field, array $value = array(), $and = true)
+    {
+        $expr = $field. ' IN (?)';
+        $value = Toolkit::quote($value, $this->_db_type);
+        $expr = str_replace('?', $value, $expr);
+        return $this->where($expr, null, $and);
+    }
+
+    /**
+     * 查询notin条件
+     *
+     * @access public
+     * @param string $field
+     * @param array $value
+     * @param bool $and
+     * @return Father
+     */
+    function whereNotIn($field, array $value = array(), $and = true)
+    {
+        $expr = $field. ' NOT IN (?)';
+        $value = Toolkit::quote($value, $this->_db_type);
+        $expr = str_replace('?', $value, $expr);
+        return $this->where($expr, null, $and);
+    }
+
+    /**
+     * 查询exists条件
+     *
+     * @access public
+     * @param mixed $sub_query
+     * @param bool $and
+     * @return Father
+     */
+    function whereExist($sub_query, $and = true)
+    {
+        $expr = 'EXISTS (?)';
+        if ($sub_query instanceof Select) {
+            $sub_query = $sub_query->getSQL();
+        }
+        $expr = str_replace('?', $sub_query, $expr);
+        return $this->where($expr, null, $and);
+    }
+
+    /**
+     * 查询notexists条件
+     *
+     * @access public
+     * @param mixed $sub_query
+     * @param bool $and
+     * @return Father
+     */
+    function whereNotExist($sub_query, $and = true)
+    {
+        $expr = 'NOT EXISTS (?)';
+        if ($sub_query instanceof Select) {
+            $sub_query = $sub_query->getSQL();
+        }
+        $expr = str_replace('?', $sub_query, $expr);
+        return $this->where($expr, null, $and);
+    }
+
+    /**
+     * 查询like条件
+     *
+     * @access public
+     * @param mixed $sub_query
+     * @param bool $and
+     * @return Father
+     */
+    function whereLike($field, $expr, $and = true, $escape = '')
+    {
+        $expr = "{$field} LIKE '{$expr}'";
+        $escape && $expr.= " ESCAPE '{$escape}'";
+        return $this->where($expr, null, $and);
+    }
+
+    /**
+     * 查询not like条件
+     *
+     * @access public
+     * @param mixed $sub_query
+     * @param bool $and
+     * @return Father
+     */
+    function whereNotLike($field, $expr, $and = true, $escape = '')
+    {
+        $expr = "{$field} NOT LIKE '{$expr}'";
+        $escape && $expr.= " ESCAPE '{$escape}'";
+        return $this->where($expr, null, $and);
     }
 
     /**
