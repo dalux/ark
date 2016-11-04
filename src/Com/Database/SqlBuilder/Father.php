@@ -173,7 +173,7 @@ abstract class Father extends Sailor implements CacheProxy
      * @param bool $and
      * @return Father
      */
-    function whereExist($sub_query, $and = true)
+    function whereExists($sub_query, $and = true)
     {
         $expr = 'EXISTS (?)';
         if ($sub_query instanceof Select) {
@@ -191,7 +191,7 @@ abstract class Father extends Sailor implements CacheProxy
      * @param bool $and
      * @return Father
      */
-    function whereNotExist($sub_query, $and = true)
+    function whereNotExists($sub_query, $and = true)
     {
         $expr = 'NOT EXISTS (?)';
         if ($sub_query instanceof Select) {
