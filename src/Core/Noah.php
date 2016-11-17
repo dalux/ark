@@ -360,7 +360,7 @@ class Noah
             }
 
             //合并为预处理程序
-            $this->_prepare = array_merge($prepares, $this->_prepare);
+            $this->_prepare = array_merge($this->_prepare, $prepares);
         }
 
         //执行各个预处理
