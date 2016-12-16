@@ -34,18 +34,14 @@ class Memcached extends Father implements CacheDriver
         foreach ($save_path as $v) {
             $url = parse_url($v);
             if ($url['host'] && $url['port']) {
-                $mem = new \Memcached();
-                $mem->addServer($url['host'], $url['port']);
-                $mem->setOption(\Memcached::OPT_CONNECT_TIMEOUT, 100);
-                if ($mem->getVersion()) {
-                    $this->_container->addServer($url['host'], $url['port']);
-                }
-                $mem = null;
+                $this->_container->addServer($url['host'], $url['port']);
             }
         }
         $params = array(
+            \Memcached::OPT_DISTRIBUTION=> \Memcached::DISTRIBUTION_CONSISTENT,
             \Memcached::OPT_CONNECT_TIMEOUT=> 500,
             \Memcached::OPT_COMPRESSION=> true,
+            \Memcached::OPT_REMOVE_FAILED_SERVERS=> true,
         );
         if ($option) {
             $params = array_merge($params, $option);
