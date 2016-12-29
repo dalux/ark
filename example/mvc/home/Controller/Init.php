@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use Ark\Core\Controller;
+use Ark\Controller\Base;
 
-abstract class Init extends Controller
+abstract class Init extends Base
 {
 
     function __init()

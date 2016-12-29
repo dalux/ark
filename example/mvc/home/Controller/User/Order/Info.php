@@ -2,9 +2,9 @@
 
 namespace App\Controller\User\Order;
 
-use Ark\Core\Controller;
+use Ark\Controller\Base;
 
-class Info extends Controller
+class Info extends Base
 {
 
     function index()

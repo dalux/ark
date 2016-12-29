@@ -2,7 +2,7 @@
 
 namespace Ark\Core;
 
-use Ark\Com\Http\Server;
+use Ark\Http\Server;
 
 class Trace
 {

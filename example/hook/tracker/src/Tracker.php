@@ -1,10 +1,10 @@
 <?php
 
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 use Ark\Core\Timer;
 use Ark\Core\Trace;
-use Ark\Core\Spanner;
-use Ark\Com\Http\Server;
+use Ark\Http\Server;
+use Ark\Core\Toolkit;
 
 class Tracker
 {
@@ -12,7 +12,7 @@ class Tracker
     function handle(array $data)
     {
         if ($data['event'] == 'event.ark.startup') {
-            $debug = Noah::getInstance()->config->global->debug;
+            $debug = Captain::getInstance()->config->global->debug;
             if ($debug && !Server::isCli()) {
                 ob_start();
             }
@@ -37,24 +37,18 @@ class Tracker
                     $driver_trace[] = array(key($v), current($v));
                 }
             }
-            //文件加载
-            //$includedfiles = array(array('number', 'file path'));
-            //foreach (get_included_files() as $k=> $v) {
-            //    $includedfiles[] = array($k+1, $v);
-            //}
             //非CLI模式时，在浏览器调试工具中输出调试信息
             if (ob_get_length() > 0
                     && !Server::isCli()
-                    && Noah::getInstance()->config->global->debug) {
+                    && Captain::getInstance()->config->global->debug) {
                 $user_agent = $_SERVER['HTTP_USER_AGENT'];
                 //chrome、火狐浏览器
-                require_once __DIR__ . '/FirePhp.php';
                 require_once __DIR__ . '/Fb.php';
                 if (strpos($user_agent, 'Chrome') !== false || strpos($user_agent, 'Firefox') !== false) {   //firefox下用firephp插件进行调试
                     $usedinfo = array(array('name', 'data'));
                     $usedinfo[] = array('all time', $all_time. 's');
                     $usedinfo[] = array('dbconnect time', $dbconnect_time. 's');
-                    $usedinfo[] = array('memory', Spanner::formatSize($memusage[1]-$memusage[0]));
+                    $usedinfo[] = array('memory', Toolkit::formatSize($memusage[1]-$memusage[0]));
                     $custom = array(array('name', 'value'));
                     $_custom = Trace::get('custom');
                     if ($_custom) {
@@ -72,13 +66,12 @@ class Tracker
                     fb($driver_trace, 'Driver List ('. (count($driver_trace)-1). ')', \FirePHP::TABLE);
                     fb($dbtrace, 'Database Trace ('. (count($dbtrace) - 1). ')', \FirePHP::TABLE);
                     if ($_custom) fb($custom, 'Custom Info ('. (count($custom)-1). ')', \FirePHP::TABLE);
-                    //fb($includedfiles, 'Included Files ('. (count($includedfiles)-1). ')', \FirePHP::TABLE);
                 }
                 //IE sorry
                 //当前为CLI模式，并且为调试模式，并且显式的指明了要显示DEBUG信息时
             } elseif (Server::isCli()
-                    && Noah::getInstance()->request->get('debug')
-                    && Noah::getInstance()->config->global->debug) {
+                    && Captain::getInstance()->request->get('debug')
+                    && Captain::getInstance()->config->global->debug) {
                 echo PHP_EOL. PHP_EOL. str_repeat('=', 20). ' Debug Info '. str_repeat('=', 40). PHP_EOL. PHP_EOL;
                 echo '>>> Database Trace'. PHP_EOL;
                 $i = 1;
@@ -94,21 +87,14 @@ class Tracker
                 echo PHP_EOL. '>>> DBConnect Time Used'. PHP_EOL;
                 echo "\t". $dbconnect_time. 's'. PHP_EOL;
                 echo PHP_EOL. '>>> Memory Used'. PHP_EOL;
-                echo "\t". Spanner::formatSize($memusage[1]-$memusage[0]). PHP_EOL;
+                echo "\t". Toolkit::formatSize($memusage[1]-$memusage[0]). PHP_EOL;
                 echo PHP_EOL. '>>> Url Mode'. PHP_EOL;
-                echo "\t". Noah::getInstance()->router->getUrlModeName(). PHP_EOL;
+                echo "\t". Captain::getInstance()->router->getUrlModeName(). PHP_EOL;
                 echo PHP_EOL. '>>> Driver List'. PHP_EOL;
                 foreach ($driver_trace as $k=> $v) {
                     if ($k == 'name') continue;
                     echo "\t". $v[0]. ': '. $v[1]. PHP_EOL;
                 }
-                //echo PHP_EOL. '>>> Included Files'. PHP_EOL;
-                //foreach ($includedfiles as $k=> $v) {
-                //    if ($k == 'number') continue;
-                //    $i = $v[0];
-                //    $i < 10 && $i = '0'. $i;
-                //    echo "\t". '['. $i. '] '. $v[1]. PHP_EOL;
-                //}
             }
         }
 

@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'driver'=> 'native',
+    'driver'=> '\Ark\View\Driver\Native',
     'template_ext'=> '.phtml',
-    'template_dir'=> \Ark\Core\Loader::realPath('./View/'),
+    'template_dir'=> \Ark\Core\Loader::realPath('@/view/'),
 );

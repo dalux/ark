@@ -2,8 +2,8 @@
 
 require_once __DIR__. '/bootstrap.php';
 
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 
-Noah::getInstance()
+Captain::getInstance()
     ->addPrepare(function() {})
     ->run();

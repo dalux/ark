@@ -29,6 +29,19 @@ class Timer
 		}
     	self::$_marks[(string)$flag] = microtime(true);
     }
+
+	/**
+	 * 查询是否有标记过
+	 *
+	 * @access public
+	 * @static
+	 * @param string $flag
+	 * @return bool
+	 */
+	static function isMarked($flag)
+	{
+		return isset(self::$_marks[(string)$flag]);
+	}
     
     /**
      * 获取最近两次标记的时间值

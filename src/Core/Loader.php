@@ -27,12 +27,12 @@ class Loader
      *
      * @param $alias
      * @param $path
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function setAlias($alias, $path)
     {
         if (in_array($alias, array('*', '.'))) {
-            throw new RuntimeException(sprintf(Captain::getInstance()->lang->get('core.deny_alias_redeclare'), $alias));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('core.deny_alias_redeclare'), $alias));
         }
         self::$_alias[$alias] = $path;
     }
@@ -42,7 +42,7 @@ class Loader
      *
      * @param $namespace
      * @param $path
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function setNameSpace($namespace, $path)
     {
@@ -83,12 +83,12 @@ class Loader
      * 设置自动加载器
      *
      * @param $loader
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function addAutoLoader($loader)
     {
         if (!is_callable($loader)) {
-            throw new RuntimeException(Captain::getInstance()->lang->get('core.invalid_autoloader'));
+            throw new Exception(Captain::getInstance()->lang->get('core.invalid_autoloader'));
         }
         spl_autoload_register($loader);
     }
@@ -144,13 +144,13 @@ class Loader
      *
      * @param $spacename
      * @return string
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function realPath($spacename)
     {
         $first_char = substr($spacename, 0, 1);
         if (!isset(self::$_alias[$first_char])) {
-            throw new RuntimeException(Captain::getInstance()->lang->get('core.format_path_failed'));
+            throw new Exception(Captain::getInstance()->lang->get('core.format_path_failed'));
         }
         $parsed = self::_parse($spacename);
         list($alias, $space) = $parsed;
