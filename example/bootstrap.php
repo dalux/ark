@@ -17,7 +17,7 @@ use Ark\Cache\Adapter as CacheAdapter;
 //实例化框架
 Captain::getInstance()
     //设置应用程序根空间名称及基本路径
-    ->setApp('App', Loader::realPath('./mvc/home'))
+    ->setApp('Home', Loader::realPath('./mvc/home'))
     //设置配置文件夹路径
     ->setConfigDir(function() {
         $path = Loader::realPath('./config');
@@ -30,11 +30,12 @@ Captain::getInstance()
         return $path. '/localhost';
     })
     //将配置文件解析结果缓存起来
-    //->cacheConfigTo(Loader::realPath('./runtime'))
+    ->cacheConfigTo(Loader::realPath('./runtime'))
+    //添加钩子程序存放目录
+    ->addHookDir(Loader::realPath('./hook'))
     //框架启动前的预处理逻辑,可以于此添加一些全局性事务
-    ->addPrepare(function() {
 
-        Captain::getInstance()->addHookDir(Loader::realPath('./hook'));
+    ->addPrepare(function() {
 
         //添加数据库查询执行前事件,执行些诸如检查SQL语句之类的动作
         EventAdapter::addListener('event.query.before', function($data) {

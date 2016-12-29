@@ -343,7 +343,9 @@ class Captain
         Server::isCli() && Server::initCli();
         //检测必要应用配置
         if (!$this->_app_name) {
-            throw new Exception($this->lang->get('core.invalid_app_property'));
+            throw new Exception($this->lang->get('core.invalid_app_name'));
+        } elseif (!is_dir($this->_app_dir)) {
+            throw new Exception($this->lang->get('core.invalid_app_dir'));
         }
         //注册应用程序基地址
         Loader::setNameSpace($this->_app_name, $this->_app_dir);

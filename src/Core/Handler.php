@@ -20,7 +20,7 @@ class Handler
         if ($type == 'exception') {
             restore_exception_handler();
             if (is_null($handler)) {
-                $handler = array(array(new self(), 'display'));
+                $handler = array(new self(), 'display');
             }
             set_exception_handler($handler);
         }
