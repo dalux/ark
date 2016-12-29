@@ -54,14 +54,14 @@ class Struct
      * 设置校验规则文件
      *
      * @param $path
-     * @throws RuntimeException
+     * @throws Exception
      */
     function setRuleFile($path)
     {
         if (!$this->_rule = Loader::import($path, false)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('struct.load_rulefile_failed'), $path));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('struct.load_rulefile_failed'), $path));
         } elseif (!is_array($this->_rule)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('struct.return_type_error'), $path));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('struct.return_type_error'), $path));
         }
     }
 
@@ -105,13 +105,13 @@ class Struct
      * 数据校验结果, 成功则返回数组, 失败返回false
      *
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     function checkOut()
     {
         $valid = true;
         $this->_message = '';
-        $language = Noah::getInstance()->language;
+        $language = Captain::getInstance()->lang;
         foreach ($this->_rule as $key=> $val) {
             foreach ($val as $k=> $v) {
                 if ($k == self::FLAG_REQUIRED && $v) {

@@ -1,12 +1,12 @@
 <?php
 
-namespace Ark\Com\Cache\Driver;
+namespace Ark\Cache\Driver;
 
-use Ark\Core\Noah;
-use Ark\Com\Cache\Signal;
-use Ark\Contract\CacheDriver;
+use Ark\Core\Captain;
+use Ark\Cache\Driver;
+use Ark\Cache\Exception;
 
-class Memcached extends Father implements CacheDriver
+class Memcached extends Driver
 {
     
     /**
@@ -22,12 +22,12 @@ class Memcached extends Father implements CacheDriver
      *
      * @param $save_path
      * @param array $option
-     * @throws MemcachedException
+     * @throws Exception
      */
     function __construct($save_path, array $option = array())
     {
         if (!extension_loaded('memcached')) {
-            throw new MemcachedException(sprintf(Noah::getInstance()->language->get('cache.extension_load_failed'), 'php_memcached'));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.extension_load_failed'), 'php_memcached'));
         }
         is_array($save_path) || $save_path = array($save_path);
         $this->_container = new \Memcached();
@@ -50,7 +50,7 @@ class Memcached extends Father implements CacheDriver
             $this->_container->setOption($key, $val);
         }
         if (!$this->_container->getVersion()) {
-            throw new MemcachedException(Noah::getInstance()->language->get('cache.cacher_create_failed'), 'Memcached');
+            throw new Exception(Captain::getInstance()->lang->get('cache.cacher_create_failed'), 'Memcached');
         }
     }
 
@@ -82,7 +82,7 @@ class Memcached extends Father implements CacheDriver
     {
     	$data = null;
     	$path = $this->getCachePath($name);
-    	if (Signal::getSignal() != Signal::SIGNAL_EXPIRE) {
+    	if ($this->_allow_cache) {
             $data = $this->_container->get($path);
             if ($this->_container->getResultCode() != \Memcached::RES_SUCCESS) {
                 $data = null;

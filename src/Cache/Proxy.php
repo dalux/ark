@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Com\Cache;
-
-use Ark\Contract\CacheDriver;
+namespace Ark\Cache;
 
 class Proxy
 {
@@ -19,7 +17,7 @@ class Proxy
      * 缓存器
      * 
      * @access private
-     * @var CacheDriver
+     * @var Driver
      */
     private $_cache = null;
 
@@ -42,9 +40,9 @@ class Proxy
      * 构造器
      *
      * @access public
-     * @param CacheDriver $cache
+     * @param Driver $cache
      */
-    function __construct(CacheDriver $cache)
+    function __construct(Driver $cache)
     {
         $this->_cache = $cache;
     }

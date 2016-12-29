@@ -1,10 +1,11 @@
 <?php
 
-namespace Ark\Contract;
+namespace Ark\Database;
 
-use Ark\Com\Database\SqlBuilder;
+use Ark\Database\Querier;
+use Ark\Cache\Driver as CacheDriver;
 
-interface DatabaseDriver
+abstract class Driver
 {
 
     /**
@@ -15,7 +16,7 @@ interface DatabaseDriver
      * @param array $bind
      * @return int
      */
-    function query($sql, array $bind = array());
+    abstract function query($sql, array $bind = array());
 
     /**
      * 获取所有数据记录
@@ -25,7 +26,7 @@ interface DatabaseDriver
      * @param array $bind
      * @return array
      */
-    function fetchAll($sql, array $bind = array());
+    abstract function fetchAll($sql, array $bind = array());
 
     /**
      * 获取当行数据
@@ -35,7 +36,7 @@ interface DatabaseDriver
      * @param array $bind
      * @return array
      */
-    function fetchRow($sql, array $bind = array());
+    abstract function fetchRow($sql, array $bind = array());
 
     /**
      * 获取第一行第一列数据，一般用在聚合函数中
@@ -45,7 +46,7 @@ interface DatabaseDriver
      * @param array $bind
      * @return int
      */
-    function fetchScalar($sql, array $bind = array());
+    abstract function fetchScalar($sql, array $bind = array());
 
     /**
      * 开启事务处理
@@ -53,7 +54,7 @@ interface DatabaseDriver
      * @access public
      * @return mixed
      */
-    function beginTransaction();
+    abstract function beginTransaction();
 
     /**
      * 提交事务处理
@@ -61,7 +62,7 @@ interface DatabaseDriver
      * @access public
      * @return mixed
      */
-    function commit();
+    abstract function commit();
 
     /**
      * 回滚事务处理
@@ -69,7 +70,7 @@ interface DatabaseDriver
      * @access public
      * @return mixed
      */
-    function rollback();
+    abstract function rollback();
 
     /**
      * 最后一次写入的主键ID
@@ -78,7 +79,7 @@ interface DatabaseDriver
      * @param string $seq
      * @return mixed
      */
-    function lastInsertId($seq = null);
+    abstract function lastInsertId($seq = null);
 
     /**
      * 最后一次事务影响的行数
@@ -86,41 +87,51 @@ interface DatabaseDriver
      * @access public
      * @return mixed
      */
-    function lastRowCount();
+    abstract function lastRowCount();
 
     /**
      * 获取驱动名称
      *
      * @return string
      */
-    function getDriverName();
+    abstract function getDriverName();
 
     /**
      * 获取select助手
      *
-     * @return SqlBuilder\Select
+     * @return Querier\Select
      */
-    function select();
+    abstract function select();
 
     /**
      * 获取update助手
      *
-     * @return SqlBuilder\Update
+     * @return Querier\Update
      */
-    function update();
+    abstract function update();
 
     /**
      * 获取insert助手
      *
-     * @return SqlBuilder\Insert
+     * @return Querier\Insert
      */
-    function insert();
+    abstract function insert();
 
     /**
      * 获取delete助手
      *
-     * @return SqlBuilder\Delete
+     * @return Querier\Delete
      */
-    function delete();
+    abstract function delete();
+
+    /**
+     * 缓存SQL语句
+     *
+     * @param $expire
+     * @param $name
+     * @param CacheDriver $cache
+     * @return mixed
+     */
+    abstract function cache($expire, $name, CacheDriver $cache);
 
 }

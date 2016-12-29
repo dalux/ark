@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Com\Database\SqlBuilder\Insert;
+namespace Ark\Database\Querier\Insert;
 
-use Ark\Com\Database\Toolkit;
-use Ark\Com\Database\SqlBuilder\Insert;
-use Ark\Com\Database\SqlBuilder\Select;
+use Ark\Database\Toolkit;
+use Ark\Database\Querier\Insert;
+use Ark\Database\Querier\Select;
 
 class Oci extends Insert
 {

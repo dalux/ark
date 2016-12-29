@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Com\Http;
+namespace Ark\Http;
 
 class Server
 {
@@ -73,8 +73,8 @@ class Server
     {
         $is_cli = false;
         if (!isset($_SERVER['HTTP_HOST'])
-            || !isset($_SERVER['SERVER_PROTOCOL'])
-            || false === strpos($_SERVER['SERVER_PROTOCOL'], 'HTTP')) {
+                || !isset($_SERVER['SERVER_PROTOCOL'])
+                || false === strpos($_SERVER['SERVER_PROTOCOL'], 'HTTP')) {
             $is_cli = true;
         }
         return $is_cli;

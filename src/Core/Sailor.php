@@ -7,7 +7,7 @@ abstract class Sailor
 
     function __get($name)
     {
-        return Noah::getInstance()->get($name);
+        return Captain::getInstance()->get($name);
     }
 
 }

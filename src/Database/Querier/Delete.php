@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Com\Database\SqlBuilder;
+namespace Ark\Database\Querier;
 
 class Delete extends Father
 {

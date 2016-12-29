@@ -2,7 +2,7 @@
 
 namespace Ark\Core;
 
-class Spanner
+class Toolkit
 {
 
     /**
@@ -121,12 +121,12 @@ class Spanner
      * @static
      * @param string $dir
      * @return bool
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function mkDir($dir)
     {
         if (!($dir = trim($dir))) {
-            throw new RuntimeException(Noah::getInstance()->language->get('tbox.invalid_create_path'));
+            throw new Exception(Captain::getInstance()->lang->get('tbox.invalid_create_path'));
         }
         $dirs = array($dir);
         while (!file_exists($dir)) {
@@ -411,7 +411,7 @@ class Spanner
      *
      * @access public
      * @param string $content
-     * @throws RuntimeException
+     * @throws Exception
      * @return \SimpleXMLElement
      */
     static function strToXml($content)
@@ -420,7 +420,7 @@ class Spanner
         if (!$data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA)) {
             $error = libxml_get_last_error();
             libxml_clear_errors();
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('tbox.parse_string_failed'), $error ? $error->message : '未知错误', $content));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('tbox.parse_string_failed'), $error ? $error->message : '未知错误', $content));
         }
         return $data;
     }
@@ -439,6 +439,7 @@ class Spanner
         $return = array();
         $last_name = null;
         foreach ($object->children() as $val) {
+            /* @var \SimpleXMLElement $val */
             if (isset($last_name) && $val->getName() == $last_name) {
                 $i == 1 && $return[$last_name] = array($return[$last_name]);
                 array_push($return[$last_name], self::xmlToArray($val));

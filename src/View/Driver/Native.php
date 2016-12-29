@@ -1,15 +1,15 @@
 <?php
 
-namespace Ark\Com\View\Driver;
+namespace Ark\View\Driver;
 
 use Ark\Core\Loader;
-use Ark\Core\Noah;
-use Ark\Core\Sailor;
+use Ark\Core\Captain;
 use Ark\Core\Struct;
-use Ark\Contract\ViewDriver;
-use Ark\Com\Event\Adapter as EventAdapter;
+use Ark\View\Exception;
+use Ark\View\Driver as ViewDriver;
+use Ark\Event\Adapter as EventAdapter;
 
-class Native extends Sailor implements ViewDriver
+class Native extends ViewDriver
 {
 
     /**
@@ -42,8 +42,7 @@ class Native extends Sailor implements ViewDriver
      */
     function __construct()
     {
-        $this->_template_dir = Loader::realPath('./view/');
-        $config = Noah::getInstance()->config->view;
+        $config = Captain::getInstance()->config->view;
         $config->template_ext && $this->_template_ext = $config->template_ext;
         $config->template_dir && $this->_template_dir = rtrim($config->template_dir, DIRECTORY_SEPARATOR);
     }
@@ -89,7 +88,7 @@ class Native extends Sailor implements ViewDriver
      * @param string $template
      * @param bool $return
      * @return string
-     * @throws RuntimeException
+     * @throws Exception
      */
     function display($template, $return = true)
     {
@@ -98,7 +97,7 @@ class Native extends Sailor implements ViewDriver
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $template;
         if (!is_file($template)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('view.template_not_found'), Loader::reducePath($template)));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('view.template_not_found'), Loader::reducePath($template)));
         }
         $data = array(
             'template'=> $template,
@@ -133,7 +132,7 @@ class Native extends Sailor implements ViewDriver
      * @param array $params 参数
      * @param bool $return
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     function import($path, $params = array(), $return = false)
     {
@@ -142,7 +141,7 @@ class Native extends Sailor implements ViewDriver
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $path;
         if (!is_file($template)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('view.include_file_not_found'), Loader::reducePath($template)));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('view.include_file_not_found'), Loader::reducePath($template)));
         }
         extract($this->_storage, EXTR_REFS);
         extract($params, EXTR_SKIP);

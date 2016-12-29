@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Com\Event;
+namespace Ark\Event;
 
 use Closure;
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 use Ark\Core\Struct;
 
 class Adapter
@@ -49,7 +49,7 @@ class Adapter
      * @param array $data
      * @param array $rule
      * @return array
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function onListening($event, array $data = array(), array $rule = array())
     {
@@ -65,10 +65,10 @@ class Adapter
                 $struct->setRule($rule);
                 $struct->setData($data);
                 if (!$data = $struct->checkOut()) {
-                    throw new RuntimeException(sprintf(Noah::getInstance()->language->get('event.struct_check_failed'), $event, $struct->getMessage()));
+                    throw new Exception(sprintf(Captain::getInstance()->lang->get('event.struct_check_failed'), $event, $struct->getMessage()));
                 }
             } elseif (!is_array($data)) {
-                throw new RuntimeException(sprintf(Noah::getInstance()->language->get('core.data_must_array'), $event));
+                throw new Exception(sprintf(Captain::getInstance()->lang->get('core.data_must_array'), $event));
             }
         }
         return $data;

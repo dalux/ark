@@ -3,8 +3,8 @@
 /*
 //通用路由器
 return array(
-    'driver'=> 'base',
-    'urlmode'=> \Ark\Com\Router\Driver\Base::URL_MODE_REWRITE,
+    'driver'=> '\Ark\Router\Driver\Base',
+    'urlmode'=> \Ark\Router\Driver\Base::URL_MODE_REWRITE,
     'urlsuffix'=> '',
     'urlsep'=> '/',
     'urlvar'=> array(
@@ -22,7 +22,7 @@ return array(
 
 //原生PHP路由器
 return array(
-    'driver'=> 'native',
+    'driver'=> '\Ark\Router\Driver\Native',
     'urlsuffix'=> '.html',
     'urlsep'=> '/',
     'default'=> array(

@@ -1,10 +1,9 @@
 <?php
 
-namespace Ark\Com\Router;
+namespace Ark\Router;
 
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 use Ark\Core\Trace;
-use Ark\Contract\RouterDriver;
 
 class Adapter
 {
@@ -12,27 +11,26 @@ class Adapter
     /**
      * 获取路由驱动器
      *
-     * @return RouterDriver
-     * @throws RuntimeException
+     * @return Driver
+     * @throws Exception
      */
     static function getDriver()
     {
-        $config = Noah::getInstance()->config->router->toArray();
+        $config = Captain::getInstance()->config->router->toArray();
         if (!$driver = $config['driver']) {
-            throw new RuntimeException(Noah::getInstance()->language->get('router.invalid_driver_name'));
+            throw new Exception(Captain::getInstance()->lang->get('router.invalid_driver_name'));
         }
-        $name = sprintf('__base_router_%s__', $driver);
-        $instance = Noah::getInstance()->container->$name;
-        if (!$instance || !$instance instanceof RouterDriver) {
-            $class_name = sprintf('\\Ark\\Com\\Router\\Driver\\'. ucfirst($driver));
-            if (!class_exists($class_name)) {
-                throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.driver_not_found'), $class_name));
+        $name = '__base_router_driver__';
+        $instance = Captain::getInstance()->container->$name;
+        if (!$instance || !$instance instanceof Driver) {
+            if (!class_exists($driver)) {
+                throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_not_found'), $driver));
             }
-            $instance = new $class_name();
-            if (!$instance instanceof RouterDriver) {
-                throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.driver_implement_error'), $class_name, '\\Ark\\Contract\\RouterDriver'));
+            $instance = new $driver();
+            if (!$instance instanceof Driver) {
+                throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_implement_error'), $driver, '\\Ark\\Router\\Driver'));
             }
-            Noah::getInstance()->container->$name = $instance;
+            Captain::getInstance()->container->$name = $instance;
             Trace::set('driver', array('router'=> $driver));
         }
         return $instance;

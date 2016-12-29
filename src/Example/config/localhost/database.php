@@ -2,9 +2,9 @@
 
 return array(
     'master'=> array(
-        'driver'=> 'pdo_mysql',     #支持项(mysql|oci|pdo_mysql|pdo_oci|pdo_sqlite|...)
+        'driver'=> '\Ark\Database\Driver\Pdo\Mysql',
         'dsn'=> 'mysql://username:password@127.0.0.1:3306/dbname?charset=utf8',
-        'option'=> array(),     #针对诸如pdo的扩展连接选项
+        'option'=> array(),
         #dsn值示例：
         #oci://root:123456@127.0.0.1:1521/test?charset=gbk
         #sqlite:/dbpath/dbname.db

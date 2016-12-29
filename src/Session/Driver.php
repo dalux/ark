@@ -1,10 +1,8 @@
 <?php
 
-namespace Ark\Com\Session\Driver;
+namespace Ark\Session;
 
-use Ark\Contract\SessionDriver;
-
-abstract class Father implements SessionDriver
+abstract class Driver
 {
 
     /**
@@ -38,7 +36,7 @@ abstract class Father implements SessionDriver
      * @access public
      * @param string $name
      * @param mixed $value
-     * @return SessionDriver
+     * @return Driver
      */
     function set($name, $value)
     {
@@ -51,7 +49,7 @@ abstract class Father implements SessionDriver
      *
      * @access public
      * @param string $name
-     * @return SessionDriver
+     * @return Driver
      */
     function delete($name)
     {

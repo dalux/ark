@@ -1,19 +1,26 @@
 <?php
 
-namespace Ark\Com\Database\Driver;
+namespace Ark\Database\Driver;
 
 use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Core\Struct;
-use Ark\Com\Cache\Proxy;
-use Ark\Contract\CacheDriver;
-use Ark\Contract\CacheProxy;
-use Ark\Contract\DatabaseDriver;
-use Ark\Com\Database\SqlBuilder;
-use Ark\Com\Event\Adapter as EventAdapter;
+use Ark\Cache\Proxy;
+use Ark\Database\Exception;
+use Ark\Database\Querier;
+use Ark\Event\Adapter as EventAdapter;
+use Ark\Cache\Driver as CacheDriver;
+use Ark\Database\Driver as DatabaseDriver;
 
-class Pdo extends \PDO implements DatabaseDriver, CacheProxy
+class Pdo extends DatabaseDriver
 {
+
+    /**
+     * PDO对象
+     *
+     * @var PDO
+     */
+    protected $_instance;
 
     /**
     * 数据库取值方式
@@ -75,16 +82,16 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param null $user
      * @param null $pass
      * @param array $options
-     * @throws PdoException
+     * @throws Exception
      */
 	function __construct($dsn = null, $user = null, $pass = null, array $options = array())
 	{
 		try {
             Timer::mark('db_connect_begin');
-			parent::__construct($dsn, $user, $pass, $options);
+            $this->_instance = new \PDO($dsn, $user, $pass, $options);
             Timer::mark('db_connect_end');
 		} catch(\PDOException $e) {
-			throw new PdoException($e->getMessage());
+			throw new Exception($e->getMessage());
 		}
 	}
 
@@ -94,14 +101,14 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param string $sql
      * @param array $bind
      * @return \PDOStatement
-     * @throws PdoException
+     * @throws Exception
      */
     protected function _query($sql, $bind = array())
     {
         try {
             Timer::mark('db_query_begin');
             is_string($sql) || $sql = (string)$sql;
-            $smt = $this->prepare($sql);
+            $smt = $this->_instance->prepare($sql);
             if ($bind) {
                 foreach ($bind as $key=> $val) {
                     is_string($key) || $key += 1;
@@ -121,7 +128,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
                 'driver'=> $this->getDriverName(),
             );
             $data = EventAdapter::onListening('event.query.failed', $data, $this->_rule_query_failed);
-            throw new PdoException($data['error']);
+            throw new Exception($data['error']);
         }
     }
 
@@ -132,7 +139,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param string $sql
      * @param array $bind
      * @return int
-     * @throws PdoException
+     * @throws Exception
      */
     function query($sql, array $bind = array())
     {
@@ -156,7 +163,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param string $sql
      * @param array $bind
      * @return mixed
-     * @throws PdoException
+     * @throws Exception
      */
     function fetchAll($sql, array $bind = array())
     {
@@ -180,7 +187,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param string $sql
      * @param array $bind
      * @return mixed
-     * @throws PdoException
+     * @throws Exception
      */
     function fetchScalar($sql, array $bind = array())
     {
@@ -204,7 +211,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param string $sql
      * @param array $bind
      * @return mixed
-     * @throws PdoException
+     * @throws Exception
      */
     function fetchRow($sql, array $bind = array())
     {
@@ -222,7 +229,38 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
     }
 
     /**
+     * 开启事务处理
+     *
+     * @return mixed
+     */
+    function beginTransaction()
+    {
+        return $this->_instance->beginTransaction();
+    }
+
+    /**
+     * 提交事务处理
+     *
+     * @return mixed
+     */
+    function commit()
+    {
+        return $this->_instance->commit();
+    }
+
+    /**
+     * 回滚事务处理
+     *
+     * @return mixed
+     */
+    function rollback()
+    {
+        return $this->_instance->rollback();
+    }
+
+    /**
      * 取序列的下一个值
+     *
      * @return null
      * @internal param null $seq
      */
@@ -262,7 +300,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      */
     function getDriverName()
     {
-        return $this->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        return $this->_instance->getAttribute(\PDO::ATTR_DRIVER_NAME);
     }
 
     /**
@@ -272,7 +310,7 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * @param int $expire
      * @param null $name
      * @param CacheDriver $cache
-     * @return CacheProxy
+     * @return Proxy
      */
     function cache($expire, $name, CacheDriver $cache)
     {
@@ -284,11 +322,12 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * select对象
      *
      * @access public
-     * @return SqlBuilder\Select;
+     * @return Querier\Select;
      */
     function select()
     {
-        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Select\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Select\\'. ucfirst($this->getDriverName());
+        /* @var Querier\Select $instance */
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -297,11 +336,12 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * update对象
      *
      * @access public
-     * @return SqlBuilder\Update;
+     * @return Querier\Update;
      */
     function update()
     {
-        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Update\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Update\\'. ucfirst($this->getDriverName());
+        /* @var Querier\Update $instance */
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -310,11 +350,12 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * insert对象
      *
      * @access public
-     * @return SqlBuilder\Insert
+     * @return Querier\Insert
      */
     function insert()
     {
-        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Insert\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Insert\\'. ucfirst($this->getDriverName());
+        /* @var Querier\Insert $instance */
         $instance = new $class();
         return $instance->invoke($this);
     }
@@ -323,11 +364,12 @@ class Pdo extends \PDO implements DatabaseDriver, CacheProxy
      * delete对象
      *
      * @access public
-     * @return SqlBuilder\Delete
+     * @return Querier\Delete
      */
     function delete()
     {
-        $class = '\\Ark\\Com\\Database\\SqlBuilder\\Delete\\'. ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Delete\\'. ucfirst($this->getDriverName());
+        /* @var Querier\Delete $instance */
         $instance = new $class();
         return $instance->invoke($this);
     }

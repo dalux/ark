@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Com\Database\SqlBuilder;
+namespace Ark\Database\Querier;
 
-use Ark\Com\Database\Toolkit;
+use Ark\Database\Toolkit;
 
 class Update extends Father
 {

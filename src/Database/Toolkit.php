@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Com\Database;
+namespace Ark\Database;
 
 class Toolkit
 {
@@ -70,12 +70,12 @@ class Toolkit
      * @access public
      * @param string $url
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     static function parseConnectUrl($url)
     {
         if (!$parsed = parse_url($url)) {
-            throw new RuntimeException(sprintf('无效的数据库连接字符串："%s"', $url));
+            throw new Exception(sprintf('无效的数据库连接字符串："%s"', $url));
         }
         $config = array(
             'type'=> $parsed['scheme'],

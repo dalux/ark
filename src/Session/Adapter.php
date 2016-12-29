@@ -1,10 +1,9 @@
 <?php
 
-namespace Ark\Com\Session;
+namespace Ark\Session;
 
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 use Ark\Core\Trace;
-use Ark\Contract\SessionDriver;
 
 class Adapter
 {
@@ -12,27 +11,26 @@ class Adapter
     /**
      * 获取会话引擎实例
      *
-     * @return SessionDriver
-     * @throws RuntimeException
+     * @return Driver
+     * @throws Exception
      */
     static function getDriver()
     {
-        $config = Noah::getInstance()->config->session->toArray();
+        $config = Captain::getInstance()->config->session->toArray();
         if (!$driver = $config['driver']) {
-            throw new RuntimeException(Noah::getInstance()->language->get('sess.invalid_driver_name'));
+            throw new Exception(Captain::getInstance()->lang->get('sess.invalid_driver_name'));
         }
-        $name = sprintf('__base_session_%s__', $driver);
-        $instance = Noah::getInstance()->container->$name;
-        if (!$instance || !$instance instanceof SessionDriver) {
-            $class_name = sprintf('\\Ark\\Com\\Session\\Driver\\'. ucfirst($driver));
-            if (!class_exists($class_name)) {
-                throw new RuntimeException(sprintf(Noah::getInstance()->language->get('sess.driver_not_found'), $class_name));
+        $name = '__base_session_driver__';
+        $instance = Captain::getInstance()->container->$name;
+        if (!$instance || !$instance instanceof Driver) {
+            if (!class_exists($driver)) {
+                throw new Exception(sprintf(Captain::getInstance()->lang->get('sess.driver_not_found'), $driver));
             }
-            $instance = new $class_name();
-            if (!$instance instanceof SessionDriver) {
-                throw new RuntimeException(sprintf(Noah::getInstance()->language->get('sess.driver_implement_error'), $class_name, '\\Ark\\Contract\\SessionDriver'));
+            $instance = new $driver();
+            if (!$instance instanceof Driver) {
+                throw new Exception(sprintf(Captain::getInstance()->lang->get('sess.driver_implement_error'), $driver, '\\Ark\\Session\\Driver'));
             }
-            Noah::getInstance()->container->$name = $instance;
+            Captain::getInstance()->container->$name = $instance;
             Trace::set('driver', array('session'=> $driver));
         }
         return $instance;

@@ -3,20 +3,20 @@
 namespace Ark\Core;
 
 use Closure;
-use Ark\Com\Http\Server;
-use Ark\Com\Http\Request;
-use Ark\Com\Http\Response;
-use Ark\Com\Cache\Driver\File as FileCache;
-use Ark\Com\Event\Adapter as EventAdapter;
-use Ark\Com\View\Adapter as ViewAdapter;
-use Ark\Com\Session\Adapter as SessionAdapter;
-use Ark\Com\Router\Adapter as RouterAdapter;
+use Ark\Http\Server;
+use Ark\Http\Request;
+use Ark\Http\Response;
+use Ark\Cache\Driver\File as FileCache;
+use Ark\Event\Adapter as EventAdapter;
+use Ark\View\Adapter as ViewAdapter;
+use Ark\Session\Adapter as SessionAdapter;
+use Ark\Router\Adapter as RouterAdapter;
 
-const Name = 'Ark';
-const Version = '1.0';
-const Eamil = 'guodalu <guodalu@qq.com>';
+const Name      = 'Ark';
+const Version   = '1.0';
+const Eamil     = 'guodalu <guodalu@qq.com>';
 
-class Noah
+class Captain
 {
 
     /**
@@ -69,6 +69,20 @@ class Noah
     private $_app_name;
 
     /**
+     * 应用目录
+     *
+     * @var string
+     */
+    private $_app_dir;
+
+    /**
+     * 钩子程序目录
+     *
+     * @var array
+     */
+    private $_hook_dir = array();
+
+    /**
      * 控制器根目录
      *
      * @var string
@@ -78,7 +92,7 @@ class Noah
     /**
      * 唯一实例
      *
-     * @var Noah
+     * @var $this
      */
     private static $_instance;
 
@@ -86,7 +100,7 @@ class Noah
      * 取实例化对象
      *
      * @access public
-     * @return Noah
+     * @return Captain
      */
     static function getInstance()
     {
@@ -105,16 +119,15 @@ class Noah
         require_once __DIR__. '/Container.php';
         require_once __DIR__. '/Timer.php';
         require_once __DIR__. '/Exception.php';
-        require_once __DIR__. '/RuntimeException.php';
         require_once __DIR__. '/Trace.php';
         require_once __DIR__. '/Loader.php';
-        require_once __DIR__. '/Spanner.php';
-        require_once __DIR__. '/../Com/Http/Request.php';
+        require_once __DIR__. '/Toolkit.php';
+        require_once __DIR__. '/Handler.php';
+        require_once __DIR__. '/../Http/Request.php';
         //初始化内存占用
         $memory_usage = memory_get_usage();
-        //默认显示错误提示
-        ini_set('display_errors', '1');
-        error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
+        //默认屏蔽错误提示
+        ini_set('display_errors', '0');
         //全局容器
         $this->_container = new Container();
         //启动时间
@@ -133,7 +146,7 @@ class Noah
      * 配置文件缓存目录
      *
      * @param string $path
-     * @return $this
+     * @return Captain
      */
     function setConfigDir($path)
     {
@@ -145,7 +158,7 @@ class Noah
      * 缓存配置数据
      *
      * @param null $save_path
-     * @return $this
+     * @return Captain
      */
     function cacheConfigTo($save_path = null)
     {
@@ -158,11 +171,14 @@ class Noah
      * 设置应用程序集根命名空间及其基本路径
      *
      * @param string $name
-     * @return $this
+     * @param null $dir
+     * @return Captain
      */
-    function setAppName($name)
+    function setApp($name, $dir = null)
     {
-        $this->_app_name = $name;
+        $this->_app_name = ucfirst($name);
+        $dir || $dir = PATH_APP;
+        $this->_app_dir = $dir;
         return $this;
     }
 
@@ -183,14 +199,36 @@ class Noah
      */
     function getAppDir()
     {
-        return PATH_APP;
+        return $this->_app_dir;
+    }
+
+    /**
+     * 添加钩子程序目录
+     *
+     * @param string $dir
+     * @return Captain
+     */
+    function addHookDir($dir)
+    {
+        $this->_hook_dir[] = $dir;
+        return $this;
+    }
+
+    /**
+     * 获取钩子程序目录
+     *
+     * @return array
+     */
+    function getHookDir()
+    {
+        return $this->_hook_dir;
     }
 
     /**
      * 设置控制器根目录
      *
      * @param $controller_dir
-     * @return $this
+     * @return Captain
      */
     function setControllerDir($controller_dir)
     {
@@ -212,7 +250,7 @@ class Noah
      * 预处理逻辑
      *
      * @param Closure $prepare
-     * @return $this
+     * @return Captain
      */
     function addPrepare(Closure $prepare = null)
     {
@@ -226,7 +264,7 @@ class Noah
      * 获取配置信息
      *
      * @return array|mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     function getConfig()
     {
@@ -243,7 +281,7 @@ class Noah
             $config_path = $this->_config_dir;
         }
         if (!$config_path) {
-            throw new RuntimeException($this->language->get('core.invalid_config_dir'));
+            throw new Exception($this->lang->get('core.invalid_config_dir'));
         }
         //如果配置文件允许缓存
         $config = array();
@@ -288,37 +326,38 @@ class Noah
      * 启动框架
      *
      * @access public
-     * @return Noah
-     * @throws RuntimeException
+     * @return mixed
+     * @throws Exception
      */
     function run()
     {
         //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
-        $this->set('language', function() { return new Language(); });
+        $this->set('lang', function() { return new Language(); });
         //异常报告
-        Exception::setHandler();
+        Handler::setHandler('exception');
         //后续类文件自动加载
         Loader::addAutoLoader(array('\\Ark\\Core\\Loader', 'autoLoad'));
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
         if (!$this->_app_name) {
-            throw new RuntimeException($this->language->get('core.invalid_app_property'));
+            throw new Exception($this->lang->get('core.invalid_app_property'));
         }
         //注册应用程序基地址
-        Loader::setNameSpace($this->_app_name, PATH_APP);
+        Loader::setNameSpace($this->_app_name, $this->_app_dir);
+        Loader::setAlias('@', $this->_app_dir);
         //配置文件
         if (!$config = $this->getConfig()) {
-            throw new RuntimeException($this->language->get('core.invalid_configuration'));
+            throw new Exception($this->lang->get('core.invalid_configuration'));
         }
         $this->_config = new Container($config);
         //控制器地址检测
         if (!$this->_controller_dir) {
-            $this->_controller_dir = PATH_APP . DIRECTORY_SEPARATOR . 'Controller';
-        } elseif (strpos($this->_controller_dir, PATH_APP) === false) {
-            throw new RuntimeException($this->language->get('core.invalid_controller_dir'));
+            $this->_controller_dir = $this->_app_dir . DIRECTORY_SEPARATOR . 'Controller';
+        } elseif (strpos($this->_controller_dir, $this->_app_dir) === false) {
+            throw new Exception($this->lang->get('core.invalid_controller_dir'));
         }
         //时区设置
         $timezone = 'Asia/Shanghai';
@@ -327,10 +366,8 @@ class Noah
         }
         date_default_timezone_set($timezone);
         //错误报告
-        if (!is_null($this->_config->global->show_error)) {
-            ini_set('display_errors', $this->_config->global->show_error ? '1' : '0');
-        }
         if (!is_null($this->_config->global->error_reporting)) {
+            ini_set('display_errors', '1');
             error_reporting($this->_config->global->error_reporting);
         }
 
@@ -342,24 +379,28 @@ class Noah
             ->set('router', function() { return RouterAdapter::getDriver(); })
             ->set('session', function() { return SessionAdapter::getDriver(); });
 
-        //外部组件加载
-        $plugin_dir = $this->config->global->plugin_dir;
-        if (is_dir($plugin_dir)) {
-            if (is_file($custom_register = $plugin_dir. '/register.php')) {
-                $list_plugins = include($custom_register);
-                is_array($list_plugins) || $list_plugins = array();
-            } else {
-                $list_plugins = glob($plugin_dir . '/*/register.php');
-            }
-            $prepares = array();
-            foreach ($list_plugins as $item) {
-                $result = include($item);
-                if ($result instanceof Closure) {
-                    $prepares[] = $result;
+        //钩子程序加载
+        $prepares = array();
+        foreach ($this->_hook_dir as $hook_dir) {
+            if (is_dir($hook_dir)) {
+                //允许根目录定制钩子程序列表
+                if (is_file($custom_register = $hook_dir. '/register.php')) {
+                    $list_hooks = include($custom_register);
+                    is_array($list_hooks) || $list_hooks = array();
+                } else {  //自动加载每个子目录下对应的钩子注册程序
+                    $list_hooks = glob($hook_dir . '/*/register.php');
+                }
+                foreach ($list_hooks as $item) {
+                    $result = include($item);
+                    if ($result instanceof Closure) {
+                        $prepares[] = $result;
+                    }
                 }
             }
+        }
 
-            //合并为预处理程序
+        //合并为预处理程序
+        if ($prepares) {
             $this->_prepare = array_merge($this->_prepare, $prepares);
         }
 
@@ -373,6 +414,7 @@ class Noah
         //监听系统启动事件
         EventAdapter::onListening('event.ark.startup');
 
+        //路由并呈现控制器内容
         echo $this->router->doAction($_SERVER['REQUEST_URI']);
 
     }
@@ -382,7 +424,7 @@ class Noah
      *
      * @param $name
      * @param $value
-     * @return Noah
+     * @return Captain
      */
     function set($name, $value)
     {
@@ -401,7 +443,7 @@ class Noah
      *
      * @param string $name
      * @param mixed $value
-     * @return Noah
+     * @return Captain
      */
     function __set($name, $value)
     {
@@ -413,7 +455,7 @@ class Noah
      *
      * @param $name
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     function get($name)
     {
@@ -425,7 +467,7 @@ class Noah
         //常规取值
         $key = "__base_{$name}__";
         if (!$instance = $this->_container->$key) {
-            throw new RuntimeException(sprintf($this->language->get('core.object_not_found'), $name));
+            throw new Exception(sprintf($this->lang->get('core.object_not_found'), $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {

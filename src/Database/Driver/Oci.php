@@ -1,20 +1,20 @@
 <?php
 
-namespace Ark\Com\Database\Driver;
+namespace Ark\Database\Driver;
 
-use Ark\Core\Noah;
+use Ark\Cache\Proxy;
+use Ark\Core\Captain;
 use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Core\Struct;
-use Ark\Contract\CacheProxy;
-use Ark\Com\Cache\Proxy;
-use Ark\Contract\CacheDriver;
-use Ark\Com\Database\Toolkit;
-use Ark\Contract\DatabaseDriver;
-use Ark\Com\Database\SQLBuilder;
-use Ark\Com\Event\Adapter as EventAdapter;
+use Ark\Database\Toolkit;
+use Ark\Database\Querier;
+use Ark\Database\Exception;
+use Ark\Cache\Driver as CacheDriver;
+use Ark\Database\Driver as DatabaseDriver;
+use Ark\Event\Adapter as EventAdapter;
 
-class Oci implements DatabaseDriver, CacheProxy
+class Oci extends DatabaseDriver
 {
 
     /**
@@ -90,12 +90,12 @@ class Oci implements DatabaseDriver, CacheProxy
      *
      * @param $dsn
      * @param array $option
-     * @throws OciException
+     * @throws Exception
      */
     function __construct($dsn, array $option = array())
     {
         if (!function_exists('oci_connect')) {
-            throw new OciException(Noah::getInstance()->language->get('db.extension_load_failed'), 'oci8');
+            throw new Exception(Captain::getInstance()->lang->get('db.extension_load_failed'), 'oci8');
         }
         $database = Toolkit::parseConnectUrl($dsn);
         $dbstring = $database['host'];
@@ -107,7 +107,7 @@ class Oci implements DatabaseDriver, CacheProxy
         $this->_instance = oci_new_connect($database['user'], $database['pass'], $dbstring, $database['charset']);
         Timer::mark('db_connect_end');
         if (!$this->_instance) {
-            throw new OciException(Noah::getInstance()->language->get('db.connect_failed'));
+            throw new Exception(Captain::getInstance()->lang->get('db.connect_failed'));
         }
     }
 
@@ -118,7 +118,7 @@ class Oci implements DatabaseDriver, CacheProxy
      * @param string $sql
      * @param array $bind
      * @return mixed
-     * @throws OciException
+     * @throws Exception
      */
     function _query($sql, array $bind = array())
     {
@@ -127,7 +127,7 @@ class Oci implements DatabaseDriver, CacheProxy
         $resource = oci_parse($this->_instance, $sql);
         if (!$resource) {
             Trace::set('database', array($sql, sprintf('%.3fs', -1)));
-            throw new OciException(Noah::getInstance()->language->get('db.parse_sql_failed'));
+            throw new Exception(Captain::getInstance()->lang->get('db.parse_sql_failed'));
         }
         if ($bind) {
             foreach ($bind as $key=> &$val) {
@@ -343,11 +343,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * select对象
      *
      * @access public
-     * @return SQLBuilder\Select\Oci
+     * @return Querier\Select\Oci
      */
     function select()
     {
-        $instance = new SQLBuilder\Select\Oci();
+        $instance = new Querier\Select\Oci();
         return $instance->invoke($this);
     }
 
@@ -355,11 +355,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * update对象
      *
      * @access public
-     * @return SQLBuilder\Update\Oci()
+     * @return Querier\Update\Oci()
      */
     function update()
     {
-        $instance = new SQLBuilder\Update\Oci();
+        $instance = new Querier\Update\Oci();
         return $instance->invoke($this);
     }
 
@@ -367,11 +367,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * insert对象
      *
      * @access public
-     * @return SQLBuilder\Insert\Oci
+     * @return Querier\Insert\Oci
      */
     function insert()
     {
-        $instance = new SQLBuilder\Insert\Oci();
+        $instance = new Querier\Insert\Oci();
         return $instance->invoke($this);
     }
 
@@ -379,11 +379,11 @@ class Oci implements DatabaseDriver, CacheProxy
      * delete对象
      *
      * @access public
-     * @return SQLBuilder\Delete\Oci
+     * @return Querier\Delete\Oci
      */
     function delete()
     {
-        $instance = new SQLBuilder\Delete\Oci();
+        $instance = new Querier\Delete\Oci();
         return $instance->invoke($this);
     }
 
@@ -394,7 +394,7 @@ class Oci implements DatabaseDriver, CacheProxy
      * @param resource $resource
      * @param string $sql
      * @return null
-     * @throws OciException
+     * @throws Exception
      */
     private function _catch($resource = null, $sql = null)
     {
@@ -405,7 +405,7 @@ class Oci implements DatabaseDriver, CacheProxy
                 'driver'=> $this->getDriverName(),
             );
             $data = EventAdapter::onListening('event.query.failed', $data, $this->_rule_query_failed);
-            throw new OciException($data['error']);
+            throw new Exception($data['error']);
         }
     }
 

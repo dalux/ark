@@ -1,16 +1,15 @@
 <?php
 
-namespace Ark\Com\Database\SqlBuilder;
+namespace Ark\Database\Querier;
 
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 use Ark\Core\Sailor;
-use Ark\Contract\CacheProxy;
-use Ark\Com\Database\Toolkit;
-use Ark\Contract\CacheDriver;
-use Ark\Contract\DatabaseDriver;
-use Ark\Com\Database\RuntimeException;
+use Ark\Database\Toolkit;
+use Ark\Cache\Driver as CacheDriver;
+use Ark\Database\Driver as DatabaseDriver;
+use Ark\Database\Exception;
 
-abstract class Father extends Sailor implements CacheProxy
+abstract class Father extends Sailor
 {
 
     /**
@@ -32,17 +31,9 @@ abstract class Father extends Sailor implements CacheProxy
      * 数据库对象实例
      *
      * @access protected
-     * @var DatabaseDriver|CacheProxy
+     * @var DatabaseDriver
      */
     protected $_db;
-
-    /**
-     * 当前数据库对象是否允许缓存
-     *
-     * @access protected
-     * @var boolean
-     */
-    protected $_allow_cache = false;
 
     /**
      * 当前SQL语句是否需要缓存
@@ -103,10 +94,6 @@ abstract class Father extends Sailor implements CacheProxy
     function invoke(DatabaseDriver $db)
     {
         $this->_db = $db;
-        //当前数据库对象是否可以被缓存
-        if ($this->_db instanceof CacheProxy) {
-            $this->_allow_cache = true;
-        }
         return $this;
     }
 
@@ -261,12 +248,12 @@ abstract class Father extends Sailor implements CacheProxy
      * @access public
      * @param array $bind
      * @return string
-     * @throws RuntimeException
+     * @throws Exception
      */
     function fetchRow($bind = array())
     {
         if (!$this->_db) {
-            throw new RuntimeException(Noah::getInstance()->language->get('tbox.no_db_instance'));
+            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
         if ($this->_allow_cache && $this->_need_cache) {
@@ -281,12 +268,12 @@ abstract class Father extends Sailor implements CacheProxy
      * @access public
      * @param array $bind
      * @return string
-     * @throws RuntimeException
+     * @throws Exception
      */
     function fetchAll($bind = array())
     {
         if (!$this->_db) {
-            throw new RuntimeException(Noah::getInstance()->language->get('tbox.no_db_instance'));
+            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
         if ($this->_allow_cache && $this->_need_cache) {
@@ -301,12 +288,12 @@ abstract class Father extends Sailor implements CacheProxy
      * @access public
      * @param array $bind
      * @return string
-     * @throws RuntimeException
+     * @throws Exception
      */
     function fetchScalar($bind = array())
     {
         if (!$this->_db) {
-            throw new RuntimeException(Noah::getInstance()->language->get('tbox.no_db_instance'));
+            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
         if ($this->_allow_cache && $this->_need_cache) {
@@ -321,12 +308,12 @@ abstract class Father extends Sailor implements CacheProxy
      * @access public
      * @param array $bind
      * @return string
-     * @throws RuntimeException
+     * @throws Exception
      */
     function query($bind = array())
     {
         if (!$this->_db) {
-            throw new RuntimeException(Noah::getInstance()->language->get('tbox.no_db_instance'));
+            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
         if ($this->_allow_cache && $this->_need_cache) {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Com\Database\SqlBuilder\Delete;
+namespace Ark\Database\Querier\Delete;
 
-use Ark\Com\Database\SqlBuilder\Delete;
+use Ark\Database\Querier\Delete;
 
 class Sqlite extends Delete
 {

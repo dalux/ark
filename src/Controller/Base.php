@@ -1,10 +1,11 @@
 <?php
 
-namespace Ark\Core;
+namespace Ark\Controller;
 
-use Ark\Com\View\RuntimeException as ViewRuntimeException;
+use Ark\Core\Sailor;
+use Ark\View\Exception as ViewException;
 
-abstract class Controller extends Sailor
+abstract class Base extends Sailor
 {
 
     /**
@@ -33,14 +34,14 @@ abstract class Controller extends Sailor
      * @access public
      * @param string $template 模板路径
      * @return string
-     * @throws ViewRuntimeException
+     * @throws ViewException
      */
     final function display($template = null)
     {
         if (!is_null($template)) {
             $this->_template = $template;
         } elseif (is_null($this->_template)) {
-            throw new ViewRuntimeException($this->language->get('com.invalid_view_template'));
+            throw new ViewException($this->lang->get('com.invalid_view_template'));
         }
         return $this->view->display($this->_template);
     }

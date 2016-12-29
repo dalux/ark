@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Com\Http;
+namespace Ark\Http;
 
 class Request
 {

@@ -29,7 +29,7 @@ class Language
     /**
      * 构造器
      *
-     * @throws RuntimeException
+     * @throws Exception
      */
     function __construct()
     {

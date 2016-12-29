@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Com\Database\Driver\Pdo;
+namespace Ark\Database\Driver\Pdo;
 
-use Ark\Com\Database\Toolkit;
-use Ark\Com\Database\Driver\Pdo;
+use Ark\Database\Toolkit;
+use Ark\Database\Driver\Pdo;
 
 class Sqlsrv extends Pdo
 {

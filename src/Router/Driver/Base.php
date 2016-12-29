@@ -1,19 +1,19 @@
 <?php
 
-namespace  Ark\Com\Router\Driver;
+namespace  Ark\Router\Driver;
 
 use ReflectionClass;
-use Ark\Core\Controller;
 use Ark\Core\Loader;
-use Ark\Core\Noah;
+use Ark\Core\Captain;
 use Ark\Core\Trace;
 use Ark\Core\Struct;
-use Ark\Com\Http\Request;
-use Ark\Contract\RouterDriver;
-use Ark\Com\Router\RuntimeException;
-use Ark\Com\Event\Adapter as EventAdapter;
+use Ark\Http\Request;
+use Ark\Router\Exception;
+use Ark\Router\Driver as RouterDriver;
+use Ark\Event\Adapter as EventAdapter;
+use Ark\Controller\Base as BaseController;
 
-class Base implements RouterDriver
+class Base extends RouterDriver
 {
 
     /**
@@ -89,7 +89,7 @@ class Base implements RouterDriver
     function __construct()
     {
         $url_mode = self::URL_MODE_COMMON;
-        if ($mode = Noah::getInstance()->config->router->urlmode) {
+        if ($mode = Captain::getInstance()->config->router->urlmode) {
             $url_mode = $mode;
         }
         $this->setUrlMode($url_mode);
@@ -240,7 +240,7 @@ class Base implements RouterDriver
      *
      * @param string $uri
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     function doAction($uri)
     {
@@ -262,8 +262,8 @@ class Base implements RouterDriver
         );
         $data = EventAdapter::onListening('event.routing.finish', $data, $rule);
         $result = $data['result'];
-        $def_controller = Noah::getInstance()->config->router->default->controller;
-        $def_action = Noah::getInstance()->config->router->default->action;
+        $def_controller = Captain::getInstance()->config->router->default->controller;
+        $def_action = Captain::getInstance()->config->router->default->action;
         //校验result结构
         $struct = new Struct();
         $struct->setRule(array(
@@ -273,7 +273,7 @@ class Base implements RouterDriver
         ));
         $struct->setData($result);
         if (!$result = $struct->checkOut()) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.uri_parse_failed'), $struct->getMessage()));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.uri_parse_failed'), $struct->getMessage()));
         }
         //控制器调度
         $this->setModule($result['module']);
@@ -287,7 +287,7 @@ class Base implements RouterDriver
      *
      * @param $uri
      * @return array
-     * @throws RuntimeException
+     * @throws Exception
      */
     function parseUri($uri)
     {
@@ -295,10 +295,10 @@ class Base implements RouterDriver
         $getdata = array();
         switch ($this->_url_mode) {
             case self::URL_MODE_COMMON:
-                $var_module = Noah::getInstance()->config->router->urlvar->module;
-                $var_controller = Noah::getInstance()->config->router->urlvar->controller;
-                $var_action = Noah::getInstance()->config->router->urlvar->action;
-                $_GET = Noah::getInstance()->request->get();
+                $var_module = Captain::getInstance()->config->router->urlvar->module;
+                $var_controller = Captain::getInstance()->config->router->urlvar->controller;
+                $var_action = Captain::getInstance()->config->router->urlvar->action;
+                $_GET = Captain::getInstance()->request->get();
                 $module = $_GET[$var_module];
                 $controller = $_GET[$var_controller];
                 $action = $_GET[$var_action];
@@ -313,8 +313,8 @@ class Base implements RouterDriver
                 $file_name = basename($_SERVER['SCRIPT_FILENAME']);
                 $uri = preg_replace('/\/'. addslashes($file_name). '/', '', $uri);
                 //重写
-                $urlsep = Noah::getInstance()->config->router->urlsep;
-                $urlsuffix = Noah::getInstance()->config->router->urlsuffix;
+                $urlsep = Captain::getInstance()->config->router->urlsep;
+                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
@@ -332,8 +332,8 @@ class Base implements RouterDriver
                 break;
             case self::URL_MODE_REWRITE:
                 //重写
-                $urlsep = Noah::getInstance()->config->router->urlsep;
-                $urlsuffix = Noah::getInstance()->config->router->urlsuffix;
+                $urlsep = Captain::getInstance()->config->router->urlsep;
+                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
@@ -350,13 +350,13 @@ class Base implements RouterDriver
                 }
                 break;
             case self::URL_MODE_COMPATIBLE:
-                $_GET = Noah::getInstance()->request->get();
-                $urlvar = Noah::getInstance()->config->router->urlvar->compatible;
+                $_GET = Captain::getInstance()->request->get();
+                $urlvar = Captain::getInstance()->config->router->urlvar->compatible;
                 $uri = $_GET[$urlvar];
                 unset($_GET[$urlvar]);
                 //重写
-                $urlsep = Noah::getInstance()->config->router->urlsep;
-                $urlsuffix = Noah::getInstance()->config->router->urlsuffix;
+                $urlsep = Captain::getInstance()->config->router->urlsep;
+                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
@@ -379,7 +379,7 @@ class Base implements RouterDriver
         }
         if ($getdata) {
             foreach ($getdata as $key=> $val) {
-                Noah::getInstance()->request->add($key, $val, Request::FLAG_GET);
+                Captain::getInstance()->request->add($key, $val, Request::FLAG_GET);
             }
         }
         return array(
@@ -393,18 +393,18 @@ class Base implements RouterDriver
      * 目标调度
      *
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     function dispatch()
     {
         if (!$this->_controller) {
-            throw new RuntimeException(Noah::getInstance()->language->get('router.invalid_controller_name'));
+            throw new Exception(Captain::getInstance()->lang->get('router.invalid_controller_name'));
         } elseif (!$this->_action) {
-            throw new RuntimeException(Noah::getInstance()->language->get('router.invalid_action_name'));
+            throw new Exception(Captain::getInstance()->lang->get('router.invalid_action_name'));
         }
-        $app_name = Noah::getInstance()->getAppName();
-        $controller_dir = Noah::getInstance()->getControllerDir();
-        $app_dir = Noah::getInstance()->getAppDir();
+        $app_name = Captain::getInstance()->getAppName();
+        $controller_dir = Captain::getInstance()->getControllerDir();
+        $app_dir = Captain::getInstance()->getAppDir();
         $path_now = $controller_dir;
         $part = str_replace($app_dir, '', $controller_dir);
         $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');
@@ -417,7 +417,7 @@ class Base implements RouterDriver
         }
         $namespace.= '\\'. ucfirst($this->_controller);
         if (!class_exists($namespace)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.controller_not_found'), $namespace));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
         }
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
@@ -425,13 +425,13 @@ class Base implements RouterDriver
         //
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.controller_is_protected'), $namespace));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
         }
         $instance = new $namespace();
-        if (!$instance instanceof Controller) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.controller_extends_error'), '\\Ark\\Core\\Controller'));
+        if (!$instance instanceof BaseController) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Controller\\Base'));
         } elseif (!method_exists($instance, $this->_action)) {
-            throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.action_not_found'), $namespace, $this->_action));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.action_not_found'), $namespace, $this->_action));
         }
         $output = null;
         //自动化类
@@ -480,7 +480,7 @@ class Base implements RouterDriver
     function makeQuery($controller, $action, array $params, $module = null, $url_mode = null)
     {
         $url_mode || $url_mode = $this->_url_mode;
-        $urlvar = Noah::getInstance()->config->router->urlvar;
+        $urlvar = Captain::getInstance()->config->router->urlvar;
         switch ($url_mode) {
             case self::URL_MODE_COMMON:
                 is_null($module) || $params[$urlvar->module] = $module;
@@ -512,7 +512,7 @@ class Base implements RouterDriver
      *
      * @param $uri
      * @return mixed
-     * @throws RuntimeException
+     * @throws Exception
      */
     private function _rewrite($uri)
     {
@@ -526,12 +526,12 @@ class Base implements RouterDriver
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new RuntimeException(sprintf(Noah::getInstance()->language->get('router.call_func_failed'), $val[0]. '::'. $val[1]. '()'));
+                    throw new Exception(sprintf(Captain::getInstance()->lang->get('router.call_func_failed'), $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new RuntimeException(Noah::getInstance()->language->get('router.uri_must_string'));
+            throw new Exception(Captain::getInstance()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }

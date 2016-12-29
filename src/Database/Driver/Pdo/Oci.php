@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Com\Database\Driver\Pdo;
+namespace Ark\Database\Driver\Pdo;
 
-use Ark\Com\Database\Toolkit;
-use Ark\Com\Database\Driver\Pdo;
+use Ark\Database\Toolkit;
+use Ark\Database\Driver\Pdo;
 
 class Oci extends Pdo
 {
@@ -28,7 +28,7 @@ class Oci extends Pdo
         }
         $params = array(
             \PDO::ATTR_ERRMODE          => \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_ORACLE_NULLS    => \PDO::NULL_EMPTY_STRING,
+            \PDO::ATTR_ORACLE_NULLS     => \PDO::NULL_EMPTY_STRING,
             \PDO::ATTR_CASE             => \PDO::CASE_LOWER,
         );
         if ($option) {

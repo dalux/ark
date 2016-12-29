@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Contract;
+namespace Ark\View;
 
-interface ViewDriver
+abstract class Driver
 {
 
     /**
@@ -11,9 +11,9 @@ interface ViewDriver
      * @access public
      * @param string $var 变量名
      * @param mixed $val 变量值
-     * @return ViewDriver
+     * @return Driver
      */
-    function set($var, $val = null);
+    abstract function set($var, $val = null);
 
     /**
      * 取值
@@ -22,7 +22,7 @@ interface ViewDriver
      * @param string $var 变量名
      * @return mixed
      */
-    function get($var = null);
+    abstract function get($var = null);
 
     /**
      * 呈现
@@ -32,6 +32,6 @@ interface ViewDriver
      * @param bool $return
      * @return string
      */
-    function display($template, $return = true);
+    abstract function display($template, $return = true);
 
 }

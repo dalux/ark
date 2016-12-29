@@ -1,13 +1,13 @@
 <?php
 
-namespace Ark\Com\Cache\Driver;
+namespace Ark\Cache\Driver;
 
-use Ark\Core\Noah;
-use Ark\Core\Spanner;
-use Ark\Com\Cache\Signal;
-use Ark\Contract\CacheDriver;
+use Ark\Core\Captain;
+use Ark\Core\Toolkit;
+use Ark\Cache\Driver;
+use Ark\Cache\Exception;
 
-class File extends Father implements CacheDriver
+class File extends Driver
 {
 	
 	/**i
@@ -31,15 +31,15 @@ class File extends Father implements CacheDriver
      *
      * @param $save_path
      * @param array $option
-     * @throws FileException
+     * @throws Exception
      */
     function __construct($save_path, array $option = array())
     {
         $this->_dir = $save_path;
-        if (!is_dir($this->_dir) && !Spanner::mkDir($this->_dir)) {
-            throw new FileException(sprintf(Noah::getInstance()->language->get('cache.dir_create_failed'), $this->_dir));
+        if (!is_dir($this->_dir) && !Toolkit::mkDir($this->_dir)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_create_failed'), $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
-            throw new FileException(sprintf(Noah::getInstance()->language->get('cache.dir_permission_error'), $this->_dir));
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_permission_error'), $this->_dir));
         }
         is_null($option['ext_name']) || $this->_ext_name = $option['ext_name'];
         is_null($option['flag']) || $this->_flag = $option['flag'];
@@ -74,18 +74,14 @@ class File extends Father implements CacheDriver
     {
     	$path = $this->getCachePath($name);
         if (!file_exists($path)
-            || Signal::getSignal() == Signal::SIGNAL_EXPIRE
-            || !$content = file_get_contents($path)) {
+                || !$this->_allow_cache
+                || !($content = file_get_contents($path))
+                || intval(substr($content, 0, 10)) < time()) {
             @unlink($path);
             return null;
         }
-
-        $expire_time = (int)substr($content, 0, 10);
-        if ($expire_time < time()) {
-            @unlink($path);
-            return null;
-        }
-        return ($tmp = @unserialize(substr($content, 10))) !== false ? $tmp : null;
+        $tmp = @unserialize(substr($content, 10));
+        return $tmp !== false ? $tmp : null;
     }
 
     /**
@@ -94,7 +90,7 @@ class File extends Father implements CacheDriver
      * @access public
      * @param $name
      * @return bool
-     * @throws FileException
+     * @throws Exception
      */
     function delete($name)
     {
@@ -136,7 +132,7 @@ class File extends Father implements CacheDriver
      * @access private
      * @param string $name
      * @return string
-     * @throws FileException
+     * @throws Exception
      */
     function getCachePath($name)
     {
@@ -158,8 +154,8 @@ class File extends Father implements CacheDriver
             $path.= "/";
         }
         $path = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
-        if (!file_exists($path) && !Spanner::mkDir($path)) {
-            throw new FileException(sprintf(Noah::getInstance()->language->get('cache.dir_create_failed'), $path));
+        if (!file_exists($path) && !Toolkit::mkDir($path)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_create_failed'), $path));
         }
         return $path. $name. $this->_ext_name;
     }

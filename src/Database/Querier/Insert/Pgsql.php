@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Com\Database\SqlBuilder\Insert;
+namespace Ark\Database\Querier\Insert;
 
-use Ark\Com\Database\SqlBuilder\Insert;
+use Ark\Database\Querier\Insert;
 
 class Pgsql extends Insert
 {

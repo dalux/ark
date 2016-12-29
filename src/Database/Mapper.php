@@ -1,13 +1,12 @@
 <?php
 
-namespace Ark\Com\Database;
+namespace Ark\Database;
 
 use Ark\Core\Sailor;
-use Ark\Contract\CacheProxy;
-use Ark\Contract\CacheDriver;
-use Ark\Contract\DatabaseDriver;
+use Ark\Cache\Driver as CacheDriver;
+use Ark\Database\Driver as DatabaseDriver;
 
-class Mapper extends Sailor implements CacheProxy
+class Mapper extends Sailor
 {
 
     /**
@@ -152,7 +151,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $update->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
+            $update->whereIn($k, $v);
         }
         return $update->query();
     }
@@ -188,7 +187,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $delete->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
+            $delete->whereIn($k, $v);
         }
         return $delete->query();
     }
@@ -226,7 +225,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $select->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
+            $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
@@ -266,7 +265,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $select->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
+            $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
@@ -313,7 +312,7 @@ class Mapper extends Sailor implements CacheProxy
                     continue;
                 }
             }
-            $select->where(Toolkit::whereIn($k, $v, $this->_db->getDriverName()));
+            $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);

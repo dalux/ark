@@ -1,12 +1,14 @@
 <?php
 
-namespace Ark\Com\Session\Driver;
+namespace Ark\Session\Driver;
 
+use Ark\Session\Exception;
 use Closure;
-use Ark\Core\Noah;
-use Ark\Contract\CacheDriver;
+use Ark\Core\Captain;
+use Ark\Cache\Driver as CacheDriver;
+use Ark\Session\Driver as SessionDriver;
 
-class User extends Father
+class User extends SessionDriver
 {
 
     /**
@@ -23,7 +25,7 @@ class User extends Father
      */
 	function __construct()
 	{
-        $config = Noah::getInstance()->config->session->toArray();
+        $config = Captain::getInstance()->config->session->toArray();
         //检查
         if ($config['save_path'] instanceof Closure) {    //支持匿名函数
             $this->_container = $config['save_path']();
@@ -31,7 +33,7 @@ class User extends Father
             $this->_container = $config['save_path'];
         }
         if (!$this->_container instanceof CacheDriver) {
-            throw new UserException(Noah::getInstance()->language->get('sess.cacher_implement_error'), 'Ark\\Contract\\CacheDriver');
+            throw new Exception(Captain::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Cache\\Driver');
         }
         $this->_container->setFlag('session');
         $this->_container->setExpireTime($config['timeout']);

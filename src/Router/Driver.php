@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Contract;
+namespace Ark\Router;
 
-interface RouterDriver
+abstract class Driver
 {
 
     /**
@@ -11,7 +11,7 @@ interface RouterDriver
      * @param $uri
      * @return mixed
      */
-    function doAction($uri);
+    abstract function doAction($uri);
 
     /**
      * 添加路径规则
@@ -20,7 +20,7 @@ interface RouterDriver
      * @param string $redirect
      * @return $this
      */
-    function addRule($rule, $redirect);
+    abstract function addRule($rule, $redirect);
 
 
 }

@@ -18,7 +18,7 @@ return array(
 
     'cache.config_not_found'            => '找不到缓存配置项[%s]',
     'cache.driver_not_found'            => '缓存驱动器类[%s]不存在',
-    'cache.driver_implement_error'      => '缓存驱动器类[%s]必须实现[%s]接口',
+    'cache.driver_implement_error'      => '缓存驱动器类[%s]必须继承自[%s]类',
     'cache.dir_create_failed'           => '无法创建缓存文件保存目录[%s]',
     'cache.dir_permission_error'        => '缓存目录[%s]读写权限不足',
     'cache.extension_load_failed'       => '加载扩展[%s]失败',
