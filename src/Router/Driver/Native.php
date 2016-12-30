@@ -7,10 +7,10 @@ use ReflectionClass;
 use Ark\Core\Struct;
 use Ark\Http\Request;
 use Ark\Core\Loader;
+use Ark\Core\Controller;
 use Ark\Router\Exception;
 use Ark\Router\Driver as RouterDriver;
 use Ark\Event\Adapter as EventAdapter;
-use Ark\Controller\Base as BaseController;
 
 class Native extends RouterDriver
 {
@@ -107,8 +107,8 @@ class Native extends RouterDriver
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
         }
         $instance = new $namespace();
-        if (!$instance instanceof BaseController) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Controller\\Base'));
+        if (!$instance instanceof Controller) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Core\\Controller'));
         } elseif (!method_exists($instance, $action)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.action_not_found'), $namespace, $action));
         }

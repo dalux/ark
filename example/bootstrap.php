@@ -17,7 +17,7 @@ use Ark\Cache\Adapter as CacheAdapter;
 //实例化框架
 Captain::getInstance()
     //设置应用程序根空间名称及基本路径
-    ->setApp('Home', Loader::realPath('./mvc/home'))
+    ->setApp('App', Loader::realPath('./mvc/home'))
     //设置配置文件夹路径
     ->setConfigDir(function() {
         $path = Loader::realPath('./config');

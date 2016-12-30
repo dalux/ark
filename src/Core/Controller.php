@@ -1,11 +1,10 @@
 <?php
 
-namespace Ark\Controller;
+namespace Ark\Core;
 
-use Ark\Core\Sailor;
 use Ark\View\Exception as ViewException;
 
-abstract class Base extends Sailor
+abstract class Controller extends Sailor
 {
 
     /**

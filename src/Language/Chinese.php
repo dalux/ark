@@ -11,7 +11,7 @@ return array(
     'core.deny_alias_redeclare'         => '不能重定义系统保留别名[%s]',
     'core.invalid_autoloader'           => '自动加载器不可调用',
     'core.format_path_failed'           => '无法格式化指定的路径',
-    'core.class_path_notfound'          => '类名称[%s]对应的文件路径不存在',
+    'core.class_path_notfound'          => '无法自动加载类名称[%s]',
 
     'com.invalid_view_template'         => '无有效的视图模板文件',
 

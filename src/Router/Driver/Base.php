@@ -8,10 +8,10 @@ use Ark\Core\Captain;
 use Ark\Core\Trace;
 use Ark\Core\Struct;
 use Ark\Http\Request;
+use Ark\Core\Controller;
 use Ark\Router\Exception;
 use Ark\Router\Driver as RouterDriver;
 use Ark\Event\Adapter as EventAdapter;
-use Ark\Controller\Base as BaseController;
 
 class Base extends RouterDriver
 {
@@ -428,7 +428,7 @@ class Base extends RouterDriver
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
         }
         $instance = new $namespace();
-        if (!$instance instanceof BaseController) {
+        if (!$instance instanceof Controller) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Controller\\Base'));
         } elseif (!method_exists($instance, $this->_action)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.action_not_found'), $namespace, $this->_action));
