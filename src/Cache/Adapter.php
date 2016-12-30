@@ -3,6 +3,7 @@
 namespace Ark\Cache;
 
 use Ark\Core\Captain;
+use Ark\Core\Loader;
 use Ark\Core\Trace;
 use Ark\Core\Container;
 
@@ -30,7 +31,7 @@ class Adapter
             $driver = $config['driver'];
             $save_path = $config['save_path'];
             $option = $config['option'];
-            if (!class_exists($driver)) {
+            if (!Loader::findClass($driver)) {
                 throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.driver_not_found'), $driver));
             }
             $instance = new $driver($save_path, $option);

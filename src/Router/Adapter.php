@@ -2,6 +2,7 @@
 
 namespace Ark\Router;
 
+use Ark\Core\Loader;
 use Ark\Core\Captain;
 use Ark\Core\Trace;
 
@@ -23,7 +24,7 @@ class Adapter
         $name = '__base_router_driver__';
         $instance = Captain::getInstance()->container->$name;
         if (!$instance || !$instance instanceof Driver) {
-            if (!class_exists($driver)) {
+            if (!Loader::findClass($driver)) {
                 throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_not_found'), $driver));
             }
             $instance = new $driver();

@@ -3,6 +3,7 @@
 namespace Ark\Database;
 
 use Ark\Core\Captain;
+use Ark\Core\Loader;
 use Ark\Core\Trace;
 
 class Adapter
@@ -32,7 +33,7 @@ class Adapter
             $driver = $config['driver'];
             $dsn = $config['dsn'];
             $option = $config['option'];
-            if (!class_exists($driver)) {
+            if (!Loader::findClass($driver)) {
                 throw new Exception(sprintf(Captain::getInstance()->lang->get('db.driver_not_found'), $driver));
             }
             $instance = new $driver($dsn, $option);

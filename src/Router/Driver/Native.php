@@ -99,7 +99,7 @@ class Native extends RouterDriver
         $part = array_map('ucfirst', explode('\\', $part));
         $part = implode('\\', $part);
         $namespace = $app_name. '\\'. $part. '\\'. $controller;
-        if (!class_exists($namespace)) {
+        if (!Loader::findClass($namespace)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
         }
         $ref = new ReflectionClass($namespace);
