@@ -97,12 +97,14 @@ class Loader
      * 本框架自动加载器
      *
      * @param $class
+     * @throws Exception
      */
     static function autoLoad($class)
     {
-        if ($path = self::findClass($class)) {
-            self::import($path);
+        if (!$path = self::findClass($class)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('core.class_path_notfound'), $class));
         }
+        self::import($path);
     }
 
     /**

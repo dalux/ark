@@ -23,7 +23,7 @@ class Adapter
         $name = '__base_session_driver__';
         $instance = Captain::getInstance()->container->$name;
         if (!$instance || !$instance instanceof Driver) {
-            if (!class_exists($driver, false)) {
+            if (!class_exists($driver)) {
                 throw new Exception(sprintf(Captain::getInstance()->lang->get('sess.driver_not_found'), $driver));
             }
             $instance = new $driver();

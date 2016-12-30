@@ -416,7 +416,7 @@ class Base extends RouterDriver
             $path_now.= DIRECTORY_SEPARATOR. $this->_module;
         }
         $namespace.= '\\'. ucfirst($this->_controller);
-        if (!class_exists($namespace, false)) {
+        if (!class_exists($namespace)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
         }
         //定义PATH_NOW常量
