@@ -6,9 +6,9 @@ use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Core\Struct;
 use Ark\Cache\Proxy;
+use Ark\Core\Event;
 use Ark\Database\Exception;
 use Ark\Database\Querier;
-use Ark\Event\Adapter as EventAdapter;
 use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
 
@@ -127,7 +127,7 @@ class Pdo extends DatabaseDriver
                 'error'=> $e->getMessage(),
                 'driver'=> $this->getDriverName(),
             );
-            $data = EventAdapter::onListening('event.query.failed', $data, $this->_rule_query_failed);
+            $data = Event::onListening('event.query.failed', $data, $this->_rule_query_failed);
             throw new Exception($data['error']);
         }
     }
@@ -149,10 +149,10 @@ class Pdo extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $result = $this->_query($data['sql'], $data['bind'])->rowCount();
         $data['result'] = $result;
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -173,10 +173,10 @@ class Pdo extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $result = $this->_query($data['sql'], $data['bind'])->fetchAll($this->_fetch_mode);
         $data['result'] = $result;
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -197,10 +197,10 @@ class Pdo extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $result = $this->_query($data['sql'], $data['bind'])->fetchColumn(0);
         $data['result'] = $result;
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -221,10 +221,10 @@ class Pdo extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $result = $this->_query($data['sql'], $data['bind'])->fetch($this->_fetch_mode);
         $data['result'] = $result;
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 

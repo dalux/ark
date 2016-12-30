@@ -2,12 +2,12 @@
 
 namespace Ark\View\Driver;
 
+use Ark\Core\Event;
 use Ark\Core\Loader;
 use Ark\Core\Captain;
 use Ark\Core\Struct;
 use Ark\View\Exception;
 use Ark\View\Driver as ViewDriver;
-use Ark\Event\Adapter as EventAdapter;
 
 class Native extends ViewDriver
 {
@@ -107,7 +107,7 @@ class Native extends ViewDriver
             'driver'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
             'template'  => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
         );
-        $data = EventAdapter::onListening('event.view.before', $data, $rule);
+        $data = Event::onListening('event.view.before', $data, $rule);
         extract($this->_storage, EXTR_REFS);
         ob_start();
         include_once($template);
@@ -117,7 +117,7 @@ class Native extends ViewDriver
             'template'  => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
             'content'   => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
         );
-        $data = EventAdapter::onListening('event.view.finish', $data, $rule);
+        $data = Event::onListening('event.view.finish', $data, $rule);
         if (!$return) {
             exit($data['content']);
         }

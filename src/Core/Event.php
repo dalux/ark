@@ -1,12 +1,10 @@
 <?php
 
-namespace Ark\Event;
+namespace Ark\Core;
 
 use Closure;
-use Ark\Core\Captain;
-use Ark\Core\Struct;
 
-class Adapter
+class Event
 {
 
     /**

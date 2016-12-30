@@ -4,10 +4,10 @@
 require_once __DIR__. '/../src/Core/Captain.php';
 
 //使用命名空间
+use Ark\Core\Event;
 use Ark\Core\Captain;
 use Ark\Core\Loader;
 use Ark\Http\Server;
-use Ark\Event\Adapter as EventAdapter;
 use Ark\Database\Adapter as DatabaseAdapter;
 use Ark\Cache\Adapter as CacheAdapter;
 
@@ -38,7 +38,7 @@ Captain::getInstance()
     ->addPrepare(function() {
 
         //添加数据库查询执行前事件,执行些诸如检查SQL语句之类的动作
-        EventAdapter::addListener('event.query.before', function($data) {
+        Event::addListener('event.query.before', function($data) {
             //检查SQL语句
             $sql = strtolower($data['sql']);
             if (!preg_match('/^insert|^select|^begin/', $sql)

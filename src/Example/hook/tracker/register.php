@@ -1,8 +1,8 @@
 <?php
 
+use Ark\Core\Event;
 use Ark\Core\Captain;
 use Ark\Http\Server;
-use Ark\Event\Adapter as EventAdapter;
 
 return function() {
 
@@ -15,7 +15,7 @@ return function() {
     );
 
     //注册框架内置事件
-    EventAdapter::addListener('event.ark.startup', function($data) {
+    Event::addListener('event.ark.startup', function($data) {
         //开启debug模式
         if ($tracker = Captain::getInstance()->container->__tracker__) {
             list($name, $pass) = array($tracker->name, $tracker->pass);
@@ -30,7 +30,7 @@ return function() {
     });
 
     //框架结束事件
-    EventAdapter::addListener('event.ark.shutdown', function($data) {
+    Event::addListener('event.ark.shutdown', function($data) {
         $tracker = new Tracker();
         return $tracker->handle($data);
     });

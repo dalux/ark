@@ -4,6 +4,7 @@ namespace Ark\Database\Driver;
 
 use Ark\Cache\Proxy;
 use Ark\Core\Captain;
+use Ark\Core\Event;
 use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Core\Struct;
@@ -12,7 +13,6 @@ use Ark\Database\Querier;
 use Ark\Database\Exception;
 use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
-use Ark\Event\Adapter as EventAdapter;
 
 class Oci extends DatabaseDriver
 {
@@ -158,10 +158,10 @@ class Oci extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $this->_query($data['sql'], $data['bind']);
         $data['result'] = $this->lastRowCount();
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -181,14 +181,14 @@ class Oci extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $resource = $this->_query($data['sql'], $data['bind']);
         $result = array();
         while ($row = oci_fetch_array($resource, $this->_fetch_mode)) {
             $result[] = array_change_key_case($row, CASE_LOWER);
         }
         $data['result'] = $result;
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -208,11 +208,11 @@ class Oci extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $resource = $this->_query($data['sql'], $data['bind']);
         $result = oci_fetch_row($resource);
         $data['result'] = current($result);
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -232,11 +232,11 @@ class Oci extends DatabaseDriver
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = EventAdapter::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
         $resource = $this->_query($data['sql'], $data['bind']);
         $result = array_change_key_case(oci_fetch_array($resource, $this->_fetch_mode), CASE_LOWER);
         $data['result'] = $result;
-        $data = EventAdapter::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
         return $data['result'];
     }
 
@@ -404,7 +404,7 @@ class Oci extends DatabaseDriver
                 'error'=> $error['message'],
                 'driver'=> $this->getDriverName(),
             );
-            $data = EventAdapter::onListening('event.query.failed', $data, $this->_rule_query_failed);
+            $data = Event::onListening('event.query.failed', $data, $this->_rule_query_failed);
             throw new Exception($data['error']);
         }
     }

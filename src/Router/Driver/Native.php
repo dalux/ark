@@ -6,11 +6,11 @@ use Ark\Core\Captain;
 use ReflectionClass;
 use Ark\Core\Struct;
 use Ark\Http\Request;
+use Ark\Core\Event;
 use Ark\Core\Loader;
 use Ark\Core\Controller;
 use Ark\Router\Exception;
 use Ark\Router\Driver as RouterDriver;
-use Ark\Event\Adapter as EventAdapter;
 
 class Native extends RouterDriver
 {
@@ -50,7 +50,7 @@ class Native extends RouterDriver
             'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
             'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
         );
-        $data = EventAdapter::onListening('event.routing.before', $data, $rule);
+        $data = Event::onListening('event.routing.before', $data, $rule);
         $uri = $data['uri'];
         //解析URI
         if (strpos($uri, '?') !== false) {
@@ -71,7 +71,7 @@ class Native extends RouterDriver
             'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
             'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
         );
-        $data = EventAdapter::onListening('event.routing.finish', $data, $rule);
+        $data = Event::onListening('event.routing.finish', $data, $rule);
         $uri = $data['uri'];
         //处理URI,组装控制器类
         $urlsep = Captain::getInstance()->config->router->urlsep;
