@@ -32,9 +32,8 @@ Captain::getInstance()
     //将配置文件解析结果缓存起来
     ->cacheConfigTo(Loader::realPath('./runtime'))
     //添加钩子程序存放目录
-    ->addHookDir(Loader::realPath('./hook'))
+    ->addHookDir(Loader::realPath('*/Hook'))
     //框架启动前的预处理逻辑,可以于此添加一些全局性事务
-
     ->addPrepare(function() {
 
         //添加数据库查询执行前事件,执行些诸如检查SQL语句之类的动作

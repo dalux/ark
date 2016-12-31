@@ -11,12 +11,12 @@ class Tracker
 
     function handle(array $data)
     {
-        if ($data['event'] == 'event.ark.startup') {
+        if ($data['event'] == 'event.framework.ready') {
             $debug = Captain::getInstance()->config->global->debug;
             if ($debug && !Server::isCli()) {
                 ob_start();
             }
-        } elseif ($data['event'] == 'event.ark.shutdown') {
+        } elseif ($data['event'] == 'event.framework.shutdown') {
             //数据库执行语句
             $dbtrace = array(array('sql', 'time'));
             $_trace = Trace::get('database');

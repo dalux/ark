@@ -413,7 +413,7 @@ class Captain
         }
 
         //监听系统启动事件
-        Event::onListening('event.ark.startup');
+        Event::onListening('event.framework.ready');
 
         //路由并呈现控制器内容
         echo $this->router->doAction($_SERVER['REQUEST_URI']);
@@ -503,7 +503,7 @@ class Captain
         //内存占用
         Trace::set('memory', memory_get_usage());
         //结束事件
-        Event::onListening('event.ark.shutdown');
+        Event::onListening('event.framework.shutdown');
     }
 
 }
