@@ -6,6 +6,7 @@ use Closure;
 use Ark\Http\Server;
 use Ark\Http\Request;
 use Ark\Http\Response;
+use Ark\Database\Querier;
 use Ark\View\Adapter as ViewAdapter;
 use Ark\Cache\Driver\File as FileCache;
 use Ark\Router\Adapter as RouterAdapter;
@@ -175,7 +176,7 @@ class Captain
      */
     function setApp($name, $dir = null)
     {
-        $this->_app_name = ucfirst($name);
+        $this->_app_name = $name;
         $dir || $dir = PATH_APP;
         $this->_app_dir = $dir;
         return $this;
@@ -378,7 +379,8 @@ class Captain
             ->set('request', function() { return Request::getInstance(); })
             ->set('view', function() { return ViewAdapter::getDriver(); })
             ->set('router', function() { return RouterAdapter::getDriver(); })
-            ->set('session', function() { return SessionAdapter::getDriver(); });
+            ->set('session', function() { return SessionAdapter::getDriver(); })
+            ->set('querier', function() { return new Querier(); });
 
         //钩子程序加载
         $prepares = array();
