@@ -19,25 +19,26 @@ class Event
      *
      * @param $event
      * @param callable|Closure $listener
-     * @param bool $prepend
+     * @param string $name
      */
-    static function addListener($event, Closure $listener, $prepend = false)
+    static function addListener($event, Closure $listener, $name = null)
     {
-        if (!$prepend) {
-            self::$_listener[$event][] = $listener;
-        } else {
-            array_unshift(self::$_listener[$event], $listener);
-        }
+        self::$_listener[$event][$name] = $listener;
     }
 
     /**
      * 移除事件处理器
      *
      * @param $event
+     * @param null $name
      */
-    static function removeListener($event)
+    static function removeListener($event, $name = null)
     {
-        unset(self::$_listener[$event]);
+        if (is_null($name)) {
+            unset(self::$_listener[$event]);
+        } else {
+            unset(self::$_listener[$event][$name]);
+        }
     }
 
     /**
