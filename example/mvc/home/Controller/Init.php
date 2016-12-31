@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Ark\Core\Controller;
 
-abstract class Init extends Controller
+class Init extends Controller
 {
 
     function __init()

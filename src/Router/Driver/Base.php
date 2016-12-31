@@ -2,6 +2,7 @@
 
 namespace  Ark\Router\Driver;
 
+use Ark\Router\Interceptor;
 use ReflectionClass;
 use Ark\Core\Loader;
 use Ark\Core\Captain;
@@ -426,6 +427,15 @@ class Base extends RouterDriver
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
+        }
+        //实现拦截器功能
+        if ($interceptors = Interceptor::get($namespace)) {
+            foreach ($interceptors as $interceptor) {
+                $result = call_user_func_array($interceptor, array());
+                if (is_string($result)) {
+                    return $result;
+                }
+            }
         }
         $instance = new $namespace();
         if (!$instance instanceof Controller) {

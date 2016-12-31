@@ -45,6 +45,7 @@ return array(
     'router.call_func_failed'           => '无法调用自定义Uri重写函数[%s]',
     'router.uri_must_string'            => '重写后的Uri必须是一个字符串',
     'router.controller_is_protected'    => '访问了非公开的控制器[%s]',
+    'router.invalid_router_interceptor' => '企图为命名空间[%s]设置无效的拦截器',
 
     'sess.invalid_driver_name'          => '无有效的会话驱动器名称',
     'sess.driver_not_found'             => '会话驱动器类[%s]不存在',

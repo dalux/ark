@@ -3,6 +3,7 @@
 namespace Ark\Router\Driver;
 
 use Ark\Core\Captain;
+use Ark\Router\Interceptor;
 use ReflectionClass;
 use Ark\Core\Struct;
 use Ark\Http\Request;
@@ -106,6 +107,16 @@ class Native extends RouterDriver
         if ($ref->isAbstract()) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
         }
+        //实现拦截器功能
+        if ($interceptors = Interceptor::get($namespace)) {
+            foreach ($interceptors as $interceptor) {
+                $result = call_user_func_array($interceptor, array());
+                if (is_string($result)) {
+                    return $result;
+                }
+            }
+        }
+        //实例化最终控制器对象
         $instance = new $namespace();
         if (!$instance instanceof Controller) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Core\\Controller'));
