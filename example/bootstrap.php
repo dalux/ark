@@ -30,22 +30,11 @@ Captain::getInstance()
         return $path. '/localhost';
     })
     //将配置文件解析结果缓存起来
-    ->cacheConfigTo(Loader::realPath('./runtime'))
+    //->cacheConfigTo(Loader::realPath('./runtime'))
     //添加钩子程序存放目录
     ->addHookDir(Loader::realPath('*/Hook'))
     //框架启动前的预处理逻辑,可以于此添加一些全局性事务
     ->addPrepare(function() {
-
-        //添加数据库查询执行前事件,执行些诸如检查SQL语句之类的动作
-        Event::addListener('event.query.before', function($data) {
-            //检查SQL语句
-            $sql = strtolower($data['sql']);
-            if (!preg_match('/^insert|^select|^begin/', $sql)
-                    && strpos($sql, ' where ') === false) {
-                throw new RuntimeException(sprintf('SQL语句缺少"where"条件[%s]', $data['sql']));
-            }
-            return $data;
-        });
 
         //注册全局性组件,可以于各控制器中直接以$this->{$varname}来调用
         //比如调用下面的db组件, 可能任意控制器或继承Sailor类的实例中调用$this->db
