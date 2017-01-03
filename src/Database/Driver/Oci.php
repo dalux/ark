@@ -104,7 +104,17 @@ class Oci extends DatabaseDriver
             $dbstring = '//'. $database['host']. ':'. $database['port']. '/'. $database['name'];
         }
         Timer::mark('db_connect_begin');
-        $this->_instance = oci_new_connect($database['user'], $database['pass'], $dbstring, $database['charset']);
+        //选择连接函数
+        $func = 'oci_new_connect';
+        $list_func = array(
+            'default'   => 'oci_connect',
+            'new'       => 'oci_new_connect',
+            'persisent' => 'oci_pconnect',
+        );
+        if ($option['type'] && isset($list_func[$option['type']])) {
+            $func = $list_func[$option['type']];
+        }
+        $this->_instance = $func($database['user'], $database['pass'], $dbstring, $database['charset']);
         Timer::mark('db_connect_end');
         if (!$this->_instance) {
             throw new Exception(Captain::getInstance()->lang->get('db.connect_failed'));

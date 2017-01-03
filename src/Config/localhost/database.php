@@ -4,7 +4,9 @@ return array(
     'master'=> array(
         'driver'=> '\Ark\Database\Driver\Pdo\Mysql',
         'dsn'=> 'mysql://username:password@127.0.0.1:3306/dbname?charset=utf8',
-        'option'=> array(),
+        'option'=> array('type'=> 'new'),
+        #option可选值:
+        #type: default|new|persisent 默认重用型链接|新链接|持久链接
         #dsn值示例：
         #oci://root:123456@127.0.0.1:1521/test?charset=gbk
         #sqlite:/dbpath/dbname.db

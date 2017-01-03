@@ -9,7 +9,7 @@ use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
 use Ark\Database\Exception;
 
-abstract class Father extends Sailor
+abstract class Father
 {
 
     /**
@@ -256,7 +256,7 @@ abstract class Father extends Sailor
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
-        if ($this->_allow_cache && $this->_need_cache) {
+        if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return $instance->fetchRow($this->getSQL(), $bind);
@@ -276,7 +276,7 @@ abstract class Father extends Sailor
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
-        if ($this->_allow_cache && $this->_need_cache) {
+        if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return $instance->fetchAll($this->getSQL(), $bind);
@@ -296,7 +296,7 @@ abstract class Father extends Sailor
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
-        if ($this->_allow_cache && $this->_need_cache) {
+        if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return $instance->fetchScalar($this->getSQL(), $bind);
@@ -316,7 +316,7 @@ abstract class Father extends Sailor
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
         }
         $instance = $this->_db;
-        if ($this->_allow_cache && $this->_need_cache) {
+        if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return $instance->query($this->getSQL(), $bind);
