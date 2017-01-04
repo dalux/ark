@@ -29,13 +29,16 @@ class Client extends Init
             exit;
         }
         $i = 0;
-        while ($i < 10) {
-            $client->send(json_encode(array('method' => 'fetchAll', 'sql' => 'select * from user_jobs where rownum < '. $client_id)));
-            $result = json_decode($client->recv(), true);
-            echo sprintf('client[%s] request success. data count[%s]', $client_id, count($result['result'])). PHP_EOL;
-            sleep(3);
-            $i ++;
-        }
+        //recv方法尽量每次send后都接收一次，不然同一会话中，下一次接收到的可能是上一个send的响应
+        $client->send(json_encode(array('method'=> 'beginTransaction', 'params'=> array())));
+        var_dump(json_decode($client->recv(), true));
+        $client->send(json_encode(array('method'=> 'fetchRow', 'params'=> array('select * from ext_order where xh=2201 for update'))));
+        print_r(json_decode($client->recv(), true));
+        var_dump(json_decode($client->recv(), true));
+        sleep(20);
+        $client->send(json_encode(array('method'=> 'commit', 'params'=> array())));
+        echo 'ok'. PHP_EOL;
+        $result = json_encode($client->recv(), true);
 
     }
 
