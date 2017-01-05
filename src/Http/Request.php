@@ -2,6 +2,9 @@
 
 namespace Ark\Http;
 
+use Ark\Core\Event;
+use Ark\Core\Struct;
+
 class Request
 {
 
@@ -25,6 +28,13 @@ class Request
      * @var int
      */
     const FLAG_FILE = 3;
+
+    /**
+     * COOKIE类型
+     *
+     * @var int
+     */
+    const FLAG_COOKIE = 4;
 
     /**
      * 请求对象实例
@@ -66,6 +76,25 @@ class Request
 	private $_files = array();
 
     /**
+     * cookie会话数据
+     *
+     * @access private
+     * @var array
+     */
+    private $_cookie = array();
+
+    /**
+     * 请求参数初始化事件校验规则
+     *
+     * @var array
+     */
+    private $_rule_init = array(
+        'get'   => array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
+        'post'  => array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
+        'cookie'=> array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
+    );
+
+    /**
      * 取请求实例
      *
      * @return Request
@@ -84,11 +113,14 @@ class Request
      */
     private function __construct()
     {
-        $this->_get = $_GET;
-        $this->_post = $_POST;
-        $this->_request = $_REQUEST;
+        $data = array('get'=> $_GET, 'post'=> $_POST, 'cookie'=> $_COOKIE);
+        $data = Event::onListening('event.request.ready', $data, $this->_rule_init);
+        $this->_get = $data['get'];
+        $this->_post = $data['post'];
+        $this->_request = array_merge($data['get'], $data['post']);
         $this->_files = $_FILES;
-        $_GET = $_POST = $_REQUEST = $_FILES = array();
+        $this->_cookie = $data['cookie'];
+        $_GET = $_POST = $_REQUEST = $_FILES = $_COOKIE = array();
     }
 
     /**
@@ -165,9 +197,9 @@ class Request
     function cookie($name = null, $default = null)
     {
         if (is_null($name)) {
-            return $_COOKIE;
+            return $this->_cookie;
         }
-        $value = $_COOKIE[$name];
+        $value = $this->_cookie[$name];
         return is_null($value) ? $default : $value;
     }
 
@@ -236,6 +268,8 @@ class Request
             $this->_request[$name] = $this->_get[$name] = $value;
         } elseif ($flag == self::FLAG_POST) {
             $this->_request[$name] = $this->_post[$name] = $value;
+        } elseif ($flag == self::FLAG_COOKIE) {
+            $this->_cookie[$name] = $value;
         }
     }
 
@@ -262,6 +296,14 @@ class Request
             } elseif (is_null($name)) {
                 foreach ($this->_post as $k=> $v) {
                     unset($this->_post[$k], $this->_request[$k]);
+                }
+            }
+        } elseif ($flag == self::FLAG_COOKIE) {
+            if (!is_null($name) && isset($this->_cookie[$name])) {
+                unset($this->_cookie[$name]);
+            } elseif (is_null($name)) {
+                foreach ($this->_cookie as $k=> $v) {
+                    unset($this->_cookie[$k]);
                 }
             }
         }

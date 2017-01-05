@@ -7,6 +7,7 @@ class Client extends Init
 
     function index()
     {
+
         $client = false;
         $client_id = $this->request->get('client_id');
         echo 'connecting';
@@ -32,7 +33,7 @@ class Client extends Init
         //recv方法尽量每次send后都接收一次，不然同一会话中，下一次接收到的可能是上一个send的响应
         $client->send(json_encode(array('method'=> 'beginTransaction', 'params'=> array())));
         var_dump(json_decode($client->recv(), true));
-        $client->send(json_encode(array('method'=> 'fetchRow', 'params'=> array('select * from ext_order where xh=2201 for update'))));
+        $client->send(json_encode(array('method'=> 'fetch', 'params'=> array('select * from ext_order where xh=2201 for update'))));
         print_r(json_decode($client->recv(), true));
         var_dump(json_decode($client->recv(), true));
         sleep(20);

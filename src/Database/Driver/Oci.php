@@ -210,7 +210,7 @@ class Oci extends DatabaseDriver
      * @param array $bind
      * @return mixed
      */
-    function fetchScalar($sql, array $bind = array())
+    function fetchOne($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -234,7 +234,7 @@ class Oci extends DatabaseDriver
      * @param array $bind
      * @return mixed
      */
-    function fetchRow($sql, array $bind = array())
+    function fetch($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -259,7 +259,7 @@ class Oci extends DatabaseDriver
      */
     function lastInsertId($seq = null)
     {
-        return $this->fetchScalar("select $seq.currval from dual");
+        return $this->fetchOne("select $seq.currval from dual");
     }
 
     /**
@@ -271,7 +271,7 @@ class Oci extends DatabaseDriver
      */
     function nextInsertId($seq = null)
     {
-        return $this->fetchScalar("select $seq.nextval from dual");
+        return $this->fetchOne("select $seq.nextval from dual");
     }
 
     /**

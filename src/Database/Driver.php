@@ -36,7 +36,7 @@ abstract class Driver
      * @param array $bind
      * @return array
      */
-    abstract function fetchRow($sql, array $bind = array());
+    abstract function fetch($sql, array $bind = array());
 
     /**
      * 获取第一行第一列数据，一般用在聚合函数中
@@ -46,7 +46,7 @@ abstract class Driver
      * @param array $bind
      * @return int
      */
-    abstract function fetchScalar($sql, array $bind = array());
+    abstract function fetchOne($sql, array $bind = array());
 
     /**
      * 开启事务处理

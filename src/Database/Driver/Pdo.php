@@ -189,7 +189,7 @@ class Pdo extends DatabaseDriver
      * @return mixed
      * @throws Exception
      */
-    function fetchScalar($sql, array $bind = array())
+    function fetchOne($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,
@@ -213,7 +213,7 @@ class Pdo extends DatabaseDriver
      * @return mixed
      * @throws Exception
      */
-    function fetchRow($sql, array $bind = array())
+    function fetch($sql, array $bind = array())
     {
         $data = array(
             'method'=> __METHOD__,

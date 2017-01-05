@@ -250,7 +250,7 @@ abstract class Father
      * @return string
      * @throws Exception
      */
-    function fetchRow($bind = array())
+    function fetch($bind = array())
     {
         if (!$this->_db) {
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
@@ -259,7 +259,7 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchRow($this->getSQL(), $bind);
+        return $instance->fetch($this->getSQL(), $bind);
     }
 
     /**
@@ -283,14 +283,14 @@ abstract class Father
     }
 
     /**
-     * 调用数据库fetchScalar方法
+     * 调用数据库fetchOne方法
      *
      * @access public
      * @param array $bind
      * @return string
      * @throws Exception
      */
-    function fetchScalar($bind = array())
+    function fetchOne($bind = array())
     {
         if (!$this->_db) {
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
@@ -299,7 +299,7 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchScalar($this->getSQL(), $bind);
+        return $instance->fetchOne($this->getSQL(), $bind);
     }
 
     /**

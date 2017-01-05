@@ -202,7 +202,7 @@ class Mapper extends Sailor
      * @param array $fields 取值字段
      * @return array
      */
-    function fetchRow($condition = array(), $fields = array('*'))
+    function fetch($condition = array(), $fields = array('*'))
     {
         $select = $this->_db
             ->select()
@@ -230,7 +230,7 @@ class Mapper extends Sailor
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
         }
-        return $select->fetchRow();
+        return $select->fetch();
     }
 
     /**
@@ -242,7 +242,7 @@ class Mapper extends Sailor
      * @param array $fields
      * @return mixed
      */
-    function fetchScalar($condition = array(), $fields = array('count(*)'))
+    function fetchOne($condition = array(), $fields = array('count(*)'))
     {
         $select = $this->_db
             ->select()
@@ -270,7 +270,7 @@ class Mapper extends Sailor
         if (!is_null($this->_expire)) {
             $select->cache($this->_expire, $this->_cache_name, $this->_cache);
         }
-        return $select->fetchScalar();
+        return $select->fetchOne();
     }
 
     /**
