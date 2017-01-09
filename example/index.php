@@ -1,9 +1,13 @@
 <?php
 
-require_once __DIR__. '/bootstrap.php';
+require_once __DIR__. '/boot.php';
 
+use Ark\Core\Loader;
 use Ark\Core\Captain;
 
 Captain::getInstance()
-    ->addPrepare(function() {})
+    ->setApp('Home', Loader::realPath('./app/home'))
+    ->addPrepare(function() {
+
+    })
     ->run();

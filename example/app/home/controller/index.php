@@ -1,5 +1,10 @@
 <?php
 
-require_once __DIR__. '/../../../bootstrap.php';
+namespace Home\Controller;
 
-return $_->view->display('index');
+use Ark\Core\Sailor;
+
+class Index extends Sailor
+{
+
+}
