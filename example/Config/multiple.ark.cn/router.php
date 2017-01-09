@@ -1,5 +1,6 @@
 <?php
 
+/*
 //通用单入口路由器
 return array(
     'driver'=> '\Ark\Router\Driver\Base',
@@ -17,6 +18,7 @@ return array(
         'action'=> 'index',
     ),
 );
+*/
 
 /*
 //模拟原生PHP单入口路由器
@@ -31,10 +33,8 @@ return array(
 );
 */
 
-/*
 //多入口路由
 return array(
     'driver'=> '\Ark\Router\Driver\Multiple',
     'interceptor'=> '__init__.php',
 );
-*/

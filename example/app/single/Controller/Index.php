@@ -9,7 +9,7 @@ class Index extends Sailor
 
     function index()
     {
-        var_dump(__METHOD__);
+        var_dump(__NAMESPACE__. '::'. __METHOD__);
     }
 
 }
