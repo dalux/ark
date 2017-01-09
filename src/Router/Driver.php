@@ -6,21 +6,18 @@ abstract class Driver
 {
 
     /**
-     * 解析Uri并寻址
+     * 路由数据准备
      *
-     * @param $uri
      * @return mixed
      */
-    abstract function doAction($uri);
+    abstract function ready();
 
     /**
-     * 添加路径规则
+     * 路由调度
      *
-     * @param string $rule
-     * @param string $redirect
-     * @return $this
+     * @return mixed
      */
-    abstract function addRule($rule, $redirect);
+    abstract function dispatch();
 
 
 }

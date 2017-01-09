@@ -4,7 +4,6 @@ namespace Ark\Core;
 
 use Closure;
 use Ark\Http\Server;
-use Ark\Http\Request;
 use Ark\Http\Response;
 use Ark\Database\Querier;
 use Ark\View\Adapter as ViewAdapter;
@@ -139,7 +138,7 @@ class Captain
         //定义常量
         $debug_trace = debug_backtrace();
         defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
-        defined('PATH_APP') || define('PATH_APP', dirname($debug_trace[1]['file']));
+        defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
     }
 
     /**
@@ -177,8 +176,8 @@ class Captain
     function setApp($name, $dir = null)
     {
         $this->_app_name = $name;
-        $dir || $dir = PATH_APP;
-        $this->_app_dir = $dir;
+        $dir || $dir = PATH_WEB;
+        $this->_app_dir = rtrim($dir, '/\\');
         return $this;
     }
 
@@ -232,7 +231,7 @@ class Captain
      */
     function setControllerDir($controller_dir)
     {
-        $this->_controller_dir = $controller_dir;
+        $this->_controller_dir = rtrim($controller_dir, '/\\');
         return $this;
     }
 
@@ -287,7 +286,7 @@ class Captain
         $config = array();
         if ($this->_config_caching) {
             //默认配置文件缓存目录为WEB根目录
-            $config_cache_dir = PATH_APP;
+            $config_cache_dir = PATH_WEB;
             //重新获取配置文件目录
             if (is_dir($this->_config_cache_dir)) {
                 $config_cache_dir = $this->_config_cache_dir;
@@ -350,6 +349,7 @@ class Captain
         //注册应用程序基地址
         Loader::setNameSpace($this->_app_name, $this->_app_dir);
         Loader::setAlias('@', $this->_app_dir);
+        defined('PATH_APP') || define('PATH_APP', $this->_app_dir);
         //配置文件
         if (!$config = $this->getConfig()) {
             throw new Exception($this->lang->get('core.invalid_configuration'));
@@ -361,6 +361,7 @@ class Captain
         } elseif (strpos($this->_controller_dir, $this->_app_dir) === false) {
             throw new Exception($this->lang->get('core.invalid_controller_dir'));
         }
+        defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_dir);
         //时区设置
         $timezone = 'Asia/Shanghai';
         if ($this->_config->global->timezone) {
@@ -376,7 +377,6 @@ class Captain
         //注册内置组件
         $this
             ->set('response', function() { return new Response(); })
-            ->set('request', function() { return Request::getInstance(); })
             ->set('view', function() { return ViewAdapter::getDriver(); })
             ->set('router', function() { return RouterAdapter::getDriver(); })
             ->set('session', function() { return SessionAdapter::getDriver(); })
@@ -414,11 +414,14 @@ class Captain
             }
         }
 
-        //监听系统启动事件
+        //路由调度准备
+        $this->router->ready();
+
+        //监听系统启动就绪事件
         Event::onListening('event.framework.ready');
 
         //路由并呈现控制器内容
-        echo $this->router->doAction($_SERVER['REQUEST_URI']);
+        $this->router->dispatch();
 
     }
 

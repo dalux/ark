@@ -4,7 +4,6 @@
 require_once __DIR__. '/../src/Core/Captain.php';
 
 //使用命名空间
-use Ark\Core\Event;
 use Ark\Core\Captain;
 use Ark\Core\Loader;
 use Ark\Http\Server;
@@ -15,9 +14,9 @@ use Ark\Cache\Adapter as CacheAdapter;
 //当前,如果你的应用不复杂,也可以只使用该文件当作入口文件即可
 
 //实例化框架
-Captain::getInstance()
-    //设置应用程序根空间名称及基本路径
-    ->setApp('App', Loader::realPath('./mvc/home'))
+$_ = Captain::getInstance();
+//设置应用程序根空间名称及基本路径
+$_->setApp('App', Loader::realPath('./mvc/home'))
     //设置配置文件夹路径
     ->setConfigDir(function() {
         $path = Loader::realPath('./config');
@@ -29,17 +28,17 @@ Captain::getInstance()
         }
         return $path. '/localhost';
     })
-    //将配置文件解析结果缓存起来
-    //->cacheConfigTo(Loader::realPath('./runtime'))
     //添加钩子程序存放目录
     ->addHookDir(Loader::realPath('*/Hook'))
     //框架启动前的预处理逻辑,可以于此添加一些全局性事务
     ->addPrepare(function() {
 
-        //注册全局性组件,可以于各控制器中直接以$this->{$varname}来调用
-        //比如调用下面的db组件, 可能任意控制器或继承Sailor类的实例中调用$this->db
+        Loader::setNameSpace('App\\Model', Loader::realPath('@/model'));
+        Loader::setNameSpace('App\\Helper', Loader::realPath('@/helper'));
+
         Captain::getInstance()
             ->set('db', function() { return DatabaseAdapter::getDriver('master'); })
             ->set('cache', function() { return CacheAdapter::getDriver('file'); });
 
-    });
+    })
+    ->run();

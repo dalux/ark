@@ -54,14 +54,7 @@ class Server
                 $_SERVER[strtoupper(substr($k, 7))] = $v;
             } elseif ($k == 'uri') {
                 $_SERVER['REQUEST_URI'] = $v;
-            } elseif ($k == 'url') {
-                $url = parse_url($v);
-                if ($url && $url['scheme'] && $url['host']) {
-                    $_SERVER['HTTP_HOST'] = $url['host'];
-                    $_SERVER['REQUEST_URI'] = $url['path'] ? $url['path'] : '/';
-                } else {
-                    $_GET[$k] = $v;
-                }
+                unset($_GET['uri']);
             } else {
                 $_GET[$k] = $v;
             }

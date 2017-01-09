@@ -2,15 +2,12 @@
 
 namespace  Ark\Router\Driver;
 
-use Ark\Router\Interceptor;
 use ReflectionClass;
 use Ark\Core\Loader;
 use Ark\Core\Captain;
-use Ark\Core\Event;
 use Ark\Core\Trace;
 use Ark\Core\Struct;
 use Ark\Http\Request;
-use Ark\Core\Controller;
 use Ark\Router\Exception;
 use Ark\Router\Driver as RouterDriver;
 
@@ -82,6 +79,20 @@ class Base extends RouterDriver
      * @var string
      */
     private $_module;
+
+    /**
+     * 控制器命名空间
+     *
+     * @var string
+     */
+    private $_namespace;
+
+    /**
+     * 拦截器
+     *
+     * @var array
+     */
+    private $_interceptors = array();
 
     /**
      * 构造器
@@ -237,167 +248,66 @@ class Base extends RouterDriver
     }
 
     /**
-     * 执行路由解析
+     * 添加拦截器规则
      *
-     * @param string $uri
-     * @return mixed
+     * @param $subspace
+     * @param $operator
      * @throws Exception
      */
-    function doAction($uri)
+    function addInterceptor($subspace, $operator)
     {
-        //解析前事件
-        $data = array('driver'=> 'Base', 'uri'=> $uri);
-        $rule = array(
-            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        );
-        $data = Event::onListening('event.routing.before', $data, $rule);
-        $uri = $data['uri'];
-        //调用路由组件，解析URI
-        $result = $this->parseUri($uri);
-        //解析后事件
-        $data = array('driver'=> 'Base', 'result'=> $result);
-        $rule = array(
-            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'result'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        );
-        $data = Event::onListening('event.routing.finish', $data, $rule);
-        $result = $data['result'];
-        $def_controller = Captain::getInstance()->config->router->default->controller;
-        $def_action = Captain::getInstance()->config->router->default->action;
-        //校验result结构
-        $struct = new Struct();
-        $struct->setRule(array(
-            'module'=> array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'controller'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING, Struct::FLAG_DEFAULT=> $def_controller),
-            'action'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING, Struct::FLAG_DEFAULT=> $def_action),
-        ));
-        $struct->setData($result);
-        if (!$result = $struct->checkOut()) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.uri_parse_failed'), $struct->getMessage()));
+        $subspace = trim($subspace, '\\');
+        if (!is_callable($operator)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.invalid_router_interceptor'), $subspace));
         }
-        //控制器调度
+        $this->_interceptors[$subspace] = $operator;
+    }
+
+    /**
+     * 获取指定类的拦截器
+     *
+     * @param $namespace
+     * @return mixed
+     */
+    function getInterceptors($namespace)
+    {
+        $namespace = trim($namespace, '\\');
+        $result = array();
+        foreach ($this->_interceptors as $subspace=> $operator) {
+            if (strpos($namespace, $subspace) !== false) {
+                $result[$subspace] = $operator;
+            }
+        }
+        //按subspace长短来重新排序
+        if ($result) {
+            uksort($result, function ($a, $b) {
+                $len_a = strlen($a);
+                $len_b = strlen($b);
+                if ($len_a == $len_b) {
+                    return 0;
+                }
+                return $len_a > $len_b ? 1 : -1;
+            });
+        }
+        return $result;
+    }
+
+    /**
+     * 准备路由数据
+     *
+     * @throws Exception
+     */
+    function ready()
+    {
+        $uri = $_SERVER['REQUEST_URI'];
+        //调用路由组件，解析URI
+        $result = $this->_parseUri($uri);
+        $def_router = Captain::getInstance()->config->router->default;
+        $result['controller'] || $result['controller'] = $def_router->controller;
+        $result['action'] || $result['action'] = $def_router->action;
         $this->setModule($result['module']);
         $this->setController($result['controller']);
         $this->setAction($result['action']);
-        return $this->dispatch();
-    }
-
-    /**
-     * 解析URI数据
-     *
-     * @param $uri
-     * @return array
-     * @throws Exception
-     */
-    function parseUri($uri)
-    {
-        $module = $controller = $action = '';
-        $getdata = array();
-        switch ($this->_url_mode) {
-            case self::URL_MODE_COMMON:
-                $var_module = Captain::getInstance()->config->router->urlvar->module;
-                $var_controller = Captain::getInstance()->config->router->urlvar->controller;
-                $var_action = Captain::getInstance()->config->router->urlvar->action;
-                $_GET = Captain::getInstance()->request->get();
-                $module = $_GET[$var_module];
-                $controller = $_GET[$var_controller];
-                $action = $_GET[$var_action];
-                unset($_GET[$var_module], $_GET[$var_controller], $_GET[$var_action]);
-                $getdata = $_GET;
-                $_GET = array();
-                if (!$this->isAllowModule()) {
-                    $module = '';
-                }
-                break;
-            case self::URL_MODE_PATHINFO:
-                $file_name = basename($_SERVER['SCRIPT_FILENAME']);
-                $uri = preg_replace('/\/'. addslashes($file_name). '/', '', $uri);
-                //重写
-                $urlsep = Captain::getInstance()->config->router->urlsep;
-                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
-                $uri = str_replace('/?', $urlsep, $uri);
-                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
-                $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
-                $uri_params = explode($urlsep, $uri);
-                if ($this->isAllowModule()) {
-                    $module = array_shift($uri_params);
-                }
-                $controller = array_shift($uri_params);
-                $action = array_shift($uri_params);
-                $uri_params = array_chunk($uri_params, 2);
-                foreach ($uri_params as $key=> $val) {
-                    $getdata[$val[0]] = $val[1];
-                }
-                break;
-            case self::URL_MODE_REWRITE:
-                //重写
-                $urlsep = Captain::getInstance()->config->router->urlsep;
-                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
-                $uri = str_replace('/?', $urlsep, $uri);
-                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
-                $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
-                $uri_params = explode($urlsep, $uri);
-                if ($this->isAllowModule()) {
-                    $module = array_shift($uri_params);
-                }
-                $controller = array_shift($uri_params);
-                $action = array_shift($uri_params);
-                $uri_params = array_chunk($uri_params, 2);
-                foreach ($uri_params as $key=> $val) {
-                    $getdata[$val[0]] = $val[1];
-                }
-                break;
-            case self::URL_MODE_COMPATIBLE:
-                $_GET = Captain::getInstance()->request->get();
-                $urlvar = Captain::getInstance()->config->router->urlvar->compatible;
-                $uri = $_GET[$urlvar];
-                unset($_GET[$urlvar]);
-                //重写
-                $urlsep = Captain::getInstance()->config->router->urlsep;
-                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
-                $uri = str_replace('/?', $urlsep, $uri);
-                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
-                $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
-                $uri_params = explode($urlsep, $uri);
-                foreach ($_GET as $k=> $v) {
-                    $uri_params[$k] = $v;
-                }
-                if ($this->isAllowModule()) {
-                    $module = array_shift($uri_params);
-                }
-                $controller = array_shift($uri_params);
-                $action = array_shift($uri_params);
-                $uri_params = array_chunk($uri_params, 2);
-                foreach ($uri_params as $key=> $val) {
-                    $getdata[$val[0]] = $val[1];
-                }
-                $_GET = array();
-                break;
-        }
-        if ($getdata) {
-            foreach ($getdata as $key=> $val) {
-                Captain::getInstance()->request->add($key, $val, Request::FLAG_GET);
-            }
-        }
-        return array(
-            'module'        => $module,
-            'controller'    => $controller,
-            'action'        => $action,
-        );
-    }
-
-    /**
-     * 目标调度
-     *
-     * @return mixed
-     * @throws Exception
-     */
-    function dispatch()
-    {
         if (!$this->_controller) {
             throw new Exception(Captain::getInstance()->lang->get('router.invalid_controller_name'));
         } elseif (!$this->_action) {
@@ -420,16 +330,31 @@ class Base extends RouterDriver
         if (!Loader::findClass($namespace)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
         }
+        $this->_namespace = $namespace;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
+        //请求数据初始化完成
+        Request::$ready = true;
+        Captain::getInstance()->set('request', function() { return Request::getInstance(); });
         //
+    }
+
+    /**
+     * 目标调度
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    function dispatch()
+    {
+        $namespace = $this->_namespace;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
         }
         //实现拦截器功能
-        if ($interceptors = Interceptor::get($namespace)) {
+        if ($interceptors = $this->getInterceptors($namespace)) {
             foreach ($interceptors as $interceptor) {
                 $result = call_user_func_array($interceptor, array());
                 if (is_string($result)) {
@@ -438,9 +363,7 @@ class Base extends RouterDriver
             }
         }
         $instance = new $namespace();
-        if (!$instance instanceof Controller) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Controller\\Base'));
-        } elseif (!method_exists($instance, $this->_action)) {
+        if (!method_exists($instance, $this->_action)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.action_not_found'), $namespace, $this->_action));
         }
         $output = null;
@@ -544,6 +467,111 @@ class Base extends RouterDriver
             throw new Exception(Captain::getInstance()->lang->get('router.uri_must_string'));
         }
         return $uri;
+    }
+
+    /**
+     * 解析URI数据
+     *
+     * @param $uri
+     * @return array
+     * @throws Exception
+     */
+    private function _parseUri($uri)
+    {
+        $module = $controller = $action = '';
+        $getdata = array();
+        switch ($this->_url_mode) {
+            case self::URL_MODE_COMMON:
+                $var_module = Captain::getInstance()->config->router->urlvar->module;
+                $var_controller = Captain::getInstance()->config->router->urlvar->controller;
+                $var_action = Captain::getInstance()->config->router->urlvar->action;
+                $module = $_GET[$var_module];
+                $controller = $_GET[$var_controller];
+                $action = $_GET[$var_action];
+                unset($_GET[$var_module], $_GET[$var_controller], $_GET[$var_action]);
+                $getdata = $_GET;
+                $_GET = array();
+                if (!$this->isAllowModule()) {
+                    $module = '';
+                }
+                break;
+            case self::URL_MODE_PATHINFO:
+                $file_name = basename($_SERVER['SCRIPT_FILENAME']);
+                $uri = preg_replace('/\/'. addslashes($file_name). '/', '', $uri);
+                //重写
+                $urlsep = Captain::getInstance()->config->router->urlsep;
+                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
+                $uri = str_replace('/?', $urlsep, $uri);
+                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
+                $uri = trim($this->_rewrite($uri), '/');
+                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
+                $uri_params = explode($urlsep, $uri);
+                if ($this->isAllowModule()) {
+                    $module = array_shift($uri_params);
+                }
+                $controller = array_shift($uri_params);
+                $action = array_shift($uri_params);
+                $uri_params = array_chunk($uri_params, 2);
+                foreach ($uri_params as $key=> $val) {
+                    $getdata[$val[0]] = $val[1];
+                }
+                break;
+            case self::URL_MODE_REWRITE:
+                //重写
+                $urlsep = Captain::getInstance()->config->router->urlsep;
+                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
+                $uri = str_replace('/?', $urlsep, $uri);
+                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
+                $uri = trim($this->_rewrite($uri), '/');
+                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
+                $uri_params = explode($urlsep, $uri);
+                if ($this->isAllowModule()) {
+                    $module = array_shift($uri_params);
+                }
+                $controller = array_shift($uri_params);
+                $action = array_shift($uri_params);
+                $uri_params = array_chunk($uri_params, 2);
+                foreach ($uri_params as $key=> $val) {
+                    $getdata[$val[0]] = $val[1];
+                }
+                break;
+            case self::URL_MODE_COMPATIBLE:
+                $urlvar = Captain::getInstance()->config->router->urlvar->compatible;
+                $uri = $_GET[$urlvar];
+                unset($_GET[$urlvar]);
+                //重写
+                $urlsep = Captain::getInstance()->config->router->urlsep;
+                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
+                $uri = str_replace('/?', $urlsep, $uri);
+                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
+                $uri = trim($this->_rewrite($uri), '/');
+                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
+                $uri_params = explode($urlsep, $uri);
+                foreach ($_GET as $k=> $v) {
+                    $uri_params[$k] = $v;
+                }
+                if ($this->isAllowModule()) {
+                    $module = array_shift($uri_params);
+                }
+                $controller = array_shift($uri_params);
+                $action = array_shift($uri_params);
+                $uri_params = array_chunk($uri_params, 2);
+                foreach ($uri_params as $key=> $val) {
+                    $getdata[$val[0]] = $val[1];
+                }
+                $_GET = array();
+                break;
+        }
+        if ($getdata) {
+            foreach ($getdata as $key=> $val) {
+                $_GET[$key] = $val;
+            }
+        }
+        return array(
+            'module'        => $module,
+            'controller'    => $controller,
+            'action'        => $action,
+        );
     }
 
 }

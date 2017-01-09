@@ -1,7 +1,7 @@
 <?php
 
 /*
-//通用路由器
+//通用单入口路由器
 return array(
     'driver'=> '\Ark\Router\Driver\Base',
     'urlmode'=> \Ark\Router\Driver\Base::URL_MODE_REWRITE,
@@ -20,7 +20,7 @@ return array(
 );
 */
 
-//原生PHP路由器
+//模拟原生PHP单入口路由器
 return array(
     'driver'=> '\Ark\Router\Driver\Native',
     'urlsuffix'=> '.html',
@@ -30,3 +30,11 @@ return array(
         'action'=> 'index'
     ),
 );
+
+/*
+//多入口路由
+return array(
+    'driver'=> '\Ark\Router\Driver\Multiple',
+    'interceptor'=> '__init__.php',
+);
+*/

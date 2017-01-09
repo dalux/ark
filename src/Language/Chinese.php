@@ -14,6 +14,7 @@ return array(
     'core.class_path_notfound'          => '类名称[%s]对应的文件不存在',
 
     'com.invalid_view_template'         => '无有效的视图模板文件',
+    'http.request_not_ready'            => 'Http请求数据未就绪',
 
     'event.struct_check_failed'         => '事件监听器[%s]返回值结构校验失败[%s]',
     'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
@@ -35,7 +36,6 @@ return array(
 
     'router.uri_parse_failed'           => '路由解析结果异常[%s]',
     'router.action_not_found'           => '控制器类[%s]中不存在行为[%s]',
-    'router.controller_extends_error'   => '控制器必须继承自类[%s]',
     'router.invalid_action_name'        => '无有效的行为名称',
     'router.invalid_controller_name'    => '无有效的控制器名称',
     'router.controller_not_found'       => '请求的控制器类[%s]不存在',

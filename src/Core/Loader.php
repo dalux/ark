@@ -12,7 +12,7 @@ class Loader
      */
     private static $_alias = array(
         '*'=> PATH_LIB,
-        '.'=> PATH_APP,
+        '.'=> PATH_WEB,
     );
 
     /**

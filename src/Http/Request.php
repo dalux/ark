@@ -2,6 +2,7 @@
 
 namespace Ark\Http;
 
+use Ark\Core\Captain;
 use Ark\Core\Event;
 use Ark\Core\Struct;
 
@@ -95,13 +96,22 @@ class Request
     );
 
     /**
-     * 取请求实例
+     * http数据是否准备就绪
      *
      * @return Request
      */
+    static $ready = false;
+
+    /**
+     * 取请求实例
+     * @return Request
+     * @throws Exception
+     */
     static function getInstance()
     {
-        if (is_null(self::$_instance)) {
+        if (!self::$ready) {
+            throw new Exception(Captain::getInstance()->lang->get('http.request_not_ready'));
+        } elseif (is_null(self::$_instance)) {
             self::$_instance = new self();
         }
         return self::$_instance;

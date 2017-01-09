@@ -3,13 +3,9 @@
 namespace Ark\Router\Driver;
 
 use Ark\Core\Captain;
-use Ark\Router\Interceptor;
 use ReflectionClass;
-use Ark\Core\Struct;
 use Ark\Http\Request;
-use Ark\Core\Event;
 use Ark\Core\Loader;
-use Ark\Core\Controller;
 use Ark\Router\Exception;
 use Ark\Router\Driver as RouterDriver;
 
@@ -22,6 +18,20 @@ class Native extends RouterDriver
      * @var array
      */
     private $_rules = array();
+
+    /**
+     * 拦截器
+     *
+     * @var array
+     */
+    private $_interceptors = array();
+
+    /**
+     * 控制器命名空间
+     *
+     * @var string
+     */
+    private $_namespace;
 
     /**
      * 添加路由规则
@@ -37,22 +47,58 @@ class Native extends RouterDriver
     }
 
     /**
-     * 执行路由
+     * 添加拦截器规则
      *
-     * @param string $uri
-     * @return string
+     * @param $subspace
+     * @param $operator
      * @throws Exception
      */
-    function doAction($uri)
+    function addInterceptor($subspace, $operator)
     {
-        //解析前事件
-        $data = array('driver'=> 'Native', 'uri'=> $uri);
-        $rule = array(
-            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        );
-        $data = Event::onListening('event.routing.before', $data, $rule);
-        $uri = $data['uri'];
+        $subspace = trim($subspace, '\\');
+        if (!is_callable($operator)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.invalid_router_interceptor'), $subspace));
+        }
+        $this->_interceptors[$subspace] = $operator;
+    }
+
+    /**
+     * 获取指定类的拦截器
+     *
+     * @param $namespace
+     * @return mixed
+     */
+    function getInterceptors($namespace)
+    {
+        $namespace = trim($namespace, '\\');
+        $result = array();
+        foreach ($this->_interceptors as $subspace=> $operator) {
+            if (strpos($namespace, $subspace) !== false) {
+                $result[$subspace] = $operator;
+            }
+        }
+        //按subspace长短来重新排序
+        if ($result) {
+            uksort($result, function ($a, $b) {
+                $len_a = strlen($a);
+                $len_b = strlen($b);
+                if ($len_a == $len_b) {
+                    return 0;
+                }
+                return $len_a > $len_b ? 1 : -1;
+            });
+        }
+        return $result;
+    }
+
+    /**
+     * 准备路由数据
+     *
+     * @throws Exception
+     */
+    function ready()
+    {
+        $uri = $_SERVER['REQUEST_URI'];
         //解析URI
         if (strpos($uri, '?') !== false) {
             $query = substr($uri, strpos($uri, '?') + 1);
@@ -60,24 +106,15 @@ class Native extends RouterDriver
             $query = explode('/', $query);
             $query = array_chunk($query, 2);
             foreach ($query as $key=> $val) {
-                Captain::getInstance()->request->add($val[0], $val[1], Request::FLAG_GET);
+                $_GET[$val[0]] = $val[1];
             }
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
         //重写
         $uri = trim($this->_rewrite($uri), '/');
-        //解析后事件
-        $data = array('driver'=> 'Native', 'uri'=> $uri);
-        $rule = array(
-            'driver'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'uri'=> array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        );
-        $data = Event::onListening('event.routing.finish', $data, $rule);
-        $uri = $data['uri'];
         //处理URI,组装控制器类
         $urlsep = Captain::getInstance()->config->router->urlsep;
         $url_suffix = Captain::getInstance()->config->router->urlsuffix;
-        $action = Captain::getInstance()->config->router->default->action;
         if (strpos($uri, $url_suffix) !== false) {
             $uri = preg_replace(sprintf('~%s$~i', $url_suffix), '', $uri);
         }
@@ -93,8 +130,6 @@ class Native extends RouterDriver
             $path_now.= DIRECTORY_SEPARATOR. implode(DIRECTORY_SEPARATOR, $controllers);
             $path_now = dirname($path_now);
         }
-        defined('PATH_NOW') || define('PATH_NOW', $path_now);
-        Loader::setAlias('~', PATH_NOW);
         $part = str_replace($app_dir, '', $controller_dir);
         $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');
         $part = array_map('ucfirst', explode('\\', $part));
@@ -103,24 +138,41 @@ class Native extends RouterDriver
         if (!Loader::findClass($namespace)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
         }
+        $this->_namespace = $namespace;
+        //定义PATH_NOW常量
+        defined('PATH_NOW') || define('PATH_NOW', $path_now);
+        Loader::setAlias('~', PATH_NOW);
+        //请求数据初始化完成
+        Request::$ready = true;
+        Captain::getInstance()->set('request', function() { return Request::getInstance(); });
+    }
+
+    /**
+     * 调度
+     *
+     * @throws Exception
+     */
+    function dispatch()
+    {
+        $namespace = $this->_namespace;
+        $action = Captain::getInstance()->config->router->default->action;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
         }
         //实现拦截器功能
-        if ($interceptors = Interceptor::get($namespace)) {
+        if ($interceptors = $this->getInterceptors($namespace)) {
             foreach ($interceptors as $interceptor) {
                 $result = call_user_func_array($interceptor, array());
                 if (is_string($result)) {
-                    return $result;
+                    echo $result;
+                    exit;
                 }
             }
         }
         //实例化最终控制器对象
         $instance = new $namespace();
-        if (!$instance instanceof Controller) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_extends_error'), '\\Ark\\Core\\Controller'));
-        } elseif (!method_exists($instance, $action)) {
+        if (!method_exists($instance, $action)) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.action_not_found'), $namespace, $action));
         }
         $output = null;
@@ -132,7 +184,7 @@ class Native extends RouterDriver
         if (is_null($output)) {
             $output = $instance->{$action}();
         }
-        return $output;
+        echo $output;
     }
 
     /**
