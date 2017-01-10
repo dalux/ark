@@ -5,11 +5,9 @@ namespace Ark\Database\Driver;
 use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Core\Struct;
-use Ark\Cache\Proxy;
 use Ark\Core\Event;
 use Ark\Database\Exception;
 use Ark\Database\Querier;
-use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
 
 class Pdo extends DatabaseDriver
@@ -304,74 +302,13 @@ class Pdo extends DatabaseDriver
     }
 
     /**
-     * 缓存代理
+     * 获取PDO对象实例
      *
-     * @access public
-     * @param int $expire
-     * @param null $name
-     * @param CacheDriver $cache
-     * @return Proxy
+     * @return \PDO
      */
-    function cache($expire, $name, CacheDriver $cache)
+    function getInstance()
     {
-        $proxy = new Proxy($cache);
-        return $proxy->invoke($this, $expire, $name);
-    }
-
-    /**
-     * select对象
-     *
-     * @access public
-     * @return Querier\Select;
-     */
-    function select()
-    {
-        $class = '\\Ark\\Database\\Querier\\Select\\'. ucfirst($this->getDriverName());
-        /* @var Querier\Select $instance */
-        $instance = new $class();
-        return $instance->invoke($this);
-    }
-
-    /**
-     * update对象
-     *
-     * @access public
-     * @return Querier\Update;
-     */
-    function update()
-    {
-        $class = '\\Ark\\Database\\Querier\\Update\\'. ucfirst($this->getDriverName());
-        /* @var Querier\Update $instance */
-        $instance = new $class();
-        return $instance->invoke($this);
-    }
-
-    /**
-     * insert对象
-     *
-     * @access public
-     * @return Querier\Insert
-     */
-    function insert()
-    {
-        $class = '\\Ark\\Database\\Querier\\Insert\\'. ucfirst($this->getDriverName());
-        /* @var Querier\Insert $instance */
-        $instance = new $class();
-        return $instance->invoke($this);
-    }
-
-    /**
-     * delete对象
-     *
-     * @access public
-     * @return Querier\Delete
-     */
-    function delete()
-    {
-        $class = '\\Ark\\Database\\Querier\\Delete\\'. ucfirst($this->getDriverName());
-        /* @var Querier\Delete $instance */
-        $instance = new $class();
-        return $instance->invoke($this);
+        return $this->_instance;
     }
 
 }

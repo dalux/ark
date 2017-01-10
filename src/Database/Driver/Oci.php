@@ -2,7 +2,6 @@
 
 namespace Ark\Database\Driver;
 
-use Ark\Cache\Proxy;
 use Ark\Core\Captain;
 use Ark\Core\Event;
 use Ark\Core\Trace;
@@ -11,7 +10,6 @@ use Ark\Core\Struct;
 use Ark\Database\Toolkit;
 use Ark\Database\Querier;
 use Ark\Database\Exception;
-use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
 
 class Oci extends DatabaseDriver
@@ -331,70 +329,17 @@ class Oci extends DatabaseDriver
      */
     function getDriverName()
     {
-        return 'oci';
+        return 'Oci';
     }
 
     /**
-     * 缓存代理
+     * 获取oracle对象原生实例
      *
-     * @access public
-     * @param int $expire
-     * @param null $name
-     * @param CacheDriver $cache
-     * @return Oci
+     * @return resource
      */
-    function cache($expire, $name, CacheDriver $cache)
+    function getInstance()
     {
-        $proxy = new Proxy($cache);
-        return $proxy->invoke($this, $expire, $name);
-    }
-
-    /**
-     * select对象
-     *
-     * @access public
-     * @return Querier\Select\Oci
-     */
-    function select()
-    {
-        $instance = new Querier\Select\Oci();
-        return $instance->invoke($this);
-    }
-
-    /**
-     * update对象
-     *
-     * @access public
-     * @return Querier\Update\Oci()
-     */
-    function update()
-    {
-        $instance = new Querier\Update\Oci();
-        return $instance->invoke($this);
-    }
-
-    /**
-     * insert对象
-     *
-     * @access public
-     * @return Querier\Insert\Oci
-     */
-    function insert()
-    {
-        $instance = new Querier\Insert\Oci();
-        return $instance->invoke($this);
-    }
-
-    /**
-     * delete对象
-     *
-     * @access public
-     * @return Querier\Delete\Oci
-     */
-    function delete()
-    {
-        $instance = new Querier\Delete\Oci();
-        return $instance->invoke($this);
+        return $this->_instance;
     }
 
     /**

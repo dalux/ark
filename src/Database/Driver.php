@@ -2,6 +2,7 @@
 
 namespace Ark\Database;
 
+use Ark\Cache\Proxy;
 use Ark\Database\Querier;
 use Ark\Cache\Driver as CacheDriver;
 
@@ -97,32 +98,71 @@ abstract class Driver
     abstract function getDriverName();
 
     /**
-     * 获取select助手
+     * 获取数据库对象原生实例
      *
-     * @return Querier\Select
+     * @return mixed
      */
-    abstract function select();
+    abstract function getInstance();
 
     /**
-     * 获取update助手
+     * select对象
      *
-     * @return Querier\Update
+     * @access public
+     * @return Querier\Select;
      */
-    abstract function update();
+    function select()
+    {
+        $driver = ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Select\\'. $driver;
+        /* @var Querier\Select $instance */
+        $instance = new $class();
+        return $instance->invoke($this);
+    }
 
     /**
-     * 获取insert助手
+     * update对象
      *
+     * @access public
+     * @return Querier\Update;
+     */
+    function update()
+    {
+        $driver = ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Update\\'. $driver;
+        /* @var Querier\Update $instance */
+        $instance = new $class();
+        return $instance->invoke($this);
+    }
+
+    /**
+     * insert对象
+     *
+     * @access public
      * @return Querier\Insert
      */
-    abstract function insert();
+    function insert()
+    {
+        $driver = ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Insert\\'. $driver;
+        /* @var Querier\Insert $instance */
+        $instance = new $class();
+        return $instance->invoke($this);
+    }
 
     /**
-     * 获取delete助手
+     * delete对象
      *
+     * @access public
      * @return Querier\Delete
      */
-    abstract function delete();
+    function delete()
+    {
+        $driver = ucfirst($this->getDriverName());
+        $class = '\\Ark\\Database\\Querier\\Delete\\'. $driver;
+        /* @var Querier\Delete $instance */
+        $instance = new $class();
+        return $instance->invoke($this);
+    }
 
     /**
      * 缓存SQL语句
@@ -132,6 +172,10 @@ abstract class Driver
      * @param CacheDriver $cache
      * @return mixed
      */
-    abstract function cache($expire, $name, CacheDriver $cache);
+    function cache($expire, $name, CacheDriver $cache)
+    {
+        $proxy = new Proxy($cache);
+        return $proxy->invoke($this, $expire, $name);
+    }
 
 }
