@@ -41,13 +41,43 @@ class Select extends Father
      *
      * @access public
      * @param $cond
-     * @param null $value
-     * @param bool $and
      * @return Select
      */
-    function having($cond, $value = null, $and = true)
+    function having($cond)
     {
-        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $value), $and);
+        $values = func_get_args();
+        array_shift($values);
+        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $values), null);
+        return $this;
+    }
+
+    /**
+     * 分组条件
+     *
+     * @access public
+     * @param $cond
+     * @return Select
+     */
+    function andHaving($cond)
+    {
+        $values = func_get_args();
+        array_shift($values);
+        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $values), true);
+        return $this;
+    }
+
+    /**
+     * 分组条件
+     *
+     * @access public
+     * @param $cond
+     * @return Select
+     */
+    function orHaving($cond)
+    {
+        $values = func_get_args();
+        array_shift($values);
+        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $values), false);
         return $this;
     }
 
@@ -253,19 +283,20 @@ class Select extends Father
         $having = array();
         if ($having_part = $this->_parts['having']) {
             foreach ($having_part as $key=> $val) {
+                $part = '';
+                if (!is_null($val[1])) {
+                    $part.= $val[1] ? ' AND ' : ' OR ';
+                }
                 $cond = $val[0]['cond'];
                 $value = $val[0]['val'];
                 if (is_null($value)) {
                     $part = $cond;
                     if ($cond instanceof self) {
-                        $part = '('. $cond->pickHavingPart(). ')';
+                        $part.= '('. $cond->pickHavingPart(). ')';
                     }
                 } else {
-                    $part = $this->_parseExpr($cond, $value);
+                    $part.= $this->_parseExpr($cond, $value);
                 }
-				if ($having_part[$key+1]) {
-					$part.= $val[1] ? ' AND ' : ' OR ';
-				}
 				$having[] = $part;
             }
         }

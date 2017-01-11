@@ -10,12 +10,13 @@ class Index extends Sailor
 
     function index()
     {
-        $delete = Querier::delete('mysql')
+        $delete = Querier::select('mysql')
             ->from('users')
-            ->where('id=:id', 1, false)
-            ->where('uid=:uid', 22)
-            ->getSQL();
-        echo $delete;
+            ->where('job=:job', 21)
+            ->group(array('name'))
+            ->having('id=? and name=:name', 1, 'hong');
+        echo $delete->getSQL();
+        print_r($delete->getBind());
     }
 
 }

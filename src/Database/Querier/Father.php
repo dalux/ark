@@ -108,126 +108,42 @@ abstract class Father
      *
      * @access public
      * @param string $cond
-     * @param mixed $value
-     * @param bool $and
      * @return Father
      */
-    function where($cond, $value = null, $and = true)
+    function where($cond)
     {
-        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $value), $and);
+        $values = func_get_args();
+        array_shift($values);
+        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $values), null);
         return $this;
     }
 
     /**
-     * 查询in条件
+     * and查询
      *
-     * @access public
-     * @param string $field
-     * @param mixed $value
-     * @param bool $and
+     * @param $cond
      * @return Father
      */
-    function whereIn($field, $value, $and = true)
+    function andWhere($cond)
     {
-        $expr = $field. ' IN (?)';
-        if ($value instanceof Select) {
-            $value = $value->getRealSQL();
-        } else {
-            $value = Toolkit::quote($value, $this->_db_type);
-        }
-        $expr = str_replace('?', $value, $expr);
-        return $this->where($expr, null, $and);
+        $values = func_get_args();
+        array_shift($values);
+        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $values), true);
+        return $this;
     }
 
     /**
-     * 查询notin条件
+     * OR查询
      *
-     * @access public
-     * @param string $field
-     * @param mixed $value
-     * @param bool $and
+     * @param $cond
      * @return Father
      */
-    function whereNotIn($field, $value, $and = true)
+    function orWhere($cond)
     {
-        $expr = $field. ' NOT IN (?)';
-        if ($value instanceof Select) {
-            $value = $value->getRealSQL();
-        } else {
-            $value = Toolkit::quote($value, $this->_db_type);
-        }
-        $expr = str_replace('?', $value, $expr);
-        return $this->where($expr, null, $and);
-    }
-
-    /**
-     * 查询exists条件
-     *
-     * @access public
-     * @param mixed $sub_query
-     * @param bool $and
-     * @return Father
-     */
-    function whereExists($sub_query, $and = true)
-    {
-        $expr = 'EXISTS (?)';
-        if ($sub_query instanceof Select) {
-            $sub_query = $sub_query->getRealSQL();
-        }
-        $expr = str_replace('?', $sub_query, $expr);
-        return $this->where($expr, null, $and);
-    }
-
-    /**
-     * 查询notexists条件
-     *
-     * @access public
-     * @param mixed $sub_query
-     * @param bool $and
-     * @return Father
-     */
-    function whereNotExists($sub_query, $and = true)
-    {
-        $expr = 'NOT EXISTS (?)';
-        if ($sub_query instanceof Select) {
-            $sub_query = $sub_query->getRealSQL();
-        }
-        $expr = str_replace('?', $sub_query, $expr);
-        return $this->where($expr, null, $and);
-    }
-
-    /**
-     * 查询like条件
-     *
-     * @access public
-     * @param $field
-     * @param $expr
-     * @param bool $and
-     * @param string $escape
-     * @return Father
-     */
-    function whereLike($field, $expr, $and = true, $escape = '')
-    {
-        $expr = "{$field} LIKE '{$expr}'";
-        $escape && $expr.= " ESCAPE '{$escape}'";
-        return $this->where($expr, null, $and);
-    }
-
-    /**
-     * 查询not like条件
-     *
-     * @access public
-     * @param $field
-     * @param $expr
-     * @param bool $and
-     * @param string $escape
-     * @return Father
-     */
-    function whereNotLike($field, $expr, $and = true, $escape = '')
-    {
-        $expr = "{$field} NOT LIKE '{$expr}'";
-        $escape && $expr.= " ESCAPE '{$escape}'";
-        return $this->where($expr, null, $and);
+        $values = func_get_args();
+        array_shift($values);
+        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $values), false);
+        return $this;
     }
 
     /**
@@ -241,18 +157,19 @@ abstract class Father
         $where = array();
         if ($where_part = $this->_parts['where']) {
             foreach ($where_part as $key=> $val) {
+                $part = '';
+                if (!is_null($val[1])) {
+                    $part.= $val[1] ? ' AND ' : ' OR ';
+                }
                 $cond = $val[0]['cond'];
                 $value = $val[0]['val'];
                 if (is_null($value)) {
                     $part = $cond;
                     if ($cond instanceof self) {
-                        $part = '(' . $cond->pickWherePart() . ')';
+                        $part.= '(' . $cond->pickWherePart() . ')';
                     }
                 } else {
-                    $part = $this->_parseExpr($cond, $value);
-                }
-                if ($where_part[$key+1]) {
-                    $part.= $val[1] ? ' AND ' : ' OR ';
+                    $part.= $this->_parseExpr($cond, $value);
                 }
                 $where[] = $part;
             }
@@ -388,19 +305,38 @@ abstract class Father
      */
     protected function _parseExpr($expr, $value = null)
     {
-        $pattern = '/(\:[\w\d]+)/';
+        $pattern = '/(\?|\:[\w\d]+)/';
         if (preg_match_all($pattern, $expr, $matches)) {
             $matches = $matches[1];
-            foreach ($matches as $v) {
-                if (is_object($value) && $value instanceof self) {
-                    $value = $value->getRealSQL();
-                    $expr = preg_replace("/$v/", $value, $expr, 1);
-                } elseif (preg_match('/^\{\{.*?\}\}$/', $value) || preg_match('/.*?\(.*?\)/', $value)) {
-                    $value = str_replace(array('{{', '}}'), '', $value);
-                    $expr = preg_replace("/$v/", $value, $expr, 1);
+            foreach ($matches as $k=> $v) {
+                if ($v == '?') {
+                    $val = $value;
+                    if (is_array($value)) {
+                        $val = $value[$k];
+                    }
+                    if ($val instanceof self) {
+                        $val = $val->getRealSQL();
+                    } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
+                        $val = str_replace(array('{{', '}}'), '', $val);
+                    } else {
+                        $val = Toolkit::quote($val, $this->_db_type);
+                    }
+                    $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {
-                    $value = Toolkit::quote($value, $this->_db_type);
-                    $this->_db_bind[$v] = $value;
+                    $val = $value;
+                    if (is_array($value)) {
+                        $val = $value[$k];
+                    }
+                    if ($val instanceof self) {
+                        $val = $val->getRealSQL();
+                        $expr = preg_replace("/$v/", $val, $expr, 1);
+                    } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
+                        $val = str_replace(array('{{', '}}'), '', $val);
+                        $expr = preg_replace("/$v/", $val, $expr, 1);
+                    } else {
+                        $val = Toolkit::quote($val, $this->_db_type);
+                        $this->_db_bind[$v] = $val;
+                    }
                 }
             }
         }
