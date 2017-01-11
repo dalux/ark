@@ -47,13 +47,7 @@ class Select extends Father
      */
     function having($cond, $value = null, $and = true)
     {
-        if (is_null($value) 
-                || $cond instanceof self) {
-            $_part = $cond;
-        } else {
-            $_part = $this->_parseExpr($cond, $value);
-        }
-        $this->_parts['having'][] = array($_part, $and);
+        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $value), $and);
         return $this;
     }
 
@@ -258,15 +252,21 @@ class Select extends Father
     {
         $having = array();
         if ($having_part = $this->_parts['having']) {
-            foreach ($having_part as $k=> $v) {
-                if ($v[0] instanceof self) {
-                    $v[0] = '('. $v[0]->pickHavingPart(). ')';
+            foreach ($having_part as $key=> $val) {
+                $cond = $val[0]['cond'];
+                $value = $val[0]['val'];
+                if (is_null($value)) {
+                    $part = $cond;
+                    if ($cond instanceof self) {
+                        $part = '('. $cond->pickHavingPart(). ')';
+                    }
+                } else {
+                    $part = $this->_parseExpr($cond, $value);
                 }
-				$tmp = $v[0];
-				if ($having_part[$k+1]) {
-					$tmp.= $v[1] ? ' AND ' : ' OR ';
+				if ($having_part[$key+1]) {
+					$part.= $val[1] ? ' AND ' : ' OR ';
 				}
-				$having[] = $tmp;
+				$having[] = $part;
             }
         }
         return $having ? implode(' ', $having) : null;

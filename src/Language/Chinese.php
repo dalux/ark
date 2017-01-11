@@ -33,6 +33,7 @@ return array(
     'db.driver_not_found'               => '数据库驱动器类[%s]不存在',
     'db.driver_implement_error'         => '数据库驱动器类[%s]须实现[%s]及[%s]接口',
     'db.extension_load_failed'          => '加载扩展[%s]失败',
+    'db.querier_type_missing'           => '缺少数据库类型参数',
 
     'router.uri_parse_failed'           => '路由解析结果异常[%s]',
     'router.action_not_found'           => '控制器类[%s]中不存在行为[%s]',

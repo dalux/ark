@@ -337,7 +337,7 @@ class Captain
         //异常报告
         Handler::setHandler('exception');
         //后续类文件自动加载
-        Loader::addAutoLoader(array('\\Ark\\Core\\Loader', 'autoLoad'));
+        Loader::addAutoLoader(array('\Ark\Core\Loader', 'autoLoad'));
         //初始化CLI模式
         Server::isCli() && Server::initCli();
         //检测必要应用配置
@@ -379,8 +379,7 @@ class Captain
             ->set('response', function() { return new Response(); })
             ->set('view', function() { return ViewAdapter::getDriver(); })
             ->set('router', function() { return RouterAdapter::getDriver(); })
-            ->set('session', function() { return SessionAdapter::getDriver(); })
-            ->set('querier', function() { return new Querier(); });
+            ->set('session', function() { return SessionAdapter::getDriver(); });
 
         //钩子程序加载
         $prepares = array();

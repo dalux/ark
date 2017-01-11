@@ -110,7 +110,8 @@ class Pdo extends DatabaseDriver
             if ($bind) {
                 foreach ($bind as $key=> $val) {
                     is_string($key) || $key += 1;
-                    $smt->bindParam($key, $val);
+                    //binParam按引用传递第二个参数,如果此处写$val,则execute执行时,值会全变为最后一次的$val值
+                    $smt->bindParam($key, $bind[$key]);
                 }
             }
             $smt->execute();
@@ -120,6 +121,7 @@ class Pdo extends DatabaseDriver
             Trace::set('database', array($smt->queryString, sprintf('%.4f', Timer::lastUsed())));
             return $smt;
         } catch(\PDOException $e) {
+            /* @var \PDOStatement $smt */
             $data = array(
                 'sql'=> $smt->queryString,
                 'error'=> $e->getMessage(),

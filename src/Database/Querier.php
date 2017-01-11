@@ -2,6 +2,12 @@
 
 namespace Ark\Database;
 
+use Ark\Core\Captain;
+use Ark\Database\Querier\Select;
+use Ark\Database\Querier\Update;
+use Ark\Database\Querier\Insert;
+use Ark\Database\Querier\Delete;
+
 class Querier
 {
 
@@ -9,10 +15,14 @@ class Querier
      * 生成查询对象
      *
      * @param $dbtype
-     * @return mixed
+     * @return Select
+     * @throws Exception
      */
-    function select($dbtype)
+    static function select($dbtype)
     {
+        if (!$dbtype) {
+            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+        }
         $namespace = '\Ark\Database\Querier\Select\\'. ucfirst($dbtype);
         return new $namespace;
     }
@@ -21,10 +31,14 @@ class Querier
      * 生成插入对象
      *
      * @param $dbtype
-     * @return mixed
+     * @return Insert
+     * @throws Exception
      */
-    function insert($dbtype)
+    static function insert($dbtype)
     {
+        if (!$dbtype) {
+            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+        }
         $namespace = '\Ark\Database\Querier\Insert\\'. ucfirst($dbtype);
         return new $namespace;
     }
@@ -33,10 +47,14 @@ class Querier
      * 生成更新对象
      *
      * @param $dbtype
-     * @return mixed
+     * @return Update
+     * @throws Exception
      */
-    function update($dbtype)
+    static function update($dbtype)
     {
+        if (!$dbtype) {
+            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+        }
         $namespace = '\Ark\Database\Querier\Update\\'. ucfirst($dbtype);
         return new $namespace;
     }
@@ -45,10 +63,14 @@ class Querier
      * 生成删除对象
      *
      * @param $dbtype
-     * @return mixed
+     * @return Delete
+     * @throws Exception
      */
-    function delete($dbtype)
+    static function delete($dbtype)
     {
+        if (!$dbtype) {
+            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+        }
         $namespace = '\Ark\Database\Querier\Delete\\'. ucfirst($dbtype);
         return new $namespace;
     }

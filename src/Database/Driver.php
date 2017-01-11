@@ -112,10 +112,7 @@ abstract class Driver
      */
     function select()
     {
-        $driver = ucfirst($this->getDriverName());
-        $class = '\\Ark\\Database\\Querier\\Select\\'. $driver;
-        /* @var Querier\Select $instance */
-        $instance = new $class();
+        $instance = Querier::select($this->getDriverName());
         return $instance->invoke($this);
     }
 
@@ -127,10 +124,7 @@ abstract class Driver
      */
     function update()
     {
-        $driver = ucfirst($this->getDriverName());
-        $class = '\\Ark\\Database\\Querier\\Update\\'. $driver;
-        /* @var Querier\Update $instance */
-        $instance = new $class();
+        $instance = Querier::update($this->getDriverName());
         return $instance->invoke($this);
     }
 
@@ -142,10 +136,7 @@ abstract class Driver
      */
     function insert()
     {
-        $driver = ucfirst($this->getDriverName());
-        $class = '\\Ark\\Database\\Querier\\Insert\\'. $driver;
-        /* @var Querier\Insert $instance */
-        $instance = new $class();
+        $instance = Querier::insert($this->getDriverName());
         return $instance->invoke($this);
     }
 
@@ -157,10 +148,7 @@ abstract class Driver
      */
     function delete()
     {
-        $driver = ucfirst($this->getDriverName());
-        $class = '\\Ark\\Database\\Querier\\Delete\\'. $driver;
-        /* @var Querier\Delete $instance */
-        $instance = new $class();
+        $instance = Querier::delete($this->getDriverName());
         return $instance->invoke($this);
     }
 

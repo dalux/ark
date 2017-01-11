@@ -18,8 +18,8 @@ class Update extends Father
     function set($table, array $updates = array()) 
     {
 		is_array($table) || $table = array($table);
-        $this->_parts['update'][] = $table;
-        $this->_parts['set'][] = $updates;
+        $this->_parts['update'] = $table;
+        $this->_parts['set'] = $updates;
         return $this;
     }
 
@@ -34,29 +34,29 @@ class Update extends Father
         $update_part = $this->_parts['update'];
         $set_part = $this->_parts['set'];
         if ($update_part && $set_part) {
-            $update = $set = array();
-            foreach ($update_part as $key=> $val) {
-                list($k, $v) = each($val);
-                if (is_integer($k)) {
-                    $alias = '';
-                    $update[] = $v;
-                } else {
-                    $alias = $k;
-                    $update[] = $v. ' '. $alias;
-                }
-                foreach ($set_part[$key] as $_key=> $_val) {
-                    $_val = trim($_val);
-                    if (preg_match('/^\{\{.*?\}\}$/', $_val) || preg_match('/.*?\(.*?\)/', $_val)) {
-                        $_val = str_replace(array('{{', '}}'), '', $_val);
-                    } else {
-                        $_val = Toolkit::quote($_val, $this->_db_type);
-                    }
-                    $set[] = $alias
-                        ? $alias. '.'. $_key. '='. $_val
-                        : $_key. '='. $_val;
-                }
+            $update = 'UPDATE ';
+            $set = array();
+            list($k, $v) = each($update_part);
+            if (is_integer($k)) {
+                $alias = '';
+                $update.= $v;
+            } else {
+                $alias = $k;
+                $update.= $v. ' '. $alias;
             }
-            $update = 'UPDATE '. implode(', ', $update). ' SET '. implode(', ', $set);
+            foreach ($set_part as $_key=> $_val) {
+                $_val = trim($_val);
+                if (preg_match('/^\{\{.*?\}\}$/', $_val) || preg_match('/.*?\(.*?\)/', $_val)) {
+                    $_val = str_replace(array('{{', '}}'), '', $_val);
+                } else {
+                    $_val = Toolkit::quote($_val, $this->_db_type);
+                }
+                $this->_db_bind[':'. $_key] = $_val;
+                $set[] = $alias
+                    ? $alias. '.'. $_key. '='. ':'. $_key
+                    : $_key. '='. ':'. $_key;
+            }
+            $update.= ' SET '. implode(', ', $set);
             if ($where = $this->pickWherePart()) {
                 $update.= ' WHERE '. $where;
             }

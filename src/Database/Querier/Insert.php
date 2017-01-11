@@ -30,7 +30,7 @@ class Insert extends Father
      */
     function values($values)
     {
-        $this->_parts['values'][] = $values;
+        $this->_parts['values'] = $values;
         return $this;
     }
     
@@ -57,10 +57,7 @@ class Insert extends Father
         $result = '';
         if ($table && $fields) {
             $result.= 'INSERT INTO '. $table;
-            foreach ($fields as $k=> $v) {
-                $fields[$k] = $v;
-            }
-            $result.= '('. implode(', ', $fields). ')';
+            $result.= '('. implode(', ', array_values($fields)). ')';
         }
         return $result;
     }
@@ -73,47 +70,25 @@ class Insert extends Father
      */
     function pickValuesPart()
     {
-        $values = $this->_parts['values'];
+        $val = $this->_parts['values'];
         $result = '';
-        $count = count($values);
         //单数据
-        if ($count == 1) {
-            $val = $values[0];
-            if (is_array($val)) {
-                $result.= 'VALUES';
-                foreach ($val as $k=> $v) {
-                    $v = trim($v);
-                    if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
-                        $v = str_replace(array('{{', '}}'), '', $v);
-                        $val[$k] = $v;
-                    } else {
-                        $val[$k] = Toolkit::quote($v, $this->_db_type);
-                    }
-                }
-                $result.= '('. implode(', ', $val). ')';
-            } elseif ($val instanceof Select) {
-                $result.= '('. $val->getSQL(). ')';
-            }
-            return $result;
-        } elseif ($count > 1) { //多数据            
-            $part = array();
-            foreach ($values as $key=> $val) {
-                if (is_array($val)) {
-                    foreach ($val as $k=> $v) {
-                        $v = trim($v);
-                        if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
-                            $v = str_replace(array('{{', '}}'), '', $v);
-                            $val[$k] = $v;
-                        } else {
-                            $val[$k] = Toolkit::quote($v, $this->_db_type);
-                        }
-                    }
-                    $part[] = '('. implode(', ', $val). ')';
-                } elseif ($val instanceof Select) {
-                    $part[] = '('. $val->getSQL(). ')';
+        if (is_array($val)) {
+            $result.= 'VALUES';
+            foreach ($val as $k=> $v) {
+                $v = trim($v);
+                if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+                    $v = str_replace(array('{{', '}}'), '', $v);
+                    $val[$k] = ':'. $k;
+                    $this->_db_bind[':'. $k] = $v;
+                } else {
+                    $val[$k] = ':'. $k;
+                    $this->_db_bind[':'. $k] = Toolkit::quote($v, $this->_db_type);
                 }
             }
-            $result.= 'VALUES'. implode(', ', $part);
+            $result.= '('. implode(', ', $val). ')';
+        } elseif ($val instanceof Select) {
+            $result.= '('. $val->getRealSQL(). ')';
         }
         return $result;
     }

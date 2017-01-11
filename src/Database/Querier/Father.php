@@ -3,7 +3,6 @@
 namespace Ark\Database\Querier;
 
 use Ark\Core\Captain;
-use Ark\Core\Sailor;
 use Ark\Database\Toolkit;
 use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
@@ -34,6 +33,13 @@ abstract class Father
      * @var DatabaseDriver
      */
     protected $_db;
+
+    /**
+     * SQL绑定参数
+     *
+     * @var array
+     */
+    protected $_db_bind = array();
 
     /**
      * 当前SQL语句是否需要缓存
@@ -108,13 +114,7 @@ abstract class Father
      */
     function where($cond, $value = null, $and = true)
     {
-        if (is_null($value)
-                || $cond instanceof self) {
-            $_part = $cond;
-        } else {
-            $_part = $this->_parseExpr($cond, $value);
-        }
-        $this->_parts['where'][] = array($_part, $and);
+        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $value), $and);
         return $this;
     }
 
@@ -123,14 +123,18 @@ abstract class Father
      *
      * @access public
      * @param string $field
-     * @param array $value
+     * @param mixed $value
      * @param bool $and
      * @return Father
      */
-    function whereIn($field, array $value = array(), $and = true)
+    function whereIn($field, $value, $and = true)
     {
         $expr = $field. ' IN (?)';
-        $value = Toolkit::quote($value, $this->_db_type);
+        if ($value instanceof Select) {
+            $value = $value->getRealSQL();
+        } else {
+            $value = Toolkit::quote($value, $this->_db_type);
+        }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr, null, $and);
     }
@@ -140,14 +144,18 @@ abstract class Father
      *
      * @access public
      * @param string $field
-     * @param array $value
+     * @param mixed $value
      * @param bool $and
      * @return Father
      */
-    function whereNotIn($field, array $value = array(), $and = true)
+    function whereNotIn($field, $value, $and = true)
     {
         $expr = $field. ' NOT IN (?)';
-        $value = Toolkit::quote($value, $this->_db_type);
+        if ($value instanceof Select) {
+            $value = $value->getRealSQL();
+        } else {
+            $value = Toolkit::quote($value, $this->_db_type);
+        }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr, null, $and);
     }
@@ -164,7 +172,7 @@ abstract class Father
     {
         $expr = 'EXISTS (?)';
         if ($sub_query instanceof Select) {
-            $sub_query = $sub_query->getSQL();
+            $sub_query = $sub_query->getRealSQL();
         }
         $expr = str_replace('?', $sub_query, $expr);
         return $this->where($expr, null, $and);
@@ -182,7 +190,7 @@ abstract class Father
     {
         $expr = 'NOT EXISTS (?)';
         if ($sub_query instanceof Select) {
-            $sub_query = $sub_query->getSQL();
+            $sub_query = $sub_query->getRealSQL();
         }
         $expr = str_replace('?', $sub_query, $expr);
         return $this->where($expr, null, $and);
@@ -192,8 +200,10 @@ abstract class Father
      * 查询like条件
      *
      * @access public
-     * @param mixed $sub_query
+     * @param $field
+     * @param $expr
      * @param bool $and
+     * @param string $escape
      * @return Father
      */
     function whereLike($field, $expr, $and = true, $escape = '')
@@ -207,8 +217,10 @@ abstract class Father
      * 查询not like条件
      *
      * @access public
-     * @param mixed $sub_query
+     * @param $field
+     * @param $expr
      * @param bool $and
+     * @param string $escape
      * @return Father
      */
     function whereNotLike($field, $expr, $and = true, $escape = '')
@@ -228,15 +240,21 @@ abstract class Father
     {
         $where = array();
         if ($where_part = $this->_parts['where']) {
-            foreach ($where_part as $k=> $v) {
-                if ($v[0] instanceof self) {
-                    $v[0] = '('. $v[0]->pickWherePart(). ')';
+            foreach ($where_part as $key=> $val) {
+                $cond = $val[0]['cond'];
+                $value = $val[0]['val'];
+                if (is_null($value)) {
+                    $part = $cond;
+                    if ($cond instanceof self) {
+                        $part = '(' . $cond->pickWherePart() . ')';
+                    }
+                } else {
+                    $part = $this->_parseExpr($cond, $value);
                 }
-                $tmp = $v[0];
-                if ($where_part[$k+1]) {
-                    $tmp.= $v[1] ? ' AND ' : ' OR ';
+                if ($where_part[$key+1]) {
+                    $part.= $val[1] ? ' AND ' : ' OR ';
                 }
-                $where[] = $tmp;
+                $where[] = $part;
             }
         }
         return $where ? implode(' ', $where) : null;
@@ -246,11 +264,10 @@ abstract class Father
      * 调用数据库fetch方法
      *
      * @access public
-     * @param array $bind
      * @return string
      * @throws Exception
      */
-    function fetch($bind = array())
+    function fetch()
     {
         if (!$this->_db) {
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
@@ -259,18 +276,17 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetch($this->getSQL(), $bind);
+        return $instance->fetch($this->getSQL(), $this->_db_bind);
     }
 
     /**
      * 调用数据库fetchAll方法
      *
      * @access public
-     * @param array $bind
      * @return string
      * @throws Exception
      */
-    function fetchAll($bind = array())
+    function fetchAll()
     {
         if (!$this->_db) {
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
@@ -279,18 +295,17 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchAll($this->getSQL(), $bind);
+        return $instance->fetchAll($this->getSQL(), $this->_db_bind);
     }
 
     /**
      * 调用数据库fetchOne方法
      *
      * @access public
-     * @param array $bind
      * @return string
      * @throws Exception
      */
-    function fetchOne($bind = array())
+    function fetchOne()
     {
         if (!$this->_db) {
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
@@ -299,18 +314,17 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchOne($this->getSQL(), $bind);
+        return $instance->fetchOne($this->getSQL(), $this->_db_bind);
     }
 
     /**
      * 调用数据库query方法
      *
      * @access public
-     * @param array $bind
      * @return string
      * @throws Exception
      */
-    function query($bind = array())
+    function query()
     {
         if (!$this->_db) {
             throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
@@ -319,7 +333,7 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->query($this->getSQL(), $bind);
+        return $instance->query($this->getSQL(), $this->_db_bind);
     }
 
     /**
@@ -333,13 +347,23 @@ abstract class Father
     }
 
     /**
-     * 输出当前SQL语句到屏显
+     * 返回完全的SQL语句
      *
-     * @return null
+     * @return string
      */
-    function showSQL()
+    function getRealSQL()
     {
-        echo $this->getSQL(). PHP_EOL;
+        return '';
+    }
+
+    /**
+     * 获取绑定参数
+     *
+     * @return array
+     */
+    function getBind()
+    {
+        return $this->_db_bind;
     }
 
     /**
@@ -364,29 +388,19 @@ abstract class Father
      */
     protected function _parseExpr($expr, $value = null)
     {
-        $pattern = '/(\?|:int:|:integer:|:float:|:double:|:string:|:str:|:float\.(\d):|:double\.(\d):|:bool:|:boolean:)/';
+        $pattern = '/(\:[\w\d]+)/';
         if (preg_match_all($pattern, $expr, $matches)) {
             $matches = $matches[1];
-            foreach ($matches as $k=> $v) {
-                if ($v == '?') {
-                    if (is_object($value) && $value instanceof self) {
-                        $value = $value->getSQL();
-                    } elseif (preg_match('/^\{\{.*?\}\}$/', $value) || preg_match('/.*?\(.*?\)/', $value)) {
-                        $value = str_replace(array('{{', '}}'), '', $value);
-                    } else {
-                        $value = Toolkit::quote($value, $this->_db_type);
-                    }
-                    $expr = preg_replace('/\?/', $value, $expr, 1);
-                } elseif ($v == ':int:' || $v == ':integer:') {
-                    $expr = preg_replace('/:(int|integer):/', (int)$value, $expr, 1);
-                } elseif ($v == ':float:' || $v == ':double:') {
-                    $expr = preg_replace('/:(float|double):/', (float)$value, $expr, 1);
-                } elseif ($v == ':string:' || $v == ':str:') {
-                    $expr = preg_replace('/:(string|str):/', Toolkit::quote($value, $this->_db_type), $expr, 1);
-                } elseif (preg_match('/:(float|double)\.(\d):/', $v)) {
-                    $expr = preg_replace('/:(float|double)\.(\d):/e', "number_format(floatval('$value'), $2, '.', '')", $expr, 1);
-                } elseif ($v == ':bool:' || $v == ':boolean:') {
-                    $expr = preg_replace('/:(bool|boolean):/', (bool)$value ? 1 : 0, $expr, 1);
+            foreach ($matches as $v) {
+                if (is_object($value) && $value instanceof self) {
+                    $value = $value->getRealSQL();
+                    $expr = preg_replace("/$v/", $value, $expr, 1);
+                } elseif (preg_match('/^\{\{.*?\}\}$/', $value) || preg_match('/.*?\(.*?\)/', $value)) {
+                    $value = str_replace(array('{{', '}}'), '', $value);
+                    $expr = preg_replace("/$v/", $value, $expr, 1);
+                } else {
+                    $value = Toolkit::quote($value, $this->_db_type);
+                    $this->_db_bind[$v] = $value;
                 }
             }
         }
