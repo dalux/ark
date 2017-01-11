@@ -108,7 +108,7 @@ abstract class Father
      *
      * @access public
      * @param string $cond
-     * @return Father
+     * @return Select
      */
     function where($cond)
     {
@@ -122,7 +122,7 @@ abstract class Father
      * and查询
      *
      * @param $cond
-     * @return Father
+     * @return Select
      */
     function andWhere($cond)
     {
@@ -136,7 +136,7 @@ abstract class Father
      * OR查询
      *
      * @param $cond
-     * @return Father
+     * @return Select
      */
     function orWhere($cond)
     {
