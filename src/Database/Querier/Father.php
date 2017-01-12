@@ -270,7 +270,12 @@ abstract class Father
      */
     function getRealSQL()
     {
-        return '';
+        $sql = $this->getSQL();
+        $bind = $this->getBind();
+        foreach ($bind as $key=> $val) {
+            $sql = preg_replace('/'. $key. '/', $val, $sql, 1);
+        }
+        return $sql;
     }
 
     /**
