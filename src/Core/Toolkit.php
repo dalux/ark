@@ -35,7 +35,7 @@ class Toolkit
      * @static
      * @return string
      */
-    static function getPrintString()
+    static function Sprintr()
     {
         $args = func_get_args();
         ob_start();
@@ -53,10 +53,10 @@ class Toolkit
      * @static
      * @return null
      */
-    static function showPrint()
+    static function Printr()
     {
         $params = func_get_args();
-        $result = call_user_func_array(array(__CLASS__, 'getPrintString'), $params);
+        $result = call_user_func_array(array(__CLASS__, 'Sprintr'), $params);
         echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
     }
 
@@ -67,7 +67,7 @@ class Toolkit
      * @static
      * @return string
      */
-    static function getVardumpString()
+    static function Svardump()
     {
         $args = func_get_args();
         ob_start();
@@ -84,10 +84,10 @@ class Toolkit
      * @static
      * @return null
      */
-    static function showVardump()
+    static function Vardump()
     {
         $params = func_get_args();
-        $result = call_user_func_array(array(__CLASS__, 'getVardumpString'), $params);
+        $result = call_user_func_array(array(__CLASS__, 'Svardump'), $params);
         echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
     }
 

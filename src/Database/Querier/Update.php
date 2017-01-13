@@ -45,7 +45,6 @@ class Update extends Father
                 $update.= $v. ' '. $alias;
             }
             foreach ($set_part as $_key=> $_val) {
-                $_val = trim($_val);
                 if (preg_match('/^\{\{.*?\}\}$/', $_val) || preg_match('/.*?\(.*?\)/', $_val)) {
                     $_val = str_replace(array('{{', '}}'), '', $_val);
                 } else {

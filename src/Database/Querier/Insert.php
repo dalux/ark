@@ -12,25 +12,13 @@ class Insert extends Father
      *
      * @access public
      * @param string $table 要插入的表
-     * @param array $fields 表字段
+     * @param array $data 数据
      * @return Insert
      */
-    function into($table, array $fields) 
+    function into($table, array $data)
     {
         $this->_parts['table'] = $table;
-        $this->_parts['fields'] = $fields;
-        return $this;
-    }
-
-    /**
-     * 要插入数据的表
-     *
-     * @param $values
-     * @return Insert
-     */
-    function values($values)
-    {
-        $this->_parts['values'] = $values;
+        $this->_parts['data'] = $data;
         return $this;
     }
 
@@ -42,11 +30,11 @@ class Insert extends Father
     function pickInsertPart()
     {
         $table = $this->_parts['table'];
-        $fields = $this->_parts['fields'];
+        $data = $this->_parts['data'];
         $result = '';
-        if ($table && $fields) {
+        if ($table && $data) {
             $result.= 'INSERT INTO '. $table;
-            $result.= '('. implode(', ', array_values($fields)). ')';
+            $result.= '('. implode(', ', array_keys($data)). ')';
         }
         return $result;
     }
@@ -59,26 +47,19 @@ class Insert extends Father
      */
     function pickValuesPart()
     {
-        $val = $this->_parts['values'];
-        $result = '';
-        //单数据
-        if (is_array($val)) {
-            $result.= 'VALUES';
-            foreach ($val as $k=> $v) {
-                $v = trim($v);
-                if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
-                    $v = str_replace(array('{{', '}}'), '', $v);
-                    $val[$k] = ':'. $k;
-                    $this->_db_bind[':'. $k] = $v;
-                } else {
-                    $val[$k] = ':'. $k;
-                    $this->_db_bind[':'. $k] = Toolkit::quote($v, $this->_db_type);
-                }
+        $data = $this->_parts['data'];
+        $result = 'VALUES';
+        foreach ($data as $k=> $v) {
+            //$v = trim($v);
+            if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+                $v = str_replace(array('{{', '}}'), '', $v);
+                $this->_db_bind[':'. $k] = $v;
+            } else {
+                $this->_db_bind[':'. $k] = Toolkit::quote($v, $this->_db_type);
             }
-            $result.= '('. implode(', ', $val). ')';
-        } elseif ($val instanceof Select) {
-            $result.= '('. $val->getRealSQL(). ')';
+            $data[$k] = ':'. $k;
         }
+        $result.= '('. implode(', ', $data). ')';
         return $result;
     }
 
