@@ -47,37 +47,7 @@ class Select extends Father
     {
         $values = func_get_args();
         array_shift($values);
-        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $values), null);
-        return $this;
-    }
-
-    /**
-     * 分组条件
-     *
-     * @access public
-     * @param $cond
-     * @return Select
-     */
-    function andHaving($cond)
-    {
-        $values = func_get_args();
-        array_shift($values);
-        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $values), true);
-        return $this;
-    }
-
-    /**
-     * 分组条件
-     *
-     * @access public
-     * @param $cond
-     * @return Select
-     */
-    function orHaving($cond)
-    {
-        $values = func_get_args();
-        array_shift($values);
-        $this->_parts['having'][] = array(array('cond'=> $cond, 'val'=> $values), false);
+        $this->_parts['having'][] = array('cond'=> $cond, 'val'=> $values);
         return $this;
     }
 
@@ -284,11 +254,8 @@ class Select extends Father
         if ($having_part = $this->_parts['having']) {
             foreach ($having_part as $key=> $val) {
                 $part = '';
-                if (!is_null($val[1])) {
-                    $part.= $val[1] ? ' AND ' : ' OR ';
-                }
-                $cond = $val[0]['cond'];
-                $value = $val[0]['val'];
+                $cond = $val['cond'];
+                $value = $val['val'];
                 if (is_null($value)) {
                     $part = $cond;
                     if ($cond instanceof self) {
@@ -296,6 +263,9 @@ class Select extends Father
                     }
                 } else {
                     $part.= $this->_parseExpr($cond, $value);
+                }
+                if (!is_null($having_part[$key+1])) {
+                    $part.= ' AND ';
                 }
 				$having[] = $part;
             }

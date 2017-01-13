@@ -33,17 +33,6 @@ class Insert extends Father
         $this->_parts['values'] = $values;
         return $this;
     }
-    
-    /**
-     * 清空已写入的数据
-     *
-     * @return Insert
-     */
-    function clearValues()
-    {
-        $this->_parts['values'] = array();
-        return $this;
-    }
 
     /**
      * 获取insert片段

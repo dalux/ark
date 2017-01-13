@@ -2,11 +2,9 @@
 
 return array(
     'master'=> array(
-        'driver'=> '\Ark\Database\Driver\Oci',
+        'driver'=> '\Ark\Database\Driver\Pdo\Oci',
         'dsn'=> 'oci://xinhua:sys@orcl_198.198.198.177/?charset=utf8',
-        'option'=> array(
-            'type'=> 'persistent',
-        ),
+        'option'=> array(),
         #option可选值:
         #type: default|new|persisent 默认重用型链接|新链接|持久链接
         #dsn值示例：

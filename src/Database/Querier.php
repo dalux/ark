@@ -12,6 +12,13 @@ class Querier
 {
 
     /**
+     * 是否使用绑定亦是方式发送生成的SQL语句
+     *
+     * @var bool
+     */
+    static $use_bind_params = true;
+
+    /**
      * 生成查询对象
      *
      * @param $dbtype

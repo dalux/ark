@@ -3,6 +3,7 @@
 namespace Ark\Database\Querier;
 
 use Ark\Core\Captain;
+use Ark\Database\Querier;
 use Ark\Database\Toolkit;
 use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
@@ -95,7 +96,7 @@ abstract class Father
      *
      * @access public
      * @param DatabaseDriver $db
-     * @return mixed
+     * @return Father
      */
     function invoke(DatabaseDriver $db)
     {
@@ -114,36 +115,114 @@ abstract class Father
     {
         $values = func_get_args();
         array_shift($values);
-        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $values), null);
+        $this->_parts['where'][] = array('cond'=> $cond, 'val'=> $values);
         return $this;
     }
 
     /**
-     * and查询
+     * 查询in条件
      *
-     * @param $cond
-     * @return Select
+     * @access public
+     * @param string $field
+     * @param mixed $value
+     * @return Father
      */
-    function andWhere($cond)
+    function whereIn($field, $value)
     {
-        $values = func_get_args();
-        array_shift($values);
-        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $values), true);
-        return $this;
+        $expr = $field. ' IN (?)';
+        if ($value instanceof Select) {
+            $value = $value->getRealSQL();
+        } else {
+            $value = Toolkit::quote($value, $this->_db_type);
+        }
+        $expr = str_replace('?', $value, $expr);
+        return $this->where($expr);
     }
 
     /**
-     * OR查询
+     * 查询notin条件
      *
-     * @param $cond
-     * @return Select
+     * @access public
+     * @param string $field
+     * @param mixed $value
+     * @return Father
      */
-    function orWhere($cond)
+    function whereNotIn($field, $value)
     {
-        $values = func_get_args();
-        array_shift($values);
-        $this->_parts['where'][] = array(array('cond'=> $cond, 'val'=> $values), false);
-        return $this;
+        $expr = $field. ' NOT IN (?)';
+        if ($value instanceof Select) {
+            $value = $value->getRealSQL();
+        } else {
+            $value = Toolkit::quote($value, $this->_db_type);
+        }
+        $expr = str_replace('?', $value, $expr);
+        return $this->where($expr);
+    }
+
+    /**
+     * 查询exists条件
+     *
+     * @access public
+     * @param mixed $query
+     * @return Father
+     */
+    function whereExists($query)
+    {
+        $expr = 'EXISTS (?)';
+        if ($query instanceof Select) {
+            $query = $query->getRealSQL();
+        }
+        $expr = str_replace('?', $query, $expr);
+        return $this->where($expr);
+    }
+
+    /**
+     * 查询notexists条件
+     *
+     * @access public
+     * @param mixed $query
+     * @return Father
+     */
+    function whereNotExists($query)
+    {
+        $expr = 'NOT EXISTS (?)';
+        if ($query instanceof Select) {
+            $query = $query->getRealSQL();
+        }
+        $expr = str_replace('?', $query, $expr);
+        return $this->where($expr);
+    }
+
+    /**
+     * 查询like条件
+     *
+     * @access public
+     * @param $field
+     * @param $expr
+     * @param string $escape
+     * @return Father
+     */
+    function whereLike($field, $expr, $escape = '')
+    {
+        $expr = "{$field} LIKE '{$expr}'";
+        $escape && $expr.= " ESCAPE '{$escape}'";
+        return $this->where($expr);
+    }
+
+    /**
+     * 查询not like条件
+     *
+     * @access public
+     * @param $field
+     * @param $expr
+     * @param string $escape
+     * @return Father
+     */
+    function whereNotLike($field, $expr, $escape = '')
+    {
+        $expr = "{$field} NOT LIKE '{$expr}'";
+        $escape && $expr.= " ESCAPE '{$escape}'";
+        return $this->where($expr);
     }
 
     /**
@@ -158,11 +237,8 @@ abstract class Father
         if ($where_part = $this->_parts['where']) {
             foreach ($where_part as $key=> $val) {
                 $part = '';
-                if (!is_null($val[1])) {
-                    $part.= $val[1] ? ' AND ' : ' OR ';
-                }
-                $cond = $val[0]['cond'];
-                $value = $val[0]['val'];
+                $cond = $val['cond'];
+                $value = $val['val'];
                 if (is_null($value)) {
                     $part = $cond;
                     if ($cond instanceof self) {
@@ -170,6 +246,9 @@ abstract class Father
                     }
                 } else {
                     $part.= $this->_parseExpr($cond, $value);
+                }
+                if (!is_null($where_part[$key+1])) {
+                    $part.= ' AND ';
                 }
                 $where[] = $part;
             }
@@ -193,7 +272,9 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetch($this->getSQL(), $this->_db_bind);
+        return Querier::$use_bind_params
+            ? $instance->fetch($this->getSQL(), $this->_db_bind)
+            : $instance->fetch($this->getRealSQL());
     }
 
     /**
@@ -212,7 +293,9 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchAll($this->getSQL(), $this->_db_bind);
+        return Querier::$use_bind_params
+            ? $instance->fetchAll($this->getRealSQL(), $this->_db_bind)
+            : $instance->fetchAll($this->getSQL());
     }
 
     /**
@@ -231,7 +314,9 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->fetchOne($this->getSQL(), $this->_db_bind);
+        return Querier::$use_bind_params
+            ? $instance->fetchOne($this->getRealSQL(), $this->_db_bind)
+            : $instance->fetchOne($this->getSQL());
     }
 
     /**
@@ -250,7 +335,9 @@ abstract class Father
         if ($this->_need_cache) {
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
-        return $instance->query($this->getSQL(), $this->_db_bind);
+        return Querier::$use_bind_params
+            ? $instance->query($this->getRealSQL(), $this->_db_bind)
+            : $instance->query($this->getSQL());
     }
 
     /**
@@ -258,10 +345,7 @@ abstract class Father
      *
      * @return string
      */
-    function getSQL()
-    {
-        return '';
-    }
+    abstract function getSQL();
 
     /**
      * 返回完全的SQL语句
