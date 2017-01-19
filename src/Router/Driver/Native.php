@@ -101,13 +101,6 @@ class Native extends RouterDriver
         $uri = $_SERVER['REQUEST_URI'];
         //解析URI
         if (strpos($uri, '?') !== false) {
-            $query = substr($uri, strpos($uri, '?') + 1);
-            $query = str_replace(array('&', '='), '/', $query);
-            $query = explode('/', $query);
-            $query = array_chunk($query, 2);
-            foreach ($query as $key=> $val) {
-                $_GET[$val[0]] = $val[1];
-            }
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
         //重写
