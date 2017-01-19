@@ -15,11 +15,11 @@ class Handler
      * @param $type
      * @param array $handler example: array(new Exception(), 'display')
      */
-    static function setHandler($type, array $handler = null)
+    static function setHandler($type, $handler = null)
     {
         if ($type == 'exception') {
             restore_exception_handler();
-            if (is_null($handler)) {
+            if (is_null($handler) || !is_callable($handler)) {
                 $handler = array(new self(), 'display');
             }
             set_exception_handler($handler);

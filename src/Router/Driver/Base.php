@@ -33,12 +33,6 @@ class Base extends RouterDriver
     const URL_MODE_REWRITE = 3;
 
     /**
-     * URL模式: 兼容
-     *
-     */
-    const URL_MODE_COMPATIBLE = 4;
-
-    /**
      * 是否支持模块
      *
      * @var bool
@@ -163,7 +157,6 @@ class Base extends RouterDriver
             self::URL_MODE_COMMON       => 'common',
             self::URL_MODE_PATHINFO     => 'pathinfo',
             self::URL_MODE_REWRITE      => 'rewrite',
-            self::URL_MODE_COMPATIBLE   => 'compatible',
         );
         return $modes[$this->_url_mode];
     }
@@ -375,7 +368,7 @@ class Base extends RouterDriver
         if (is_null($output)) {
             $output = $instance->{$this->_action}();
         }
-        return $output;
+        echo $output;
     }
 
     /**
@@ -520,46 +513,33 @@ class Base extends RouterDriver
                 //重写
                 $urlsep = Captain::getInstance()->config->router->urlsep;
                 $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
-                $uri = str_replace('/?', $urlsep, $uri);
-                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
-                $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
-                $uri_params = explode($urlsep, $uri);
-                if ($this->isAllowModule()) {
-                    $module = array_shift($uri_params);
+                if (strpos($uri, '?') !== false) {
+                    $getdata = $_GET;
+                    $_GET = array();
+                    $uri = substr($uri, 0, strpos($uri, '?'));
+                    $uri = trim($this->_rewrite($uri), '/');
+                    $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
+                    $uri_params = explode($urlsep, $uri);
+                    if ($this->isAllowModule()) {
+                        $module = array_shift($uri_params);
+                    }
+                    $controller = array_shift($uri_params);
+                    $action = array_shift($uri_params);
+                } else {
+                    $uri = str_replace(array('&', '='), $urlsep, $uri);
+                    $uri = trim($this->_rewrite($uri), '/');
+                    $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
+                    $uri_params = explode($urlsep, $uri);
+                    if ($this->isAllowModule()) {
+                        $module = array_shift($uri_params);
+                    }
+                    $controller = array_shift($uri_params);
+                    $action = array_shift($uri_params);
+                    $uri_params = array_chunk($uri_params, 2);
+                    foreach ($uri_params as $key=> $val) {
+                        $getdata[$val[0]] = $val[1];
+                    }
                 }
-                $controller = array_shift($uri_params);
-                $action = array_shift($uri_params);
-                $uri_params = array_chunk($uri_params, 2);
-                foreach ($uri_params as $key=> $val) {
-                    $getdata[$val[0]] = $val[1];
-                }
-                break;
-            case self::URL_MODE_COMPATIBLE:
-                $urlvar = Captain::getInstance()->config->router->urlvar->compatible;
-                $uri = $_GET[$urlvar];
-                unset($_GET[$urlvar]);
-                //重写
-                $urlsep = Captain::getInstance()->config->router->urlsep;
-                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
-                $uri = str_replace('/?', $urlsep, $uri);
-                $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
-                $uri = trim($this->_rewrite($uri), '/');
-                $uri = preg_replace(sprintf('~%s$~i', $urlsuffix), '', $uri);
-                $uri_params = explode($urlsep, $uri);
-                foreach ($_GET as $k=> $v) {
-                    $uri_params[$k] = $v;
-                }
-                if ($this->isAllowModule()) {
-                    $module = array_shift($uri_params);
-                }
-                $controller = array_shift($uri_params);
-                $action = array_shift($uri_params);
-                $uri_params = array_chunk($uri_params, 2);
-                foreach ($uri_params as $key=> $val) {
-                    $getdata[$val[0]] = $val[1];
-                }
-                $_GET = array();
                 break;
         }
         if ($getdata) {
