@@ -278,7 +278,7 @@ class Pdo extends DatabaseDriver
      */
     function lastInsertId($seq = null)
     {
-        return parent::lastInsertId($seq);
+        return $this->_instance->lastInsertId();
     }
 
 	/**

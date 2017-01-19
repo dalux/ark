@@ -423,7 +423,6 @@ abstract class Father
                         $val = str_replace(array('{{', '}}'), '', $val);
                         $expr = preg_replace("/$v/", $val, $expr, 1);
                     } else {
-                        $val = Toolkit::quote($val, $this->_db_type);
                         $this->_db_bind[$v] = $val;
                     }
                 }
