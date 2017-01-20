@@ -6,7 +6,7 @@ use Ark\Core\Sailor;
 use Ark\Cache\Driver as CacheDriver;
 use Ark\Database\Driver as DatabaseDriver;
 
-class Mapper extends Sailor
+class Saber extends Sailor
 {
 
     /**
@@ -72,6 +72,27 @@ class Mapper extends Sailor
     );
 
     /**
+     * @var array
+     */
+    protected static $_instance = array();
+
+    /**
+     * 快速初始化
+     *
+     * @param $table
+     * @param Driver $db
+     * @return Saber
+     */
+    static function init($table, DatabaseDriver $db)
+    {
+        $key = md5($table. spl_object_hash($db));
+        if (!isset(self::$_instance[$key])) {
+            self::$_instance[$key] = new self($table, $db);
+        }
+        return self::$_instance[$key];
+    }
+
+    /**
      * 构造器
      *
      * @param $table
@@ -90,7 +111,7 @@ class Mapper extends Sailor
      * @param int $expire
      * @param null $name
      * @param CacheDriver $cache
-     * @return Mapper
+     * @return Saber
      */
     function cache($expire, $name, CacheDriver $cache)
     {
