@@ -10,6 +10,57 @@ class Multiple extends RouterDriver
 {
 
     /**
+     * 模块名称
+     *
+     * @var string
+     */
+    private $_module;
+
+    /**
+     * 控制器名称
+     *
+     * @var string
+     */
+    private $_controller;
+
+    /**
+     * 行为名称
+     *
+     * @var string
+     */
+    private $_action;
+
+    /**
+     * 获取模块名称
+     *
+     * @return string
+     */
+    function getModule()
+    {
+        return $this->_module;
+    }
+
+    /**
+     * 获取控制器名称
+     *
+     * @return string
+     */
+    function getController()
+    {
+        return $this->_controller;
+    }
+
+    /**
+     * 获取控制器名称
+     *
+     * @return string
+     */
+    function getAction()
+    {
+        return $this->_action;
+    }
+
+    /**
      * 准备请求数据
      *
      * @return null
@@ -20,6 +71,7 @@ class Multiple extends RouterDriver
         $debug_trace = debug_backtrace();
         $caller = current(end($debug_trace));
         define('PATH_NOW', dirname($caller));
+        $this->_controller = str_replace(PATH_APP, '', $caller);
         //请求数据初始化完成
         Request::$ready = true;
         Captain::getInstance()->set('request', function() { return Request::getInstance(); });

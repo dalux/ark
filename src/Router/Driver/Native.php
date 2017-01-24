@@ -34,6 +34,57 @@ class Native extends RouterDriver
     private $_namespace;
 
     /**
+     * 模块名称
+     *
+     * @var string
+     */
+    private $_module;
+
+    /**
+     * 控制器名称
+     *
+     * @var string
+     */
+    private $_controller;
+
+    /**
+     * 行为名称
+     *
+     * @var string
+     */
+    private $_action;
+
+    /**
+     * 获取模块名称
+     *
+     * @return string
+     */
+    function getModule()
+    {
+        return $this->_module;
+    }
+
+    /**
+     * 获取控制器名称
+     *
+     * @return string
+     */
+    function getController()
+    {
+        return $this->_controller;
+    }
+
+    /**
+     * 获取控制器名称
+     *
+     * @return string
+     */
+    function getAction()
+    {
+        return $this->_action;
+    }
+
+    /**
      * 添加路由规则
      *
      * @param string $rule
@@ -132,6 +183,8 @@ class Native extends RouterDriver
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
         }
         $this->_namespace = $namespace;
+        $this->_controller = '/'. $uri;
+        $this->_action = Captain::getInstance()->config->router->default->action;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
@@ -148,7 +201,7 @@ class Native extends RouterDriver
     function dispatch()
     {
         $namespace = $this->_namespace;
-        $action = Captain::getInstance()->config->router->default->action;
+        $action = $this->_action;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));

@@ -162,15 +162,13 @@ class Base extends RouterDriver
     }
 
     /**
-     * 设置控制器名
+     * 获取当前模块名称
      *
-     * @param $controller
-     * @return $this
+     * @return string
      */
-    function setController($controller)
+    function getModule()
     {
-        $this->_controller = $controller;
-        return $this;
+        return $this->_module;
     }
 
     /**
@@ -184,18 +182,6 @@ class Base extends RouterDriver
     }
 
     /**
-     * 设置行为名称
-     *
-     * @param $action
-     * @return $this
-     */
-    function setAction($action)
-    {
-        $this->_action = $action;
-        return $this;
-    }
-
-    /**
      * 获取当前行为名称
      *
      * @return string
@@ -203,28 +189,6 @@ class Base extends RouterDriver
     function getAction()
     {
         return $this->_action;
-    }
-
-    /**
-     * 设置模块名称
-     *
-     * @param $module
-     * @return $this
-     */
-    function setModule($module)
-    {
-        $this->_module = $module;
-        return $this;
-    }
-
-    /**
-     * 获取当前模块名称
-     *
-     * @return string
-     */
-    function getModule()
-    {
-        return $this->_module;
     }
 
     /**
@@ -298,9 +262,9 @@ class Base extends RouterDriver
         $def_router = Captain::getInstance()->config->router->default;
         $result['controller'] || $result['controller'] = $def_router->controller;
         $result['action'] || $result['action'] = $def_router->action;
-        $this->setModule($result['module']);
-        $this->setController($result['controller']);
-        $this->setAction($result['action']);
+        $this->_module = $result['module'];
+        $this->_controller = $result['controller'];
+        $this->_action = $result['action'];
         if (!$this->_controller) {
             throw new Exception(Captain::getInstance()->lang->get('router.invalid_controller_name'));
         } elseif (!$this->_action) {
