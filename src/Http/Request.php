@@ -125,12 +125,11 @@ class Request
     {
         $data = array('get'=> $_GET, 'post'=> $_POST, 'cookie'=> $_COOKIE);
         $data = Event::onListening('event.request.ready', $data, $this->_rule_init);
-        $this->_get = $data['get'];
-        $this->_post = $data['post'];
-        $this->_request = array_merge($data['get'], $data['post']);
+        $this->_get = $_GET = $data['get'];
+        $this->_post = $_POST = $data['post'];
+        $this->_request = $_REQUEST = array_merge($data['get'], $data['post']);
         $this->_files = $_FILES;
-        $this->_cookie = $data['cookie'];
-        $_GET = $_POST = $_REQUEST = $_FILES = $_COOKIE = array();
+        $this->_cookie = $_COOKIE = $data['cookie'];
     }
 
     /**
