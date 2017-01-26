@@ -47,13 +47,15 @@ class Update extends Father
             foreach ($set_part as $_key=> $_val) {
                 if (preg_match('/^\{\{.*?\}\}$/', $_val) || preg_match('/.*?\(.*?\)/', $_val)) {
                     $_val = str_replace(array('{{', '}}'), '', $_val);
+                    $set[] = $alias
+                        ? $alias. '.'. $_key. '='. $_val
+                        : $_key. '='. $_val;
                 } else {
-                    $_val = Toolkit::quote($_val, $this->_db_type);
+                    $this->_db_bind[':'. $_key] = $_val;
+                    $set[] = $alias
+                        ? $alias. '.'. $_key. '='. ':'. $_key
+                        : $_key. '='. ':'. $_key;
                 }
-                $this->_db_bind[':'. $_key] = $_val;
-                $set[] = $alias
-                    ? $alias. '.'. $_key. '='. ':'. $_key
-                    : $_key. '='. ':'. $_key;
             }
             $update.= ' SET '. implode(', ', $set);
             if ($where = $this->pickWherePart()) {

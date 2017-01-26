@@ -294,8 +294,8 @@ abstract class Father
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return Querier::$use_bind_params
-            ? $instance->fetchAll($this->getRealSQL(), $this->_db_bind)
-            : $instance->fetchAll($this->getSQL());
+            ? $instance->fetchAll($this->getSQL(), $this->_db_bind)
+            : $instance->fetchAll($this->getRealSQL());
     }
 
     /**
@@ -315,8 +315,8 @@ abstract class Father
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return Querier::$use_bind_params
-            ? $instance->fetchOne($this->getRealSQL(), $this->_db_bind)
-            : $instance->fetchOne($this->getSQL());
+            ? $instance->fetchOne($this->getSQL(), $this->_db_bind)
+            : $instance->fetchOne($this->getRealSQL());
     }
 
     /**
@@ -336,8 +336,8 @@ abstract class Father
             $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
         }
         return Querier::$use_bind_params
-            ? $instance->query($this->getRealSQL(), $this->_db_bind)
-            : $instance->query($this->getSQL());
+            ? $instance->query($this->getSQL(), $this->_db_bind)
+            : $instance->query($this->getRealSQL());
     }
 
     /**
@@ -357,7 +357,7 @@ abstract class Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', $val, $sql, 1);
+            $sql = preg_replace('/'. $key. '/', Toolkit::quote($val, $this->_db_type), $sql, 1);
         }
         return $sql;
     }

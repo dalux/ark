@@ -86,7 +86,7 @@ class Response
      * @param bool $httponly
      * @return mixed
      */
-    function cookie($var, $val, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = false)
+    function cookie($var, $val, $expire = 0, $path = '/', $domain = '', $secure = false, $httponly = true)
     {
         setcookie($var, $val, time() + $expire, $path, $domain, (bool)$secure, (bool)$httponly);
         return $this;

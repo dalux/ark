@@ -50,14 +50,13 @@ class Insert extends Father
         $data = $this->_parts['data'];
         $result = 'VALUES';
         foreach ($data as $k=> $v) {
-            //$v = trim($v);
             if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
                 $v = str_replace(array('{{', '}}'), '', $v);
-                $this->_db_bind[':'. $k] = $v;
+                $data[$k] = $v;
             } else {
-                $this->_db_bind[':'. $k] = Toolkit::quote($v, $this->_db_type);
+                $this->_db_bind[':'. $k] = $v;
+                $data[$k] = ':'. $k;
             }
-            $data[$k] = ':'. $k;
         }
         $result.= '('. implode(', ', $data). ')';
         return $result;

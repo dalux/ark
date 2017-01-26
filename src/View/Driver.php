@@ -2,7 +2,9 @@
 
 namespace Ark\View;
 
-abstract class Driver
+use Ark\Core\Sailor;
+
+abstract class Driver extends Sailor
 {
 
     /**
