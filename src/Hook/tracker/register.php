@@ -2,7 +2,7 @@
 
 use Ark\Core\Event;
 use Ark\Core\Captain;
-use Ark\Http\Server;
+use Ark\Core\Server;
 
 return function() {
 

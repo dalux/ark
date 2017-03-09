@@ -3,7 +3,7 @@
 namespace Ark\Router\Driver;
 
 use Ark\Core\Captain;
-use Ark\Http\Request;
+use Ark\Core\Request;
 use Ark\Router\Driver as RouterDriver;
 
 class Multiple extends RouterDriver

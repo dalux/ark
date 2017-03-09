@@ -3,8 +3,6 @@
 namespace Ark\Core;
 
 use Closure;
-use Ark\Http\Server;
-use Ark\Http\Response;
 use Ark\Database\Querier;
 use Ark\View\Adapter as ViewAdapter;
 use Ark\Cache\Driver\File as FileCache;
@@ -122,7 +120,7 @@ class Captain
         require_once __DIR__. '/Loader.php';
         require_once __DIR__. '/Toolkit.php';
         require_once __DIR__. '/Handler.php';
-        require_once __DIR__. '/../Http/Request.php';
+        require_once __DIR__. '/Request.php';
         //初始化内存占用
         $memory_usage = memory_get_usage();
         //默认屏蔽错误提示

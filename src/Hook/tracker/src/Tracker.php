@@ -3,7 +3,7 @@
 use Ark\Core\Captain;
 use Ark\Core\Timer;
 use Ark\Core\Trace;
-use Ark\Http\Server;
+use Ark\Core\Server;
 use Ark\Core\Toolkit;
 
 class Tracker

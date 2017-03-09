@@ -4,7 +4,7 @@ namespace Ark\Router\Driver;
 
 use Ark\Core\Captain;
 use ReflectionClass;
-use Ark\Http\Request;
+use Ark\Core\Request;
 use Ark\Core\Loader;
 use Ark\Router\Exception;
 use Ark\Router\Driver as RouterDriver;
