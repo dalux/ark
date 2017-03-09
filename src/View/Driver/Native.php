@@ -90,7 +90,7 @@ class Native extends ViewDriver
      * @return string
      * @throws Exception
      */
-    function display($template, $return = true)
+    function display($template, $return = false)
     {
         if (strpos($template, $this->_template_ext) === false) {
             $template.= $this->_template_ext;

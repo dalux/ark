@@ -34,6 +34,6 @@ abstract class Driver extends Sailor
      * @param bool $return
      * @return string
      */
-    abstract function display($template, $return = true);
+    abstract function display($template, $return = false);
 
 }
