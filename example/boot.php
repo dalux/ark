@@ -6,7 +6,7 @@ require_once __DIR__. '/../src/Core/Captain.php';
 //使用命名空间
 use Ark\Core\Captain;
 use Ark\Core\Loader;
-use Ark\Http\Server;
+use Ark\Core\Server;
 use Ark\Database\Adapter as DatabaseAdapter;
 use Ark\Cache\Adapter as CacheAdapter;
 
