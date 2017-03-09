@@ -1,10 +1,6 @@
 <?php
 
-namespace Ark\Http;
-
-use Ark\Core\Captain;
-use Ark\Core\Event;
-use Ark\Core\Struct;
+namespace Ark\Core;
 
 class Request
 {

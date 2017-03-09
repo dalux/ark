@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Http;
+namespace Ark\Core;
 
 class Response
 {    
