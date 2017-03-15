@@ -205,7 +205,9 @@ class Request
             return $this->_cookie;
         }
         $value = $this->_cookie[$name];
-        return is_null($value) ? $default : $value;
+        return is_null($value) || $value === ''
+            ? $default
+            : $value;
     }
 
     /**
@@ -222,7 +224,9 @@ class Request
             return $this->_get;
         }
         $value = $this->_get[$name];
-        return is_null($value) ? $default : $value;
+        return is_null($value) || $value === ''
+            ? $default
+            : $value;
     }
 
     /**
@@ -239,7 +243,9 @@ class Request
             return $this->_post;
         }
         $value = $this->_post[$name];
-        return is_null($value) ? $default : $value;
+        return is_null($value) || $value === ''
+            ? $default
+            : $value;
     }
 
     /**
@@ -256,7 +262,9 @@ class Request
             return $this->_files;
         }
         $value = $this->_files[$name];
-        return is_null($value) ? $default : $value;
+        return is_null($value) || $value === ''
+            ? $default
+            : $value;
     }
 
     /**
@@ -328,7 +336,9 @@ class Request
             return $this->_request;
         }
         $value = $this->_request[$name];
-        return is_null($value) ? $default : $value;
+        return is_null($value) || $value === ''
+            ? $default
+            : $value;
     }
 
     /**

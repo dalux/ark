@@ -71,7 +71,7 @@ class Multiple extends RouterDriver
         $debug_trace = debug_backtrace();
         $caller = current(end($debug_trace));
         define('PATH_NOW', dirname($caller));
-        $this->_controller = str_replace(PATH_APP, '', $caller);
+        $this->_controller = str_replace(PATH_WEB, '', $caller);
         //请求数据初始化完成
         Request::$ready = true;
         Captain::getInstance()->set('request', function() { return Request::getInstance(); });
@@ -83,9 +83,14 @@ class Multiple extends RouterDriver
      */
 	function dispatch()
 	{
+        $config = Captain::getInstance()->config->router;
+        $global_var = $config->global_var;
+        if (!is_null($global_var) && !preg_match('/^[0-9]+/', $global_var)) {
+            global ${$global_var};
+            ${$global_var} = Captain::getInstance();
+        }
         //自动加载目录下引导文件
-        $interceptor = Captain::getInstance()->config->router->interceptor;
-        if ($interceptor) {
+        if ($interceptor = $config->interceptor) {
             //获取目录树
             $path_nodes = array(PATH_NOW);
             if (PATH_NOW != PATH_CTRL) {

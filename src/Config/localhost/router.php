@@ -35,6 +35,7 @@ return array(
 //多入口路由
 return array(
     'driver'=> '\Ark\Router\Driver\Multiple',
+    'global_var'=> '_',
     'interceptor'=> '__init__.php',
 );
 */
