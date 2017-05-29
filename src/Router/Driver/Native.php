@@ -179,9 +179,6 @@ class Native extends RouterDriver
         $part = array_map('ucfirst', explode('\\', $part));
         $part = implode('\\', $part);
         $namespace = $app_name. '\\'. $part. '\\'. $controller;
-        if (!Loader::findClass($namespace)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
-        }
         $this->_namespace = $namespace;
         $this->_controller = '/'. $uri;
         $this->_action = Captain::getInstance()->config->router->default->action;
@@ -191,6 +188,9 @@ class Native extends RouterDriver
         //请求数据初始化完成
         Request::$ready = true;
         Captain::getInstance()->set('request', function() { return Request::getInstance(); });
+        if (!Loader::findClass($namespace)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
+        }
     }
 
     /**

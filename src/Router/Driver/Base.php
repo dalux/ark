@@ -284,9 +284,6 @@ class Base extends RouterDriver
             $path_now.= DIRECTORY_SEPARATOR. $this->_module;
         }
         $namespace.= '\\'. ucfirst($this->_controller);
-        if (!Loader::findClass($namespace)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
-        }
         $this->_namespace = $namespace;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
@@ -294,7 +291,9 @@ class Base extends RouterDriver
         //请求数据初始化完成
         Request::$ready = true;
         Captain::getInstance()->set('request', function() { return Request::getInstance(); });
-        //
+        if (!Loader::findClass($namespace)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
+        }
     }
 
     /**
