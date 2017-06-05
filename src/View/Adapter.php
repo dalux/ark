@@ -20,20 +20,14 @@ class Adapter
         $config = Captain::getInstance()->config->view->toArray();
         if (!$driver = $config['driver']) {
             throw new Exception(Captain::getInstance()->lang->get('view.invalid_driver_name'));
+        } elseif (!Loader::findClass($driver)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('view.driver_not_found'), $driver));
         }
-        $name = '__base_view_driver__';
-        $instance = Captain::getInstance()->container->$name;
-        if (!$instance || !$instance instanceof Driver) {
-            if (!Loader::findClass($driver)) {
-                throw new Exception(sprintf(Captain::getInstance()->lang->get('view.driver_not_found'), $driver));
-            }
-            $instance = new $driver();
-            if (!$instance instanceof Driver) {
-                throw new Exception(sprintf(Captain::getInstance()->lang->get('view.driver_implement_error'), $driver, '\\Ark\\View\\Driver'));
-            }
-            Captain::getInstance()->container->$name = $instance;
-            Trace::set('driver', array('view'=> $driver));
+        $instance = new $driver();
+        if (!$instance instanceof Driver) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('view.driver_implement_error'), $driver, '\\Ark\\View\\Driver'));
         }
+        Trace::set('driver', array('view'=> $driver));
         return $instance;
     }
 

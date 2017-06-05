@@ -20,20 +20,14 @@ class Adapter
         $config = Captain::getInstance()->config->router->toArray();
         if (!$driver = $config['driver']) {
             throw new Exception(Captain::getInstance()->lang->get('router.invalid_driver_name'));
+        } elseif (!Loader::findClass($driver)) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_not_found'), $driver));
         }
-        $name = '__base_router_driver__';
-        $instance = Captain::getInstance()->container->$name;
-        if (!$instance || !$instance instanceof Driver) {
-            if (!Loader::findClass($driver)) {
-                throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_not_found'), $driver));
-            }
-            $instance = new $driver();
-            if (!$instance instanceof Driver) {
-                throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_implement_error'), $driver, '\\Ark\\Router\\Driver'));
-            }
-            Captain::getInstance()->container->$name = $instance;
-            Trace::set('driver', array('router'=> $driver));
+        $instance = new $driver();
+        if (!$instance instanceof Driver) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_implement_error'), $driver, '\\Ark\\Router\\Driver'));
         }
+        Trace::set('driver', array('router'=> $driver));
         return $instance;
     }
 

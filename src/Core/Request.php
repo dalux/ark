@@ -293,30 +293,19 @@ class Request
      * @param null $name
      * @return mixed
      */
-    function del($flag, $name = null)
+    function del($name, $flag = null)
     {
-        if ($flag == self::FLAG_GET) {
-            if (!is_null($name) && isset($this->_get[$name])) {
-                unset($this->_get[$name], $this->_request[$name]);
-            } elseif (is_null($name)) {
-                foreach ($this->_get as $k=> $v) {
-                    unset($this->_get[$k], $this->_request[$k]);
-                }
-            }
-        } elseif ($flag == self::FLAG_POST) {
-            if (!is_null($name) && isset($this->_post[$name])) {
-                unset($this->_post[$name], $this->_request[$name]);
-            } elseif (is_null($name)) {
-                foreach ($this->_post as $k=> $v) {
-                    unset($this->_post[$k], $this->_request[$k]);
-                }
-            }
-        } elseif ($flag == self::FLAG_COOKIE) {
-            if (!is_null($name) && isset($this->_cookie[$name])) {
-                unset($this->_cookie[$name]);
-            } elseif (is_null($name)) {
-                foreach ($this->_cookie as $k=> $v) {
-                    unset($this->_cookie[$k]);
+        if (is_null($flag)) {
+            unset($this->_get[$name], $this->_post[$name], $this->_cookie[$name], $this->_request[$name]);
+        } else {
+            $list = array(
+                self::FLAG_GET => '_get',
+                self::FLAG_POST => '_post',
+                self::FLAG_COOKIE => '_cookie',
+            );
+            foreach ($list as $_flag => $_method) {
+                if ($flag == $_flag) {
+                    unset($this->$_method[$name], $this->_request[$name]);
                 }
             }
         }
