@@ -1,18 +1,20 @@
 <?php
 
-namespace Ark\Router;
+namespace Ark\Assembly;
 
 use Ark\Core\Loader;
 use Ark\Core\Captain;
 use Ark\Core\Trace;
+use Ark\Assembly\Router\Father;
+use Ark\Assembly\Router\Exception;
 
-class Adapter
+class Router
 {
 
     /**
      * 获取路由驱动器
      *
-     * @return Driver
+     * @return Father
      * @throws Exception
      */
     static function getDriver()
@@ -24,9 +26,6 @@ class Adapter
             throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_not_found'), $driver));
         }
         $instance = new $driver();
-        if (!$instance instanceof Driver) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.driver_implement_error'), $driver, '\\Ark\\Router\\Driver'));
-        }
         Trace::set('driver', array('router'=> $driver));
         return $instance;
     }

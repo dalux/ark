@@ -1,12 +1,11 @@
 <?php
 
-namespace Ark\Database;
+namespace Ark\Assembly\Database;
 
-use Ark\Cache\Proxy;
-use Ark\Database\Querier;
-use Ark\Cache\Driver as CacheDriver;
+use Ark\Assembly\Cache\Proxy;
+use Ark\Toolkit\Querier;
 
-abstract class Driver
+abstract class Father
 {
 
     /**

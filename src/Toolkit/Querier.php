@@ -1,12 +1,12 @@
 <?php
 
-namespace Ark\Database;
+namespace Ark\Toolkit;
 
 use Ark\Core\Captain;
-use Ark\Database\Querier\Select;
-use Ark\Database\Querier\Update;
-use Ark\Database\Querier\Insert;
-use Ark\Database\Querier\Delete;
+use Ark\Toolkit\Querier\Select;
+use Ark\Toolkit\Querier\Update;
+use Ark\Toolkit\Querier\Insert;
+use Ark\Toolkit\Querier\Delete;
 
 class Querier
 {
@@ -30,7 +30,7 @@ class Querier
         if (!$dbtype) {
             throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
         }
-        $namespace = '\Ark\Database\Querier\Select\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Select\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -46,7 +46,7 @@ class Querier
         if (!$dbtype) {
             throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
         }
-        $namespace = '\Ark\Database\Querier\Insert\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Insert\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -62,7 +62,7 @@ class Querier
         if (!$dbtype) {
             throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
         }
-        $namespace = '\Ark\Database\Querier\Update\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Update\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -78,7 +78,7 @@ class Querier
         if (!$dbtype) {
             throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
         }
-        $namespace = '\Ark\Database\Querier\Delete\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Delete\\'. ucfirst($dbtype);
         return new $namespace;
     }
 

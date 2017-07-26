@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Database;
+namespace Ark\Assembly\Database;
 
 class Toolkit
 {

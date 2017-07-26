@@ -1,11 +1,11 @@
 <?php
 
-namespace Ark\Database\Driver\Pdo;
+namespace Ark\Assembly\Database\Pdo;
 
-use Ark\Database\Toolkit;
-use Ark\Database\Driver\Pdo;
+use Ark\Assembly\Database\Toolkit;
+use Ark\Assembly\Database\Pdo;
 
-class Sqlsrv extends Pdo
+class Mysql extends Pdo
 {
 
     /**
@@ -17,7 +17,7 @@ class Sqlsrv extends Pdo
     function __construct($dsn, array $option = array())
     {
         $database = Toolkit::parseConnectUrl($dsn);
-        $conn_str = sprintf('%s:Server=%s,%s;Database=%s;', $database['type'], $database['host'], $database['port'], $database['name']);
+        $conn_str = sprintf('%s:host=%s;port=%s;dbname=%s;', $database['type'], $database['host'], $database['port'], $database['name']);
         if ($charset = $database['charset']) {
             $conn_str.= sprintf('charset=%s', $charset);
         }

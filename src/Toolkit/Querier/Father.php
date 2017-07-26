@@ -1,13 +1,9 @@
 <?php
 
-namespace Ark\Database\Querier;
+namespace Ark\Toolkit\Querier;
 
-use Ark\Core\Captain;
-use Ark\Database\Querier;
+use Ark\Toolkit\Querier;
 use Ark\Database\Toolkit;
-use Ark\Cache\Driver as CacheDriver;
-use Ark\Database\Driver as DatabaseDriver;
-use Ark\Database\Exception;
 
 abstract class Father
 {
@@ -28,81 +24,11 @@ abstract class Father
     protected $_parts = array();
 
     /**
-     * 数据库对象实例
-     *
-     * @access protected
-     * @var DatabaseDriver
-     */
-    protected $_db;
-
-    /**
      * SQL绑定参数
      *
      * @var array
      */
     protected $_db_bind = array();
-
-    /**
-     * 当前SQL语句是否需要缓存
-     *
-     * @access protected
-     * @var boolean
-     */
-    protected $_need_cache = false;
-
-    /**
-     * 缓存过期时间
-     *
-     * @access protected
-     * @var integer
-     */
-    protected $_cache_expire = 86400;
-
-    /**
-     * 缓存名称
-     *
-     * @var string
-     */
-    protected $_cache_name = null;
-
-    /**
-     * 缓存引擎名称
-     *
-     * @access protected
-     * @var CacheDriver
-     */
-    protected $_cache_adapter;
-
-    /**
-     * 设置缓存代理
-     *
-     * @access public
-     * @param integer $expire
-     * @param null $name
-     * @param CacheDriver $cache
-     * @return Father
-     */
-    function cache($expire, $name, CacheDriver $cache)
-    {
-        $this->_need_cache = true;
-        $this->_cache_expire = $expire;
-        $this->_cache_name = $name;
-        $this->_cache_adapter = $cache;
-        return $this;
-    }
-
-    /**
-     * 引用数据库对象
-     *
-     * @access public
-     * @param DatabaseDriver $db
-     * @return Father
-     */
-    function invoke(DatabaseDriver $db)
-    {
-        $this->_db = $db;
-        return $this;
-    }
 
     /**
      * 查询条件
@@ -256,89 +182,6 @@ abstract class Father
         return $where ? implode(' ', $where) : null;
     }
 
-    /**
-     * 调用数据库fetch方法
-     *
-     * @access public
-     * @return string
-     * @throws Exception
-     */
-    function fetch()
-    {
-        if (!$this->_db) {
-            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
-        }
-        $instance = $this->_db;
-        if ($this->_need_cache) {
-            $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
-        }
-        return Querier::$use_bind_params
-            ? $instance->fetch($this->getSQL(), $this->_db_bind)
-            : $instance->fetch($this->getRealSQL());
-    }
-
-    /**
-     * 调用数据库fetchAll方法
-     *
-     * @access public
-     * @return string
-     * @throws Exception
-     */
-    function fetchAll()
-    {
-        if (!$this->_db) {
-            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
-        }
-        $instance = $this->_db;
-        if ($this->_need_cache) {
-            $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
-        }
-        return Querier::$use_bind_params
-            ? $instance->fetchAll($this->getSQL(), $this->_db_bind)
-            : $instance->fetchAll($this->getRealSQL());
-    }
-
-    /**
-     * 调用数据库fetchOne方法
-     *
-     * @access public
-     * @return string
-     * @throws Exception
-     */
-    function fetchOne()
-    {
-        if (!$this->_db) {
-            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
-        }
-        $instance = $this->_db;
-        if ($this->_need_cache) {
-            $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
-        }
-        return Querier::$use_bind_params
-            ? $instance->fetchOne($this->getSQL(), $this->_db_bind)
-            : $instance->fetchOne($this->getRealSQL());
-    }
-
-    /**
-     * 调用数据库query方法
-     *
-     * @access public
-     * @return string
-     * @throws Exception
-     */
-    function query()
-    {
-        if (!$this->_db) {
-            throw new Exception(Captain::getInstance()->lang->get('tbox.no_db_instance'));
-        }
-        $instance = $this->_db;
-        if ($this->_need_cache) {
-            $instance = $instance->cache($this->_cache_expire, $this->_cache_name, $this->_cache_adapter);
-        }
-        return Querier::$use_bind_params
-            ? $instance->query($this->getSQL(), $this->_db_bind)
-            : $instance->query($this->getRealSQL());
-    }
 
     /**
      * 获取SQL

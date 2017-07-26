@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Database\Querier;
+namespace Ark\Toolkit\Querier;
 
 class Select extends Father
 {

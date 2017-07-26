@@ -1,8 +1,10 @@
 <?php
 
-namespace Ark\Router;
+namespace Ark\Assembly\Router;
 
-abstract class Driver
+use Ark\Contract\Router;
+
+abstract class Father implements Router
 {
 
     /**

@@ -1,12 +1,11 @@
 <?php
 
-namespace Ark\Router\Driver;
+namespace Ark\Assembly\Router;
 
 use Ark\Core\Captain;
 use Ark\Core\Request;
-use Ark\Router\Driver as RouterDriver;
 
-class Multiple extends RouterDriver
+class Multiple extends Father
 {
 
     /**

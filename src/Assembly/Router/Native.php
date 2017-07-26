@@ -1,15 +1,13 @@
 <?php
 
-namespace Ark\Router\Driver;
+namespace Ark\Assembly\Router;
 
 use Ark\Core\Captain;
 use ReflectionClass;
 use Ark\Core\Request;
 use Ark\Core\Loader;
-use Ark\Router\Exception;
-use Ark\Router\Driver as RouterDriver;
 
-class Native extends RouterDriver
+class Native extends Father
 {
 
     /**

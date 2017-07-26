@@ -1,6 +1,9 @@
 <?php
 
-namespace Ark\Core;
+namespace Ark\Toolkit;
+
+use Ark\Core\Loader;
+use Ark\Core\Captain;
 
 class Struct
 {

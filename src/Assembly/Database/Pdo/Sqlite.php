@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Database\Driver\Pdo;
+namespace Ark\Assembly\Database\Pdo;
 
-use Ark\Database\Driver\Pdo;
+use Ark\Assembly\Database\Pdo;
 
 class Sqlite extends Pdo
 {

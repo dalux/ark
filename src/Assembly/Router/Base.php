@@ -1,17 +1,14 @@
 <?php
 
-namespace  Ark\Router\Driver;
+namespace  Ark\Assembly\Router;
 
 use ReflectionClass;
 use Ark\Core\Loader;
 use Ark\Core\Captain;
 use Ark\Core\Trace;
-use Ark\Core\Struct;
 use Ark\Core\Request;
-use Ark\Router\Exception;
-use Ark\Router\Driver as RouterDriver;
 
-class Base extends RouterDriver
+class Base extends Father
 {
 
     /**
@@ -350,8 +347,6 @@ class Base extends RouterDriver
                 return preg_match('/^\/([\w\d\_]+\.php(\/([^\/\&\=]+\/?)*)?)?$/', $uri);
             case self::URL_MODE_REWRITE:
                 return preg_match('/^\/(([^\/\&\=\.]+\/?)*)?$/', $uri);
-            case self::URL_MODE_COMPATIBLE:
-                return preg_match('/^\/([\w\d]+\.php)?\?[\w\d]+\=\/([^\/\&\=]+\/?)*$/', $uri);
         }
         return false;
     }
@@ -385,14 +380,6 @@ class Base extends RouterDriver
                     $url.= $k. '/'. urlencode($v). '/';
                 }
                 return $url;
-            case self::URL_MODE_COMPATIBLE:
-                $url = '/';
-                is_null($module) || $url.= $module. '/';
-                $url.= $controller. '/'. $action. '/';
-                foreach ($params as $k=> $v) {
-                    $url.= $k. '/'. urlencode($v). '/';
-                }
-                return '?'. $urlvar->compatible. '='. $url;
         }
     }
 

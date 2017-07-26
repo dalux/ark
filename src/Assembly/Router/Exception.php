@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Router;
+namespace Ark\Assembly\Router;
 
 class Exception extends \Ark\Core\Exception
 {

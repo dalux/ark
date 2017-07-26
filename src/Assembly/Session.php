@@ -8,7 +8,7 @@ use Ark\Core\Loader;
 use Ark\Assembly\Session\Father;
 use Ark\Assembly\Session\Exception;
 
-class Adapter
+class Session
 {
 
     /**

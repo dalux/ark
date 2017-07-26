@@ -3,14 +3,12 @@
 namespace Ark\Core;
 
 use Closure;
-use Ark\Database\Querier;
-use Ark\View\Adapter as ViewAdapter;
-use Ark\Cache\Driver\File as FileCache;
-use Ark\Router\Adapter as RouterAdapter;
-use Ark\Session\Adapter as SessionAdapter;
+use Ark\Toolkit\Querier;
+use Ark\Assembly\Router as RouterAdapter;
+use Ark\Contract\Router as RouterInterface;
 
 const Name      = 'Ark';
-const Version   = '1.0';
+const Version   = '1.1';
 const Eamil     = 'guodalu <guodalu@qq.com>';
 
 class Captain
@@ -36,20 +34,6 @@ class Captain
      * @var Closure
      */
     private $_config_dir;
-
-    /**
-     * 是否缓存配置项
-     *
-     * @var bool
-     */
-    private $_config_caching = false;
-
-    /**
-     * 配置项缓存目录
-     *
-     * @var string
-     */
-    private $_config_cache_dir = '';
 
     /**
      * 预处理逻辑
@@ -148,19 +132,6 @@ class Captain
     function setConfigDir($path)
     {
         $this->_config_dir = $path;
-        return $this;
-    }
-
-    /**
-     * 缓存配置数据
-     *
-     * @param null $save_path
-     * @return Captain
-     */
-    function cacheConfigTo($save_path = null)
-    {
-        $this->_config_caching = true;
-        $this->_config_cache_dir = $save_path;
         return $this;
     }
 
@@ -282,38 +253,13 @@ class Captain
         }
         //如果配置文件允许缓存
         $config = array();
-        if ($this->_config_caching) {
-            //默认配置文件缓存目录为WEB根目录
-            $config_cache_dir = PATH_WEB;
-            //重新获取配置文件目录
-            if (is_dir($this->_config_cache_dir)) {
-                $config_cache_dir = $this->_config_cache_dir;
-            }
-            //取配置文件
-            $cache = new FileCache($config_cache_dir, array('allow_format' => false));
-            //取不到缓存则重获取并重新缓存之
-            if (!$config = $cache->get(basename($config_path))) {
-                $config_files = glob($config_path . '/*.php');
-                foreach ($config_files as $file) {
-                    $result = include($file);
-                    $key = strtolower(basename($file));
-                    $key = preg_replace('/\.php$/', '', $key);
-                    if ($result) {
-                        $config[$key] = $result;
-                    }
-                }
-                $cache->set(basename($config_path), $config, 8640000);
-            }
-            unset($cache);
-        } else {
-            $config_files = glob($config_path . '/*.php');
-            foreach ($config_files as $file) {
-                $result = include($file);
-                $key = strtolower(basename($file));
-                $key = preg_replace('/\.php$/', '', $key);
-                if ($result) {
-                    $config[$key] = $result;
-                }
+        $config_files = glob($config_path . '/*.php');
+        foreach ($config_files as $file) {
+            $result = include($file);
+            $key = strtolower(basename($file));
+            $key = preg_replace('/\.php$/', '', $key);
+            if ($result) {
+                $config[$key] = $result;
             }
         }
         return $config;
@@ -375,9 +321,7 @@ class Captain
         //注册内置组件
         $this
             ->set('response', function() { return new Response(); })
-            ->set('view', function() { return ViewAdapter::getDriver(); })
-            ->set('router', function() { return RouterAdapter::getDriver(); })
-            ->set('session', function() { return SessionAdapter::getDriver(); });
+            ->set('router', function() { return RouterAdapter::getDriver(); });
 
         //钩子程序加载
         $prepares = array();
@@ -409,6 +353,11 @@ class Captain
             foreach ($this->_prepare as $val) {
                 $val();
             }
+        }
+
+        if (!$this->router instanceof RouterInterface) {
+            $lang = Captain::getInstance()->lang->get('router.driver_implement_error');
+            throw new Exception(sprintf($lang, get_class($this->router), '\\Ark\\Contract\\Router'));
         }
 
         //路由调度准备
