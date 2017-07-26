@@ -1,12 +1,11 @@
 <?php
 
-namespace Ark\Session\Driver;
+namespace Ark\Assembly\Session;
 
 use Ark\Core\Captain;
 use Ark\Core\Toolkit;
-use Ark\Session\Driver as SessionDriver;
 
-class File extends SessionDriver
+class File extends Father
 {
 
     /**

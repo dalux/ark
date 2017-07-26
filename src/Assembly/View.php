@@ -1,18 +1,20 @@
 <?php
 
-namespace Ark\View;
+namespace Ark\Assembly;
 
 use Ark\Core\Captain;
 use Ark\Core\Trace;
 use Ark\Core\Loader;
+use Ark\Assembly\View\Father;
+use Ark\Assembly\View\Exception;
 
-class Adapter
+class View
 {
 
     /**
      * 获取视图引擎实例
      *
-     * @return Driver
+     * @return Father
      * @throws Exception
      */
     static function getDriver()
@@ -24,7 +26,7 @@ class Adapter
             throw new Exception(sprintf(Captain::getInstance()->lang->get('view.driver_not_found'), $driver));
         }
         $instance = new $driver();
-        if (!$instance instanceof Driver) {
+        if (!$instance instanceof Father) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('view.driver_implement_error'), $driver, '\\Ark\\View\\Driver'));
         }
         Trace::set('driver', array('view'=> $driver));

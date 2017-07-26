@@ -1,20 +1,18 @@
 <?php
 
-namespace Ark\Session\Driver;
+namespace Ark\Assembly\Session;
 
-use Ark\Session\Exception;
 use Closure;
 use Ark\Core\Captain;
-use Ark\Cache\Driver as CacheDriver;
-use Ark\Session\Driver as SessionDriver;
+use Ark\Assembly\Cache\Father as Cache;
 
-class User extends SessionDriver
+class User extends Father
 {
 
     /**
      * 缓存器
      *
-     * @var CacheDriver
+     * @var Cache
      */
     protected $_container;
 
@@ -32,7 +30,7 @@ class User extends SessionDriver
         } else {
             $this->_container = $config['save_path'];
         }
-        if (!$this->_container instanceof CacheDriver) {
+        if (!$this->_container instanceof Cache) {
             throw new Exception(Captain::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Cache\\Driver');
         }
         $this->_container->setFlag('session');

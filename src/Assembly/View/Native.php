@@ -1,15 +1,14 @@
 <?php
 
-namespace Ark\View\Driver;
+namespace Ark\Assembly\View;
 
 use Ark\Core\Event;
 use Ark\Core\Loader;
 use Ark\Core\Captain;
 use Ark\Core\Struct;
 use Ark\View\Exception;
-use Ark\View\Driver as ViewDriver;
 
-class Native extends ViewDriver
+class Native extends Father
 {
 
     /**
@@ -53,7 +52,7 @@ class Native extends ViewDriver
      * @access public
      * @param mixed $var
      * @param mixed $val
-     * @return ViewDriver
+     * @return Father
      */
     function set($var, $val = null)
     {

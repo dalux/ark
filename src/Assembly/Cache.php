@@ -13,7 +13,7 @@ class Cache
 {
 
     /**
-     * »ñÈ¡»º´æÒıÇæÊµÀı
+     * è·å–é©±åŠ¨å™¨
      *
      * @param null $name
      * @return Father

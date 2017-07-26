@@ -1,10 +1,12 @@
 <?php
 
-namespace Ark\Session;
+namespace Ark\Assembly;
 
 use Ark\Core\Captain;
 use Ark\Core\Trace;
 use Ark\Core\Loader;
+use Ark\Assembly\Session\Father;
+use Ark\Assembly\Session\Exception;
 
 class Adapter
 {
@@ -12,7 +14,7 @@ class Adapter
     /**
      * 获取会话引擎实例
      *
-     * @return Driver
+     * @return Father
      * @throws Exception
      */
     static function getDriver()
@@ -24,8 +26,8 @@ class Adapter
             throw new Exception(sprintf(Captain::getInstance()->lang->get('sess.driver_not_found'), $driver));
         }
         $instance = new $driver();
-        if (!$instance instanceof Driver) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('sess.driver_implement_error'), $driver, '\\Ark\\Session\\Driver'));
+        if (!$instance instanceof Father) {
+            throw new Exception(sprintf(Captain::getInstance()->lang->get('sess.driver_implement_error'), $driver, '\\Ark\\Assembly\\Session\\Father'));
         }
         Trace::set('driver', array('session'=> $driver));
         return $instance;

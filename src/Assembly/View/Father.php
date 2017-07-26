@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\View;
+namespace Ark\Assembly\View;
 
 use Ark\Core\Sailor;
 
-abstract class Driver extends Sailor
+abstract class Father extends Sailor
 {
 
     /**
@@ -13,7 +13,7 @@ abstract class Driver extends Sailor
      * @access public
      * @param string $var 变量名
      * @param mixed $val 变量值
-     * @return Driver
+     * @return Father
      */
     abstract function set($var, $val = null);
 
