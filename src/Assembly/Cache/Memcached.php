@@ -2,6 +2,7 @@
 
 namespace Ark\Assembly\Cache;
 
+use Closure;
 use Ark\Core\Captain;
 
 class Memcached extends Father
@@ -61,9 +62,8 @@ class Memcached extends Father
      * @param mixed $expire
      * @return bool
      */
-    function set($name, $value, $expire = null)
+    function set($name, $value, $expire = 86400)
     {
-        $expire || $expire = $this->_expire_time;
     	$path = $this->getCachePath($name);
         $this->_container->set($path, $value, $expire);
         return $this->_container->getResultCode() == \Memcached::RES_SUCCESS;
@@ -127,13 +127,14 @@ class Memcached extends Father
     {
     	return $this->get($name);
     }
-    
+
     /**
      * 格式化变量名
      *
      * @access public
      * @param string $name
      * @return string
+     * @throws Exception
      */
     function getCachePath($name)
     {
@@ -141,10 +142,16 @@ class Memcached extends Father
         if ($this->_flag) {
             $path.= $this->_flag. '_';
         }
-        if ($this->_allow_format) {
-            $name = md5($name);
+        if (!$this->_format instanceof Closure || !is_callable($this->_format)) {
+            $this->_format = function($name) {
+                return md5($name);
+            };
         }
-        return $path. $name;
+        $format = $this->_format;
+        if (!$part = $format($name)) {
+            throw new Exception(Captain::getInstance()->lang->get('cache.path_mustbe_notnull'));
+        }
+        return $path. $part;
     }
     
 }

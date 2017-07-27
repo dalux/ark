@@ -1,8 +1,10 @@
 <?php
 
-namespace Ark\Assembly\Cache;
+namespace Ark\Assembly\Proxy;
 
-class Proxy
+use Ark\Contract\Cache as CacheInterface;
+
+class Cache
 {
     
     /**
@@ -17,7 +19,7 @@ class Proxy
      * 缓存器
      * 
      * @access private
-     * @var Father
+     * @var CacheInterface
      */
     private $_cache = null;
 
@@ -27,6 +29,13 @@ class Proxy
      * @var null
      */
     private $_cache_name = null;
+
+    /**
+     * 缓存过期时间
+     *
+     * @var int
+     */
+    private $_cache_expire = 86400;
 	
 	/**
 	 * 允许缓存的方法
@@ -40,9 +49,9 @@ class Proxy
      * 构造器
      *
      * @access public
-     * @param Father $cache
+     * @param CacheInterface $cache
      */
-    function __construct(Father $cache)
+    function __construct(CacheInterface $cache)
     {
         $this->_cache = $cache;
     }
@@ -52,7 +61,7 @@ class Proxy
      * 
      * @access public
 	 * @param array $deny
-     * @return Proxy
+     * @return Cache
      */
 	function deny(array $deny = null)
 	{
@@ -70,12 +79,12 @@ class Proxy
      * @param object $adapter 所代理对象
      * @param int $expire 缓存过期时间
      * @param string $name 缓存名称
-     * @return Proxy
+     * @return Cache
      */
     function invoke($adapter, $expire, $name)
     {
         $this->_adapter = $adapter;
-        $this->_cache->setExpireTime($expire);
+        $this->_cache_expire = $expire;
         $this->_cache_name = $name;
         return $this;
     }
@@ -101,13 +110,13 @@ class Proxy
         }
         $data = $this->_cache->get($key);
         //如果缓存过期时间为0，则设置缓存为过期状态
-        if ($this->_cache->getExpireTime() <= 0) {
+        if ($this->_cache_expire <= 0) {
             $data = null;
             $this->_cache->delete($key);
         }
         if (is_null($data)) {
             $data = call_user_func_array(array($this->_adapter, $name), $args);
-            if (!is_null($data) && $this->_cache->getExpireTime() > 0) {
+            if (!is_null($data) && $this->_cache_expire > 0) {
                 $this->_cache->set($key, $data);
             }
         }

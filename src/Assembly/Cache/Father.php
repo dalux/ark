@@ -2,16 +2,11 @@
 
 namespace Ark\Assembly\Cache;
 
-abstract class Father
-{
+use Closure;
+use Ark\Contract\Cache;
 
-    /**
-     * 超时期限
-     *
-     * @access protected
-     * @var int
-     */
-    protected $_expire_time = 86400;
+abstract class Father implements Cache
+{
 
     /**
      * 数据项区分标志
@@ -27,38 +22,14 @@ abstract class Father
      * @access protected
      * @var bool
      */
-    protected $_allow_format = true;
+    protected $_format;
 
     /**
      * 缓存器状态是否可用
      *
      * @var bool
      */
-    protected $_allow_cache = true;
-
-    /**
-     * 设置当前过期时间
-     *
-     * @access public
-     * @param int $time
-     * @return mixed
-     */
-    function setExpireTime($time)
-    {
-        $this->_expire_time = (int)$time;
-        return $this;
-    }
-
-    /**
-     * 取得当前过期时间
-     *
-     * @access public
-     * @return mixed
-     */
-    function getExpireTime()
-    {
-        return $this->_expire_time;
-    }
+    protected $_caching = true;
 
     /**
      * 取得/设置当前标志
@@ -74,60 +45,28 @@ abstract class Father
     }
 
     /**
-     * 取得当前缓存存放区
+     * 设置缓存名称格式化函数
      *
-     * @return string
-     */
-    function getFlag()
-    {
-        return $this->_flag;
-    }
-
-    /**
-     * 是否允许格式化名称
-     *
-     * @access public
-     * @param bool|string $allow
+     * @param Closure $format
      * @return $this
      */
-    function setAllowFormat($allow = true)
+    function setFormat(Closure $format)
     {
-        $this->_allow_format = (bool)$allow;
+        $this->_format = $format;
         return $this;
-    }
-
-    /**
-     * 是否允许格式化名称
-     *
-     * @access public
-     * @return bool
-     */
-    function getAllowFormat()
-    {
-        return (bool) $this->_allow_format;
     }
 
     /**
      * 是否允许使用缓存器
      *
      * @access public
-     * @param bool|string $allow
+     * @param bool|string $caching
      * @return $this
      */
-    function setAllowCache($allow = true)
+    function setCaching($caching = true)
     {
-        $this->_allow_cache = (bool)$allow;
+        $this->_caching = (bool)$caching;
         return $this;
-    }
-
-    /**
-     * 获取当前缓存器状态
-     *
-     * @return bool
-     */
-    function getAllowCache()
-    {
-        return $this->_allow_cache;
     }
 
     /**
@@ -136,9 +75,10 @@ abstract class Father
      * @access public
      * @param $name
      * @param $value
+     * @param int $expire
      * @return bool
      */
-    abstract function set($name, $value);
+    abstract function set($name, $value, $expire = 86400);
 
     /**
      * 缓存器取值

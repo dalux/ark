@@ -2,6 +2,7 @@
 
 namespace Ark\Assembly\Cache;
 
+use Closure;
 use Ark\Core\Captain;
 use Ark\Core\Toolkit;
 
@@ -41,7 +42,6 @@ class File extends Father
         }
         is_null($option['ext_name']) || $this->_ext_name = $option['ext_name'];
         is_null($option['flag']) || $this->_flag = $option['flag'];
-        is_null($option['allow_format']) || $this->_allow_format = (bool)$option['allow_format'];
     }
 
     /**
@@ -53,9 +53,8 @@ class File extends Father
      * @param mixed $expire
      * @return bool
      */
-    function set($name, $value, $expire = null)
+    function set($name, $value, $expire = 86400)
     {
-        $expire || $expire = $this->_expire_time;
     	$path = $this->getCachePath($name);
         $expire_time = time() + $expire;
     	return file_put_contents($path, $expire_time . serialize($value)) ? true : false;
@@ -72,7 +71,7 @@ class File extends Father
     {
     	$path = $this->getCachePath($name);
         if (!file_exists($path)
-                || !$this->_allow_cache
+                || !$this->_caching
                 || !($content = file_get_contents($path))
                 || intval(substr($content, 0, 10)) < time()) {
             @unlink($path);
@@ -138,24 +137,32 @@ class File extends Father
         if ($this->_flag) {
             $path.= "/{$this->_flag}";
         }
-        if ($this->_allow_format) {
-            if (strpos($name, '.') === false) {
-                $name = md5($name);
-                $path.= "/{$name[0]}/{$name[1]}/";
-            } else {
-                $names = explode('.', $name);
-                array_pop($names);
-                $names = implode('/', $names);
-                $path.= "/{$names}/";
-            }
-        } else {
-            $path.= "/";
+        $path.= '/';
+        if (!$this->_format instanceof Closure || !is_callable($this->_format)) {
+            $this->_format = function($name) {
+                $path = '';
+                if (strpos($name, '.') === false) {
+                    $name = md5($name);
+                    $path.= "{$name[0]}/{$name[1]}/{$name}/";
+                } else {
+                    $names = explode('.', $name);
+                    array_pop($names);
+                    $names = implode('/', $names);
+                    $path.= "{$names}/{$name}/";
+                }
+                return $path;
+            };
         }
+        $format = $this->_format;
+        if (!$part = $format($name)) {
+            throw new Exception(Captain::getInstance()->lang->get('cache.path_mustbe_notnull'));
+        }
+        $path.= $part. $this->_ext_name;
         $path = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
-        if (!file_exists($path) && !Toolkit::mkDir($path)) {
+        if (!file_exists(dirname($path)) && !Toolkit::mkDir(dirname($path))) {
             throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_create_failed'), $path));
         }
-        return $path. $name. $this->_ext_name;
+        return $path;
     }
     
 }

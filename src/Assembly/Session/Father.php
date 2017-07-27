@@ -2,7 +2,9 @@
 
 namespace Ark\Assembly\Session;
 
-abstract class Father
+use Ark\Contract\Session;
+
+abstract class Father implements Session
 {
 
     /**

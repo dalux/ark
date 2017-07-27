@@ -26,6 +26,7 @@ return array(
     'cache.dir_permission_error'        => '缓存目录[%s]读写权限不足',
     'cache.extension_load_failed'       => '加载扩展[%s]失败',
     'cache.cacher_create_failed'        => '缓存器对象[%s]创建失败',
+    'cache.path_mustbe_notnull'         => '格式化路径函数返回值不能为空',
 
     'db.parse_sql_failed'               => 'SQL语句解析失败',
     'db.connect_failed'                 => '数据库连接失败',
