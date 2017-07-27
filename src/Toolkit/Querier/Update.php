@@ -2,8 +2,6 @@
 
 namespace Ark\Toolkit\Querier;
 
-use Ark\Database\Toolkit;
-
 class Update extends Father
 {
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Database\Querier\Select;
+namespace Ark\Toolkit\Querier\Select;
 
-use Ark\Database\Querier\Select;
+use Ark\Toolkit\Querier\Select;
 
 class Mysql extends Select
 {

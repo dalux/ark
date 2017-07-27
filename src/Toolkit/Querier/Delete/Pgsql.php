@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Database\Querier\Delete;
+namespace Ark\Toolkit\Querier\Delete;
 
-use Ark\Database\Querier\Delete;
+use Ark\Toolkit\Querier\Delete;
 
 class Pgsql extends Delete
 {

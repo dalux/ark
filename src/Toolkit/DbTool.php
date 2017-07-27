@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Assembly\Database;
+namespace Ark\Toolkit;
 
-class Toolkit
+class DbTool
 {
 
     /**

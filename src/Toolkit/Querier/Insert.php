@@ -2,8 +2,6 @@
 
 namespace Ark\Toolkit\Querier;
 
-use Ark\Database\Toolkit;
-
 class Insert extends Father
 {
     

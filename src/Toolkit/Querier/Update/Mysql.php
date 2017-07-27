@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Database\Querier\Update;
+namespace Ark\Toolkit\Querier\Update;
 
-use Ark\Database\Querier\Update;
+use Ark\Toolkit\Querier\Update;
 
 class Mysql extends Update
 {

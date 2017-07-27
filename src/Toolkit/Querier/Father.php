@@ -3,7 +3,7 @@
 namespace Ark\Toolkit\Querier;
 
 use Ark\Toolkit\Querier;
-use Ark\Database\Toolkit;
+use Ark\Toolkit\DbTool;
 
 abstract class Father
 {
@@ -59,7 +59,7 @@ abstract class Father
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
         } else {
-            $value = Toolkit::quote($value, $this->_db_type);
+            $value = DbTool::quote($value, $this->_db_type);
         }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
@@ -79,7 +79,7 @@ abstract class Father
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
         } else {
-            $value = Toolkit::quote($value, $this->_db_type);
+            $value = DbTool::quote($value, $this->_db_type);
         }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
@@ -200,7 +200,7 @@ abstract class Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', Toolkit::quote($val, $this->_db_type), $sql, 1);
+            $sql = preg_replace('/'. $key. '/', DbTool::quote($val, $this->_db_type), $sql, 1);
         }
         return $sql;
     }
@@ -223,7 +223,7 @@ abstract class Father
      */
     function __toString()
     {
-        return $this->getSQL();
+        return $this->getRealSQL();
     }
 
     /**
@@ -251,7 +251,7 @@ abstract class Father
                     } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
                         $val = str_replace(array('{{', '}}'), '', $val);
                     } else {
-                        $val = Toolkit::quote($val, $this->_db_type);
+                        $val = DbTool::quote($val, $this->_db_type);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Database\Querier\Insert;
+namespace Ark\Toolkit\Querier\Insert;
 
-use Ark\Database\Querier\Insert;
+use Ark\Toolkit\Querier\Insert;
 
 class Sqlsrv extends Insert
 {
