@@ -2,7 +2,7 @@
 
 namespace Ark\Assembly\Database\Pdo;
 
-use Ark\Assembly\Database\Toolkit;
+use Ark\Toolkit\DbTool;
 use Ark\Assembly\Database\Pdo;
 
 class Oci extends Pdo
@@ -16,7 +16,7 @@ class Oci extends Pdo
      */
     function __construct($dsn, array $option = array())
     {
-        $database = Toolkit::parseConnectUrl($dsn);
+        $database = DbTool::parseConnectUrl($dsn);
         $conn_str = $database['host'];
         if ($database['host'] && $database['name']) {
             $database['port'] || $database['port'] = 1521;

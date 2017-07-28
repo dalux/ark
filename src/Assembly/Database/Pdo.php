@@ -4,8 +4,8 @@ namespace Ark\Assembly\Database;
 
 use Ark\Core\Trace;
 use Ark\Core\Timer;
-use Ark\Core\Struct;
 use Ark\Core\Event;
+use Ark\Toolkit\Struct;
 use Ark\Toolkit\Querier;
 
 class Pdo extends Father

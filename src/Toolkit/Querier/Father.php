@@ -2,8 +2,8 @@
 
 namespace Ark\Toolkit\Querier;
 
-use Ark\Toolkit\Querier;
 use Ark\Toolkit\DbTool;
+use Ark\Toolkit\Querier;
 
 abstract class Father
 {

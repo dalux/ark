@@ -3,7 +3,6 @@
 namespace Ark\Core;
 
 use Closure;
-use Ark\Toolkit\Querier;
 use Ark\Assembly\Router as RouterAdapter;
 use Ark\Contract\Router as RouterInterface;
 

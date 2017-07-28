@@ -2,8 +2,8 @@
 
 namespace Ark\Assembly\Database\Pdo;
 
-use Ark\Assembly\Database\Toolkit;
 use Ark\Assembly\Database\Pdo;
+use Ark\Toolkit\DbTool;
 
 class Mysql extends Pdo
 {
@@ -16,7 +16,7 @@ class Mysql extends Pdo
      */
     function __construct($dsn, array $option = array())
     {
-        $database = Toolkit::parseConnectUrl($dsn);
+        $database = DbTool::parseConnectUrl($dsn);
         $conn_str = sprintf('%s:host=%s;port=%s;dbname=%s;', $database['type'], $database['host'], $database['port'], $database['name']);
         if ($charset = $database['charset']) {
             $conn_str.= sprintf('charset=%s', $charset);

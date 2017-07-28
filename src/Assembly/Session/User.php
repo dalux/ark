@@ -17,6 +17,13 @@ class User extends Father
     protected $_container;
 
     /**
+     * 过期时间
+     *
+     * @var int
+     */
+    protected $_expire_time = 86400;
+
+    /**
      * 构造函数
      *
      * @access public
@@ -31,10 +38,10 @@ class User extends Father
             $this->_container = $config['save_path'];
         }
         if (!$this->_container instanceof Cache) {
-            throw new Exception(Captain::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Cache\\Driver');
+            throw new Exception(Captain::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Contract\\Cache');
         }
         $this->_container->setFlag('session');
-        $this->_container->setExpireTime($config['timeout']);
+        $this->_expire_time = $config['expire_time'];
 		session_set_save_handler(
 			array($this, 'open'), array($this, 'close'), array($this, 'read'),
 			array($this, 'write'), array($this, 'destroy'), array($this, 'gc')
@@ -83,7 +90,7 @@ class User extends Father
      */
     function write($session_id, $session_data)
     {
-    	return $this->_container->set($session_id, $session_data);
+    	return $this->_container->set($session_id, $session_data, $this->_expire_time);
     }
 
     /**

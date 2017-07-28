@@ -11,9 +11,10 @@ class Invalid extends Father
      * @access public
      * @param $name
      * @param $value
+     * @param int $expire
      * @return bool
      */
-    function set($name, $value)
+    function set($name, $value, $expire = 86400)
     {
         return false;
     }
