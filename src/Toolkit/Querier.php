@@ -12,23 +12,6 @@ class Querier
 {
 
     /**
-     * 是否使用绑定变量方式发送生成的SQL语句
-     *
-     * @var bool
-     */
-    private static $_use_bind_params = true;
-
-    /**
-     * 设置是否绑定变量方式
-     *
-     * @param $state
-     */
-    static function setBindParams($state)
-    {
-        self::$_use_bind_params = (bool)$state;
-    }
-
-    /**
      * 生成查询对象
      *
      * @param $dbtype

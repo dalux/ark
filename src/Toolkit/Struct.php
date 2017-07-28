@@ -127,7 +127,7 @@ class Struct
                         $have = false;
                     }
                     if (!$have && !array_key_exists(self::FLAG_DEFAULT, $this->_rule[$key])) {
-                        $this->_message = sprintf($language->get('struct.field_is_required'), $key);
+                        $this->_message = $language->get('struct.field_is_required', $key);
                         $valid = false;
                         break 2;
                     }
@@ -141,7 +141,7 @@ class Struct
                     }
                     if (!$have) {
                         $keys[] = $key;
-                        $this->_message = sprintf($language->get('struct.field_more_than'), implode(',', $keys));
+                        $this->_message = $language->get('struct.field_more_than', implode(',', $keys));
                         $valid = false;
                         break 2;
                     }
@@ -153,7 +153,7 @@ class Struct
                             $type = self::TYPE_NUMBER;
                         }
                         if ($v != $type) {
-                            $this->_message = sprintf($language->get('struct.field_type_nomatch'), $key, $v, $type);
+                            $this->_message = $language->get('struct.field_type_nomatch', $key, $v, $type);
                             $valid = false;
                             break 2;
                         }
@@ -161,21 +161,21 @@ class Struct
                 } elseif ($k == self::FLAG_RANGE && is_array($v)) {
                     if (!is_null($this->_data[$key])
                             && !in_array($this->_data[$key], $v)) {
-                        $this->_message = sprintf($language->get('struct.field_outof_range'), $key);
+                        $this->_message = $language->get('struct.field_outof_range', $key);
                         $valid = false;
                         break 2;
                     }
                 } elseif ($k == self::FLAG_MIN_VALUE) {
                     if (!is_null($this->_data[$key])
                             && $this->_data[$key] < $v) {
-                        $this->_message = sprintf($language->get('struct.value_greater_than'), $key, $v);
+                        $this->_message = $language->get('struct.value_greater_than', $key, $v);
                         $valid = false;
                         break 2;
                     }
                 } elseif ($k == self::FLAG_MAX_VALUE) {
                     if (!is_null($this->_data[$key])
                             && $this->_data[$key] > $v) {
-                        $this->_message = sprintf($language->get('struct.value_less_than'), $key, $v);
+                        $this->_message = $language->get('struct.value_less_than', $key, $v);
                         $valid = false;
                         break 2;
                     }
@@ -183,7 +183,7 @@ class Struct
                     if (!is_null($this->_data[$key])
                             && is_string($this->_data[$key])
                             && mb_strlen($this->_data[$key], $this->_encode) < $v) {
-                        $this->_message = sprintf($language->get('struct.length_greater_than'), $key, $v, mb_strlen($this->_data[$key], 'utf-8'));
+                        $this->_message = $language->get('struct.length_greater_than', $key, $v, mb_strlen($this->_data[$key], 'utf-8'));
                         $valid = false;
                         break 2;
                     }
@@ -191,7 +191,7 @@ class Struct
                     if (!is_null($this->_data[$key])
                             && is_string($this->_data[$key])
                             && mb_strlen($this->_data[$key], $this->_encode) > $v) {
-                        $this->_message = sprintf($language->get('struct.length_less_than'), $key, $v, mb_strlen($this->_data[$key], 'utf-8'));
+                        $this->_message = $language->get('struct.length_less_than', $key, $v, mb_strlen($this->_data[$key], 'utf-8'));
                         $valid = false;
                         break 2;
                     }
@@ -199,20 +199,20 @@ class Struct
                     if (!is_null($this->_data[$key])
                             && is_string($this->_data[$key])
                             && $this->_data[$key] != $v) {
-                        $this->_message = sprintf($language->get('struct.content_not_equal'), $key, $v, $this->_data[$key]);
+                        $this->_message = $language->get('struct.content_not_equal', $key, $v, $this->_data[$key]);
                         $valid = false;
                         break 2;
                     } elseif (!is_null($this->_data[$key])
                             && is_object($this->_data[$key])
                             && !$this->_data[$key] instanceof $v) {
-                        $this->_message = sprintf($language->get('struct.object_not_instanceof'), $key, get_class($v));
+                        $this->_message = $language->get('struct.object_not_instanceof', $key, get_class($v));
                         $valid = false;
                         break 2;
                     }
                 } elseif ($k == self::FLAG_MATCH) {
                     if (!is_null($this->_data[$key])
                             && !preg_match($v, $this->_data[$key])) {
-                        $this->_message = sprintf($language->get('struct.regexp_not_match'), $key, $v);
+                        $this->_message = $language->get('struct.regexp_not_match', $key, $v);
                         $valid = false;
                         break 2;
                     }
