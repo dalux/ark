@@ -5,8 +5,7 @@ namespace Ark\Assembly\View;
 use Ark\Core\Event;
 use Ark\Core\Loader;
 use Ark\Core\Captain;
-use Ark\Core\Struct;
-use Ark\View\Exception;
+use Ark\Toolkit\Struct;
 
 class Native extends Father
 {
@@ -96,7 +95,7 @@ class Native extends Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $template;
         if (!is_file($template)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('view.template_not_found'), Loader::reducePath($template)));
+            throw new Exception(Captain::getInstance()->lang->get('view.template_not_found', Loader::reducePath($template)));
         }
         $data = array(
             'template'=> $template,
@@ -140,7 +139,7 @@ class Native extends Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $path;
         if (!is_file($template)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('view.include_file_not_found'), Loader::reducePath($template)));
+            throw new Exception(Captain::getInstance()->lang->get('view.include_file_not_found', Loader::reducePath($template)));
         }
         extract($this->_storage, EXTR_REFS);
         extract($params, EXTR_SKIP);

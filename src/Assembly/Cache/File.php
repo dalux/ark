@@ -36,9 +36,9 @@ class File extends Father
     {
         $this->_dir = $save_path;
         if (!is_dir($this->_dir) && !Toolkit::mkDir($this->_dir)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_create_failed'), $this->_dir));
+            throw new Exception(Captain::getInstance()->lang->get('cache.dir_create_failed', $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_permission_error'), $this->_dir));
+            throw new Exception(Captain::getInstance()->lang->get('cache.dir_permission_error', $this->_dir));
         }
         is_null($option['ext_name']) || $this->_ext_name = $option['ext_name'];
         is_null($option['flag']) || $this->_flag = $option['flag'];
@@ -160,7 +160,7 @@ class File extends Father
         $path.= $part. $this->_ext_name;
         $path = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
         if (!file_exists(dirname($path)) && !Toolkit::mkDir(dirname($path))) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('cache.dir_create_failed'), $path));
+            throw new Exception(Captain::getInstance()->lang->get('cache.dir_create_failed', $path));
         }
         return $path;
     }

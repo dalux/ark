@@ -62,9 +62,9 @@ class Struct
     function setRuleFile($path)
     {
         if (!$this->_rule = Loader::import($path, false)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('struct.load_rulefile_failed'), $path));
+            throw new Exception(Captain::getInstance()->lang->get('struct.load_rulefile_failed', $path));
         } elseif (!is_array($this->_rule)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('struct.return_type_error'), $path));
+            throw new Exception(Captain::getInstance()->lang->get('struct.return_type_error', $path));
         }
     }
 

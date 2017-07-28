@@ -93,7 +93,9 @@ class Language
      */
     function get($label)
     {
-        return $this->_package[$label];
+        $args = func_get_args();
+        $label = array_shift($args);
+        return vsprintf($this->_package[$label], $args);
     }
 
 }

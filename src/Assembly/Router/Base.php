@@ -212,7 +212,7 @@ class Base extends Father
     {
         $subspace = trim($subspace, '\\');
         if (!is_callable($operator)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.invalid_router_interceptor'), $subspace));
+            throw new Exception(Captain::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
         }
         $this->_interceptors[$subspace] = $operator;
     }
@@ -289,7 +289,7 @@ class Base extends Father
         Request::$ready = true;
         Captain::getInstance()->set('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_not_found'), $namespace));
+            throw new Exception(Captain::getInstance()->lang->get('router.controller_not_found', $namespace));
         }
     }
 
@@ -304,7 +304,7 @@ class Base extends Father
         $namespace = $this->_namespace;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.controller_is_protected'), $namespace));
+            throw new Exception(Captain::getInstance()->lang->get('router.controller_is_protected', $namespace));
         }
         //实现拦截器功能
         if ($interceptors = $this->getInterceptors($namespace)) {
@@ -317,7 +317,7 @@ class Base extends Father
         }
         $instance = new $namespace();
         if (!method_exists($instance, $this->_action)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('router.action_not_found'), $namespace, $this->_action));
+            throw new Exception(Captain::getInstance()->lang->get('router.action_not_found', $namespace, $this->_action));
         }
         $output = null;
         //自动化类
@@ -402,7 +402,7 @@ class Base extends Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Exception(sprintf(Captain::getInstance()->lang->get('router.call_func_failed'), $val[0]. '::'. $val[1]. '()'));
+                    throw new Exception(Captain::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }

@@ -356,7 +356,7 @@ class Captain
 
         if (!$this->router instanceof RouterInterface) {
             $lang = Captain::getInstance()->lang->get('router.driver_implement_error');
-            throw new Exception(sprintf($lang, get_class($this->router), '\\Ark\\Contract\\Router'));
+            throw new Exception($lang, get_class($this->router, '\\Ark\\Contract\\Router'));
         }
 
         //路由调度准备
@@ -418,7 +418,7 @@ class Captain
         //常规取值
         $key = "__base_{$name}__";
         if (!$instance = $this->_container->$key) {
-            throw new Exception(sprintf($this->lang->get('core.object_not_found'), $name));
+            throw new Exception($this->lang->get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {

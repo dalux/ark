@@ -5,8 +5,8 @@ namespace Ark\Assembly;
 use Ark\Core\Captain;
 use Ark\Core\Loader;
 use Ark\Core\Trace;
-use Ark\Assembly\Database\Father;
 use Ark\Assembly\Database\Exception;
+use Ark\Contract\Database as DbInterface;
 
 class Database
 {
@@ -23,7 +23,7 @@ class Database
     {
         $config = Captain::getInstance()->config->database->$name;
         if (!$config) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('db.config_not_found'), $name));
+            throw new Exception(Captain::getInstance()->lang->get('db.config_not_found', $name));
         }
         /* @var \Ark\Core\Container $config */
         $config = $config->toArray();
@@ -31,11 +31,11 @@ class Database
         $dsn = $config['dsn'];
         $option = $config['option'];
         if (!Loader::findClass($driver)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('db.driver_not_found'), $driver));
+            throw new Exception(Captain::getInstance()->lang->get('db.driver_not_found', $driver));
         }
         $instance = new $driver($dsn, $option);
-        if (!$instance instanceof Father) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('db.driver_implement_error'), $driver, '\\Ark\\Assembly\\Database\\Father'));
+        if (!$instance instanceof DbInterface) {
+            throw new Exception(Captain::getInstance()->lang->get('db.driver_implement_error', $driver, '\\Ark\\Contract\\Database'));
         }
         Trace::set('driver', array('database'=> sprintf('%s[%s]', $name, $driver)));
         return $instance;

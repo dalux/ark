@@ -32,7 +32,7 @@ class Loader
     static function setAlias($alias, $path)
     {
         if (in_array($alias, array('*', '.'))) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('core.deny_alias_redeclare'), $alias));
+            throw new Exception(Captain::getInstance()->lang->get('core.deny_alias_redeclare', $alias));
         }
         self::$_alias[$alias] = $path;
     }
@@ -102,7 +102,7 @@ class Loader
     static function autoLoad($class)
     {
         if (!$path = self::findClass($class)) {
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('core.class_path_notfound'), $class));
+            throw new Exception(Captain::getInstance()->lang->get('core.class_path_notfound', $class));
         }
         self::import($path);
     }

@@ -2,6 +2,8 @@
 
 namespace Ark\Toolkit;
 
+use Ark\Core\Captain;
+
 class DbTool
 {
 
@@ -75,7 +77,7 @@ class DbTool
     static function parseConnectUrl($url)
     {
         if (!$parsed = parse_url($url)) {
-            throw new Exception(sprintf('无效的数据库连接字符串："%s"', $url));
+            throw new Exception(Captain::getInstance()->lang->get('db.invalid_conn_string', $url));
         }
         $config = array(
             'type'=> $parsed['scheme'],

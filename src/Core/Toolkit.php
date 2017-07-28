@@ -420,7 +420,7 @@ class Toolkit
         if (!$data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA)) {
             $error = libxml_get_last_error();
             libxml_clear_errors();
-            throw new Exception(sprintf(Captain::getInstance()->lang->get('tbox.parse_string_failed'), $error ? $error->message : '未知错误', $content));
+            throw new Exception(Captain::getInstance()->lang->get('tbox.parse_string_failed', $error ? $error->message : '未知错误', $content));
         }
         return $data;
     }
