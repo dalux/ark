@@ -3,8 +3,8 @@
 /*
 //通用单入口路由器
 return array(
-    'driver'=> '\Ark\Router\Driver\Base',
-    'urlmode'=> \Ark\Router\Driver\Base::URL_MODE_REWRITE,
+    'driver'=> '\Ark\Assembly\Router\Base',
+    'urlmode'=> \Ark\Assembly\Router\Base::URL_MODE_REWRITE,
     'urlsuffix'=> '',
     'urlsep'=> '/',
     'urlvar'=> array(
@@ -22,7 +22,7 @@ return array(
 
 //模拟原生PHP单入口路由器
 return array(
-    'driver'=> '\Ark\Router\Driver\Native',
+    'driver'=> '\Ark\Assembly\Router\Native',
     'urlsuffix'=> '.html',
     'urlsep'=> '/',
     'default'=> array(
@@ -34,7 +34,7 @@ return array(
 /*
 //多入口路由
 return array(
-    'driver'=> '\Ark\Router\Driver\Multiple',
+    'driver'=> '\Ark\Assembly\Router\Multiple',
     'global_var'=> '_',
     'interceptor'=> '__init__.php',
 );

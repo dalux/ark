@@ -60,7 +60,7 @@ class Captain
      *
      * @var array
      */
-    private $_hook_dir = array();
+    private $_trigger_dir = array();
 
     /**
      * 控制器根目录
@@ -175,9 +175,9 @@ class Captain
      * @param string $dir
      * @return Captain
      */
-    function addHookDir($dir)
+    function addTriggerDir($dir)
     {
-        $this->_hook_dir[] = $dir;
+        $this->_trigger_dir[] = $dir;
         return $this;
     }
 
@@ -186,9 +186,9 @@ class Captain
      *
      * @return array
      */
-    function getHookDir()
+    function getTriggerDir()
     {
-        return $this->_hook_dir;
+        return $this->_trigger_dir;
     }
 
     /**
@@ -324,16 +324,16 @@ class Captain
 
         //钩子程序加载
         $prepares = array();
-        foreach ($this->_hook_dir as $hook_dir) {
-            if (is_dir($hook_dir)) {
+        foreach ($this->_trigger_dir as $trigger_dir) {
+            if (is_dir($trigger_dir)) {
                 //允许根目录定制钩子程序列表
-                if (is_file($custom_register = $hook_dir. '/register.php')) {
-                    $list_hooks = include($custom_register);
-                    is_array($list_hooks) || $list_hooks = array();
+                if (is_file($custom_register = $trigger_dir. '/register.php')) {
+                    $list_triggers = include($custom_register);
+                    is_array($list_triggers) || $list_triggers = array();
                 } else {  //自动加载每个子目录下对应的钩子注册程序
-                    $list_hooks = glob($hook_dir . '/*/register.php');
+                    $list_triggers = glob($trigger_dir . '/*/register.php');
                 }
-                foreach ($list_hooks as $item) {
+                foreach ($list_triggers as $item) {
                     $result = include($item);
                     if ($result instanceof Closure) {
                         $prepares[] = $result;
@@ -355,8 +355,8 @@ class Captain
         }
 
         if (!$this->router instanceof RouterInterface) {
-            $lang = Captain::getInstance()->lang->get('router.driver_implement_error');
-            throw new Exception($lang, get_class($this->router, '\\Ark\\Contract\\Router'));
+            $lang = Captain::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), '\\Ark\\Contract\\Router');
+            throw new Exception($lang);
         }
 
         //路由调度准备

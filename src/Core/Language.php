@@ -6,25 +6,25 @@ class Language
 {
 
     /**
-     * 语言包存放路径
-     *
-     * @var array
-     */
-    private $_path = array();
-
-    /**
-     * 语言包名称
-     *
-     * @var string
-     */
-    private $_language = 'Chinese';
-
-    /**
-     * 当前语言包内容
+     * 语言包文件夹路径
      *
      * @var array
      */
     private $_package = array();
+
+    /**
+     * 当前语言文件名
+     *
+     * @var string
+     */
+    private $_language = 'zh_cn';
+
+    /**
+     * 当前语言包条目清单
+     *
+     * @var array
+     */
+    private $_list = array();
 
     /**
      * 构造器
@@ -33,7 +33,7 @@ class Language
      */
     function __construct()
     {
-        $this->addPath(Loader::realPath('*/Language'));
+        $this->addPackage(Loader::realPath('*/Language'));
     }
 
     /**
@@ -42,10 +42,10 @@ class Language
      * @param $path
      * @return $this
      */
-    function addPath($path)
+    function addPackage($path)
     {
         if (is_dir($path)) {
-            $this->_path[] = $path;
+            $this->_package[] = $path;
             $this->restore();
         }
         return $this;
@@ -57,7 +57,7 @@ class Language
      * @param $language
      * @return $this
      */
-    function choose($language)
+    function locate($language)
     {
         $this->_language = $language;
         $this->restore();
@@ -71,17 +71,17 @@ class Language
      */
     function restore()
     {
-        $package = array();
-        foreach ($this->_path as $path) {
-            $file = $path. DIRECTORY_SEPARATOR . ucfirst($this->_language). '.php';
+        $list = array();
+        foreach ($this->_package as $path) {
+            $file = $path. DIRECTORY_SEPARATOR . strtolower($this->_language). '.php';
             if (is_file($file)) {
                 $data = include($file);
                 if (is_array($data)) {
-                    $package += $data;
+                    $list += $data;
                 }
             }
         }
-        $this->_package = $package;
+        $this->_list = $list;
         return $this;
     }
 
@@ -94,8 +94,10 @@ class Language
     function get($label)
     {
         $args = func_get_args();
-        $label = array_shift($args);
-        return vsprintf($this->_package[$label], $args);
+        if ($args > 1) {
+            $label = array_shift($args);
+        }
+        return vsprintf($this->_list[$label], $args);
     }
 
 }
