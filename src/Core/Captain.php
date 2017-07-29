@@ -14,18 +14,11 @@ class Captain
 {
 
     /**
-     * 组件存储
-     *
-     * @var Container
-     */
-    private $_container;
-
-    /**
-     * 配置文件
+     * 存储区
      *
      * @var array
      */
-    private $_config;
+    private $_storage = array();
 
     /**
      * 配置文件获取器
@@ -108,14 +101,12 @@ class Captain
         $memory_usage = memory_get_usage();
         //默认屏蔽错误提示
         ini_set('display_errors', '0');
-        //全局容器
-        $this->_container = new Container();
         //启动时间
         Timer::mark('sys_startup');
         //初始内存占用数
         Trace::set('memory', $memory_usage);
         //配置项默认为空对象
-        $this->_config = new Container();
+        $this->_storage['config'] = new Container();
         //定义常量
         $debug_trace = debug_backtrace();
         defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
@@ -297,7 +288,7 @@ class Captain
         if (!$config = $this->getConfig()) {
             throw new Exception($this->lang->get('core.invalid_configuration'));
         }
-        $this->_config = new Container($config);
+        $this->_storage['config'] = new Container($config);
         //控制器地址检测
         if (!$this->_controller_dir) {
             $this->_controller_dir = $this->_app_dir . DIRECTORY_SEPARATOR . 'Controller';
@@ -307,18 +298,19 @@ class Captain
         defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_dir);
         //时区设置
         $timezone = 'Asia/Shanghai';
-        if ($this->_config->global->timezone) {
-            $timezone = $this->_config->global->timezone;
+        if ($this->_storage['config']->global->timezone) {
+            $timezone = $this->_storage['config']->global->timezone;
         }
         date_default_timezone_set($timezone);
         //错误报告
-        if (!is_null($this->_config->global->error_reporting)) {
+        if (!is_null($this->_storage['config']->global->error_reporting)) {
             ini_set('display_errors', '1');
-            error_reporting($this->_config->global->error_reporting);
+            error_reporting($this->_storage['config']->global->error_reporting);
         }
 
         //注册内置组件
         $this
+            ->set('container', function() { return new Container(); })
             ->set('response', function() { return new Response(); })
             ->set('router', function() { return RouterAdapter::getDriver(); });
 
@@ -379,13 +371,9 @@ class Captain
      */
     function set($name, $value)
     {
-        $denied = array('container', 'config');
-        if (in_array($name, $denied)) {
-            return $this;
+        if (!in_array($name, array('config'))) {
+            $this->_storage[$name] = $value;
         }
-        $name = trim($name, '_');
-        $name = "__base_{$name}__";
-        $this->_container->$name = $value;
         return $this;
     }
 
@@ -410,19 +398,13 @@ class Captain
      */
     function get($name)
     {
-        if (in_array($name, array('container', 'config'))) {
-            $name = '_'. $name;
-            return $this->$name;
-        }
-        $name = trim($name, '_');
         //常规取值
-        $key = "__base_{$name}__";
-        if (!$instance = $this->_container->$key) {
+        if (!$instance = $this->_storage[$name]) {
             throw new Exception($this->lang->get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {
-                $this->_container->$key = $instance;
+                $this->_storage[$name] = $instance;
             }
         }
         return $instance;
