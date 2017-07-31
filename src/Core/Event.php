@@ -20,14 +20,14 @@ class Event
      *
      * @param $event
      * @param callable|Closure $listener
-     * @param string $flag
+     * @param string $name
      */
-    static function addListener($event, Closure $listener, $flag = null)
+    static function addListener($event, Closure $listener, $name = null)
     {
-        if (is_null($flag)) {
+        if (is_null($name)) {
             self::$_listener[$event][] = $listener;
         } else {
-            self::$_listener[$event][$flag] = $listener;
+            self::$_listener[$event][$name] = $listener;
         }
     }
 
@@ -35,17 +35,17 @@ class Event
      * 获取事件处理器
      *
      * @param null $event
-     * @param null $flag
+     * @param null $name
      * @return mixed
      */
-    static function getListener($event = null, $flag = null)
+    static function getListener($event = null, $name = null)
     {
         if (is_null($event)) {
             return self::$_listener;
         }
-        return is_null($flag)
+        return is_null($name)
             ? self::$_listener[$event]
-            : self::$_listener[$event][$flag];
+            : self::$_listener[$event][$name];
     }
 
     /**
@@ -79,8 +79,8 @@ class Event
         }
         $listener = self::$_listener[$event];
         $data['event'] = $event;
-        foreach ($listener as $flag=> $item) {
-            $data['flag'] = $flag;
+        foreach ($listener as $name=> $item) {
+            $data['name'] = $name;
             $data = $item($data);
             if ($rule) {
                 $struct = new Struct();
