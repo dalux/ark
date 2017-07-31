@@ -2,7 +2,7 @@
 
 namespace Ark\Assembly;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Core\Loader;
 use Ark\Core\Trace;
 use Ark\Assembly\Database\Exception;
@@ -21,9 +21,9 @@ class Database
      */
     static function getDriver($name)
     {
-        $config = Captain::getInstance()->config->database->$name;
+        $config = Noah::init()->config->database->$name;
         if (!$config) {
-            throw new Exception(Captain::getInstance()->lang->get('db.config_not_found', $name));
+            throw new Exception(Noah::init()->lang->get('db.config_not_found', $name));
         }
         /* @var \Ark\Core\Container $config */
         $config = $config->toArray();
@@ -31,11 +31,11 @@ class Database
         $dsn = $config['dsn'];
         $option = $config['option'];
         if (!Loader::findClass($driver)) {
-            throw new Exception(Captain::getInstance()->lang->get('db.driver_not_found', $driver));
+            throw new Exception(Noah::init()->lang->get('db.driver_not_found', $driver));
         }
         $instance = new $driver($dsn, $option);
         if (!$instance instanceof DbInterface) {
-            throw new Exception(Captain::getInstance()->lang->get('db.driver_implement_error', $driver, '\\Ark\\Contract\\Database'));
+            throw new Exception(Noah::init()->lang->get('db.driver_implement_error', $driver, '\\Ark\\Contract\\Database'));
         }
         Trace::set('driver', array('database'=> sprintf('%s[%s]', $name, $driver)));
         return $instance;

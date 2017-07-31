@@ -108,7 +108,7 @@ class Request
     static function getInstance()
     {
         if (!self::$ready) {
-            throw new Exception(Captain::getInstance()->lang->get('http.request_not_ready'));
+            throw new Exception(Noah::init()->lang->get('http.request_not_ready'));
         } elseif (is_null(self::$_instance)) {
             self::$_instance = new self();
         }

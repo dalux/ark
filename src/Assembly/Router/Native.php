@@ -2,7 +2,7 @@
 
 namespace Ark\Assembly\Router;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use ReflectionClass;
 use Ark\Core\Request;
 use Ark\Core\Loader;
@@ -106,7 +106,7 @@ class Native extends Father
     {
         $subspace = trim($subspace, '\\');
         if (!is_callable($operator)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
+            throw new Exception(Noah::init()->lang->get('router.invalid_router_interceptor', $subspace));
         }
         $this->_interceptors[$subspace] = $operator;
     }
@@ -155,17 +155,17 @@ class Native extends Father
         //重写
         $uri = trim($this->_rewrite($uri), '/');
         //处理URI,组装控制器类
-        $urlsep = Captain::getInstance()->config->router->urlsep;
-        $url_suffix = Captain::getInstance()->config->router->urlsuffix;
+        $urlsep = Noah::init()->config->router->urlsep;
+        $url_suffix = Noah::init()->config->router->urlsuffix;
         if (strpos($uri, $url_suffix) !== false) {
             $uri = preg_replace(sprintf('~%s$~i', $url_suffix), '', $uri);
         }
-        $app_name = Captain::getInstance()->getAppName();
-        $controller_dir = Captain::getInstance()->getControllerDir();
-        $app_dir = Captain::getInstance()->getAppDir();
+        $app_name = Noah::init()->getAppName();
+        $controller_dir = Noah::init()->getControllerDir();
+        $app_dir = Noah::init()->getAppDir();
         $path_now = $controller_dir;
         if ($uri == '') {
-            $controller = ucfirst(Captain::getInstance()->config->router->default->controller);
+            $controller = ucfirst(Noah::init()->config->router->default->controller);
         } else {
             $controllers = array_map('ucfirst', explode($urlsep, $uri));
             $controller = implode('\\', $controllers);
@@ -179,15 +179,15 @@ class Native extends Father
         $namespace = $app_name. '\\'. $part. '\\'. $controller;
         $this->_namespace = $namespace;
         $this->_controller = '/'. $uri;
-        $this->_action = Captain::getInstance()->config->router->default->action;
+        $this->_action = Noah::init()->config->router->default->action;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::$ready = true;
-        Captain::getInstance()->set('request', function() { return Request::getInstance(); });
+        Noah::init()->set('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.controller_not_found', $namespace));
+            throw new Exception(Noah::init()->lang->get('router.controller_not_found', $namespace));
         }
     }
 
@@ -202,7 +202,7 @@ class Native extends Father
         $action = $this->_action;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new Exception(Captain::getInstance()->lang->get('router.controller_is_protected', $namespace));
+            throw new Exception(Noah::init()->lang->get('router.controller_is_protected', $namespace));
         }
         //实现拦截器功能
         if ($interceptors = $this->getInterceptors($namespace)) {
@@ -217,7 +217,7 @@ class Native extends Father
         //实例化最终控制器对象
         $instance = new $namespace();
         if (!method_exists($instance, $action)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.action_not_found', $namespace, $action));
+            throw new Exception(Noah::init()->lang->get('router.action_not_found', $namespace, $action));
         }
         $output = null;
         //自动化类
@@ -250,12 +250,12 @@ class Native extends Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Exception(Captain::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new Exception(Noah::init()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.uri_must_string'));
+            throw new Exception(Noah::init()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }

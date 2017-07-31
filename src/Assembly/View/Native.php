@@ -4,7 +4,7 @@ namespace Ark\Assembly\View;
 
 use Ark\Core\Event;
 use Ark\Core\Loader;
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Toolkit\Struct;
 
 class Native extends Father
@@ -40,7 +40,7 @@ class Native extends Father
      */
     function __construct()
     {
-        $config = Captain::getInstance()->config->view;
+        $config = Noah::init()->config->view;
         $config->template_ext && $this->_template_ext = $config->template_ext;
         $config->template_dir && $this->_template_dir = rtrim($config->template_dir, DIRECTORY_SEPARATOR);
     }
@@ -95,7 +95,7 @@ class Native extends Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $template;
         if (!is_file($template)) {
-            throw new Exception(Captain::getInstance()->lang->get('view.template_not_found', Loader::reducePath($template)));
+            throw new Exception(Noah::init()->lang->get('view.template_not_found', Loader::reducePath($template)));
         }
         $data = array(
             'template'=> $template,
@@ -139,7 +139,7 @@ class Native extends Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $path;
         if (!is_file($template)) {
-            throw new Exception(Captain::getInstance()->lang->get('view.include_file_not_found', Loader::reducePath($template)));
+            throw new Exception(Noah::init()->lang->get('view.include_file_not_found', Loader::reducePath($template)));
         }
         extract($this->_storage, EXTR_REFS);
         extract($params, EXTR_SKIP);

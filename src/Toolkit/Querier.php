@@ -2,7 +2,7 @@
 
 namespace Ark\Toolkit;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Toolkit\Querier\Select;
 use Ark\Toolkit\Querier\Update;
 use Ark\Toolkit\Querier\Insert;
@@ -21,7 +21,7 @@ class Querier
     static function select($dbtype)
     {
         if (!$dbtype) {
-            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
         $namespace = '\Ark\Toolkit\Querier\Select\\'. ucfirst($dbtype);
         return new $namespace;
@@ -37,7 +37,7 @@ class Querier
     static function insert($dbtype)
     {
         if (!$dbtype) {
-            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
         $namespace = '\Ark\Toolkit\Querier\Insert\\'. ucfirst($dbtype);
         return new $namespace;
@@ -53,7 +53,7 @@ class Querier
     static function update($dbtype)
     {
         if (!$dbtype) {
-            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
         $namespace = '\Ark\Toolkit\Querier\Update\\'. ucfirst($dbtype);
         return new $namespace;
@@ -69,7 +69,7 @@ class Querier
     static function delete($dbtype)
     {
         if (!$dbtype) {
-            throw new Exception(Captain::getInstance()->lang->get('db.querier_type_missing'));
+            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
         $namespace = '\Ark\Toolkit\Querier\Delete\\'. ucfirst($dbtype);
         return new $namespace;

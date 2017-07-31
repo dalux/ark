@@ -87,10 +87,10 @@ class Event
                 $struct->setRule($rule);
                 $struct->setData($data);
                 if (!$data = $struct->checkOut()) {
-                    throw new Exception(Captain::getInstance()->lang->get('event.struct_check_failed', $event, $struct->getMessage()));
+                    throw new Exception(Noah::init()->lang->get('event.struct_check_failed', $event, $struct->getMessage()));
                 }
             } elseif (!is_array($data)) {
-                throw new Exception(Captain::getInstance()->lang->get('core.data_must_array', $event));
+                throw new Exception(Noah::init()->lang->get('core.data_must_array', $event));
             }
         }
         return $data;

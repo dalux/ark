@@ -1,7 +1,7 @@
 <?php
 
 use Ark\Core\Event;
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Core\Server;
 
 return function() {
@@ -9,7 +9,7 @@ return function() {
     require_once __DIR__. '/src/Tracker.php';
 
     //设置cookie
-    Captain::getInstance()->container->__tracker__ = array(
+    Noah::init()->container->__tracker__ = array(
         'name'=> 'test',
         'pass'=> '12345678'
     );
@@ -17,11 +17,11 @@ return function() {
     //注册框架内置事件
     Event::addListener('event.framework.ready', function($data) {
         //开启debug模式
-        if ($tracker = Captain::getInstance()->container->__tracker__) {
+        if ($tracker = Noah::init()->container->__tracker__) {
             list($name, $pass) = array($tracker->name, $tracker->pass);
-            $token = Captain::getInstance()->request->cookie($name);
+            $token = Noah::init()->request->cookie($name);
             if ($token == $pass && !Server::isCli()) {
-                Captain::getInstance()->config->global->debug = true;
+                Noah::init()->config->global->debug = true;
             }
         }
         //Debug内容

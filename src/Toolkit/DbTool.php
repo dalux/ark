@@ -2,7 +2,7 @@
 
 namespace Ark\Toolkit;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 
 class DbTool
 {
@@ -77,7 +77,7 @@ class DbTool
     static function parseConnectUrl($url)
     {
         if (!$parsed = parse_url($url)) {
-            throw new Exception(Captain::getInstance()->lang->get('db.invalid_conn_string', $url));
+            throw new Exception(Noah::init()->lang->get('db.invalid_conn_string', $url));
         }
         $config = array(
             'type'=> $parsed['scheme'],

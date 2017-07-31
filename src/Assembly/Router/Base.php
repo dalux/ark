@@ -4,7 +4,7 @@ namespace  Ark\Assembly\Router;
 
 use ReflectionClass;
 use Ark\Core\Loader;
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Core\Trace;
 use Ark\Core\Request;
 
@@ -92,7 +92,7 @@ class Base extends Father
     function __construct()
     {
         $url_mode = self::URL_MODE_COMMON;
-        if ($mode = Captain::getInstance()->config->router->urlmode) {
+        if ($mode = Noah::init()->config->router->urlmode) {
             $url_mode = $mode;
         }
         $this->setUrlMode($url_mode);
@@ -212,7 +212,7 @@ class Base extends Father
     {
         $subspace = trim($subspace, '\\');
         if (!is_callable($operator)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
+            throw new Exception(Noah::init()->lang->get('router.invalid_router_interceptor', $subspace));
         }
         $this->_interceptors[$subspace] = $operator;
     }
@@ -256,20 +256,20 @@ class Base extends Father
         $uri = $_SERVER['REQUEST_URI'];
         //调用路由组件，解析URI
         $result = $this->_parseUri($uri);
-        $def_router = Captain::getInstance()->config->router->default;
+        $def_router = Noah::init()->config->router->default;
         $result['controller'] || $result['controller'] = $def_router->controller;
         $result['action'] || $result['action'] = $def_router->action;
         $this->_module = $result['module'];
         $this->_controller = $result['controller'];
         $this->_action = $result['action'];
         if (!$this->_controller) {
-            throw new Exception(Captain::getInstance()->lang->get('router.invalid_controller_name'));
+            throw new Exception(Noah::init()->lang->get('router.invalid_controller_name'));
         } elseif (!$this->_action) {
-            throw new Exception(Captain::getInstance()->lang->get('router.invalid_action_name'));
+            throw new Exception(Noah::init()->lang->get('router.invalid_action_name'));
         }
-        $app_name = Captain::getInstance()->getAppName();
-        $controller_dir = Captain::getInstance()->getControllerDir();
-        $app_dir = Captain::getInstance()->getAppDir();
+        $app_name = Noah::init()->getAppName();
+        $controller_dir = Noah::init()->getControllerDir();
+        $app_dir = Noah::init()->getAppDir();
         $path_now = $controller_dir;
         $part = str_replace($app_dir, '', $controller_dir);
         $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');
@@ -287,9 +287,9 @@ class Base extends Father
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::$ready = true;
-        Captain::getInstance()->set('request', function() { return Request::getInstance(); });
+        Noah::init()->set('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.controller_not_found', $namespace));
+            throw new Exception(Noah::init()->lang->get('router.controller_not_found', $namespace));
         }
     }
 
@@ -304,7 +304,7 @@ class Base extends Father
         $namespace = $this->_namespace;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new Exception(Captain::getInstance()->lang->get('router.controller_is_protected', $namespace));
+            throw new Exception(Noah::init()->lang->get('router.controller_is_protected', $namespace));
         }
         //实现拦截器功能
         if ($interceptors = $this->getInterceptors($namespace)) {
@@ -317,7 +317,7 @@ class Base extends Father
         }
         $instance = new $namespace();
         if (!method_exists($instance, $this->_action)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.action_not_found', $namespace, $this->_action));
+            throw new Exception(Noah::init()->lang->get('router.action_not_found', $namespace, $this->_action));
         }
         $output = null;
         //自动化类
@@ -364,7 +364,7 @@ class Base extends Father
     function makeQuery($controller, $action, array $params, $module = null, $url_mode = null)
     {
         $url_mode || $url_mode = $this->_url_mode;
-        $urlvar = Captain::getInstance()->config->router->urlvar;
+        $urlvar = Noah::init()->config->router->urlvar;
         switch ($url_mode) {
             case self::URL_MODE_COMMON:
                 is_null($module) || $params[$urlvar->module] = $module;
@@ -402,12 +402,12 @@ class Base extends Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Exception(Captain::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new Exception(Noah::init()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Exception(Captain::getInstance()->lang->get('router.uri_must_string'));
+            throw new Exception(Noah::init()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }
@@ -425,9 +425,9 @@ class Base extends Father
         $getdata = array();
         switch ($this->_url_mode) {
             case self::URL_MODE_COMMON:
-                $var_module = Captain::getInstance()->config->router->urlvar->module;
-                $var_controller = Captain::getInstance()->config->router->urlvar->controller;
-                $var_action = Captain::getInstance()->config->router->urlvar->action;
+                $var_module = Noah::init()->config->router->urlvar->module;
+                $var_controller = Noah::init()->config->router->urlvar->controller;
+                $var_action = Noah::init()->config->router->urlvar->action;
                 $module = $_GET[$var_module];
                 $controller = $_GET[$var_controller];
                 $action = $_GET[$var_action];
@@ -442,8 +442,8 @@ class Base extends Father
                 $file_name = basename($_SERVER['SCRIPT_FILENAME']);
                 $uri = preg_replace('/\/'. addslashes($file_name). '/', '', $uri);
                 //重写
-                $urlsep = Captain::getInstance()->config->router->urlsep;
-                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
+                $urlsep = Noah::init()->config->router->urlsep;
+                $urlsuffix = Noah::init()->config->router->urlsuffix;
                 $uri = str_replace('/?', $urlsep, $uri);
                 $uri = str_replace(array('&', '=', '?'), $urlsep, $uri);
                 $uri = trim($this->_rewrite($uri), '/');
@@ -461,8 +461,8 @@ class Base extends Father
                 break;
             case self::URL_MODE_REWRITE:
                 //重写
-                $urlsep = Captain::getInstance()->config->router->urlsep;
-                $urlsuffix = Captain::getInstance()->config->router->urlsuffix;
+                $urlsep = Noah::init()->config->router->urlsep;
+                $urlsuffix = Noah::init()->config->router->urlsuffix;
                 if (strpos($uri, '?') !== false) {
                     $getdata = $_GET;
                     $_GET = array();

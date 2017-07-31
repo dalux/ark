@@ -2,7 +2,7 @@
 
 namespace Ark\Assembly\Session;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Core\Toolkit;
 
 class File extends Father
@@ -15,7 +15,7 @@ class File extends Father
      */
 	function __construct()
 	{
-		$config = Captain::getInstance()->config->session->toArray();
+		$config = Noah::init()->config->session->toArray();
 		ini_set('session.save_handler', 'files');
 		ini_set('session.cache_expire', $config['expire_time']);
 		if (file_exists($config['save_path'])

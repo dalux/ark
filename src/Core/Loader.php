@@ -32,7 +32,7 @@ class Loader
     static function setAlias($alias, $path)
     {
         if (in_array($alias, array('*', '.'))) {
-            throw new Exception(Captain::getInstance()->lang->get('core.deny_alias_redeclare', $alias));
+            throw new Exception(Noah::init()->lang->get('core.deny_alias_redeclare', $alias));
         }
         self::$_alias[$alias] = $path;
     }
@@ -88,7 +88,7 @@ class Loader
     static function addAutoLoader($loader)
     {
         if (!is_callable($loader)) {
-            throw new Exception(Captain::getInstance()->lang->get('core.invalid_autoloader'));
+            throw new Exception(Noah::init()->lang->get('core.invalid_autoloader'));
         }
         spl_autoload_register($loader);
     }
@@ -102,7 +102,7 @@ class Loader
     static function autoLoad($class)
     {
         if (!$path = self::findClass($class)) {
-            throw new Exception(Captain::getInstance()->lang->get('core.class_path_notfound', $class));
+            throw new Exception(Noah::init()->lang->get('core.class_path_notfound', $class));
         }
         self::import($path);
     }
@@ -153,7 +153,7 @@ class Loader
     {
         $first_char = substr($spacename, 0, 1);
         if (!isset(self::$_alias[$first_char])) {
-            throw new Exception(Captain::getInstance()->lang->get('core.format_path_failed'));
+            throw new Exception(Noah::init()->lang->get('core.format_path_failed'));
         }
         $parsed = self::_parse($spacename);
         list($alias, $space) = $parsed;

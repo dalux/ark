@@ -3,7 +3,7 @@
 namespace Ark\Assembly\Cache;
 
 use Closure;
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 
 class Memcached extends Father
 {
@@ -26,7 +26,7 @@ class Memcached extends Father
     function __construct($save_path, array $option = array())
     {
         if (!extension_loaded('memcached')) {
-            throw new Exception(Captain::getInstance()->lang->get('cache.extension_load_failed', 'php_memcached'));
+            throw new Exception(Noah::init()->lang->get('cache.extension_load_failed', 'php_memcached'));
         }
         is_array($save_path) || $save_path = array($save_path);
         $this->_container = new \Memcached();
@@ -38,6 +38,7 @@ class Memcached extends Father
         }
         $params = array(
             \Memcached::OPT_DISTRIBUTION=> \Memcached::DISTRIBUTION_CONSISTENT,
+            \Memcached::OPT_LIBKETAMA_COMPATIBLE=> true,
             \Memcached::OPT_CONNECT_TIMEOUT=> 500,
             \Memcached::OPT_COMPRESSION=> true,
             \Memcached::OPT_REMOVE_FAILED_SERVERS=> true,
@@ -49,7 +50,7 @@ class Memcached extends Father
             $this->_container->setOption($key, $val);
         }
         if (!$this->_container->getVersion()) {
-            throw new Exception(Captain::getInstance()->lang->get('cache.cacher_create_failed', 'Memcached'));
+            throw new Exception(Noah::init()->lang->get('cache.cacher_create_failed', 'Memcached'));
         }
     }
 
@@ -149,7 +150,7 @@ class Memcached extends Father
         }
         $format = $this->_format;
         if (!$part = $format($name)) {
-            throw new Exception(Captain::getInstance()->lang->get('cache.path_mustbe_notnull'));
+            throw new Exception(Noah::init()->lang->get('cache.path_mustbe_notnull'));
         }
         return $path. $part;
     }

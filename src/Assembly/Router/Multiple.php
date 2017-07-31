@@ -2,7 +2,7 @@
 
 namespace Ark\Assembly\Router;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Core\Request;
 
 class Multiple extends Father
@@ -73,7 +73,7 @@ class Multiple extends Father
         $this->_controller = str_replace(PATH_WEB, '', $caller);
         //请求数据初始化完成
         Request::$ready = true;
-        Captain::getInstance()->set('request', function() { return Request::getInstance(); });
+        Noah::init()->set('request', function() { return Request::getInstance(); });
 	}
 
     /**
@@ -82,11 +82,11 @@ class Multiple extends Father
      */
 	function dispatch()
 	{
-        $config = Captain::getInstance()->config->router;
+        $config = Noah::init()->config->router;
         $global_var = $config->global_var;
         if (!is_null($global_var) && !preg_match('/^[0-9]+/', $global_var)) {
             global ${$global_var};
-            ${$global_var} = Captain::getInstance();
+            ${$global_var} = Noah::init();
         }
         //自动加载目录下引导文件
         if ($interceptor = $config->interceptor) {

@@ -3,7 +3,7 @@
 namespace Ark\Assembly\Session;
 
 use Closure;
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Assembly\Cache\Father as Cache;
 
 class User extends Father
@@ -30,7 +30,7 @@ class User extends Father
      */
 	function __construct()
 	{
-        $config = Captain::getInstance()->config->session->toArray();
+        $config = Noah::init()->config->session->toArray();
         //检查
         if ($config['save_path'] instanceof Closure) {    //支持匿名函数
             $this->_container = $config['save_path']();
@@ -38,7 +38,7 @@ class User extends Father
             $this->_container = $config['save_path'];
         }
         if (!$this->_container instanceof Cache) {
-            throw new Exception(Captain::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Contract\\Cache');
+            throw new Exception(Noah::init()->lang->get('sess.cacher_implement_error'), 'Ark\\Contract\\Cache');
         }
         $this->_container->setFlag('session');
         $this->_expire_time = $config['expire_time'];
