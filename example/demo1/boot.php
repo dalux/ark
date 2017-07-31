@@ -6,16 +6,7 @@ require_once __DIR__. '/../../src/Core/Noah.php';
 //实例化框架
 \Ark\Core\Noah::init()
     //设置配置文件夹路径
-    ->setConfigDir(function() {
-        $path = \Ark\Core\Loader::realPath('./config');
-        $host = \Ark\Core\Server::getDomain();
-        $full = \Ark\Core\Server::getDomain(false);
-        if (is_dir($dir = $path. '/'. $full)
-                || is_dir($dir = $path. '/'. $host)) {
-            return $dir;
-        }
-        return $path. '/localhost'; 
-    })
+    ->setConfigPath(\Ark\Core\Loader::realPath('./config/localhost.php'), false)
     ->addTriggerDir(\Ark\Core\Loader::realPath('*/Trigger'))
     ->addPrepare(function() {
 

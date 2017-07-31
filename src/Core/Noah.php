@@ -23,9 +23,9 @@ class Noah
     /**
      * 配置文件获取器
      *
-     * @var Closure
+     * @var array
      */
-    private $_config_dir;
+    private $_config_path = array();
 
     /**
      * 预处理逻辑
@@ -116,12 +116,13 @@ class Noah
     /**
      * 配置文件缓存目录
      *
-     * @param string $path
+     * @param mixed $path
+     * @param bool $is_dir
      * @return Noah
      */
-    function setConfigDir($path)
+    function setConfigPath($path, $is_dir = false)
     {
-        $this->_config_dir = $path;
+        $this->_config_path = array('path'=> $path, 'is_dir'=> (bool)$is_dir);
         return $this;
     }
 
@@ -226,30 +227,54 @@ class Noah
      */
     function getConfig()
     {
-        //获取配置文件目录
-        $config_path = '';
-        //如果配置文件目录是匿名函数
-        if ($this->_config_dir instanceof Closure) {
-            $getter = $this->_config_dir;
-            $result = (string)$getter();
-            if (is_dir($result)) {
-                $config_path = $result;
-            }
-        } elseif (is_dir($this->_config_dir)) {
-            $config_path = $this->_config_dir;
+        $config = array();
+        //如果未设置,默认使用应用程序目录config下的localhost.php配置文件
+        if (!$this->_config_path) {
+            $this->_config_path = array(
+                'path'=> function() {
+                    $path = Loader::realPath('./config');
+                    $host = Server::getDomain();
+                    $full = Server::getDomain(false);
+                    if (is_file($file = $path. '/'. $full. '.php')
+                            || is_file($file = $path. '/'. $host. '.php')) {
+                        return $file;
+                    }
+                    return $path. '/localhost.php';
+                },
+                'is_dir'=> false
+            );
         }
-        if (!$config_path) {
-            throw new Exception($this->lang->get('core.invalid_config_dir'));
+        //如果配置文件目录是匿名函数
+        if ($this->_config_path['path'] instanceof Closure) {
+            $getter = $this->_config_path['path'];
+            $config_path = (string)$getter();
+        } else {
+            $config_path = $this->_config_path['path'];
+        }
+        $is_dir = $this->_config_path['is_dir'];
+        if (!$config_path
+                || $is_dir && !is_dir($config_path)
+                || !$is_dir && !is_file($config_path)) {
+            throw new Exception($this->lang->get('core.invalid_config_path'));
         }
         //如果配置文件允许缓存
-        $config = array();
-        $config_files = glob($config_path . '/*.php');
-        foreach ($config_files as $file) {
-            $result = include($file);
-            $key = strtolower(basename($file));
-            $key = preg_replace('/\.php$/', '', $key);
-            if ($result) {
-                $config[$key] = $result;
+        if ($is_dir) {
+            $config_files = glob($config_path . '/*.php');
+            foreach ($config_files as $file) {
+                $result = include($file);
+                if (!is_array($result)) {
+                    throw new Exception($this->lang->get('core.invalid_config_format', basename($file)));
+                }
+                $key = strtolower(basename($file));
+                $key = preg_replace('/\.php$/', '', $key);
+                if ($result) {
+                    $config[$key] = $result;
+                }
+            }
+        } else {
+            $config = include($config_path);
+            if (!is_array($config)) {
+                throw new Exception($this->lang->get('core.invalid_config_format', basename($config_path)));
             }
         }
         return $config;
