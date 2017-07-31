@@ -11,7 +11,7 @@ class Index extends Sailor
 
 	function index() 
 	{
-        Toolkit::Printr(Captain::getInstance()->config->cache->toArray());
+        Toolkit::Printr(Noah::init()->config->cache->toArray());
 		echo 'hello';
 	}
 

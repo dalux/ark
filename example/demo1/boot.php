@@ -4,7 +4,7 @@
 require_once __DIR__. '/../../src/Core/Captain.php';
 
 //实例化框架
-\Ark\Core\Captain::getInstance()
+\Ark\Core\Captain::init()
     //设置配置文件夹路径
     ->setConfigDir(function() {
         $path = \Ark\Core\Loader::realPath('./config');
