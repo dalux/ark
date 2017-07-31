@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Ark\Core\Captain;
+use Ark\Core\Noah;
 use Ark\Core\Sailor;
 use Ark\Core\Toolkit;
 

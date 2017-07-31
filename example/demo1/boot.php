@@ -1,10 +1,10 @@
 <?php
 
 //引入框架核心文件
-require_once __DIR__. '/../../src/Core/Captain.php';
+require_once __DIR__. '/../../src/Core/Noah.php';
 
 //实例化框架
-\Ark\Core\Captain::init()
+\Ark\Core\Noah::init()
     //设置配置文件夹路径
     ->setConfigDir(function() {
         $path = \Ark\Core\Loader::realPath('./config');
@@ -14,7 +14,7 @@ require_once __DIR__. '/../../src/Core/Captain.php';
                 || is_dir($dir = $path. '/'. $host)) {
             return $dir;
         }
-        return $path. '/localhost';
+        return $path. '/localhost'; 
     })
     ->addTriggerDir(\Ark\Core\Loader::realPath('*/Trigger'))
     ->addPrepare(function() {
@@ -31,7 +31,7 @@ require_once __DIR__. '/../../src/Core/Captain.php';
         });
 
         //常用组件
-        \Ark\Core\Captain::getInstance()
+        \Ark\Core\Noah::init()
             ->set('session', function() { return \Ark\Assembly\Session::getDriver(); })
             ->set('db', function() { return \Ark\Assembly\Database::getDriver('master'); })
             ->set('cache', function() { return \Ark\Assembly\Cache::getDriver('file'); });
