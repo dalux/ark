@@ -5,9 +5,9 @@ nginx 配置:
 server {
 
     listen 80;
-    server_name www.yourdomain.com;
+    server_name index.localhost;
     index index.php;
-    root  /Users/dalu/WebSites/ark/example/demo1/public;
+    root  ~/ark/example/public;
 
     location / {
         if (!-e $request_filename) {
@@ -23,4 +23,7 @@ server {
 
 }
 
-该demo1请求URL类似：http://localhost/a/b 对应具体的控制器：./logic/index/Controller/A/B
+该demo请求URL类似：http://index.localhost/user/panel
+
+对应具体的控制器：~/ark/example/logic/index/Controller/User/Panel.php
+对应具体的类名：\App\Controller\User\Panel()
