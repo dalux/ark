@@ -73,7 +73,7 @@ class Multiple extends Father
         $this->_controller = str_replace(PATH_WEB, '', $caller);
         //请求数据初始化完成
         Request::$ready = true;
-        Noah::init()->set('request', function() { return Request::getInstance(); });
+        Noah::init()->setMember('request', function() { return Request::getInstance(); });
 	}
 
     /**

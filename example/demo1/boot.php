@@ -23,8 +23,8 @@ require_once __DIR__. '/../../src/Core/Noah.php';
 
         //常用组件
         \Ark\Core\Noah::init()
-            ->set('session', function() { return \Ark\Assembly\Session::getDriver(); })
-            ->set('db', function() { return \Ark\Assembly\Database::getDriver('master'); })
-            ->set('cache', function() { return \Ark\Assembly\Cache::getDriver('file'); });
+            ->setMember('session', function() { return \Ark\Assembly\Session::getDriver(); })
+            ->setMember('db', function() { return \Ark\Assembly\Database::getDriver('master'); })
+            ->setMember('cache', function() { return \Ark\Assembly\Cache::getDriver('file'); });
 
     });

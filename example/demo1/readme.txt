@@ -1,4 +1,4 @@
-##示例单入口框架程序结构
+﻿##示例单入口框架程序结构
 
 nginx 配置:
 
@@ -22,3 +22,5 @@ server {
     }
 
 }
+
+该demo1请求URL类似：http://localhost/a/b 对应具体的控制器：./logic/index/Controller/A/B

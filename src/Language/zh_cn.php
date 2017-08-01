@@ -13,6 +13,8 @@ return array(
     'core.invalid_autoloader'           => '自动加载器不可调用',
     'core.format_path_failed'           => '无法格式化指定的路径',
     'core.class_path_notfound'          => '类名称[%s]对应的文件不存在',
+    'core.invalid_custom_method'        => '无效的自定义方法[%s]',
+    'core.custom_method_notfound'       => '无法找到自定义方法[%s]',
 
     'com.invalid_view_template'         => '无有效的视图模板文件',
     'http.request_not_ready'            => 'Http请求数据未就绪',

@@ -185,7 +185,7 @@ class Native extends Father
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::$ready = true;
-        Noah::init()->set('request', function() { return Request::getInstance(); });
+        Noah::init()->setMember('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
             throw new Exception(Noah::init()->lang->get('router.controller_not_found', $namespace));
         }

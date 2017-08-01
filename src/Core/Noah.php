@@ -35,6 +35,13 @@ class Noah
     private $_prepare = array();
 
     /**
+     * 自定义方法体
+     *
+     * @var array
+     */
+    private $_custom_method = array();
+
+    /**
      * 应用名称
      *
      * @var string
@@ -292,7 +299,7 @@ class Noah
         //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
-        $this->set('lang', function() { return new Language(); });
+        $this->setMember('lang', function() { return new Language(); });
         //异常报告
         Handler::setHandler('exception');
         //后续类文件自动加载
@@ -335,9 +342,9 @@ class Noah
 
         //注册内置组件
         $this
-            ->set('container', function() { return new Container(); })
-            ->set('response', function() { return new Response(); })
-            ->set('router', function() { return RouterAdapter::getDriver(); });
+            ->setMember('container', function() { return new Container(); })
+            ->setMember('response', function() { return new Response(); })
+            ->setMember('router', function() { return RouterAdapter::getDriver(); });
 
         //钩子程序加载
         $prepares = array();
@@ -394,24 +401,12 @@ class Noah
      * @param $value
      * @return Noah
      */
-    function set($name, $value)
+    function setMember($name, $value)
     {
         if (!in_array($name, array('config'))) {
             $this->_storage[$name] = $value;
         }
         return $this;
-    }
-
-    /**
-     * 设置
-     *
-     * @param string $name
-     * @param mixed $value
-     * @return Noah
-     */
-    function __set($name, $value)
-    {
-        $this->set($name, $value);
     }
 
     /**
@@ -421,7 +416,7 @@ class Noah
      * @return mixed
      * @throws Exception
      */
-    function get($name)
+    function getMember($name)
     {
         //常规取值
         if (!$instance = $this->_storage[$name]) {
@@ -435,17 +430,63 @@ class Noah
         return $instance;
     }
 
-
     /**
-     * 取组件
+     * 魔术方法取值
      *
-     * @param string $name
+     * @param $name
      * @return mixed
      * @throws Exception
      */
     function __get($name)
     {
-        return $this->get($name);
+        return $this->getMember($name);
+    }
+
+    /**
+     * 设置自定义方法
+     *
+     * @param $name
+     * @param callable $method
+     * @return $this
+     * @throws Exception
+     */
+    function setMethod($name, callable $method)
+    {
+        if (!is_callable($method)) {
+            throw new Exception($this->lang->get('core.invalid_custom_method', $name));
+        }
+        $this->_custom_method[$name] = $method;
+        return $this;
+    }
+
+    /**
+     * 调用自定义方法
+     *
+     * @param $name
+     * @param $args
+     * @return mixed
+     * @throws Exception
+     */
+    function callMethod($name, $args)
+    {
+        if (!isset($this->_custom_method[$name])) {
+            throw new Exception($this->lang->get('core.custom_method_notfound', $name));
+        }
+        $method = $this->_custom_method[$name];
+        return call_user_func_array($method, $args);
+    }
+
+    /**
+     * 魔术方法调用自定义方法
+     *
+     * @param $name
+     * @param $args
+     * @return mixed
+     * @throws Exception
+     */
+    function __call($name, $args)
+    {
+        return $this->callMethod($name, $args);
     }
 
     /**
