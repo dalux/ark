@@ -299,7 +299,7 @@ class Noah
         //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
-        $this->setMember('lang', function() { return new Language(); });
+        $this->_storage['lang'] = function() { return new Language(); };
         //异常报告
         Handler::setHandler('exception');
         //后续类文件自动加载
