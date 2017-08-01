@@ -97,7 +97,10 @@ class Language
         if ($args > 1) {
             $label = array_shift($args);
         }
-        return vsprintf($this->_list[$label], $args);
+        if (!$result = vsprintf($this->_list[$label], $args)) {
+            $result = $this->_list[$label];
+        }
+        return $result;
     }
 
 }

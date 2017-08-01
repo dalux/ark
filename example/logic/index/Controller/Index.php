@@ -7,9 +7,9 @@ use Ark\Core\Sailor;
 class Index extends Sailor
 {
 
-	function index() 
+	function index()
 	{
-
+		echo 'hello.';
 	}
 
 }
