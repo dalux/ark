@@ -35,7 +35,7 @@ class Toolkit
      * @static
      * @return string
      */
-    static function Sprintr()
+    static function sprintr()
     {
         $args = func_get_args();
         ob_start();
@@ -53,7 +53,7 @@ class Toolkit
      * @static
      * @return null
      */
-    static function Printr()
+    static function printr()
     {
         $params = func_get_args();
         $result = call_user_func_array(array(__CLASS__, 'Sprintr'), $params);
@@ -67,7 +67,7 @@ class Toolkit
      * @static
      * @return string
      */
-    static function Svardump()
+    static function svardump()
     {
         $args = func_get_args();
         ob_start();
@@ -84,7 +84,7 @@ class Toolkit
      * @static
      * @return null
      */
-    static function Vardump()
+    static function vardump()
     {
         $params = func_get_args();
         $result = call_user_func_array(array(__CLASS__, 'Svardump'), $params);
