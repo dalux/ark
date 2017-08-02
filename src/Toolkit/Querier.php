@@ -17,18 +17,7 @@ class Querier
      * @static
      * @var string $dbtype
      */
-    private $_db_type = 'mysql';
-
-    /**
-     * 构造器
-     *
-     * @static
-     * @param string $dbtype
-     */
-    function __construct($dbtype = null)
-    {
-        is_null($dbtype) || $this->setDbType($dbtype);
-    }
+    private static $_db_type = 'mysql';
 
     /**
      * 设置数据库类型
@@ -36,10 +25,9 @@ class Querier
      * @static
      * @param string $dbtype
      */
-    function setDbType($dbtype)
+    static function setDbType($dbtype)
     {
-        $this->_db_type = $dbtype;
-        return $this;
+        self::$_db_type = $dbtype;
     }
 
     /**
@@ -51,7 +39,7 @@ class Querier
      */
     function select($dbtype = null)
     {
-        $dbtype || $dbtype = $this->_db_type;
+        $dbtype || $dbtype = self::$_db_type;
         if (!$dbtype) {
             throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
@@ -68,7 +56,7 @@ class Querier
      */
     function insert($dbtype = null)
     {
-        $dbtype || $dbtype = $this->_db_type;
+        $dbtype || $dbtype = self::$_db_type;
         if (!$dbtype) {
             throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
@@ -85,7 +73,7 @@ class Querier
      */
     function update($dbtype = null)
     {
-        $dbtype || $dbtype = $this->_db_type;
+        $dbtype || $dbtype = self::$_db_type;
         if (!$dbtype) {
             throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
@@ -102,7 +90,7 @@ class Querier
      */
     function delete($dbtype = null)
     {
-        $dbtype || $dbtype = $this->_db_type;
+        $dbtype || $dbtype = self::$_db_type;
         if (!$dbtype) {
             throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
         }
