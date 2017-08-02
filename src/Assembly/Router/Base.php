@@ -208,7 +208,7 @@ class Base extends Father
      * @param $operator
      * @throws Exception
      */
-    function addInterceptor($subspace, $operator)
+    function addInterceptor($subspace, callable $operator)
     {
         $subspace = trim($subspace, '\\');
         if (!is_callable($operator)) {
