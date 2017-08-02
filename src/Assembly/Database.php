@@ -41,5 +41,38 @@ class Database
         return $instance;
     }
 
+    /**
+     * 解析数据库连接字符串
+     *
+     * @access public
+     * @param string $url
+     * @return mixed
+     * @throws Exception
+     */
+    static function parseConnectUrl($url)
+    {
+        if (!$parsed = parse_url($url)) {
+            throw new Exception(Noah::init()->lang->get('db.invalid_conn_string', $url));
+        }
+        $config = array(
+            'type'=> $parsed['scheme'],
+            'host'=> $parsed['host'],
+            'port'=> $parsed['port'],
+            'user'=> $parsed['user'],
+            'pass'=> $parsed['pass'],
+            'name'=> trim($parsed['path'], '/'),
+        );
+        if ($query = $parsed['query']) {
+            $query = explode('&', $query);
+            foreach ($query as $key=> $val) {
+                $expr = explode('=', $val);
+                if ($expr[0] && $expr[1] !== '') {
+                    $config[$expr[0]] = $expr[1];
+                }
+            }
+        }
+        return $config;
+    }
+
 }
 

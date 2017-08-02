@@ -2,7 +2,6 @@
 
 namespace Ark\Toolkit\Querier;
 
-use Ark\Toolkit\DbTool;
 use Ark\Toolkit\Querier;
 
 abstract class Father
@@ -59,7 +58,7 @@ abstract class Father
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
         } else {
-            $value = DbTool::quote($value, $this->_db_type);
+            $value = Querier::quote($value, $this->_db_type);
         }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
@@ -79,7 +78,7 @@ abstract class Father
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
         } else {
-            $value = DbTool::quote($value, $this->_db_type);
+            $value = Querier::quote($value, $this->_db_type);
         }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
@@ -200,7 +199,7 @@ abstract class Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', DbTool::quote($val, $this->_db_type), $sql, 1);
+            $sql = preg_replace('/'. $key. '/', Querier::quote($val, $this->_db_type), $sql, 1);
         }
         return $sql;
     }
@@ -251,7 +250,7 @@ abstract class Father
                     } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
                         $val = str_replace(array('{{', '}}'), '', $val);
                     } else {
-                        $val = DbTool::quote($val, $this->_db_type);
+                        $val = Querier::quote($val, $this->_db_type);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {

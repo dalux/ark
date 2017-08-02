@@ -7,7 +7,6 @@ use Ark\Toolkit\Querier\Select;
 class Oci extends Select
 {
 
-
     /**
      * 数据库类型
      *
