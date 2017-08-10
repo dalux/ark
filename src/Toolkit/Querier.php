@@ -14,39 +14,62 @@ class Querier
     /**
      * 数据库类型
      *
-     * @static
      * @var string $dbtype
      */
-    private static $_db_type = 'mysql';
+    private $_db_type = 'mysql';
+
+    /**
+     * 数据库类型
+     *
+     * @static
+     * @var string $_instance
+     */
+	private static $_instance = null;
+
+    /**
+     * 取实例化对象
+     *
+     * @access public
+     * @return Noah
+     */
+    static function init($dbtype = null)
+    {
+        is_null(self::$_instance) 
+			&& self::$_instance = new self();
+        return is_null($dbtype)
+			? self::$_instance
+			: self::$_instance->setDbType($dbtype);
+    }
 
     /**
      * 设置数据库类型
      *
-     * @static
+     * @access public
      * @param string $dbtype
+     * @return mixed
      */
-    static function setDbType($dbtype)
-    {
-        self::$_db_type = $dbtype;
-    }
+	function setDbType($dbtype)
+	{
+		$this->_db_type = $dbtype;
+		return $this;
+	}
 
     /**
      * 为值添加引号
      *
      * @access public
      * @param mixed $value
-     * @param string $dbtype
      * @return mixed
      */
-    static function quote($value, $dbtype = 'mysql')
+    function quote($value)
     {
         if (is_array($value)) {
-            foreach ($value as $key=> $val) { $value[$key] = self::quote($val, $dbtype); }
+            foreach ($value as $key=> $val) { $value[$key] = $this->quote($val); }
             return implode(',', $value);
         } elseif (is_int($value) || is_float($value)) {
             return $value;
         }
-        switch ($dbtype) {
+        switch ($this->_db_type) {
             case 'oci':
                 return "'" . str_replace("'", "''", $value) . "'";
             case 'mysql':
@@ -61,68 +84,48 @@ class Querier
     /**
      * 生成查询对象
      *
-     * @param $dbtype
      * @return Select
      * @throws Exception
      */
-    function select($dbtype = null)
+    function select()
     {
-        $dbtype || $dbtype = self::$_db_type;
-        if (!$dbtype) {
-            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
-        }
-        $namespace = '\Ark\Toolkit\Querier\Select\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Select\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
     /**
      * 生成插入对象
      *
-     * @param $dbtype
      * @return Insert
      * @throws Exception
      */
-    function insert($dbtype = null)
+    function insert($dbtype)
     {
-        $dbtype || $dbtype = self::$_db_type;
-        if (!$dbtype) {
-            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
-        }
-        $namespace = '\Ark\Toolkit\Querier\Insert\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Insert\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
     /**
      * 生成更新对象
      *
-     * @param $dbtype
      * @return Update
      * @throws Exception
      */
-    function update($dbtype = null)
+    function update()
     {
-        $dbtype || $dbtype = self::$_db_type;
-        if (!$dbtype) {
-            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
-        }
-        $namespace = '\Ark\Toolkit\Querier\Update\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Update\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
     /**
      * 生成删除对象
      *
-     * @param $dbtype
      * @return Delete
      * @throws Exception
      */
-    function delete($dbtype = null)
+    function delete()
     {
-        $dbtype || $dbtype = self::$_db_type;
-        if (!$dbtype) {
-            throw new Exception(Noah::init()->lang->get('db.querier_type_missing'));
-        }
-        $namespace = '\Ark\Toolkit\Querier\Delete\\'. ucfirst($dbtype);
+        $namespace = '\Ark\Toolkit\Querier\Delete\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
