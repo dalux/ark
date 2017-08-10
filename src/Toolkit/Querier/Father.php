@@ -199,7 +199,7 @@ abstract class Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', Querier::init($this->_db_type)->quote($val);, $sql, 1);
+            $sql = preg_replace('/'. $key. '/', Querier::init($this->_db_type)->quote($val), $sql, 1);
         }
         return $sql;
     }
