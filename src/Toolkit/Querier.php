@@ -75,14 +75,24 @@ class Querier
      * 构造器
      *
      * @param $table
-     * @param $db
-     * @throws DDatabase_exception
+     * @param Database $db
      */
-    function init($table, Database $db)
+    function __construct($table, Database $db)
     {
         $this->_tb = $table;
         $this->_db = $db;
-        return $this;
+    }
+
+    /**
+     * 构造器
+     *
+     * @param $table
+     * @param $db
+     * @throws DDatabase_exception
+     */
+    static function init($table, Database $db)
+    {
+        return new self($table, $db);
     }
 
     /**
@@ -114,7 +124,7 @@ class Querier
      */
     function insert(array $data, $return_primarykey = false)
     {
-        $insert = SQLBuilder::init($this->_db->getDriverName())->into($this->_tb, $data);
+        $insert = SQLBuilder::insert($this->_db->getDriverName())->into($this->_tb, $data);
         $added = $this->_db->query($insert);
         return $added ? ($return_primarykey ? $this->_db->lastInsertId() : true) : false;
     }
@@ -130,7 +140,7 @@ class Querier
      */
     function update(array $data, array $condition)
     {
-        $update = SQLBuilder::init($this->_db->getDriverName())->update()->set($this->_tb, $data);
+        $update = SQLBuilder::update($this->_db->getDriverName())->set($this->_tb, $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -164,7 +174,7 @@ class Querier
      */
     function delete(array $condition = array())
     {
-        $delete = SQLBuilder::init($this->_db->getDriverName())->delete()->from($this->_tb);
+        $delete = SQLBuilder::delete($this->_db->getDriverName())->from($this->_tb);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -200,7 +210,7 @@ class Querier
      */
     function fetch($condition = array(), $fields = array('*'))
     {
-        $select = SQLBuilder::init($this->_db->getDriverName())->select()->from($this->_tb, $fields);
+        $select = SQLBuilder::select($this->_db->getDriverName())->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -238,7 +248,7 @@ class Querier
      */
     function fetchOne($condition = array(), $fields = array('count(*)'))
     {
-        $select = SQLBuilder::init($this->_db->getDriverName())->select()->from($this->_tb, $fields);
+        $select = SQLBuilder::select($this->_db->getDriverName())->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -279,10 +289,7 @@ class Querier
      */
     function fetchAll($condition = array(), $order = array(), $count = 0, $offset = 0, $fields = array('*'))
     {
-        $select = SQLBuilder::init($this->_db->getDriverName())
-            ->select()
-            ->from($this->_tb, $fields)
-            ->limit($count, $offset);
+        $select = SQLBuilder::select($this->_db->getDriverName())->from($this->_tb, $fields)->limit($count, $offset);
         foreach ($order as $k=> $v) {
             $select->order($k, $v);
         }

@@ -54,13 +54,18 @@ abstract class Father
      */
     function whereIn($field, $value)
     {
-        $expr = $field. ' IN (?)';
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
+            $expr = $field. ' IN (' . $value. ')';
+        } elseif (is_array($value) && count($value) == 1) {
+            $value = current($value);
+            $expr = $field. '='. SQLBuilder::quote($value);
+        } elseif (is_array($value)) {
+            $value = SQLBuilder::quote($value);
+            $expr = $field. ' IN ('. $value. ')';
         } else {
-            $value = SQLBuilder::init($this->_db_type)->quote($value);
+            $expr = $field. '='. SQLBuilder::quote($value);
         }
-        $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
     }
 
@@ -74,13 +79,18 @@ abstract class Father
      */
     function whereNotIn($field, $value)
     {
-        $expr = $field. ' NOT IN (?)';
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
+            $expr = $field . ' NOT IN (' . $value . ')';
+        } elseif (is_array($value) && count($value) == 1) {
+            $value = current($value);
+            $expr = $field. '!='. SQLBuilder::quote($value);
+        } elseif (is_array($value)) {
+            $value = SQLBuilder::quote($value);
+            $expr = $field. ' NOT IN ('. $value. ')';
         } else {
-            $value = SQLBuilder::init($this->_db_type)->quote($value);
+            $expr = $field. '!='. SQLBuilder::quote($value);
         }
-        $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
     }
 

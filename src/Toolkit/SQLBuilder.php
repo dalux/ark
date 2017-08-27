@@ -16,30 +16,7 @@ class SQLBuilder
      *
      * @var string $dbtype
      */
-    private $_db_type = 'mysql';
-
-    /**
-     * 数据库类型
-     *
-     * @static
-     * @var string $_instance
-     */
-	private static $_instance = null;
-
-    /**
-     * 取实例化对象
-     *
-     * @access public
-     * @return Noah
-     */
-    static function init($dbtype = null)
-    {
-        is_null(self::$_instance) 
-			&& self::$_instance = new self();
-        return is_null($dbtype)
-			? self::$_instance
-			: self::$_instance->setDbType($dbtype);
-    }
+    private static $_db_type = 'mysql';
 
     /**
      * 设置数据库类型
@@ -48,10 +25,9 @@ class SQLBuilder
      * @param string $dbtype
      * @return mixed
      */
-	function setDbType($dbtype)
+	static function setDbType($dbtype)
 	{
-		$this->_db_type = $dbtype;
-		return $this;
+		self::$_db_type = $dbtype;
 	}
 
     /**
@@ -61,15 +37,16 @@ class SQLBuilder
      * @param mixed $value
      * @return mixed
      */
-    function quote($value)
+    static function quote($value, $dbtype = null)
     {
+        is_null($dbtype) && $dbtype = self::$_db_type;
         if (is_array($value)) {
-            foreach ($value as $key=> $val) { $value[$key] = $this->quote($val); }
+            foreach ($value as $key=> $val) { $value[$key] = self::quote($val); }
             return implode(',', $value);
         } elseif (is_int($value) || is_float($value)) {
             return $value;
         }
-        switch ($this->_db_type) {
+        switch ($dbtype) {
             case 'oci':
                 return "'" . str_replace("'", "''", $value) . "'";
             case 'mysql':
@@ -87,9 +64,10 @@ class SQLBuilder
      * @return Select
      * @throws Exception
      */
-    function select()
+    static function select($dbtype = null)
     {
-        $namespace = '\Ark\Toolkit\SQLBuilder\Select\\'. ucfirst($this->_db_type);
+        is_null($dbtype) && $dbtype = self::$_db_type;
+        $namespace = '\Ark\Toolkit\SQLBuilder\Select\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -99,9 +77,10 @@ class SQLBuilder
      * @return Insert
      * @throws Exception
      */
-    function insert($dbtype)
+    static function insert($dbtype = null)
     {
-        $namespace = '\Ark\Toolkit\SQLBuilder\Insert\\'. ucfirst($this->_db_type);
+        is_null($dbtype) && $dbtype = self::$_db_type;
+        $namespace = '\Ark\Toolkit\SQLBuilder\Insert\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -111,9 +90,10 @@ class SQLBuilder
      * @return Update
      * @throws Exception
      */
-    function update()
+    static function update($dbtype = null)
     {
-        $namespace = '\Ark\Toolkit\SQLBuilder\Update\\'. ucfirst($this->_db_type);
+        is_null($dbtype) && $dbtype = self::$_db_type;
+        $namespace = '\Ark\Toolkit\SQLBuilder\Update\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -123,9 +103,10 @@ class SQLBuilder
      * @return Delete
      * @throws Exception
      */
-    function delete()
+    static function delete($dbtype = null)
     {
-        $namespace = '\Ark\Toolkit\SQLBuilder\Delete\\'. ucfirst($this->_db_type);
+        is_null($dbtype) && $dbtype = self::$_db_type;
+        $namespace = '\Ark\Toolkit\SQLBuilder\Delete\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
