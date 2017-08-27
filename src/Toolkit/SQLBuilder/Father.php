@@ -58,7 +58,7 @@ abstract class Father
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
         } else {
-            $value = Querier::init($this->_db_type)->quote($value);
+            $value = SQLBuilder::init($this->_db_type)->quote($value);
         }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
@@ -78,7 +78,7 @@ abstract class Father
         if ($value instanceof Select) {
             $value = $value->getRealSQL();
         } else {
-            $value = Querier::init($this->_db_type)->quote($value);
+            $value = SQLBuilder::init($this->_db_type)->quote($value);
         }
         $expr = str_replace('?', $value, $expr);
         return $this->where($expr);
@@ -199,7 +199,7 @@ abstract class Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', Querier::init($this->_db_type)->quote($val), $sql, 1);
+            $sql = preg_replace('/'. $key. '/', SQLBuilder::init($this->_db_type)->quote($val), $sql, 1);
         }
         return $sql;
     }
@@ -250,7 +250,7 @@ abstract class Father
                     } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
                         $val = str_replace(array('{{', '}}'), '', $val);
                     } else {
-                        $val = Querier::init($this->_db_type)->quote($val);
+                        $val = SQLBuilder::init($this->_db_type)->quote($val);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {
