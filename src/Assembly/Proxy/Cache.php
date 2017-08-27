@@ -37,6 +37,9 @@ class Cache
      */
     function doProxy($adapter, $method, array $args, $expire = 86400, $name = null)
     {
+        if (!is_callable(array($adapter, $method))) {
+            throw new Exception(Noah::init()->lang->get('proxy.target_not_callable'));
+        }
         $key = is_null($name)
             ? $this->name($adapter, $method, $args)
             : $name;
@@ -66,7 +69,11 @@ class Cache
      */
     function name($class, $func, $args) 
     {
-        return get_class($class). '.'. $func. '.'. md5(serialize($args));
+        $class_name = is_object($class)
+            ? get_class($class)
+            : (string)$class;
+        $class_name = str_replace('\\', '_', $class_name);
+        return md5($class_name. '.'. $func. '.'.serialize($args));
     }
 
 }

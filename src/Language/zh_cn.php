@@ -83,4 +83,6 @@ return array(
     'struct.object_not_instanceof'      => '字段[%s]内容不符, 需要继承或实现对象[%s]',
     'struct.regexp_not_match'           => '字段[%s]内容不匹配正则[%s]',
 
+    'proxy.target_not_callable'         => '指定的对象或方法无法调用',
+
 );

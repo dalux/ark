@@ -140,17 +140,8 @@ class File extends Father
         $path.= '/';
         if (!$this->_format instanceof Closure || !is_callable($this->_format)) {
             $this->_format = function($name) {
-                $path = '';
-                if (strpos($name, '.') === false) {
-                    $name = md5($name);
-                    $path.= "{$name[0]}/{$name[1]}/{$name}/";
-                } else {
-                    $names = explode('.', $name);
-                    array_pop($names);
-                    $names = implode('/', $names);
-                    $path.= "{$names}/{$name}/";
-                }
-                return $path;
+                $name = md5($name);
+                return "{$name[0]}/{$name[1]}/{$name}/";
             };
         }
         $format = $this->_format;
