@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Update;
+namespace Ark\Toolkit\SQLBuilder\Select;
 
-use Ark\Toolkit\Querier\Update;
+use Ark\Toolkit\SQLBuilder\Select;
 
-class Sqlite extends Update
+class Sqlite extends Select
 {
 
     /**

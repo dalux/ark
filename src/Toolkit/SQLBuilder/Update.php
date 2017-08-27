@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Toolkit\Querier;
+namespace Ark\Toolkit\SQLBuilder;
 
 class Update extends Father
 {

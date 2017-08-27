@@ -3,12 +3,12 @@
 namespace Ark\Toolkit;
 
 use Ark\Core\Noah;
-use Ark\Toolkit\Querier\Select;
-use Ark\Toolkit\Querier\Update;
-use Ark\Toolkit\Querier\Insert;
-use Ark\Toolkit\Querier\Delete;
+use Ark\Toolkit\SQLBuilder\Select;
+use Ark\Toolkit\SQLBuilder\Update;
+use Ark\Toolkit\SQLBuilder\Insert;
+use Ark\Toolkit\SQLBuilder\Delete;
 
-class Querier
+class SQLBuilder
 {
 
     /**
@@ -89,7 +89,7 @@ class Querier
      */
     function select()
     {
-        $namespace = '\Ark\Toolkit\Querier\Select\\'. ucfirst($this->_db_type);
+        $namespace = '\Ark\Toolkit\SQLBuilder\Select\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
@@ -101,7 +101,7 @@ class Querier
      */
     function insert($dbtype)
     {
-        $namespace = '\Ark\Toolkit\Querier\Insert\\'. ucfirst($this->_db_type);
+        $namespace = '\Ark\Toolkit\SQLBuilder\Insert\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
@@ -113,7 +113,7 @@ class Querier
      */
     function update()
     {
-        $namespace = '\Ark\Toolkit\Querier\Update\\'. ucfirst($this->_db_type);
+        $namespace = '\Ark\Toolkit\SQLBuilder\Update\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 
@@ -125,7 +125,7 @@ class Querier
      */
     function delete()
     {
-        $namespace = '\Ark\Toolkit\Querier\Delete\\'. ucfirst($this->_db_type);
+        $namespace = '\Ark\Toolkit\SQLBuilder\Delete\\'. ucfirst($this->_db_type);
         return new $namespace;
     }
 

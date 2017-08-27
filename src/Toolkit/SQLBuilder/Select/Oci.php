@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Select;
+namespace Ark\Toolkit\SQLBuilder\Select;
 
-use Ark\Toolkit\Querier\Select;
+use Ark\Toolkit\SQLBuilder\Select;
 
 class Oci extends Select
 {

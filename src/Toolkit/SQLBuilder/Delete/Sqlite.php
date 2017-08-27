@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Insert;
+namespace Ark\Toolkit\SQLBuilder\Delete;
 
-use Ark\Toolkit\Querier\Insert;
+use Ark\Toolkit\SQLBuilder\Delete;
 
-class Sqlite extends Insert
+class Sqlite extends Delete
 {
 
     /**

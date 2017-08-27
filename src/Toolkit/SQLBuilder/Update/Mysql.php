@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Insert;
+namespace Ark\Toolkit\SQLBuilder\Update;
 
-use Ark\Toolkit\Querier\Insert;
+use Ark\Toolkit\SQLBuilder\Update;
 
-class Mysql extends Insert
+class Mysql extends Update
 {
 
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Delete;
+namespace Ark\Toolkit\SQLBuilder\Delete;
 
-use Ark\Toolkit\Querier\Delete;
+use Ark\Toolkit\SQLBuilder\Delete;
 
 class Mysql extends Delete
 {

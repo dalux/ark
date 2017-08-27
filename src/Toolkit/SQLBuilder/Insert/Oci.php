@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Update;
+namespace Ark\Toolkit\SQLBuilder\Insert;
 
-use Ark\Toolkit\Querier\Update;
+use Ark\Toolkit\SQLBuilder\Insert;
 
-class Oci extends Update
+class Oci extends Insert
 {
 
     /**

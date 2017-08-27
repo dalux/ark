@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\Querier;
+namespace Ark\Toolkit\SQLBuilder;
 
-use Ark\Toolkit\Querier;
+use Ark\Toolkit\SQLBuilder;
 
 abstract class Father
 {

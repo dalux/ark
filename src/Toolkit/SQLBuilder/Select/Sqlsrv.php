@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Insert;
+namespace Ark\Toolkit\SQLBuilder\Select;
 
-use Ark\Toolkit\Querier\Insert;
+use Ark\Toolkit\SQLBuilder\Select;
 
-class Sqlsrv extends Insert
+class Sqlsrv extends Select
 {
 
     /**

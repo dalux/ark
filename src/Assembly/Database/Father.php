@@ -105,18 +105,4 @@ abstract class Father implements Database
      */
     abstract function getInstance();
 
-    /**
-     * 缓存SQL语句
-     *
-     * @param $expire
-     * @param $name
-     * @param CacheInterface $cache
-     * @return mixed
-     */
-    function cache($expire, $name, CacheInterface $cache)
-    {
-        $proxy = new CacheProxy($cache);
-        return $proxy->invoke($this, $expire, $name);
-    }
-
 }

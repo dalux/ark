@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Select;
+namespace Ark\Toolkit\SQLBuilder\Insert;
 
-use Ark\Toolkit\Querier\Select;
+use Ark\Toolkit\SQLBuilder\Insert;
 
-class Sqlite extends Select
+class Sqlite extends Insert
 {
 
     /**

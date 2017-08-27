@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Toolkit\Querier\Update;
+namespace Ark\Toolkit\SQLBuilder\Select;
 
-use Ark\Toolkit\Querier\Update;
+use Ark\Toolkit\SQLBuilder\Select;
 
-class Pgsql extends Update
+class Pgsql extends Select
 {
 
     /**
