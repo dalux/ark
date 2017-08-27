@@ -77,10 +77,21 @@ class Querier
      * @param $table
      * @param Database $db
      */
-    function __construct($table, Database $db)
+    function __construct(Database $db)
     {
-        $this->_tb = $table;
-        $this->_db = $db;
+        $this->setDb($db);
+    }
+
+    /**
+     * 静态方法初始化
+     *
+     * @param $table
+     * @param Database $db
+     * @return Querier
+     */
+    static function init(Database $db)
+    {
+        return new self($db);
     }
 
     /**
@@ -90,9 +101,22 @@ class Querier
      * @param $db
      * @throws DDatabase_exception
      */
-    static function init($table, Database $db)
+    function invoke($table)
     {
-        return new self($table, $db);
+        $this->_tb = $table;
+        return $this;
+    }
+
+    /**
+     * 设置数据库驱动器
+     *
+     * @param Database $db
+     * @return $this
+     */
+    function setDb(Database $db)
+    {
+        $this->_db = $db;
+        return $this;
     }
 
     /**
