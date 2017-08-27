@@ -2,6 +2,10 @@
 
 namespace Ark\Toolkit;
 
+use Ark\Contract\Cache;
+use Ark\Contract\Database;
+use Ark\Assembly\Proxy\Cache as Proxy;
+
 class Querier
 {
 
@@ -15,7 +19,7 @@ class Querier
     /**
      * 数据库连接配置
      *
-     * @var
+     * @var Database
      */
     protected $_db;
 
@@ -27,18 +31,18 @@ class Querier
     protected $_expire;
 
     /**
-     * 缓存引擎配置名称
-     *
-     * @var DCache_driver_interface
-     */
-    protected $_cache;
-
-    /**
      * 缓存结果名称
      *
      * @var string
      */
     protected $_cache_name;
+
+    /**
+     * 缓存代理
+     *
+     * @var Proxy
+     */
+    protected $_proxy;
 
     /**
      * 条件标记列表
@@ -74,14 +78,11 @@ class Querier
      * @param $db
      * @throws DDatabase_exception
      */
-    function __construct($table, $db)
+    function init($table, Database $db)
     {
         $this->_tb = $table;
         $this->_db = $db;
-        if (!$this->_db instanceof DDatabase_driver_interface
-                && !$this->_db instanceof DDatabase_driver_proxy) {
-            throw new DDatabase_exception('无效的数据库驱动器实例');
-        }
+        return $this;
     }
 
     /**
@@ -93,10 +94,11 @@ class Querier
      * @param DCache_driver_interface $cache
      * @return DDatabase_mapper
      */
-    function cache($expire, $name, DCache_driver_interface $cache)
+    function cache($expire, $name, Cache $cache)
     {
+        $this->_proxy = new Proxy();
+        $this->_proxy->setCacher($cache);
         $this->_expire = $expire;
-        $this->_cache = $cache;
         $this->_cache_name = $name;
         return $this;
     }
@@ -112,11 +114,8 @@ class Querier
      */
     function insert(array $data, $return_primarykey = false)
     {
-        $added = $this->_db
-            ->insert()
-            ->into($this->_tb, array_keys($data))
-            ->values(array_values($data))
-            ->query();
+        $insert = SQLBuilder::init($this->_db->getDriverName())->into($this->_tb, $data);
+        $added = $this->_db->query($insert);
         return $added ? ($return_primarykey ? $this->_db->lastInsertId() : true) : false;
     }
 
@@ -131,9 +130,7 @@ class Querier
      */
     function update(array $data, array $condition)
     {
-        $update = $this->_db
-            ->update()
-            ->set($this->_tb, $data);
+        $update = SQLBuilder::init($this->_db->getDriverName())->update()->set($this->_tb, $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -144,7 +141,7 @@ class Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $update->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = DDatabase_toolkit::quote($vv);
+                        $vv = SQLBuilder::quote($vv);
                         $update->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $update->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -152,9 +149,9 @@ class Querier
                     continue;
                 }
             }
-            $update->where(DDatabase_toolkit::quoteIn($k, $v));
+            $update->whereIn($k, $v);
         }
-        return $update->query();
+        return $this->_db->query($update);
     }
 
     /**
@@ -167,9 +164,7 @@ class Querier
      */
     function delete(array $condition = array())
     {
-        $delete = $this->_db
-            ->delete()
-            ->from($this->_tb);
+        $delete = SQLBuilder::init($this->_db->getDriverName())->delete()->from($this->_tb);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -180,7 +175,7 @@ class Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $delete->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = DDatabase_toolkit::quote($vv);
+                        $vv = SQLBuilder::quote($vv);
                         $delete->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $delete->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -188,9 +183,9 @@ class Querier
                     continue;
                 }
             }
-            $delete->where(DDatabase_toolkit::quoteIn($k, $v));
+            $delete->whereIn($k, $v);
         }
-        return $delete->query();
+        return $this->_db->query($delete);
     }
 
 
@@ -205,9 +200,7 @@ class Querier
      */
     function fetch($condition = array(), $fields = array('*'))
     {
-        $select = $this->_db
-            ->select()
-            ->from($this->_tb, $fields);
+        $select = SQLBuilder::init($this->_db->getDriverName())->select()->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -218,7 +211,7 @@ class Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = DDatabase_toolkit::quote($vv);
+                        $vv = SQLBuilder::quote($vv);
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -226,12 +219,12 @@ class Querier
                     continue;
                 }
             }
-            $select->where(DDatabase_toolkit::quoteIn($k, $v));
+            $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            $select->cache($this->_expire, $this->_cache_name, $this->_cache);
+            return $this->_proxy->doProxy($this->_db, 'fetch', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
         }
-        return $select->fetch();
+        return $this->_db->fetch($select);
     }
 
     /**
@@ -245,9 +238,7 @@ class Querier
      */
     function fetchOne($condition = array(), $fields = array('count(*)'))
     {
-        $select = $this->_db
-            ->select()
-            ->from($this->_tb, $fields);
+        $select = SQLBuilder::init($this->_db->getDriverName())->select()->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -258,7 +249,7 @@ class Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = DDatabase_toolkit::quote($vv);
+                        $vv = SQLBuilder::quote($vv);
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -266,12 +257,12 @@ class Querier
                     continue;
                 }
             }
-            $select->where(DDatabase_toolkit::quoteIn($k, $v));
+            $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            $select->cache($this->_expire, $this->_cache_name, $this->_cache);
+            return $this->_proxy->doProxy($this->_db, 'fetchOne', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
         }
-        return $select->fetchOne();
+        return $this->_db->fetchOne($select);
     }
 
     /**
@@ -288,7 +279,7 @@ class Querier
      */
     function fetchAll($condition = array(), $order = array(), $count = 0, $offset = 0, $fields = array('*'))
     {
-        $select = $this->_db
+        $select = SQLBuilder::init($this->_db->getDriverName())
             ->select()
             ->from($this->_tb, $fields)
             ->limit($count, $offset);
@@ -305,7 +296,7 @@ class Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = DDatabase_toolkit::quote($vv);
+                        $vv = SQLBuilder::quote($vv);
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -313,12 +304,12 @@ class Querier
                     continue;
                 }
             }
-            $select->where(DDatabase_toolkit::quoteIn($k, $v));
+            $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            $select->cache($this->_expire, $this->_cache_name, $this->_cache);
+            return $this->_proxy->doProxy($this->_db, 'fetchAll', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
         }
-        return $select->fetchAll();
+        return $this->_db->fetchAll($select);
     }
 
 }

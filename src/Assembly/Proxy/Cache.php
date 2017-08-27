@@ -35,7 +35,7 @@ class Cache
      * @param array $args
      * @return mixed
      */
-    function doProxy($adapter, $method, $args, $expire = 86400, $name = null)
+    function doProxy($adapter, $method, array $args, $expire = 86400, $name = null)
     {
         $key = is_null($name)
             ? $this->name($adapter, $method, $args)
