@@ -209,7 +209,7 @@ abstract class Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', SQLBuilder::init($this->_db_type)->quote($val), $sql, 1);
+            $sql = preg_replace('/'. $key. '/', SQLBuilder::quote($val), $sql, 1);
         }
         return $sql;
     }
@@ -260,7 +260,7 @@ abstract class Father
                     } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
                         $val = str_replace(array('{{', '}}'), '', $val);
                     } else {
-                        $val = SQLBuilder::init($this->_db_type)->quote($val);
+                        $val = SQLBuilder::quote($val);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {
