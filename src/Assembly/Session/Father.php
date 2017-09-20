@@ -17,6 +17,7 @@ abstract class Father implements Session
     function start($session_id = null)
     {
         is_null($session_id) || session_id($session_id);
+		session_cache_limiter('private,must-revalidate');
         session_start();
     }
 
