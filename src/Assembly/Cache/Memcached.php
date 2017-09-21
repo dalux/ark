@@ -155,5 +155,15 @@ class Memcached extends Father
         return $path. $part;
     }
     
+    /**
+     * 返回memcached实例
+     *
+     * @return \Memcached
+     */
+    function getInstance()
+    {
+        return $this->_container;
+    }
+
 }
 
