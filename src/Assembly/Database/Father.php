@@ -75,6 +75,13 @@ abstract class Father implements Database
     abstract function rollback();
 
     /**
+     * 是否处于事务中
+     *
+     * @return bool
+     */
+    abstract function inTransaction();
+
+    /**
      * 最后一次写入的主键ID
      *
      * @access public
