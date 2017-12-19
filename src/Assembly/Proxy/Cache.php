@@ -2,6 +2,7 @@
 
 namespace Ark\Assembly\Proxy;
 
+use Ark\Core\Noah;
 use Ark\Contract\Cache as CacheInterface;
 
 class Cache
@@ -29,11 +30,15 @@ class Cache
 
     /**
      * 未知调用
-     * 
+     *
      * @access public
-     * @param string $name
+     * @param $adapter
+     * @param $method
      * @param array $args
+     * @param int $expire
+     * @param string $name
      * @return mixed
+     * @throws Exception
      */
     function doProxy($adapter, $method, array $args, $expire = 86400, $name = null)
     {

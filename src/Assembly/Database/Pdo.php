@@ -5,8 +5,6 @@ namespace Ark\Assembly\Database;
 use Ark\Core\Trace;
 use Ark\Core\Timer;
 use Ark\Core\Event;
-use Ark\Toolkit\Struct;
-use Ark\Toolkit\Querier;
 
 class Pdo extends Father
 {
@@ -14,7 +12,7 @@ class Pdo extends Father
     /**
      * PDO对象
      *
-     * @var PDO
+     * @var \PDO
      */
     protected $_instance;
 
@@ -35,53 +33,6 @@ class Pdo extends Father
     protected $_row_count = 0;
 
     /**
-     * 查询开始前的事件检验规则
-     *
-     * @var array
-     */
-    protected $_rule_query_before = array(
-        'method'    => array(Struct::FLAG_REQUIRED=> true,  Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        'sql'       => array(Struct::FLAG_REQUIRED=> true,  Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        'bind'      => array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        'driver'    => array(Struct::FLAG_REQUIRED=> true,  Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-    );
-
-    /**
-     * 查询结束后的事件校验规则
-     *
-     * @var array
-     */
-    protected $_rule_query_finish = array(
-        'method'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        'sql'       => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        'bind'      => array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        'result'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        'driver'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-    );
-
-    /**
-     * 查询失败时的事件校验规则
-     *
-     * @var array
-     */
-    protected $_rule_query_failed = array(
-        'sql'       => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        'error'     => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        'driver'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-    );
-
-    /**
-     * 数据库连接创建成功时
-     *
-     * @var array
-     */
-    protected $_rule_dbconnect_finish = array(
-        'container' => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_OBJECT),
-        'instance'  => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_OBJECT),
-        'driver'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-    );
-
-    /**
      * 构造函数
      *
      * @access public
@@ -100,9 +51,9 @@ class Pdo extends Father
             $data = array(
                 'container'=> $this,
                 'instance'=> $instance,
-                'driver'=> $this->getDriverName(),
+                'driver'=> $instance->getAttribute(\PDO::ATTR_DRIVER_NAME),
             );
-            $data = Event::onListening('event.dbconnect.finish', $data, $this->_rule_dbconnect_finish);
+            $data = Event::onListening('event.dbconnect.finish', $data);
             $this->_instance = $data['instance'];
 		} catch(\PDOException $e) {
 			throw new Exception($e->getMessage());
@@ -122,6 +73,7 @@ class Pdo extends Father
         try {
             Timer::mark('db_query_begin');
             is_string($sql) || $sql = (string)$sql;
+            /* @var \PDOStatement $smt */
             $smt = $this->_instance->prepare($sql);
             if ($bind) {
                 foreach ($bind as $key=> $val) {
@@ -143,7 +95,7 @@ class Pdo extends Father
                 'error'=> $e->getMessage(),
                 'driver'=> $this->getDriverName(),
             );
-            $data = Event::onListening('event.query.failed', $data, $this->_rule_query_failed);
+            $data = Event::onListening('event.query.failed', $data);
             throw new Exception($data['error']);
         }
     }
@@ -165,12 +117,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = true;
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -191,12 +143,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetchAll($this->_fetch_mode);
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -217,12 +169,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetchColumn(0);
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -243,12 +195,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data, $this->_rule_query_before);
+        $data = Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetch($this->_fetch_mode);
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data, $this->_rule_query_finish);
+        $data = Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 

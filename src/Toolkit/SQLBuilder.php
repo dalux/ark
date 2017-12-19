@@ -35,6 +35,7 @@ class SQLBuilder
      *
      * @access public
      * @param mixed $value
+     * @param null $dbtype
      * @return mixed
      */
     static function quote($value, $dbtype = null)

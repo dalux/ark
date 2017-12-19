@@ -2,10 +2,7 @@
 
 namespace Ark\Assembly\Database;
 
-use Ark\Toolkit\Querier;
 use Ark\Contract\Database;
-use Ark\Assembly\Proxy\Cache as CacheProxy;
-use Ark\Contract\Cache as CacheInterface;
 
 abstract class Father implements Database
 {

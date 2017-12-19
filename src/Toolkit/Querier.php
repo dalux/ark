@@ -125,8 +125,8 @@ class Querier
      * @access public
      * @param int $expire
      * @param null $name
-     * @param DCache_driver_interface $cache
-     * @return DDatabase_mapper
+     * @param Cache $cache
+     * @return Querier
      */
     function cache($expire, $name, Cache $cache)
     {

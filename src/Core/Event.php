@@ -68,11 +68,10 @@ class Event
      *
      * @param $event
      * @param array $data
-     * @param array $rule
      * @return array
      * @throws Exception
      */
-    static function onListening($event, array $data = array(), array $rule = array())
+    static function onListening($event, array $data = array())
     {
         if (!isset(self::$_listener[$event])) {
             return $data;
@@ -82,14 +81,7 @@ class Event
         foreach ($listener as $name=> $item) {
             $data['name'] = $name;
             $data = $item($data);
-            if ($rule) {
-                $struct = new Struct();
-                $struct->setRule($rule);
-                $struct->setData($data);
-                if (!$data = $struct->checkOut()) {
-                    throw new Exception(Noah::init()->lang->get('event.struct_check_failed', $event, $struct->getMessage()));
-                }
-            } elseif (!is_array($data)) {
+            if (!is_array($data)) {
                 throw new Exception(Noah::init()->lang->get('core.data_must_array', $event));
             }
         }

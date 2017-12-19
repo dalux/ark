@@ -141,7 +141,7 @@ class File extends Father
         if (!$this->_format instanceof Closure || !is_callable($this->_format)) {
             $this->_format = function($name) {
                 $name = md5($name);
-                return "{$name[0]}/{$name[1]}/{$name}/";
+                return "{$name[0]}/{$name[1]}/{$name}";
             };
         }
         $format = $this->_format;

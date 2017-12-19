@@ -101,21 +101,12 @@ class Native extends Father
             'template'=> $template,
             'driver'=> 'Native',
         );
-        $rule = array(
-            'driver'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'template'  => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        );
-        $data = Event::onListening('event.view.before', $data, $rule);
+        $data = Event::onListening('event.view.before', $data);
         extract($this->_storage, EXTR_REFS);
         ob_start();
         include_once($template);
         $data['content'] = ob_get_clean();
-        $rule = array(
-            'driver'    => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'template'  => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-            'content'   => array(Struct::FLAG_REQUIRED=> true, Struct::FLAG_TYPE=> Struct::TYPE_STRING),
-        );
-        $data = Event::onListening('event.view.finish', $data, $rule);
+        $data = Event::onListening('event.view.finish', $data);
         if (!$return) {
             exit($data['content']);
         }

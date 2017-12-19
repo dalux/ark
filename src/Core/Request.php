@@ -83,17 +83,6 @@ class Request
     private $_cookie = array();
 
     /**
-     * 请求参数初始化事件校验规则
-     *
-     * @var array
-     */
-    private $_rule_init = array(
-        'get'   => array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        'post'  => array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-        'cookie'=> array(Struct::FLAG_REQUIRED=> false, Struct::FLAG_TYPE=> Struct::TYPE_ARRAY),
-    );
-
-    /**
      * http数据是否准备就绪
      *
      * @return Request
@@ -122,7 +111,7 @@ class Request
     private function __construct()
     {
         $data = array('get'=> $_GET, 'post'=> $_POST, 'cookie'=> $_COOKIE);
-        $data = Event::onListening('event.request.ready', $data, $this->_rule_init);
+        $data = Event::onListening('event.request.ready', $data);
         $this->_get = $_GET = $data['get'];
         $this->_post = $_POST = $data['post'];
         $this->_request = $_REQUEST = array_merge($data['get'], $data['post']);
