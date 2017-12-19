@@ -5,7 +5,6 @@ namespace Ark\Assembly\View;
 use Ark\Core\Event;
 use Ark\Core\Loader;
 use Ark\Core\Noah;
-use Ark\Toolkit\Struct;
 
 class Native extends Father
 {

@@ -3,7 +3,6 @@
 namespace Ark\Core;
 
 use Closure;
-use Ark\Toolkit\Struct;
 
 class Event
 {
