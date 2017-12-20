@@ -21,6 +21,7 @@ return array(
 
     'event.struct_check_failed'         => '事件监听器[%s]返回值结构校验失败[%s]',
     'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
+    'event.data_key_must_equal'         => '事件监听器[%s]数组返回键值不完整',
 
     'cache.config_not_found'            => '找不到缓存配置项[%s]',
     'cache.driver_not_found'            => '缓存驱动器类[%s]不存在',
