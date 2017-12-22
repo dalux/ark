@@ -55,10 +55,10 @@ class Handler
      *
      * @access public
      * @static
-     * @param \Exception $e
+     * @param \Throwable $e
      * @return string
      */
-    function display(\Exception $e)
+    function display($e)
     {
         //错误信息
         $message = $e->getMessage();

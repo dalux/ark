@@ -55,6 +55,11 @@ class Server
             } elseif ($k == 'uri') {
                 $_SERVER['REQUEST_URI'] = $v;
                 unset($_GET['uri']);
+            } elseif ($k == 'url') {
+                $info = parse_url($v);
+                $_SERVER['HTTP_HOST'] = $info['host'];
+                $_SERVER['REQUEST_URI'] = $info['path'];
+                unset($_GET['url']);
             } else {
                 $_GET[$k] = $v;
             }
