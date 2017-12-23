@@ -48,7 +48,7 @@ class Insert extends Father
         $data = $this->_parts['data'];
         $result = 'VALUES';
         foreach ($data as $k=> $v) {
-            if (preg_match('/^\{\{.*?\}\}$/', $v) || preg_match('/.*?\(.*?\)/', $v)) {
+            if (preg_match('/^\{\{.*?\}\}$/', $v)) {
                 $v = str_replace(array('{{', '}}'), '', $v);
                 $data[$k] = $v;
             } else {

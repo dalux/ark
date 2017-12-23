@@ -165,7 +165,7 @@ class Select extends Father
                 foreach ($val[1] as $k=> $v) {
                     $v = trim($v);
                     //系统函数或对象调用
-                    if (preg_match('/.*?\(.*?\)/', $v) || preg_match('/^\{\{.*?\}\}$/', $v)) {
+                    if (preg_match('/^\{\{.*?\}\}$/', $v)) {
                         $v = str_replace(array('{{', '}}'), '', $v);
                         $val[1][$k] = is_integer($k) ? $v : $v. ' '. $k;
                     } else {
@@ -201,7 +201,7 @@ class Select extends Father
                         foreach ($join_fields as $k=> $v) {
                             $v = trim($v);
                             //系统函数或对象调用
-                            if (preg_match('/.*?\(.*?\)/', $v) || preg_match('/^\{\{.*?\}\}$/', $v)) {
+                            if (preg_match('/^\{\{.*?\}\}$/', $v)) {
                                 $v = str_replace(array('{{', '}}'), '', $v);
                                 $join_fields[$k] = is_integer($k) ? $v : $v. ' '. $k;
                             } else {
