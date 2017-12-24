@@ -24,22 +24,15 @@ return array(
         'save_path'=> \Ark\Core\Loader::realPath('./runtime/session/'),
     ),
     'database'=> array(
-        'master'=> array(
+        'mysql'=> array(
             'driver'=> '\Ark\Assembly\Database\Pdo\Mysql',
-            'dsn'=> 'mysql://username:password@127.0.0.1:3306/dbname?charset=utf8',
-            'option'=> array('type'=> 'new'),
+            'dsn'=> 'mysql://root:123456@127.0.0.1:3306/book?charset=utf8',
+            'option'=> array(),
         ),
-    ),
-    'cache'=> array(
-        'file'=> array(
-            'driver'=> '\Ark\Assembly\Cache\File',      //文件缓存引擎
-            'save_path'=> \Ark\Core\Loader::realPath('./runtime/cache/'),    //缓存文件保存地址
-            'option'=> array('ext_name'=> '.cache'),
-        ),
-        'memcache'=> array(
-            'driver'=> '\Ark\Assembly\Cache\Memcached',  //引擎名称，对应缓存类名
-            'save_path'=> array('127.0.0.1:11211'),  //memcached服务器地址，单服务器时为'127.0.0.1:11211'
-            'option'=> array(),     //初始化连接参数
+        'oracle'=> array(
+            'driver'=> '\Ark\Assembly\Database\Pdo\Oci',
+            'dsn'=> 'oci://root:123456@testdb/?charset=utf8',
+            'option'=> array(),
         ),
     ),
     'view'=> array(

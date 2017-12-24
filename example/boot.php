@@ -22,7 +22,16 @@ require_once __DIR__. '/../src/Core/Noah.php';
         //常用组件
         \Ark\Core\Noah::init()
             ->setMember('session', function() { return \Ark\Assembly\Session::getDriver(); })
-            ->setMember('db', function() { return \Ark\Assembly\Database::getDriver('master'); })
-            ->setMember('cache', function() { return \Ark\Assembly\Cache::getDriver('file'); });
+            ->setMember('mysql', function() { return \Ark\Assembly\Database::getDriver('mysql'); })
+            ->setMember('oracle', function() { return  \Ark\Assembly\Database::getDriver('oracle'); });
+
+        \Ark\Core\Noah::init()
+            ->setMethod('db', function($name = null) {
+                if ($name == 'mysql' || is_null($name)) {
+                    return \Ark\Core\Noah::init()->mysql;
+                } elseif ($name == 'oracle') {
+                    return \Ark\Core\Noah::init()->oracle;
+                }
+            });
 
     });
