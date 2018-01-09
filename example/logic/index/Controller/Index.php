@@ -20,31 +20,32 @@ class Index extends Sailor
 			}
 			foreach ($result as $val) {
 				$sql = SQLBuilder::select('oci')
-						->from(array('a' => 'bm_jbxxk'), array('spbs', 'sm', 'isbn', 'zyz', 'my_dj', 'cbrq' => "{{to_char(a.cbrq, 'yyyy-mm-dd')}}", 'ysny' => "{{to_char(a.ysny, 'yyyy-mm-dd')}}", 'yc', 'bc'))
+						->from(array('a' => 'bm_jbxxk'), array('spbs',  'sm'=> '{{substr(sm, 0, 256)}}', 'isbn', 'zyz', 'my_dj', 'cbrq' => "{{to_char(a.cbrq, 'yyyy-mm-dd')}}", 'ysny' => "{{to_char(a.ysny, 'yyyy-mm-dd')}}", 'yc', 'bc'))
 						->joinLeft(array('b' => 'bm_cbsbmb'), 'a.bb=b.bb', array('cbsmc'))
 						->joinLeft(array('c' => 'bm_kbbmb'), 'a.kb=c.bh', array('kb' => 'mc'))
 						->joinLeft(array('d' => 'bm_fjxxk'), 'a.spbs=d.spbs', array('ys', 'zs'))
-						->where('a.spbs=?', $val['spbs']);					
+						->where('a.spbs=?', $val['spbs']);
 				$detail = $this->oracle->fetch($sql);
 				$sm = explode('/', $detail['sm']);
 				$zyz = str_replace(array('（', '）', '//'), array('(', ')', '/'), $detail['zyz']);
 				$data = array(
 					'title'=> str_replace(array('\\', '\''), '', $sm[0]),
 					'isbn'=> $detail['isbn'],
-					'author'=> $zyz,
+					'author'=> mb_substr(str_replace(array('\\', '\''), '', $zyz), 0, 64),
 					'dj'=> $detail['my_dj'],
 					'publisher'=> $detail['cbsmc'],
 					'publish_date'=> $detail['cbrq'],
 					'print_date'=> $detail['ysny'],
 					'publish_num'=> $detail['bc'],
 					'print_num'=> $detail['yc'],
-					'folio'=> $detail['kb'],
+					'folio'=> trim($detail['kb']),
 					'page_count'=> (int)$detail['ys'],
 					'word_count'=> (int)$detail['zs'],
 					'bkspbs'=> $val['spbs']
 				);
 				$data = array_filter($data);
 				$sql = SQLBuilder::insert('mysql')->into('base_items', $data);
+				//echo $sql.PHP_EOL;exit;
 				$this->mysql->query($sql);
 				$sql = SQLBuilder::delete('oci')->from('tmp_yihaodian_spbs')->where('spbs=?', $val['spbs']);
 				$this->oracle->query($sql);
