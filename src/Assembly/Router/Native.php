@@ -106,7 +106,7 @@ class Native extends Father
     {
         $subspace = trim($subspace, '\\');
         if (!is_callable($operator)) {
-            throw new Exception(Noah::init()->lang->get('router.invalid_router_interceptor', $subspace));
+            throw new Exception(Noah::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
         }
         $this->_interceptors[$subspace] = $operator;
     }
@@ -156,17 +156,17 @@ class Native extends Father
         //重写
         $uri = trim($this->_rewrite($uri), '/');
         //处理URI,组装控制器类
-        $urlsep = Noah::init()->config->router->urlsep;
-        $url_suffix = Noah::init()->config->router->urlsuffix;
+        $urlsep = Noah::getInstance()->config->router->urlsep;
+        $url_suffix = Noah::getInstance()->config->router->urlsuffix;
         if (strpos($uri, $url_suffix) !== false) {
             $uri = preg_replace(sprintf('~%s$~i', $url_suffix), '', $uri);
         }
-        $app_name = Noah::init()->getAppName();
-        $controller_dir = Noah::init()->getControllerDir();
-        $app_dir = Noah::init()->getAppDir();
+        $app_name = Noah::getInstance()->getAppName();
+        $controller_dir = Noah::getInstance()->getControllerDir();
+        $app_dir = Noah::getInstance()->getAppDir();
         $path_now = $controller_dir;
         if ($uri == '') {
-            $controller = ucfirst(Noah::init()->config->router->default->controller);
+            $controller = ucfirst(Noah::getInstance()->config->router->default->controller);
         } else {
             $controllers = array_map('ucfirst', explode($urlsep, $uri));
             $controller = implode('\\', $controllers);
@@ -180,15 +180,15 @@ class Native extends Father
         $namespace = $app_name. '\\'. $part. '\\'. $controller;
         $this->_namespace = $namespace;
         $this->_controller = '/'. $uri;
-        $this->_action = Noah::init()->config->router->default->action;
+        $this->_action = Noah::getInstance()->config->router->default->action;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::$ready = true;
-        Noah::init()->setMember('request', function() { return Request::getInstance(); });
+        Noah::getInstance()->setMember('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
-            throw new Exception(Noah::init()->lang->get('router.controller_not_found', $namespace));
+            throw new Exception(Noah::getInstance()->lang->get('router.controller_not_found', $namespace));
         }
     }
 
@@ -203,7 +203,7 @@ class Native extends Father
         $action = $this->_action;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new Exception(Noah::init()->lang->get('router.controller_is_protected', $namespace));
+            throw new Exception(Noah::getInstance()->lang->get('router.controller_is_protected', $namespace));
         }
         //实现拦截器功能
         if ($interceptors = $this->getInterceptors($namespace)) {
@@ -218,7 +218,7 @@ class Native extends Father
         //实例化最终控制器对象
         $instance = new $namespace();
         if (!method_exists($instance, $action)) {
-            throw new Exception(Noah::init()->lang->get('router.action_not_found', $namespace, $action));
+            throw new Exception(Noah::getInstance()->lang->get('router.action_not_found', $namespace, $action));
         }
         $output = null;
         //自动化类
@@ -251,12 +251,12 @@ class Native extends Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Exception(Noah::init()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new Exception(Noah::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Exception(Noah::init()->lang->get('router.uri_must_string'));
+            throw new Exception(Noah::getInstance()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }

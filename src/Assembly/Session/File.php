@@ -15,7 +15,7 @@ class File extends Father
      */
 	function __construct()
 	{
-		$config = Noah::init()->config->session->toArray();
+		$config = Noah::getInstance()->config->session->toArray();
 		ini_set('session.save_handler', 'files');
 		ini_set('session.cache_expire', $config['expire_time']);
 		if (file_exists($config['save_path'])

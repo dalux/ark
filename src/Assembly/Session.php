@@ -19,15 +19,15 @@ class Session
      */
     static function getDriver()
     {
-        $config = Noah::init()->config->session->toArray();
+        $config = Noah::getInstance()->config->session->toArray();
         if (!$driver = $config['driver']) {
-            throw new Exception(Noah::init()->lang->get('sess.invalid_driver_name'));
+            throw new Exception(Noah::getInstance()->lang->get('sess.invalid_driver_name'));
         } elseif (!Loader::findClass($driver)) {
-            throw new Exception(Noah::init()->lang->get('sess.driver_not_found', $driver));
+            throw new Exception(Noah::getInstance()->lang->get('sess.driver_not_found', $driver));
         }
         $instance = new $driver();
         if (!$instance instanceof SessionInterface) {
-            throw new Exception(Noah::init()->lang->get('sess.driver_implement_error', $driver, '\\Ark\\Contract\\Session'));
+            throw new Exception(Noah::getInstance()->lang->get('sess.driver_implement_error', $driver, '\\Ark\\Contract\\Session'));
         }
         Trace::set('driver', array('session'=> $driver));
         return $instance;

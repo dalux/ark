@@ -73,7 +73,7 @@ class Multiple extends Father
         $this->_controller = str_replace(PATH_WEB, '', $caller);
         //请求数据初始化完成
         Request::$ready = true;
-        Noah::init()->setMember('request', function() { return Request::getInstance(); });
+        Noah::getInstance()->setMember('request', function() { return Request::getInstance(); });
 	}
 
     /**
@@ -82,11 +82,11 @@ class Multiple extends Father
      */
 	function dispatch()
 	{
-        $config = Noah::init()->config->router;
+        $config = Noah::getInstance()->config->router;
         $global_var = $config->global_var;
         if (!is_null($global_var) && !preg_match('/^[0-9]+/', $global_var)) {
             global ${$global_var};
-            ${$global_var} = Noah::init();
+            ${$global_var} = Noah::getInstance();
         }
         //自动加载目录下引导文件
         if ($interceptor = $config->interceptor) {

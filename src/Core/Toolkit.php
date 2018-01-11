@@ -126,7 +126,7 @@ class Toolkit
     static function mkDir($dir)
     {
         if (!($dir = trim($dir))) {
-            throw new Exception(Noah::init()->lang->get('tbox.invalid_create_path'));
+            throw new Exception(Noah::getInstance()->lang->get('tbox.invalid_create_path'));
         }
         $dirs = array($dir);
         while (!file_exists($dir)) {
@@ -420,7 +420,7 @@ class Toolkit
         if (!$data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA)) {
             $error = libxml_get_last_error();
             libxml_clear_errors();
-            throw new Exception(Noah::init()->lang->get('tbox.parse_string_failed', $error ? $error->message : '未知错误', $content));
+            throw new Exception(Noah::getInstance()->lang->get('tbox.parse_string_failed', $error ? $error->message : '未知错误', $content));
         }
         return $data;
     }

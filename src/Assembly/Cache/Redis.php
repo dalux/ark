@@ -111,7 +111,7 @@ class Redis extends Father
         }
         $format = $this->_format;
         if (!$part = $format($name)) {
-            throw new Exception(Noah::init()->lang->get('cache.path_mustbe_notnull'));
+            throw new Exception(Noah::getInstance()->lang->get('cache.path_mustbe_notnull'));
         }
         return $path. $part;
     }

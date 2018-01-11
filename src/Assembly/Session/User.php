@@ -30,7 +30,7 @@ class User extends Father
      */
 	function __construct()
 	{
-        $config = Noah::init()->config->session->toArray();
+        $config = Noah::getInstance()->config->session->toArray();
         //检查
         if ($config['save_path'] instanceof Closure) {    //支持匿名函数
             $this->_container = $config['save_path']();
@@ -38,7 +38,7 @@ class User extends Father
             $this->_container = $config['save_path'];
         }
         if (!$this->_container instanceof Cache) {
-            throw new Exception(Noah::init()->lang->get('sess.cacher_implement_error'), 'Ark\\Contract\\Cache');
+            throw new Exception(Noah::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Contract\\Cache');
         }
         $this->_container->setFlag('session');
         $this->_expire_time = $config['expire_time'];

@@ -82,11 +82,11 @@ class Event
             $ori_keys = array_keys($data);
             $data = $item($data);
             if (!is_array($data)) {
-                throw new Exception(Noah::init()->lang->get('core.data_must_array', $event));
+                throw new Exception(Noah::getInstance()->lang->get('core.data_must_array', $event));
             }
             $now_keys = array_keys($data);
             if ($diff = array_diff($ori_keys, $now_keys)) {
-                throw new Exception(Noah::init()->lang->get('core.data_key_must_equal', $event));
+                throw new Exception(Noah::getInstance()->lang->get('core.data_key_must_equal', $event));
             }
         }
         return $data;

@@ -19,15 +19,15 @@ class View
      */
     static function getDriver()
     {
-        $config = Noah::init()->config->view->toArray();
+        $config = Noah::getInstance()->config->view->toArray();
         if (!$driver = $config['driver']) {
-            throw new Exception(Noah::init()->lang->get('view.invalid_driver_name'));
+            throw new Exception(Noah::getInstance()->lang->get('view.invalid_driver_name'));
         } elseif (!Loader::findClass($driver)) {
-            throw new Exception(Noah::init()->lang->get('view.driver_not_found', $driver));
+            throw new Exception(Noah::getInstance()->lang->get('view.driver_not_found', $driver));
         }
         $instance = new $driver();
         if (!$instance instanceof ViewInterface) {
-            throw new Exception(Noah::init()->lang->get('view.driver_implement_error', $driver, '\\Ark\\Contract\\View'));
+            throw new Exception(Noah::getInstance()->lang->get('view.driver_implement_error', $driver, '\\Ark\\Contract\\View'));
         }
         Trace::set('driver', array('view'=> $driver));
         return $instance;

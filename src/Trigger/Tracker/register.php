@@ -9,7 +9,7 @@ return function() {
     require_once __DIR__. '/src/Tracker.php';
 
     //设置cookie
-    Noah::init()->container->__tracker__ = array(
+    Noah::getInstance()->container->__tracker__ = array(
         'name'=> 'test',
         'pass'=> '12345678'
     );
@@ -17,11 +17,11 @@ return function() {
     //注册框架内置事件
     Event::addListener('event.framework.ready', function($data) {
         //开启debug模式
-        if ($tracker = Noah::init()->container->__tracker__) {
+        if ($tracker = Noah::getInstance()->container->__tracker__) {
             list($name, $pass) = array($tracker->name, $tracker->pass);
-            $token = Noah::init()->request->cookie($name);
+            $token = Noah::getInstance()->request->cookie($name);
             if ($token == $pass && !Server::isCli()) {
-                Noah::init()->config->global->debug = true;
+                Noah::getInstance()->config->global->debug = true;
             }
         }
         //Debug内容

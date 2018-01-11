@@ -39,7 +39,7 @@ class Native extends Father
      */
     function __construct()
     {
-        $config = Noah::init()->config->view;
+        $config = Noah::getInstance()->config->view;
         $config->template_ext && $this->_template_ext = $config->template_ext;
         $config->template_dir && $this->_template_dir = rtrim($config->template_dir, DIRECTORY_SEPARATOR);
     }
@@ -94,7 +94,7 @@ class Native extends Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $template;
         if (!is_file($template)) {
-            throw new Exception(Noah::init()->lang->get('view.template_not_found', Loader::reducePath($template)));
+            throw new Exception(Noah::getInstance()->lang->get('view.template_not_found', Loader::reducePath($template)));
         }
         $data = array(
             'template'=> $template,
@@ -129,7 +129,7 @@ class Native extends Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $path;
         if (!is_file($template)) {
-            throw new Exception(Noah::init()->lang->get('view.include_file_not_found', Loader::reducePath($template)));
+            throw new Exception(Noah::getInstance()->lang->get('view.include_file_not_found', Loader::reducePath($template)));
         }
         extract($this->_storage, EXTR_REFS);
         extract($params, EXTR_SKIP);

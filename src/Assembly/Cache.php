@@ -21,9 +21,9 @@ class Cache
      */
     static function getDriver($name)
     {
-        $config = Noah::init()->config->cache->$name;
+        $config = Noah::getInstance()->config->cache->$name;
         if (!$config) {
-            throw new Exception(Noah::init()->lang->get('cache.config_not_found', $name));
+            throw new Exception(Noah::getInstance()->lang->get('cache.config_not_found', $name));
         }
         /* @var Container $config */
         $config = $config->toArray();
@@ -31,11 +31,11 @@ class Cache
         $save_path = $config['save_path'];
         $option = $config['option'];
         if (!Loader::findClass($driver)) {
-            throw new Exception(Noah::init()->lang->get('cache.driver_not_found', $driver));
+            throw new Exception(Noah::getInstance()->lang->get('cache.driver_not_found', $driver));
         }
         $instance = new $driver($save_path, $option);
         if (!$instance instanceof CacheInterface) {
-            throw new Exception(Noah::init()->lang->get('cache.driver_implement_error', $driver, '\\Ark\\Contract\\CacheInterface'));
+            throw new Exception(Noah::getInstance()->lang->get('cache.driver_implement_error', $driver, '\\Ark\\Contract\\CacheInterface'));
         }
         Trace::set('driver', array('cache'=> sprintf('%s[%s]', $name, $driver)));
         return $instance;

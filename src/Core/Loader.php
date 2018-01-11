@@ -27,10 +27,13 @@ class Loader
      *
      * @param $alias
      * @param $path
+     * @throws Exception
      */
     static function setAlias($alias, $path)
     {
-        if (in_array($alias, array('*', '.'))) return;
+        if (in_array($alias, array('*', '.'))) {
+            throw new Exception(Noah::getInstance()->lang->get('core.deny_alias_redeclare', $alias));
+        }
         self::$_alias[$alias] = $path;
     }
 
@@ -79,24 +82,28 @@ class Loader
      * 设置自动加载器
      *
      * @param $loader
+     * @throws Exception
      */
     static function addAutoLoader($loader)
     {
-        if (is_callable($loader)) {
-            spl_autoload_register($loader);
+        if (!is_callable($loader)) {
+            throw new Exception(Noah::getInstance()->lang->get('core.invalid_autoloader'));
         }
+        spl_autoload_register($loader);
     }
 
     /**
      * 本框架自动加载器
      *
      * @param $class
+     * @throws Exception
      */
     static function autoLoad($class)
     {
-        if ($path = self::findClass($class)) {
-            self::import($path);
+        if (!$path = self::findClass($class)) {
+            throw new Exception(Noah::getInstance()->lang->get('core.class_path_notfound', $class));
         }
+        self::import($path);
     }
 
     /**
@@ -139,16 +146,17 @@ class Loader
      *
      * @param $spacename
      * @return string
+     * @throws Exception
      */
     static function realPath($spacename)
     {
         $first_char = substr($spacename, 0, 1);
-        if (isset(self::$_alias[$first_char])) {
-            $parsed = self::_parse($spacename);
-            list($alias, $space) = $parsed;
-            return str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, self::$_alias[$alias]. $space);
+        if (!isset(self::$_alias[$first_char])) {
+            throw new Exception(Noah::getInstance()->lang->get('core.format_path_failed'));
         }
-        return '';
+        $parsed = self::_parse($spacename);
+        list($alias, $space) = $parsed;
+        return str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, self::$_alias[$alias]. $space);
     }
 
     /**

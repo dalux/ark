@@ -62,9 +62,9 @@ class Struct
     function setRuleFile($path)
     {
         if (!$this->_rule = Loader::import($path, false)) {
-            throw new Exception(Noah::init()->lang->get('struct.load_rulefile_failed', $path));
+            throw new Exception(Noah::getInstance()->lang->get('struct.load_rulefile_failed', $path));
         } elseif (!is_array($this->_rule)) {
-            throw new Exception(Noah::init()->lang->get('struct.return_type_error', $path));
+            throw new Exception(Noah::getInstance()->lang->get('struct.return_type_error', $path));
         }
     }
 
@@ -114,7 +114,7 @@ class Struct
     {
         $valid = true;
         $this->_message = '';
-        $language = Noah::init()->lang;
+        $language = Noah::getInstance()->lang;
         foreach ($this->_rule as $key=> $val) {
             foreach ($val as $k=> $v) {
                 if ($k == self::FLAG_REQUIRED && $v) {

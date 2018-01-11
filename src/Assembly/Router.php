@@ -19,15 +19,15 @@ class Router
      */
     static function getDriver()
     {
-        $config = Noah::init()->config->router->toArray();
+        $config = Noah::getInstance()->config->router->toArray();
         if (!$driver = $config['driver']) {
-            throw new Exception(Noah::init()->lang->get('router.invalid_driver_name'));
+            throw new Exception(Noah::getInstance()->lang->get('router.invalid_driver_name'));
         } elseif (!Loader::findClass($driver)) {
-            throw new Exception(Noah::init()->lang->get('router.driver_not_found', $driver));
+            throw new Exception(Noah::getInstance()->lang->get('router.driver_not_found', $driver));
         }
         $instance = new $driver();
         if (!$instance instanceof RouterInterface) {
-            throw new Exception(Noah::init()->lang->get('router.driver_implement_error', $driver, '\\Ark\\Contract\\Router'));
+            throw new Exception(Noah::getInstance()->lang->get('router.driver_implement_error', $driver, '\\Ark\\Contract\\Router'));
         }
         Trace::set('driver', array('router'=> $driver));
         return $instance;

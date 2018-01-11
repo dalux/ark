@@ -43,7 +43,7 @@ class Cache
     function doProxy($adapter, $method, array $args, $expire = 86400, $name = null)
     {
         if (!is_callable(array($adapter, $method))) {
-            throw new Exception(Noah::init()->lang->get('proxy.target_not_callable'));
+            throw new Exception(Noah::getInstance()->lang->get('proxy.target_not_callable'));
         }
         $key = is_null($name)
             ? $this->name($adapter, $method, $args)

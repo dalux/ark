@@ -21,25 +21,18 @@ class Noah
     private $_storage = array();
 
     /**
+     * 自定义方法体
+     *
+     * @var array
+     */
+    private $_method = array();
+
+    /**
      * 配置文件获取器
      *
      * @var array
      */
     private $_config_path = array();
-
-    /**
-     * 预处理逻辑
-     *
-     * @var string
-     */
-    private $_prepare = array();
-
-    /**
-     * 自定义方法体
-     *
-     * @var array
-     */
-    private $_custom_method = array();
 
     /**
      * 应用名称
@@ -54,13 +47,6 @@ class Noah
      * @var string
      */
     private $_app_dir;
-
-    /**
-     * 钩子程序目录
-     *
-     * @var array
-     */
-    private $_trigger_dir = array();
 
     /**
      * 控制器根目录
@@ -82,7 +68,7 @@ class Noah
      * @access public
      * @return Noah
      */
-    static function init()
+    static function getInstance()
     {
         if (is_null(self::$_instance)) {
             self::$_instance = new self();
@@ -113,7 +99,10 @@ class Noah
         //初始内存占用数
         Trace::set('memory', $memory_usage);
         //配置项默认为空对象
-        $this->_storage['config'] = new Container();
+        $this->_storage['config'] = array(
+            'instance'=> new Container(),
+            'system'=> 1
+        );
         //定义常量
         $debug_trace = debug_backtrace();
         defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
@@ -168,28 +157,6 @@ class Noah
     }
 
     /**
-     * 添加钩子程序目录
-     *
-     * @param string $dir
-     * @return Noah
-     */
-    function addTriggerDir($dir)
-    {
-        $this->_trigger_dir[] = $dir;
-        return $this;
-    }
-
-    /**
-     * 获取钩子程序目录
-     *
-     * @return array
-     */
-    function getTriggerDir()
-    {
-        return $this->_trigger_dir;
-    }
-
-    /**
      * 设置控制器根目录
      *
      * @param $controller_dir
@@ -209,20 +176,6 @@ class Noah
     function getControllerDir()
     {
         return $this->_controller_dir;
-    }
-
-    /**
-     * 预处理逻辑
-     *
-     * @param Closure $prepare
-     * @return Noah
-     */
-    function addPrepare(Closure $prepare = null)
-    {
-        if (is_callable($prepare)) {
-            $this->_prepare[] = $prepare;
-        }
-        return $this;
     }
 
     /**
@@ -280,18 +233,20 @@ class Noah
     }
 
     /**
-     * 启动框架
+     * 框架预热
      *
-     * @access public
-     * @return mixed
      * @throws Exception
      */
-    function run()
+    function prepare()
     {
+
         //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
-        $this->_storage['lang'] = function() { return new Language(); };
+        $this->_storage['lang'] = array(
+            'instance'=> function() { return new Language(); },
+            'system'=> 1
+        );
         //异常报告
         Handler::setHandler('exception');
         //后续类文件自动加载
@@ -312,7 +267,7 @@ class Noah
         if (!$config = $this->getConfig()) {
             throw new Exception($this->lang->get('core.invalid_configuration'));
         }
-        $this->_storage['config'] = new Container($config);
+        $this->_storage['config']['instance'] = new Container($config);
         //控制器地址检测
         if (!$this->_controller_dir) {
             $this->_controller_dir = $this->_app_dir . DIRECTORY_SEPARATOR . 'Controller';
@@ -322,64 +277,56 @@ class Noah
         defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_dir);
         //时区设置
         $timezone = 'Asia/Shanghai';
-        if ($this->_storage['config']->global->timezone) {
-            $timezone = $this->_storage['config']->global->timezone;
+        $instance = $this->_storage['config']['instance'];
+        if ($instance->global->timezone) {
+            $timezone = $instance->global->timezone;
         }
         date_default_timezone_set($timezone);
         //错误报告
-        if (!is_null($this->_storage['config']->global->error_reporting)) {
+        if (!is_null($instance->global->error_reporting)) {
             ini_set('display_errors', '1');
-            error_reporting($this->_storage['config']->global->error_reporting);
+            error_reporting($instance->global->error_reporting);
         }
 
         //注册内置组件
-        $this
-            ->setMember('container', function() { return new Container(); })
-            ->setMember('response', function() { return new Response(); })
-            ->setMember('router', function() { return RouterAdapter::getDriver(); });
+        $this->_storage['container'] = array(
+            'instance'=> function() { return new Container(); },
+            'system'=> 1,
+        );
+        $this->_storage['response'] = array(
+            'instance'=> function() { return new Response(); },
+            'system'=> 1,
+        );
+        $this->_storage['router'] = array(
+            'instance'=>  function() { return RouterAdapter::getDriver(); },
+            'system'=> 1,
+        );
 
-        //钩子程序加载
-        $prepares = array();
-        foreach ($this->_trigger_dir as $trigger_dir) {
-            if (is_dir($trigger_dir)) {
-                //允许根目录定制钩子程序列表
-                if (is_file($custom_register = $trigger_dir. '/register.php')) {
-                    $list_triggers = include($custom_register);
-                    is_array($list_triggers) || $list_triggers = array();
-                } else {  //自动加载每个子目录下对应的钩子注册程序
-                    $list_triggers = glob($trigger_dir . '/*/register.php');
-                }
-                foreach ($list_triggers as $item) {
-                    $result = include($item);
-                    if ($result instanceof Closure) {
-                        $prepares[] = $result;
-                    }
-                }
-            }
-        }
+    }
 
-        //合并为预处理程序
-        if ($prepares) {
-            $this->_prepare = array_merge($this->_prepare, $prepares);
-        }
+    /**
+     * 启动框架
+     *
+     * @access public
+     * @return mixed
+     * @throws Exception
+     */
+    function run()
+    {
 
-        //执行各个预处理
-        if ($this->_prepare) {
-            foreach ($this->_prepare as $val) {
-                $val();
-            }
-        }
+        //监听系统启动就绪事件
+        Event::onListening('event.framework.ready');
 
         if (!$this->router instanceof RouterInterface) {
-            $lang = Noah::init()->lang->get('router.driver_implement_error', get_class($this->router), '\\Ark\\Contract\\Router');
+            $lang = Noah::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), '\\Ark\\Contract\\Router');
             throw new Exception($lang);
         }
 
         //路由调度准备
         $this->router->ready();
 
-        //监听系统启动就绪事件
-        Event::onListening('event.framework.ready');
+        //路由准备就绪
+        Event::onListening('event.router.ready');
 
         //路由并呈现控制器内容
         $this->router->dispatch();
@@ -395,8 +342,9 @@ class Noah
      */
     function setMember($name, $value)
     {
-        if (!in_array($name, array('config'))) {
-            $this->_storage[$name] = $value;
+        if (!isset($this->_storage[$name])
+                || !$this->_storage[$name]['system']) {
+            $this->_storage[$name] = array('instance'=> $value, 'system'=> 0);
         }
         return $this;
     }
@@ -411,12 +359,12 @@ class Noah
     function getMember($name)
     {
         //常规取值
-        if (!$instance = $this->_storage[$name]) {
+        if (!$instance = $this->_storage[$name]['instance']) {
             throw new Exception($this->lang->get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {
-                $this->_storage[$name] = $instance;
+                $this->_storage[$name]['instance'] = $instance;
             }
         }
         return $instance;
@@ -446,8 +394,9 @@ class Noah
     {
         if (!is_callable($method)) {
             throw new Exception($this->lang->get('core.invalid_custom_method', $name));
+        } elseif (!isset($this->_method[$name]) || !$this->_method[$name]['system']) {
+            $this->_method[$name] = array('method' => $method, 'system' => 0);
         }
-        $this->_custom_method[$name] = $method;
         return $this;
     }
 
@@ -461,10 +410,10 @@ class Noah
      */
     function callMethod($name, $args)
     {
-        if (!isset($this->_custom_method[$name])) {
+        if (!isset($this->_method[$name])) {
             throw new Exception($this->lang->get('core.custom_method_notfound', $name));
         }
-        $method = $this->_custom_method[$name];
+        $method = $this->_method[$name]['method'];
         return call_user_func_array($method, $args);
     }
 
