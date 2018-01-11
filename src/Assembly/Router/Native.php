@@ -144,6 +144,7 @@ class Native extends Father
      * 准备路由数据
      *
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function ready()
     {

@@ -42,4 +42,22 @@ interface Cache
      */
     function getCachePath($name);
 
+    /**
+     * 取得/设置当前标志
+     *
+     * @access public
+     * @param string $flag
+     * @return $this
+     */
+    function setFlag($flag);
+
+    /**
+     * 是否允许使用缓存器
+     *
+     * @access public
+     * @param bool|string $caching
+     * @return $this
+     */
+    function setCaching($caching = true);
+
 }

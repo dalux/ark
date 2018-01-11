@@ -13,6 +13,8 @@ class Oci extends Pdo
      *
      * @param null $dsn
      * @param array $option
+     * @throws Database\Exception
+     * @throws \Ark\Core\Exception
      */
     function __construct($dsn, array $option = array())
     {

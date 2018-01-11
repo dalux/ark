@@ -48,6 +48,7 @@ class Redis extends Father
      * @param $value
      * @param $expire
      * @return bool
+     * @throws Exception
      */
     function set($name, $value, $expire = 86400)
     {
@@ -61,12 +62,13 @@ class Redis extends Father
      * @access public
      * @param $name
      * @return bool
+     * @throws Exception
      */
     function get($name)
     {
         $data = null;
         $path = $this->getCachePath($name);
-        if ($this->_allow_cache) {
+        if ($this->_caching) {
             if (!$data = $this->_container->get($path)) {
                 return null;
             }
@@ -80,6 +82,7 @@ class Redis extends Father
      *
      * @param $name
      * @return mixed
+     * @throws Exception
      */
     function delete($name)
     {
@@ -93,6 +96,7 @@ class Redis extends Father
      * @access public
      * @param string $name
      * @return string
+     * @throws Exception
      */
     function getCachePath($name)
     {

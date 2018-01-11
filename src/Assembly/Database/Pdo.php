@@ -41,6 +41,7 @@ class Pdo extends Father
      * @param null $pass
      * @param array $options
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
 	function __construct($dsn = null, $user = null, $pass = null, array $options = array())
 	{
@@ -67,6 +68,7 @@ class Pdo extends Father
      * @param array $bind
      * @return \PDOStatement
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     protected function _query($sql, $bind = array())
     {
@@ -108,6 +110,7 @@ class Pdo extends Father
      * @param array $bind
      * @return int
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function query($sql, array $bind = array())
     {
@@ -134,6 +137,7 @@ class Pdo extends Father
      * @param array $bind
      * @return mixed
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function fetchAll($sql, array $bind = array())
     {
@@ -160,6 +164,7 @@ class Pdo extends Father
      * @param array $bind
      * @return mixed
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function fetchOne($sql, array $bind = array())
     {
@@ -186,6 +191,7 @@ class Pdo extends Father
      * @param array $bind
      * @return mixed
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function fetch($sql, array $bind = array())
     {

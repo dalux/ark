@@ -31,7 +31,7 @@ class Index extends Sailor
 				$data = array(
 					'title'=> str_replace(array('\\', '\''), '', $sm[0]),
 					'isbn'=> $detail['isbn'],
-					'author'=> $zyz,
+					'author'=> mb_substr($zyz, 0, 64),
 					'dj'=> $detail['my_dj'],
 					'publisher'=> $detail['cbsmc'],
 					'publish_date'=> $detail['cbrq'],

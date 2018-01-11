@@ -29,11 +29,6 @@ return array(
             'dsn'=> 'mysql://root:123456@127.0.0.1:3306/book?charset=utf8',
             'option'=> array(),
         ),
-        'oracle'=> array(
-            'driver'=> '\Ark\Assembly\Database\Pdo\Oci',
-            'dsn'=> 'oci://root:123456@testdb/?charset=utf8',
-            'option'=> array(),
-        ),
     ),
     'view'=> array(
         'driver'=> '\Ark\Assembly\View\Native',

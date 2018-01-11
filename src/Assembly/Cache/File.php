@@ -31,6 +31,7 @@ class File extends Father
      * @param $save_path
      * @param array $option
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function __construct($save_path, array $option = array())
     {
@@ -46,12 +47,14 @@ class File extends Father
 
     /**
      * 缓存设值
-     * 
+     *
      * @access public
      * @param string $name
      * @param mixed $value
      * @param mixed $expire
      * @return bool
+     * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function set($name, $value, $expire = 86400)
     {
@@ -59,13 +62,15 @@ class File extends Father
         $expire_time = time() + $expire;
     	return file_put_contents($path, $expire_time . serialize($value)) ? true : false;
     }
-    
+
     /**
      * 缓存取值
-     * 
+     *
      * @access public
      * @param string $name
      * @return mixed
+     * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function get($name)
     {
@@ -88,6 +93,7 @@ class File extends Father
      * @param $name
      * @return bool
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function delete($name)
     {
@@ -105,18 +111,22 @@ class File extends Father
      * @param string $name
      * @param $value
      * @return bool
+     * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function __set($name, $value)
     {
     	return $this->set($name, $value);
     }
-    
+
     /**
      * 取得缓存数据
      *
      * @access public
      * @param string $name
      * @return mixed
+     * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function __get($name)
     {
@@ -130,6 +140,7 @@ class File extends Father
      * @param string $name
      * @return string
      * @throws Exception
+     * @throws \Ark\Core\Exception
      */
     function getCachePath($name)
     {

@@ -56,12 +56,13 @@ class Memcached extends Father
 
     /**
      * 缓存设值
-     * 
+     *
      * @access public
      * @param string $name
      * @param mixed $value
      * @param mixed $expire
      * @return bool
+     * @throws Exception
      */
     function set($name, $value, $expire = 86400)
     {
@@ -69,19 +70,20 @@ class Memcached extends Father
         $this->_container->set($path, $value, $expire);
         return $this->_container->getResultCode() == \Memcached::RES_SUCCESS;
     }
-    
+
     /**
      * 缓存取值
-     * 
+     *
      * @access public
      * @param string $name
      * @return mixed
+     * @throws Exception
      */
     function get($name)
     {
     	$data = null;
     	$path = $this->getCachePath($name);
-    	if ($this->_allow_cache) {
+    	if ($this->_caching) {
             $data = $this->_container->get($path);
             if ($this->_container->getResultCode() != \Memcached::RES_SUCCESS) {
                 $data = null;
@@ -96,6 +98,7 @@ class Memcached extends Father
      * @access public
      * @param $name
      * @return bool
+     * @throws Exception
      */
     function delete($name)
     {
@@ -111,18 +114,20 @@ class Memcached extends Father
      * @param string $name
      * @param $value
      * @return bool
+     * @throws Exception
      */
     function __set($name, $value)
     {
     	return $this->set($name, $value);
     }
-    
+
     /**
      * 取得缓存数据
      *
      * @access public
      * @param string $name
      * @return mixed
+     * @throws Exception
      */
     function __get($name)
     {

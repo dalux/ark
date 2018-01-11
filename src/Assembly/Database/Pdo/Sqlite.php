@@ -12,6 +12,8 @@ class Sqlite extends Pdo
      *
      * @param null $dsn
      * @param array $option
+     * @throws \Ark\Assembly\Database\Exception
+     * @throws \Ark\Core\Exception
      */
     function __construct($dsn, array $option = array())
     {
