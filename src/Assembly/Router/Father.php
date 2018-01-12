@@ -15,6 +15,13 @@ abstract class Father implements Router
     abstract function ready();
 
     /**
+     * 路由是否准备就绪
+     *
+     * @return bool
+     */
+    abstract function isReady();
+
+    /**
      * 路由调度
      *
      * @return mixed

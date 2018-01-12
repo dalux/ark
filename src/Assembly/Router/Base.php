@@ -37,6 +37,13 @@ class Base extends Father
     private $_allow_module = false;
 
     /**
+     * 路由是否准备就绪
+     *
+     * @var bool
+     */
+    private $_ready = false;
+
+    /**
      * 路由转换规则
      *
      * @var array
@@ -97,6 +104,16 @@ class Base extends Father
         }
         $this->setUrlMode($url_mode);
         Trace::set('custom', array('name'=> 'url_mode', 'value'=> $url_mode));
+    }
+
+    /**
+     * 路由是否就绪
+     *
+     * @return bool|mixed
+     */
+    function isReady()
+    {
+        return $this->_ready;
     }
 
     /**
@@ -287,11 +304,12 @@ class Base extends Father
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
-        Request::$ready = true;
+        Request::setReady(true);
         Noah::getInstance()->setMember('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
             throw new Exception(Noah::getInstance()->lang->get('router.controller_not_found', $namespace));
         }
+        $this->_ready = true;
     }
 
     /**

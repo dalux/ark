@@ -30,6 +30,13 @@ class Multiple extends Father
     private $_action;
 
     /**
+     * 路由状态
+     *
+     * @var bool
+     */
+    private $_ready = false;
+
+    /**
      * 获取模块名称
      *
      * @return string
@@ -60,6 +67,16 @@ class Multiple extends Father
     }
 
     /**
+     * 路由是否就绪
+     *
+     * @return mixed
+     */
+    function isReady()
+    {
+        return $this->_ready;
+    }
+
+    /**
      * 准备请求数据
      *
      * @return null
@@ -72,8 +89,9 @@ class Multiple extends Father
         define('PATH_NOW', dirname($caller));
         $this->_controller = str_replace(PATH_WEB, '', $caller);
         //请求数据初始化完成
-        Request::$ready = true;
+        Request::setReady(true);
         Noah::getInstance()->setMember('request', function() { return Request::getInstance(); });
+        $this->_ready = true;
 	}
 
     /**

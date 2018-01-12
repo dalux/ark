@@ -53,6 +53,13 @@ class Native extends Father
     private $_action;
 
     /**
+     * 路由是否就绪
+     *
+     * @var bool
+     */
+    private $_ready = false;
+
+    /**
      * 获取模块名称
      *
      * @return string
@@ -93,6 +100,16 @@ class Native extends Father
     {
         $this->_rules[$rule] = $redirect;
         return $this;
+    }
+
+    /**
+     * 路由是否就绪
+     *
+     * @return bool
+     */
+    function isReady()
+    {
+        return $this->_ready;
     }
 
     /**
@@ -185,11 +202,12 @@ class Native extends Father
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
-        Request::$ready = true;
+        Request::setReady(true);
         Noah::getInstance()->setMember('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
             throw new Exception(Noah::getInstance()->lang->get('router.controller_not_found', $namespace));
         }
+        $this->_ready = true;
     }
 
     /**

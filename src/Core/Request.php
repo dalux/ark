@@ -85,7 +85,27 @@ class Request
      *
      * @return Request
      */
-    static $ready = false;
+    private static $_ready = false;
+
+    /**
+     * 是否准备就绪
+     *
+     * @return bool
+     */
+    static function isReady()
+    {
+        return self::$_ready;
+    }
+
+    /**
+     * 设置就绪状态
+     *
+     * @param $state
+     */
+    static function setReady($state)
+    {
+        self::$_ready = $state;
+    }
 
     /**
      * 取请求实例
@@ -94,7 +114,7 @@ class Request
      */
     static function getInstance()
     {
-        if (!self::$ready) {
+        if (!self::$_ready) {
             throw new Exception(Noah::getInstance()->lang->get('http.request_not_ready'));
         } elseif (is_null(self::$_instance)) {
             self::$_instance = new self();
@@ -121,16 +141,11 @@ class Request
      * 当前是否是post请求
      *
      * @access public
-     * @param null $name
      * @return bool
      */
-	function isPost($name = null)
+	static function isPost()
 	{
-        $ispost = "POST" == strtoupper($_SERVER["REQUEST_METHOD"]);
-        if ($ispost && $name) {
-            return isset($this->_post[$name]) && !empty($this->_post[$name]);
-        }
-        return $ispost;
+        return "POST" == strtoupper($_SERVER["REQUEST_METHOD"]);
 	}
 
     /**
@@ -139,7 +154,7 @@ class Request
      * @access public
      * @return bool
      */
-    function isAjax()
+    static function isAjax()
     {
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
             return $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
@@ -154,7 +169,7 @@ class Request
      * @param bool $convert
      * @return string
      */
-    function getIpAddress($convert = false)
+    static function getIpAddress($convert = false)
     {
         static $ip;
         if (is_null($ip)){

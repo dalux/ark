@@ -56,6 +56,13 @@ class Noah
     private $_controller_dir;
 
     /**
+     * 框架是否就绪
+     *
+     * @var bool
+     */
+    private $_ready = false;
+
+    /**
      * 唯一实例
      *
      * @var $this
@@ -82,7 +89,6 @@ class Noah
      */
     private function __construct()
     {
-        require_once __DIR__. '/Container.php';
         require_once __DIR__. '/Timer.php';
         require_once __DIR__. '/Exception.php';
         require_once __DIR__. '/Trace.php';
@@ -90,23 +96,8 @@ class Noah
         require_once __DIR__. '/Toolkit.php';
         require_once __DIR__. '/Handler.php';
         require_once __DIR__. '/Request.php';
-        //初始化内存占用
-        $memory_usage = memory_get_usage();
-        //默认屏蔽错误提示
-        ini_set('display_errors', '0');
-        //启动时间
-        Timer::mark('sys_startup');
-        //初始内存占用数
-        Trace::set('memory', $memory_usage);
-        //配置项默认为空对象
-        $this->_storage['config'] = array(
-            'instance'=> new Container(),
-            'system'=> 1
-        );
-        //定义常量
-        $debug_trace = debug_backtrace();
-        defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
-        defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
+        require_once __DIR__. '/Event.php';
+        require_once __DIR__. '/Container.php';
     }
 
     /**
@@ -233,13 +224,39 @@ class Noah
     }
 
     /**
-     * 框架预热
+     * 框架是否准备就绪
      *
-     * @throws Exception
+     * @return bool
      */
-    function prepare()
+    function isReady()
+    {
+        return $this->_ready;
+    }
+
+    /**
+     * 框架准备
+     *
+     */
+    function init()
     {
 
+        //初始化内存占用
+        $memory_usage = memory_get_usage();
+        //默认屏蔽错误提示
+        ini_set('display_errors', '0');
+        //启动时间
+        Timer::mark('sys_startup');
+        //初始内存占用数
+        Trace::set('memory', $memory_usage);
+        //配置项默认为空对象
+        $this->_storage['config'] = array(
+            'instance'=> new Container(),
+            'system'=> 1
+        );
+        //定义常量
+        $debug_trace = debug_backtrace();
+        defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
+        defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
         //注册框架类库基地址
         Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
@@ -253,6 +270,24 @@ class Noah
         Loader::addAutoLoader(array('\Ark\Core\Loader', 'autoLoad'));
         //初始化CLI模式
         Server::isCli() && Server::initCli();
+        //准备就绪
+        $this->_ready = true;
+
+    }
+
+    /**
+     * 启动框架
+     *
+     * @access public
+     * @return mixed
+     * @throws Exception
+     */
+    function run()
+    {
+
+        if (!$this->_ready) {
+            throw new Exception($this->lang->get('core.framework_not_ready'));
+        }
         //检测必要应用配置
         if (!$this->_app_name) {
             throw new Exception($this->lang->get('core.invalid_app_name'));
@@ -301,18 +336,6 @@ class Noah
             'instance'=>  function() { return RouterAdapter::getDriver(); },
             'system'=> 1,
         );
-
-    }
-
-    /**
-     * 启动框架
-     *
-     * @access public
-     * @return mixed
-     * @throws Exception
-     */
-    function run()
-    {
 
         //监听系统启动就绪事件
         Event::onListening('event.framework.ready');

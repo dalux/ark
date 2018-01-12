@@ -2,6 +2,7 @@
 
 return array(
 
+    'core.framework_not_ready'          => '框架尚未初始化',
     'core.invalid_app_name'             => '未设置应用程序名称',
     'core.invalid_app_dir'              => '未设置应用程序目录或目录不存在',
     'core.invalid_controller_dir'       => '控制器目录必须位于应用程序集目录下',
