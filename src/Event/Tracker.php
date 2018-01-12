@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__. '/src/Tracker.php';
+require_once __DIR__. '/Tracker/Tracker.php';
 
 use Ark\Core\Event;
 use Ark\Core\Noah;
