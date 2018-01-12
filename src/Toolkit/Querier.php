@@ -76,9 +76,19 @@ class Querier
      *
      * @param Database $conn
      */
-    static function forConnection(Database $conn)
+    static function setConnection(Database $conn)
     {
         self::$_conn = $conn;
+    }
+
+    /**
+     * 获取当前数据库连接对象
+     *
+     * @return Database
+     */
+    static function getConnection()
+    {
+        return self::$_conn;
     }
 
     /**

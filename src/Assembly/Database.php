@@ -17,6 +17,7 @@ class Database
      * @access public
      * @static
      * @param $name
+     * @return mixed
      * @throws Exception
      */
     static function getDriver($name)
