@@ -335,7 +335,6 @@ class Noah
         );
         //监听系统启动就绪事件
         Event::onListening('event.framework.ready');
-
         if (!$this->router instanceof RouterInterface) {
             $lang = Noah::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), '\\Ark\\Contract\\Router');
             throw new Exception($lang);
