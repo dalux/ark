@@ -17,13 +17,6 @@ class Querier
     protected $_tb;
 
     /**
-     * 数据库连接配置
-     *
-     * @var Database
-     */
-    protected $_db;
-
-    /**
      * 缓存时间
      *
      * @var int
@@ -43,6 +36,13 @@ class Querier
      * @var Proxy
      */
     protected $_proxy;
+
+    /**
+     * 数据库连接
+     *
+     * @var Database $_conn
+     */
+    private static $_conn = null;
 
     /**
      * 条件标记列表
@@ -72,51 +72,34 @@ class Querier
     );
 
     /**
+     * 指定数据库连接对象
+     *
+     * @param Database $conn
+     */
+    static function forConnection(Database $conn)
+    {
+        self::$_conn = $conn;
+    }
+
+    /**
      * 构造器
      *
-     * @param $table
-     * @param Database $db
+     * @param $tb
      */
-    function __construct(Database $db)
+    private function __construct($tb)
     {
-        $this->setDb($db);
+        $this->_tb = $tb;
     }
 
     /**
      * 静态方法初始化
      *
-     * @param $table
-     * @param Database $db
+     * @param $tb
      * @return Querier
      */
-    static function init(Database $db)
+    static function init($tb)
     {
-        return new self($db);
-    }
-
-    /**
-     * 构造器
-     *
-     * @param $table
-     * @param $db
-     * @throws DDatabase_exception
-     */
-    function invoke($table)
-    {
-        $this->_tb = $table;
-        return $this;
-    }
-
-    /**
-     * 设置数据库驱动器
-     *
-     * @param Database $db
-     * @return $this
-     */
-    function setDb(Database $db)
-    {
-        $this->_db = $db;
-        return $this;
+        return new self($tb);
     }
 
     /**
@@ -143,14 +126,15 @@ class Querier
      * @access public
      * @final
      * @param array $data 数据键值对数组
-     * @param bool $return_primarykey 是否返回新增的ID主键
+     * @param bool $return 是否返回新增的ID主键
      * @return mixed
+     * @throws Exception
      */
-    function insert(array $data, $return_primarykey = false)
+    function insert(array $data, $return = false)
     {
-        $insert = SQLBuilder::insert($this->_db->getDriverName())->into($this->_tb, $data);
-        $added = $this->_db->query($insert);
-        return $added ? ($return_primarykey ? $this->_db->lastInsertId() : true) : false;
+        $insert = SQLBuilder::insert(self::$_conn->getDriverName())->into($this->_tb, $data);
+        $added = self::$_conn->query($insert);
+        return $added ? ($return ? self::$_conn->lastInsertId() : true) : false;
     }
 
     /**
@@ -161,10 +145,11 @@ class Querier
      * @param array $data 数据键值对
      * @param array $condition 编辑条件
      * @return integer
+     * @throws Exception
      */
     function update(array $data, array $condition)
     {
-        $update = SQLBuilder::update($this->_db->getDriverName())->set($this->_tb, $data);
+        $update = SQLBuilder::update(self::$_conn->getDriverName())->set($this->_tb, $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -185,7 +170,7 @@ class Querier
             }
             $update->whereIn($k, $v);
         }
-        return $this->_db->query($update);
+        return self::$_conn->query($update);
     }
 
     /**
@@ -195,10 +180,11 @@ class Querier
      * @final
      * @param array $condition 删除条件
      * @return int
+     * @throws Exception
      */
     function delete(array $condition = array())
     {
-        $delete = SQLBuilder::delete($this->_db->getDriverName())->from($this->_tb);
+        $delete = SQLBuilder::delete(self::$_conn->getDriverName())->from($this->_tb);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -219,7 +205,7 @@ class Querier
             }
             $delete->whereIn($k, $v);
         }
-        return $this->_db->query($delete);
+        return self::$_conn->query($delete);
     }
 
 
@@ -231,10 +217,12 @@ class Querier
      * @param array $condition 取值条件
      * @param array $fields 取值字段
      * @return array
+     * @throws Exception
+     * @throws \Ark\Assembly\Proxy\Exception
      */
     function fetch($condition = array(), $fields = array('*'))
     {
-        $select = SQLBuilder::select($this->_db->getDriverName())->from($this->_tb, $fields);
+        $select = SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -256,9 +244,9 @@ class Querier
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy($this->_db, 'fetch', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
+            return $this->_proxy->doProxy(self::$_conn, 'fetch', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
         }
-        return $this->_db->fetch($select);
+        return self::$_conn->fetch($select);
     }
 
     /**
@@ -269,10 +257,12 @@ class Querier
      * @param array $condition
      * @param array $fields
      * @return mixed
+     * @throws Exception
+     * @throws \Ark\Assembly\Proxy\Exception
      */
     function fetchOne($condition = array(), $fields = array('count(*)'))
     {
-        $select = SQLBuilder::select($this->_db->getDriverName())->from($this->_tb, $fields);
+        $select = SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -294,9 +284,9 @@ class Querier
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy($this->_db, 'fetchOne', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
+            return $this->_proxy->doProxy(self::$_conn, 'fetchOne', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
         }
-        return $this->_db->fetchOne($select);
+        return self::$_conn->fetchOne($select);
     }
 
     /**
@@ -310,10 +300,12 @@ class Querier
      * @param int $offset
      * @param array $fields
      * @return array
+     * @throws Exception
+     * @throws \Ark\Assembly\Proxy\Exception
      */
     function fetchAll($condition = array(), $order = array(), $count = 0, $offset = 0, $fields = array('*'))
     {
-        $select = SQLBuilder::select($this->_db->getDriverName())->from($this->_tb, $fields)->limit($count, $offset);
+        $select = SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields)->limit($count, $offset);
         foreach ($order as $k=> $v) {
             $select->order($k, $v);
         }
@@ -338,9 +330,9 @@ class Querier
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy($this->_db, 'fetchAll', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
+            return $this->_proxy->doProxy(self::$_conn, 'fetchAll', array('sql'=> (string)$select), $this->_expire, $this->_cache_name);
         }
-        return $this->_db->fetchAll($select);
+        return self::$_conn->fetchAll($select);
     }
 
 }

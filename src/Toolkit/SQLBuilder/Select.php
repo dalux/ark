@@ -9,7 +9,7 @@ class Select extends Father
      * 要查询的表
      *
      * @access public
-     * @param array $table
+     * @param mixed $table
      * @param array $columns
      * @return Select
      */

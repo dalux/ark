@@ -62,8 +62,8 @@ class SQLBuilder
     /**
      * 生成查询对象
      *
+     * @param null $dbtype
      * @return Select
-     * @throws Exception
      */
     static function select($dbtype = null)
     {
@@ -75,8 +75,8 @@ class SQLBuilder
     /**
      * 生成插入对象
      *
+     * @param null $dbtype
      * @return Insert
-     * @throws Exception
      */
     static function insert($dbtype = null)
     {
@@ -88,8 +88,8 @@ class SQLBuilder
     /**
      * 生成更新对象
      *
+     * @param null $dbtype
      * @return Update
-     * @throws Exception
      */
     static function update($dbtype = null)
     {
@@ -101,8 +101,8 @@ class SQLBuilder
     /**
      * 生成删除对象
      *
+     * @param null $dbtype
      * @return Delete
-     * @throws Exception
      */
     static function delete($dbtype = null)
     {
