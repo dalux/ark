@@ -46,14 +46,14 @@ class Noah
      *
      * @var string
      */
-    private $_app_dir;
+    private $_app_path;
 
     /**
      * 控制器根目录
      *
      * @var string
      */
-    private $_controller_dir;
+    private $_controller_path;
 
     /**
      * 框架是否就绪
@@ -116,14 +116,14 @@ class Noah
      * 设置应用程序集根命名空间及其基本路径
      *
      * @param string $name
-     * @param null $dir
+     * @param null $path
      * @return Noah
      */
-    function setApp($name, $dir = null)
+    function setApp($name, $path = null)
     {
         $this->_app_name = $name;
-        $dir || $dir = PATH_WEB;
-        $this->_app_dir = rtrim($dir, '/\\');
+        $path || $path = PATH_WEB;
+        $this->_app_path = rtrim($path, '/\\');
         return $this;
     }
 
@@ -142,20 +142,20 @@ class Noah
      *
      * @return string
      */
-    function getAppDir()
+    function getAppPath()
     {
-        return $this->_app_dir;
+        return $this->_app_path;
     }
 
     /**
      * 设置控制器根目录
      *
-     * @param $controller_dir
+     * @param $controller_path
      * @return Noah
      */
-    function setControllerDir($controller_dir)
+    function setControllerPath($controller_path)
     {
-        $this->_controller_dir = rtrim($controller_dir, '/\\');
+        $this->_controller_path = rtrim($controller_path, '/\\');
         return $this;
     }
 
@@ -164,9 +164,9 @@ class Noah
      *
      * @return string
      */
-    function getControllerDir()
+    function getControllerPath()
     {
-        return $this->_controller_dir;
+        return $this->_controller_path;
     }
 
     /**
@@ -239,7 +239,6 @@ class Noah
      */
     function init()
     {
-
         //初始化内存占用
         $memory_usage = memory_get_usage();
         //默认屏蔽错误提示
@@ -270,9 +269,17 @@ class Noah
         Loader::addAutoLoader(array('\Ark\Core\Loader', 'autoLoad'));
         //初始化CLI模式
         Server::isCli() && Server::initCli();
+        //注册内置组件
+        $this->_storage['container'] = array(
+            'instance'=> function() { return new Container(); },
+            'system'=> 1,
+        );
+        $this->_storage['response'] = array(
+            'instance'=> function() { return new Response(); },
+            'system'=> 1,
+        );
         //准备就绪
         $this->_ready = true;
-
     }
 
     /**
@@ -284,32 +291,31 @@ class Noah
      */
     function run()
     {
-
         if (!$this->_ready) {
             throw new Exception($this->lang->get('core.framework_not_ready'));
         }
         //检测必要应用配置
         if (!$this->_app_name) {
             throw new Exception($this->lang->get('core.invalid_app_name'));
-        } elseif (!is_dir($this->_app_dir)) {
-            throw new Exception($this->lang->get('core.invalid_app_dir'));
+        } elseif (!is_dir($this->_app_path)) {
+            throw new Exception($this->lang->get('core.invalid_app_path'));
         }
         //注册应用程序基地址
-        Loader::setNameSpace($this->_app_name, $this->_app_dir);
-        Loader::setAlias('@', $this->_app_dir);
-        defined('PATH_APP') || define('PATH_APP', $this->_app_dir);
+        Loader::setNameSpace($this->_app_name, $this->_app_path);
+        Loader::setAlias('@', $this->_app_path);
+        defined('PATH_APP') || define('PATH_APP', $this->_app_path);
         //配置文件
         if (!$config = $this->getConfig()) {
             throw new Exception($this->lang->get('core.invalid_configuration'));
         }
         $this->_storage['config']['instance'] = new Container($config);
         //控制器地址检测
-        if (!$this->_controller_dir) {
-            $this->_controller_dir = $this->_app_dir . DIRECTORY_SEPARATOR . 'Controller';
-        } elseif (strpos($this->_controller_dir, $this->_app_dir) === false) {
-            throw new Exception($this->lang->get('core.invalid_controller_dir'));
+        if (!$this->_controller_path) {
+            $this->_controller_path = $this->_app_path . DIRECTORY_SEPARATOR . 'Controller';
+        } elseif (strpos($this->_controller_path, $this->_app_path) === false) {
+            throw new Exception($this->lang->get('core.invalid_controller_path'));
         }
-        defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_dir);
+        defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_path);
         //时区设置
         $timezone = 'Asia/Shanghai';
         $instance = $this->_storage['config']['instance'];
@@ -322,21 +328,11 @@ class Noah
             ini_set('display_errors', '1');
             error_reporting($instance->global->error_reporting);
         }
-
-        //注册内置组件
-        $this->_storage['container'] = array(
-            'instance'=> function() { return new Container(); },
-            'system'=> 1,
-        );
-        $this->_storage['response'] = array(
-            'instance'=> function() { return new Response(); },
-            'system'=> 1,
-        );
+        //路由
         $this->_storage['router'] = array(
             'instance'=>  function() { return RouterAdapter::getDriver(); },
             'system'=> 1,
         );
-
         //监听系统启动就绪事件
         Event::onListening('event.framework.ready');
 
@@ -344,16 +340,12 @@ class Noah
             $lang = Noah::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), '\\Ark\\Contract\\Router');
             throw new Exception($lang);
         }
-
         //路由调度准备
         $this->router->ready();
-
         //路由准备就绪
         Event::onListening('event.router.ready');
-
         //路由并呈现控制器内容
         $this->router->dispatch();
-
     }
 
     /**
@@ -373,13 +365,31 @@ class Noah
     }
 
     /**
+     * 设置自定义方法
+     *
+     * @param $name
+     * @param callable $method
+     * @return $this
+     * @throws Exception
+     */
+    function setMethod($name, callable $method)
+    {
+        if (!is_callable($method)) {
+            throw new Exception($this->lang->get('core.invalid_custom_method', $name));
+        } elseif (!isset($this->_method[$name]) || !$this->_method[$name]['system']) {
+            $this->_method[$name] = array('method' => $method, 'system' => 0);
+        }
+        return $this;
+    }
+
+    /**
      * 取值
      *
      * @param $name
      * @return mixed
      * @throws Exception
      */
-    function getMember($name)
+    function get($name)
     {
         //常规取值
         if (!$instance = $this->_storage[$name]['instance']) {
@@ -402,25 +412,7 @@ class Noah
      */
     function __get($name)
     {
-        return $this->getMember($name);
-    }
-
-    /**
-     * 设置自定义方法
-     *
-     * @param $name
-     * @param callable $method
-     * @return $this
-     * @throws Exception
-     */
-    function setMethod($name, callable $method)
-    {
-        if (!is_callable($method)) {
-            throw new Exception($this->lang->get('core.invalid_custom_method', $name));
-        } elseif (!isset($this->_method[$name]) || !$this->_method[$name]['system']) {
-            $this->_method[$name] = array('method' => $method, 'system' => 0);
-        }
-        return $this;
+        return $this->get($name);
     }
 
     /**
@@ -431,7 +423,7 @@ class Noah
      * @return mixed
      * @throws Exception
      */
-    function callMethod($name, $args)
+    function call($name, $args)
     {
         if (!isset($this->_method[$name])) {
             throw new Exception($this->lang->get('core.custom_method_notfound', $name));
@@ -450,13 +442,14 @@ class Noah
      */
     function __call($name, $args)
     {
-        return $this->callMethod($name, $args);
+        return $this->call($name, $args);
     }
 
     /**
      * 析构函数
      *
      * @return null
+     * @throws Exception
      */
     function __destruct()
     {

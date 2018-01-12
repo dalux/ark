@@ -286,8 +286,8 @@ class Base extends Father
             throw new Exception(Noah::getInstance()->lang->get('router.invalid_action_name'));
         }
         $app_name = Noah::getInstance()->getAppName();
-        $controller_dir = Noah::getInstance()->getControllerDir();
-        $app_dir = Noah::getInstance()->getAppDir();
+        $controller_dir = Noah::getInstance()->getControllerPath();
+        $app_dir = Noah::getInstance()->getAppPath();
         $path_now = $controller_dir;
         $part = str_replace($app_dir, '', $controller_dir);
         $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');

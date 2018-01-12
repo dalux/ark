@@ -4,8 +4,8 @@ return array(
 
     'core.framework_not_ready'          => '框架尚未初始化',
     'core.invalid_app_name'             => '未设置应用程序名称',
-    'core.invalid_app_dir'              => '未设置应用程序目录或目录不存在',
-    'core.invalid_controller_dir'       => '控制器目录必须位于应用程序集目录下',
+    'core.invalid_app_path'             => '未设置应用程序目录或目录不存在',
+    'core.invalid_controller_path'      => '控制器目录必须位于应用程序集目录下',
     'core.invalid_config_path'          => '无效的配置文件路径',
     'core.invalid_configuration'        => '未找到有效的配置信息',
     'core.invalid_config_format'        => '配置文件[%s]必须返回数组格式数据',

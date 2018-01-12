@@ -181,6 +181,7 @@ class Loader
      * @param string $path 命名空间
      * @param bool $once 是否只加载一次
      * @return mixed
+     * @throws Exception
      */
     static function import($path, $once = true)
     {

@@ -179,8 +179,8 @@ class Native extends Father
             $uri = preg_replace(sprintf('~%s$~i', $url_suffix), '', $uri);
         }
         $app_name = Noah::getInstance()->getAppName();
-        $controller_dir = Noah::getInstance()->getControllerDir();
-        $app_dir = Noah::getInstance()->getAppDir();
+        $controller_dir = Noah::getInstance()->getControllerPath();
+        $app_dir = Noah::getInstance()->getAppPath();
         $path_now = $controller_dir;
         if ($uri == '') {
             $controller = ucfirst(Noah::getInstance()->config->router->default->controller);
