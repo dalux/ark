@@ -280,6 +280,7 @@ class Noah
         );
         //准备就绪
         $this->_ready = true;
+        return $this;
     }
 
     /**
