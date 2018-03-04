@@ -4,7 +4,7 @@
 require_once __DIR__. '/../src/Core/Noah.php';
 
 //实例化框架
-\Ark\Core\Noah::init()
+\Ark\Core\Ark_Core::init()
     ->addTriggerDir(\Ark\Core\Loader::realPath('*/Trigger'))
     ->addPrepare(function() {
 
@@ -20,17 +20,17 @@ require_once __DIR__. '/../src/Core/Noah.php';
         });
 
         //常用组件
-        \Ark\Core\Noah::init()
+        \Ark\Core\Ark_Core::init()
             ->setMember('session', function() { return \Ark\Assembly\Session::getDriver(); })
             ->setMember('mysql', function() { return \Ark\Assembly\Database::getDriver('mysql'); })
             ->setMember('oracle', function() { return  \Ark\Assembly\Database::getDriver('oracle'); });
 
-        \Ark\Core\Noah::init()
+        \Ark\Core\Ark_Core::init()
             ->setMethod('db', function($name = null) {
                 if ($name == 'mysql' || is_null($name)) {
-                    return \Ark\Core\Noah::init()->mysql;
+                    return \Ark\Core\Ark_Core::init()->mysql;
                 } elseif ($name == 'oracle') {
-                    return \Ark\Core\Noah::init()->oracle;
+                    return \Ark\Core\Ark_Core::init()->oracle;
                 }
             });
 

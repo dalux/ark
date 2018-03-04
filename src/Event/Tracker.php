@@ -7,7 +7,7 @@ use Ark\Core\Noah;
 use Ark\Core\Server;
 
 //设置cookie
-Noah::getInstance()->container->__tracker__ = array(
+Ark_Core::getInstance()->container->__tracker__ = array(
     'name'=> 'test',
     'pass'=> '12345678'
 );
@@ -15,11 +15,11 @@ Noah::getInstance()->container->__tracker__ = array(
 //注册框架内置事件
 Event::addListener('event.router.ready', function($data) {
     //开启debug模式
-    if ($tracker = Noah::getInstance()->container->__tracker__) {
+    if ($tracker = Ark_Core::getInstance()->container->__tracker__) {
         list($name, $pass) = array($tracker->name, $tracker->pass);
-        $token = Noah::getInstance()->request->cookie($name);
+        $token = Ark_Core::getInstance()->request->cookie($name);
         if ($token == $pass && !Server::isCli()) {
-            Noah::getInstance()->config->global->debug = true;
+            Ark_Core::getInstance()->config->global->debug = true;
         }
     }
     //Debug内容

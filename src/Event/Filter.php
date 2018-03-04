@@ -4,7 +4,7 @@ use Ark\Core\Event;
 use Ark\Core\Exception;
 
 //请求初始化时过滤攻击威胁
-Event::addListener('event.request.ready', function($data) {
+Ark_Event::addListener('event.request.ready', function($data) {
     foreach ($data as $key=> $val) {
         $pattern = '';
         switch($key) {
@@ -21,7 +21,7 @@ Event::addListener('event.request.ready', function($data) {
         if ($pattern) {
             foreach ($val as $k => $v) {
                 if (preg_match("/$pattern/is", $v)) {
-                    throw new Exception(sprintf('无效的%s参数:[%s],IP已记录,请勿尝试注入', strtoupper($key), $k));
+                    throw new Ark_Exception(sprintf('无效的%s参数:[%s],IP已记录,请勿尝试注入', strtoupper($key), $k));
                 }
             }
         }
