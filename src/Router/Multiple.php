@@ -1,11 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Router;
-
-use Ark\Core\Noah;
-use Ark\Core\Request;
-
-class Multiple extends Father
+class Ark_Router_Multiple extends Ark_Router_Father
 {
 
     /**
@@ -89,8 +84,8 @@ class Multiple extends Father
         define('PATH_NOW', dirname($caller));
         $this->_controller = str_replace(PATH_WEB, '', $caller);
         //请求数据初始化完成
-        Request::setReady(true);
-        Ark_Core::getInstance()->setMember('request', function() { return Request::getInstance(); });
+        Ark_Request::setReady(true);
+        Ark_Core::getInstance()->setMember('request', function() { return Ark_Request::getInstance(); });
         $this->_ready = true;
 	}
 

@@ -164,6 +164,29 @@ class Ark_Toolkit
         }
         closedir($handle);
     }
+	
+	/**
+	 * 递归删除目录
+	 *
+	 * @static
+     * @param string $dir
+     * @return bool
+     * @throws Ark_Exception
+	 */
+	static function removeDir($dirName)
+	{
+		if (is_dir($dirName)) {
+			$handle = opendir($dirName);
+			while(($file = readdir($handle)) !== false) {
+				if($file != '.' && $file != '..') {
+					$dir = $dirName . '/' . $file;
+					is_dir($dir) ? self::removeDir($dir) : unlink($dir);
+				}
+			}
+			closedir($handle);
+			return rmdir($dirName);
+		}
+	}
 
     /**
      * 转换编码
@@ -451,5 +474,23 @@ class Ark_Toolkit
         }
         return $return;
     }
+
+	/**
+	 * 对中文字符串进行切割
+	 *
+	 * @static
+     * @param string $str
+     * @param int $length
+     * @return array
+	 */
+	function splitStr($str, $length = 4000) {
+		$len = mb_strlen($str);
+		$max = ceil($len/$length);
+		$result = array();
+		for ($i=0; $i<$max; $i++) {
+			$result[$i] = mb_substr($str, $i*$length, $length);
+		}
+		return $result;
+	}
 
 }

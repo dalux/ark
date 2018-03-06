@@ -1,20 +1,12 @@
 <?php
 
-namespace Ark\Assembly;
-
-use Ark\Core\Loader;
-use Ark\Core\Noah;
-use Ark\Core\Trace;
-use Ark\Assembly\Router\Exception;
-use Ark\Contract\Router as RouterInterface;
-
-class Router
+class Ark_Router_Adapter
 {
 
     /**
      * 获取路由驱动器
      *
-     * @return RouterInterface
+     * @return Ark_Router_Contract
      * @throws Exception
      */
     static function getDriver()
@@ -22,14 +14,14 @@ class Router
         $config = Ark_Core::getInstance()->config->router->toArray();
         if (!$driver = $config['driver']) {
             throw new Exception(Ark_Core::getInstance()->lang->get('router.invalid_driver_name'));
-        } elseif (!Loader::findClass($driver)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.driver_not_found', $driver));
+        } elseif (!Ark_Loader::findClass($driver)) {
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.driver_not_found', $driver));
         }
         $instance = new $driver();
-        if (!$instance instanceof RouterInterface) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.driver_implement_error', $driver, '\\Ark\\Contract\\Router'));
+        if (!$instance instanceof Ark_Router_Contract) {
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.driver_implement_error', $driver, 'Ark_Router_Contract'));
         }
-        Trace::set('driver', array('router'=> $driver));
+        Ark_Trace::set('driver', array('router'=> $driver));
         return $instance;
     }
 

@@ -1,10 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Database\Pdo;
-
-use Ark\Assembly\Database\Pdo;
-
-class Sqlite extends Pdo
+class Ark_Database_Pdo_Sqlite extends Ark_Database_Pdo
 {
 
     /**
@@ -12,15 +8,15 @@ class Sqlite extends Pdo
      *
      * @param null $dsn
      * @param array $option
-     * @throws \Ark\Assembly\Database\Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
+     * @throws Exception
      */
     function __construct($dsn, array $option = array())
     {
         $params = array(
-            \PDO::ATTR_ERRMODE              => \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_ORACLE_NULLS         => \PDO::NULL_EMPTY_STRING,
-            \PDO::ATTR_EMULATE_PREPARES     => false,
+            PDO::ATTR_ERRMODE              => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ORACLE_NULLS         => PDO::NULL_EMPTY_STRING,
+            PDO::ATTR_EMULATE_PREPARES     => false,
         );
         if ($option) {
             $params = array_merge($params, $option);

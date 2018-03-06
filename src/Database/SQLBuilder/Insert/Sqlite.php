@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Insert_Sqlite extends Ark_Toolkit_SQLBuilder_Insert
+class Ark_Database_SQLBuilder_Insert_Sqlite extends Ark_Database_SQLBuilder_Insert
 {
 
     /**

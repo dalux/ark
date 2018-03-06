@@ -1,10 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Database;
-
-use Ark\Contract\Database;
-
-abstract class Father implements Database
+abstract class Ark_Database_Father implements Ark_Database_Contract
 {
 
     /**

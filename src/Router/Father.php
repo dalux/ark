@@ -1,10 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Router;
-
-use Ark\Contract\Router;
-
-abstract class Father implements Router
+abstract class Ark_Router_Father implements Ark_Router_Contract
 {
 
     /**

@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Session;
-
-class Exception extends \Ark\Core\Exception
+class Ark_Session_Exception extends Ark_Exception
 {
 
 }

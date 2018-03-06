@@ -1,11 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Database\Pdo;
-
-use Ark\Assembly\Database;
-use Ark\Assembly\Database\Pdo;
-
-class Oci extends Pdo
+class Ark_Database_Pdo_Oci extends Ark_Database_Pdo
 {
 
     /**
@@ -13,12 +8,12 @@ class Oci extends Pdo
      *
      * @param null $dsn
      * @param array $option
-     * @throws Database\Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
+     * @throws Exception
      */
     function __construct($dsn, array $option = array())
     {
-        $database = Database::parseConnectUrl($dsn);
+        $database = Ark_Database_Toolkit::parseConnectUrl($dsn);
         $conn_str = $database['host'];
         if ($database['host'] && $database['name']) {
             $database['port'] || $database['port'] = 1521;
@@ -29,10 +24,10 @@ class Oci extends Pdo
             $conn_str.= sprintf('charset=%s', $charset);
         }
         $params = array(
-            \PDO::ATTR_ERRMODE              => \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_ORACLE_NULLS         => \PDO::NULL_EMPTY_STRING,
-            \PDO::ATTR_CASE                 => \PDO::CASE_LOWER,
-            \PDO::ATTR_EMULATE_PREPARES     => false,
+            PDO::ATTR_ERRMODE              => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_ORACLE_NULLS         => PDO::NULL_EMPTY_STRING,
+            PDO::ATTR_CASE                 => PDO::CASE_LOWER,
+            PDO::ATTR_EMULATE_PREPARES     => false,
         );
         if ($option) {
             $params = array_merge($params, $option);

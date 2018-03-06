@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Select_Mysql extends Ark_Toolkit_SQLBuilder_Select
+class Ark_Database_SQLBuilder_Select_Mysql extends Ark_Database_SQLBuilder_Select
 {
 
 

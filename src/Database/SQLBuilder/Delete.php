@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Delete extends Ark_Toolkit_SQLBuilder_Father
+class Ark_Database_SQLBuilder_Delete extends Ark_Database_SQLBuilder_Father
 {
         
     /**
@@ -8,7 +8,7 @@ class Ark_Toolkit_SQLBuilder_Delete extends Ark_Toolkit_SQLBuilder_Father
      *
      * @access public
      * @param string $table
-     * @return Delete
+     * @return Ark_Database_SQLBuilder_Delete
      */
     function from($table) 
     {

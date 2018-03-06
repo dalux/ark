@@ -32,7 +32,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
             }
         }
         $params = array(
-            Memcached::OPT_DISTRIBUTION=> \Memcached::DISTRIBUTION_CONSISTENT,
+            Memcached::OPT_DISTRIBUTION=> Memcached::DISTRIBUTION_CONSISTENT,
             Memcached::OPT_LIBKETAMA_COMPATIBLE=> true,
             Memcached::OPT_CONNECT_TIMEOUT=> 500,
             Memcached::OPT_COMPRESSION=> true,
@@ -63,7 +63,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
     {
     	$path = $this->getCachePath($name);
         $this->_container->set($path, $value, $expire);
-        return $this->_container->getResultCode() == \Memcached::RES_SUCCESS;
+        return $this->_container->getResultCode() == Memcached::RES_SUCCESS;
     }
 
     /**
@@ -80,7 +80,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
     	$path = $this->getCachePath($name);
     	if ($this->_caching) {
             $data = $this->_container->get($path);
-            if ($this->_container->getResultCode() != \Memcached::RES_SUCCESS) {
+            if ($this->_container->getResultCode() != Memcached::RES_SUCCESS) {
                 $data = null;
             }
         }
@@ -99,7 +99,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
     {
     	$path = $this->getCachePath($name);
         $this->_container->delete($path);
-        return $this->_container->getResultCode() == \Memcached::RES_SUCCESS;
+        return $this->_container->getResultCode() == Memcached::RES_SUCCESS;
     }
 
     /**

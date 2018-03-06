@@ -1,14 +1,6 @@
 <?php
 
-namespace  Ark\Assembly\Router;
-
-use ReflectionClass;
-use Ark\Core\Loader;
-use Ark\Core\Noah;
-use Ark\Core\Trace;
-use Ark\Core\Request;
-
-class Base extends Father
+class Ark_Router_Base extends Ark_Router_Father
 {
 
     /**
@@ -103,7 +95,7 @@ class Base extends Father
             $url_mode = $mode;
         }
         $this->setUrlMode($url_mode);
-        Trace::set('custom', array('name'=> 'url_mode', 'value'=> $url_mode));
+        Ark_Trace::set('custom', array('name'=> 'url_mode', 'value'=> $url_mode));
     }
 
     /**
@@ -229,7 +221,7 @@ class Base extends Father
     {
         $subspace = trim($subspace, '\\');
         if (!is_callable($operator)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
         }
         $this->_interceptors[$subspace] = $operator;
     }
@@ -267,7 +259,7 @@ class Base extends Father
      * 准备路由数据
      *
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Router_Exception
      */
     function ready()
     {
@@ -302,11 +294,11 @@ class Base extends Father
         $this->_namespace = $namespace;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
-        Loader::setAlias('~', PATH_NOW);
+        Ark_Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
-        Request::setReady(true);
-        Ark_Core::getInstance()->setMember('request', function() { return Request::getInstance(); });
-        if (!Loader::findClass($namespace)) {
+        Ark_Request::setReady(true);
+        Ark_Core::getInstance()->setMember('request', function() { return Ark_Request::getInstance(); });
+        if (!Ark_Loader::findClass($namespace)) {
             throw new Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', $namespace));
         }
         $this->_ready = true;
@@ -323,7 +315,7 @@ class Base extends Father
         $namespace = $this->_namespace;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $namespace));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $namespace));
         }
         //实现拦截器功能
         if ($interceptors = $this->getInterceptors($namespace)) {
@@ -336,7 +328,7 @@ class Base extends Father
         }
         $instance = new $namespace();
         if (!method_exists($instance, $this->_action)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.action_not_found', $namespace, $this->_action));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.action_not_found', $namespace, $this->_action));
         }
         $output = null;
         //自动化类
@@ -426,7 +418,7 @@ class Base extends Father
             }
         }
         if (!is_string($uri)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.uri_must_string'));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }

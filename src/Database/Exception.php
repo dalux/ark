@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Database;
-
-class Exception extends \Ark\Core\Exception
+class Ark_Database_Exception extends Ark_Exception
 {
 
 }

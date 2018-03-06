@@ -1,13 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Router;
-
-use Ark\Core\Noah;
-use ReflectionClass;
-use Ark\Core\Request;
-use Ark\Core\Loader;
-
-class Native extends Father
+class Ark_Router_Native extends Ark_Router_Father
 {
 
     /**
@@ -161,7 +154,7 @@ class Native extends Father
      * 准备路由数据
      *
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Router_Exception
      */
     function ready()
     {
@@ -200,12 +193,12 @@ class Native extends Father
         $this->_action = Ark_Core::getInstance()->config->router->default->action;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', $path_now);
-        Loader::setAlias('~', PATH_NOW);
+        Ark_Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
-        Request::setReady(true);
-        Ark_Core::getInstance()->setMember('request', function() { return Request::getInstance(); });
-        if (!Loader::findClass($namespace)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', $namespace));
+        Ark_Request::setReady(true);
+        Ark_Core::getInstance()->setMember('request', function() { return Ark_Request::getInstance(); });
+        if (!Ark_Loader::findClass($namespace)) {
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', $namespace));
         }
         $this->_ready = true;
     }
@@ -221,7 +214,7 @@ class Native extends Father
         $action = $this->_action;
         $ref = new ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $namespace));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $namespace));
         }
         //实现拦截器功能
         if ($interceptors = $this->getInterceptors($namespace)) {
@@ -236,7 +229,7 @@ class Native extends Father
         //实例化最终控制器对象
         $instance = new $namespace();
         if (!method_exists($instance, $action)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.action_not_found', $namespace, $action));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.action_not_found', $namespace, $action));
         }
         $output = null;
         //自动化类
@@ -269,12 +262,12 @@ class Native extends Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Exception(Ark_Core::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.uri_must_string'));
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }

@@ -1,28 +1,23 @@
 <?php
 
-namespace Ark\Assembly\Proxy;
-
-use Ark\Core\Noah;
-use Ark\Contract\Cache as CacheInterface;
-
-class Cache
+class Ark_Proxy_Cache
 {
 
     /**
      * 缓存器
      * 
      * @access private
-     * @var CacheInterface
+     * @var Ark_Cache_Contract
      */
     private $_cacher = null;
 
     /**
      * 设置代理缓存器
      *
-     * @param CacheInterface $cache
+     * @param Ark_Cache_Contract $cache
      * @return $this
      */
-    function setCacher(CacheInterface $cache)
+    function setCacher(Ark_Cache_Contract $cache)
     {
         $this->_cacher = $cache;
         return $this;
@@ -43,7 +38,7 @@ class Cache
     function doProxy($adapter, $method, array $args, $expire = 86400, $name = null)
     {
         if (!is_callable(array($adapter, $method))) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('proxy.target_not_callable'));
+            throw new Ark_Proxy_Exception(Ark_Core::getInstance()->lang->get('proxy.target_not_callable'));
         }
         $key = is_null($name)
             ? $this->name($adapter, $method, $args)

@@ -2,10 +2,6 @@
 
 require_once __DIR__. '/Tracker/Tracker.php';
 
-use Ark\Core\Event;
-use Ark\Core\Noah;
-use Ark\Core\Server;
-
 //设置cookie
 Ark_Core::getInstance()->container->__tracker__ = array(
     'name'=> 'test',
@@ -13,12 +9,12 @@ Ark_Core::getInstance()->container->__tracker__ = array(
 );
 
 //注册框架内置事件
-Event::addListener('event.router.ready', function($data) {
+Ark_Event::addListener('event.router.ready', function($data) {
     //开启debug模式
     if ($tracker = Ark_Core::getInstance()->container->__tracker__) {
         list($name, $pass) = array($tracker->name, $tracker->pass);
         $token = Ark_Core::getInstance()->request->cookie($name);
-        if ($token == $pass && !Server::isCli()) {
+        if ($token == $pass && !Ark_Server::isCli()) {
             Ark_Core::getInstance()->config->global->debug = true;
         }
     }
@@ -28,7 +24,7 @@ Event::addListener('event.router.ready', function($data) {
 }, 'open.debug');
 
 //框架结束事件
-Event::addListener('event.framework.shutdown', function($data) {
+Ark_Event::addListener('event.framework.shutdown', function($data) {
     $tracker = new Tracker();
     return $tracker->handle($data);
 }, 'close.debug');

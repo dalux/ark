@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Insert extends Ark_Toolkit_SQLBuilder_Father
+class Ark_Database_SQLBuilder_Insert extends Ark_Database_SQLBuilder_Father
 {
     
     /**
@@ -9,7 +9,7 @@ class Ark_Toolkit_SQLBuilder_Insert extends Ark_Toolkit_SQLBuilder_Father
      * @access public
      * @param string $table 要插入的表
      * @param array $data 数据
-     * @return Ark_Toolkit_SQLBuilder_Insert
+     * @return Ark_Database_SQLBuilder_Insert
      */
     function into($table, array $data)
     {

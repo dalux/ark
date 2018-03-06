@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
+class Ark_Database_SQLBuilder_Select extends Ark_Database_SQLBuilder_Father
 {
     
     /**
@@ -9,7 +9,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @access public
      * @param mixed $table
      * @param array $columns
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function from($table, array $columns = array('*')) 
     {
@@ -23,7 +23,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      *
      * @access public
      * @param mixed $column
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function group($column)
     {
@@ -39,7 +39,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      *
      * @access public
      * @param $cond
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function having($cond)
     {
@@ -55,7 +55,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @access public
      * @param int $count
      * @param int $offset
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function limit($count = 0, $offset = 0) 
     {
@@ -70,7 +70,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @access public
      * @param string $col
      * @param boolean $asc
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function order($col, $asc = true) 
     {
@@ -85,7 +85,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @param array $table
      * @param string $cond
      * @param array $fetch
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function joinLeft($table, $cond, $fetch = array('*')) 
     {
@@ -99,7 +99,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @param array $table
      * @param string $cond
      * @param array $fetch
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function joinInner($table, $cond, $fetch = array('*')) 
     {
@@ -113,7 +113,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @param array $table
      * @param string $cond
      * @param array $fetch
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     function joinRight($table, $cond, $fetch = array('*')) 
     {
@@ -128,7 +128,7 @@ class Ark_Toolkit_SQLBuilder_Select extends Ark_Toolkit_SQLBuilder_Father
      * @param string $cond 联接条件
      * @param array $fetch 当前表取值字段
      * @param string $jointype 联接类型
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     protected function _join($table, $cond, $fetch, $jointype) 
     {

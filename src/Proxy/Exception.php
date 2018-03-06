@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Proxy;
-
-class Exception extends \Ark\Core\Exception
+class Ark_Proxy_Exception extends Ark_Exception
 {
 
 }

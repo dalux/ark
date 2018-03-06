@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Update_Mysql extends Ark_Toolkit_SQLBuilder_Update
+class Ark_Database_SQLBuilder_Update_Mysql extends Ark_Database_SQLBuilder_Update
 {
 
     /**

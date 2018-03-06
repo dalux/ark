@@ -1,7 +1,6 @@
 <?php
 
-
-class Ark_Toolkit_SQLBuilder_Update extends Father
+class Ark_Database_SQLBuilder_Update extends Ark_Database_SQLBuilder_Father
 {
 
     /**
@@ -10,7 +9,7 @@ class Ark_Toolkit_SQLBuilder_Update extends Father
      * @access public
      * @param mixed $table 要更新的表
      * @param array $updates 要更新的字段及其值
-     * @return Ark_Toolkit_SQLBuilder_Update
+     * @return Ark_Database_SQLBuilder_Update
      */
     function set($table, array $updates = array()) 
     {

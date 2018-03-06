@@ -1,7 +1,6 @@
 <?php
 
-
-class Ark_Toolkit_SQLBuilder_Insert_Mysql extends Ark_Toolkit_SQLBuilder_Insert
+class Ark_Database_SQLBuilder_Insert_Mysql extends Ark_Database_SQLBuilder_Insert
 {
 
     /**

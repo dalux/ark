@@ -1,18 +1,12 @@
 <?php
 
-namespace Ark\Assembly\Database;
-
-use Ark\Core\Trace;
-use Ark\Core\Timer;
-use Ark\Core\Event;
-
-class Pdo extends Father
+class Ark_Database_Pdo extends Ark_Database_Father
 {
 
     /**
      * PDO对象
      *
-     * @var \PDO
+     * @var PDO
      */
     protected $_instance;
 
@@ -22,7 +16,7 @@ class Pdo extends Father
     * @access protected
     * @var string
     */
-    protected $_fetch_mode = \PDO::FETCH_ASSOC;
+    protected $_fetch_mode = PDO::FETCH_ASSOC;
 
     /**
      * SQL语句执行后影响到的行数
@@ -41,23 +35,23 @@ class Pdo extends Father
      * @param null $pass
      * @param array $options
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
      */
 	function __construct($dsn = null, $user = null, $pass = null, array $options = array())
 	{
 		try {
-            Timer::mark('db_connect_begin');
-            $instance = new \PDO($dsn, $user, $pass, $options);
-            Timer::mark('db_connect_end');
+            Ark_Timer::mark('db_connect_begin');
+            $instance = new PDO($dsn, $user, $pass, $options);
+            Ark_Timer::mark('db_connect_end');
             $data = array(
                 'container'=> $this,
                 'instance'=> $instance,
-                'driver'=> $instance->getAttribute(\PDO::ATTR_DRIVER_NAME),
+                'driver'=> $instance->getAttribute(PDO::ATTR_DRIVER_NAME),
             );
-            $data = Event::onListening('event.dbconnect.finish', $data);
+            $data = Ark_Event::onListening('event.dbconnect.finish', $data);
             $this->_instance = $data['instance'];
-		} catch(\PDOException $e) {
-			throw new Exception($e->getMessage());
+		} catch(PDOException $e) {
+			throw new Ark_Database_Exception($e->getMessage());
 		}
 	}
 
@@ -66,16 +60,16 @@ class Pdo extends Father
      *
      * @param string $sql
      * @param array $bind
-     * @return \PDOStatement
+     * @return PDOStatement
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
      */
     protected function _query($sql, $bind = array())
     {
         try {
-            Timer::mark('db_query_begin');
+            Ark_Timer::mark('db_query_begin');
             is_string($sql) || $sql = (string)$sql;
-            /* @var \PDOStatement $smt */
+            /* @var PDOStatement $smt */
             $smt = $this->_instance->prepare($sql);
             if ($bind) {
                 foreach ($bind as $key=> $val) {
@@ -87,18 +81,18 @@ class Pdo extends Father
             $smt->execute();
             $smt->setFetchMode($this->_fetch_mode);
             $this->_row_count = $smt->rowCount();
-            Timer::mark('db_query_end');
-            Trace::set('database', array($smt->queryString, sprintf('%.4f', Timer::lastUsed())));
+            Ark_Timer::mark('db_query_end');
+            Ark_Trace::set('database', array($smt->queryString, sprintf('%.4f', Ark_Timer::lastUsed())));
             return $smt;
-        } catch(\PDOException $e) {
-            /* @var \PDOStatement $smt */
+        } catch(PDOException $e) {
+            /* @var PDOStatement $smt */
             $data = array(
                 'sql'=> $smt->queryString,
                 'error'=> $e->getMessage(),
                 'driver'=> $this->getDriverName(),
             );
-            $data = Event::onListening('event.query.failed', $data);
-            throw new Exception($data['error']);
+            $data = Ark_Event::onListening('event.query.failed', $data);
+            throw new Ark_Database_Exception($data['error']);
         }
     }
 
@@ -110,7 +104,7 @@ class Pdo extends Father
      * @param array $bind
      * @return int
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
      */
     function query($sql, array $bind = array())
     {
@@ -120,12 +114,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data);
+        $data = Ark_Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = true;
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data);
+        $data = Ark_Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -137,7 +131,7 @@ class Pdo extends Father
      * @param array $bind
      * @return mixed
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
      */
     function fetchAll($sql, array $bind = array())
     {
@@ -147,12 +141,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data);
+        $data = Ark_Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetchAll($this->_fetch_mode);
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data);
+        $data = Ark_Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -164,7 +158,7 @@ class Pdo extends Father
      * @param array $bind
      * @return mixed
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
      */
     function fetchOne($sql, array $bind = array())
     {
@@ -174,12 +168,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data);
+        $data = Ark_Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetchColumn(0);
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data);
+        $data = Ark_Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -191,7 +185,7 @@ class Pdo extends Father
      * @param array $bind
      * @return mixed
      * @throws Exception
-     * @throws \Ark\Core\Exception
+     * @throws Ark_Database_Exception
      */
     function fetch($sql, array $bind = array())
     {
@@ -201,12 +195,12 @@ class Pdo extends Father
             'bind'=> $bind,
             'driver'=> $this->getDriverName(),
         );
-        $data = Event::onListening('event.query.before', $data);
+        $data = Ark_Event::onListening('event.query.before', $data);
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetch($this->_fetch_mode);
         $smt = null;
         $data['result'] = $result;
-        $data = Event::onListening('event.query.finish', $data);
+        $data = Ark_Event::onListening('event.query.finish', $data);
         return $data['result'];
     }
 
@@ -292,13 +286,13 @@ class Pdo extends Father
      */
     function getDriverName()
     {
-        return $this->_instance->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        return $this->_instance->getAttribute(PDO::ATTR_DRIVER_NAME);
     }
 
     /**
      * 获取PDO对象实例
      *
-     * @return \PDO
+     * @return PDO
      */
     function getInstance()
     {

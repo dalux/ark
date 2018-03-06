@@ -1,10 +1,6 @@
 <?php
 
-namespace Ark\Assembly\Session;
-
-use Ark\Contract\Session;
-
-abstract class Father implements Session
+abstract class Ark_Session_Father implements Ark_Session_Contract
 {
 
     /**
@@ -39,7 +35,7 @@ abstract class Father implements Session
      * @access public
      * @param string $name
      * @param mixed $value
-     * @return Father
+     * @return Ark_Session_Father
      */
     function set($name, $value)
     {
@@ -52,7 +48,7 @@ abstract class Father implements Session
      *
      * @access public
      * @param string $name
-     * @return Father
+     * @return Ark_Session_Father
      */
     function delete($name)
     {

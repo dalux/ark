@@ -1,8 +1,4 @@
 <?php
-
-use Ark\Core\Event;
-use Ark\Core\Exception;
-
 //请求初始化时过滤攻击威胁
 Ark_Event::addListener('event.request.ready', function($data) {
     foreach ($data as $key=> $val) {

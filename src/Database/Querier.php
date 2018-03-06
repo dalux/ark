@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_Querier
+class Ark_Database_Querier
 {
 
     /**
@@ -34,7 +34,7 @@ class Ark_Toolkit_Querier
     /**
      * 数据库连接
      *
-     * @var Database $_conn
+     * @var Ark_Database_Contract $_conn
      */
     private static $_conn = null;
 

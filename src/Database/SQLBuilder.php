@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder
+class Ark_Database_SQLBuilder
 {
 
     /**

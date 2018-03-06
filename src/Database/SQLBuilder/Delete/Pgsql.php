@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Toolkit_SQLBuilder_Delete_Pgsql extends Ark_Toolkit_SQLBuilder_Delete
+class Ark_Database_SQLBuilder_Delete_Pgsql extends Ark_Database_SQLBuilder_Delete
 {
 
     /**

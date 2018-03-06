@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Contract;
-
-interface Database
+interface Ark_Database_Contract
 {
 
     /**

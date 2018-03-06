@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Contract;
-
-interface Session
+interface Ark_Session_Contract
 {
 
     /**
@@ -29,7 +27,7 @@ interface Session
      * @access public
      * @param string $name
      * @param mixed $value
-     * @return Session
+     * @return Ark_Session_Contract
      */
     function set($name, $value);
 
@@ -38,7 +36,7 @@ interface Session
      *
      * @access public
      * @param string $name
-     * @return Session
+     * @return Ark_Session_Contract
      */
     function delete($name);
 

@@ -1,8 +1,6 @@
 <?php
 
-namespace Ark\Contract;
-
-interface Router
+interface Ark_Router_Contract
 {
 
 

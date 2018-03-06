@@ -1,18 +1,12 @@
 <?php
 
-namespace Ark\Assembly\Session;
-
-use Closure;
-use Ark\Core\Noah;
-use Ark\Assembly\Cache\Father as Cache;
-
-class User extends Father
+class Ark_Session_User extends Ark_Session_Father
 {
 
     /**
      * 缓存器
      *
-     * @var Cache
+     * @var Ark_Cache_Contract
      */
     protected $_container;
 
@@ -37,8 +31,8 @@ class User extends Father
         } else {
             $this->_container = $config['save_path'];
         }
-        if (!$this->_container instanceof Cache) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark\\Contract\\Cache');
+        if (!$this->_container instanceof Ark_Cache_Contract) {
+            throw new Ark_Session_Exception(Ark_Core::getInstance()->lang->get('sess.cacher_implement_error'), 'Ark_Cache_Contract');
         }
         $this->_container->setFlag('session');
         $this->_expire_time = $config['expire_time'];

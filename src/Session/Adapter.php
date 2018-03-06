@@ -1,14 +1,6 @@
 <?php
 
-namespace Ark\Assembly;
-
-use Ark\Core\Noah;
-use Ark\Core\Trace;
-use Ark\Core\Loader;
-use Ark\Assembly\Session\Exception;
-use Ark\Contract\Session as SessionInterface;
-
-class Session
+class Ark_Session_Adapter
 {
 
     /**

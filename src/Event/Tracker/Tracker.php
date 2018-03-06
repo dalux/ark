@@ -1,11 +1,5 @@
 <?php
 
-use Ark\Core\Noah;
-use Ark\Core\Timer;
-use Ark\Core\Trace;
-use Ark\Core\Server;
-use Ark\Core\Toolkit;
-
 class Tracker
 {
 
@@ -13,25 +7,25 @@ class Tracker
     {
         if ($data['event'] == 'event.framework.ready') {
             $debug = Ark_Core::getInstance()->config->global->debug;
-            if ($debug && !Server::isCli()) {
+            if ($debug && !Ark_Server::isCli()) {
                 ob_start();
             }
         } elseif ($data['event'] == 'event.framework.shutdown') {
             //数据库执行语句
             $dbtrace = array(array('sql', 'time'));
-            $_trace = Trace::get('database');
+            $_trace = Ark_Trace::get('database');
             $_trace || $_trace = array();
             foreach ($_trace as $k=> $v) { $dbtrace[] = $v; }
             //内存占用
-            $memusage = Trace::get('memory');
+            $memusage = Ark_Trace::get('memory');
             //页面执行完成总耗时
-            $all_time = Timer::totalUsed();
+            $all_time = Ark_Timer::totalUsed();
             //数据连接时间
-            $dbconnect_time = Timer::pick('db_connect_begin', 'db_connect_end');
+            $dbconnect_time = Ark_Timer::pick('db_connect_begin', 'db_connect_end');
             $dbconnect_time || $dbconnect_time = '0.0000';
             //引擎加载
             $driver_trace = array(array('name', 'value'));
-            $drivers = Trace::get('driver');
+            $drivers = Ark_Trace::get('driver');
             if (is_array($drivers)) {
                 foreach ($drivers as $k => $v) {
                     $driver_trace[] = array(key($v), current($v));
@@ -39,7 +33,7 @@ class Tracker
             }
             //非CLI模式时，在浏览器调试工具中输出调试信息
             if (ob_get_length() > 0
-                    && !Server::isCli()
+                    && !Ark_Server::isCli()
                     && Ark_Core::getInstance()->config->global->debug) {
                 $user_agent = $_SERVER['HTTP_USER_AGENT'];
                 //chrome、火狐浏览器
@@ -48,9 +42,9 @@ class Tracker
                     $usedinfo = array(array('name', 'data'));
                     $usedinfo[] = array('all time', $all_time. 's');
                     $usedinfo[] = array('dbconnect time', $dbconnect_time. 's');
-                    $usedinfo[] = array('memory', Toolkit::formatSize($memusage[1]-$memusage[0]));
+                    $usedinfo[] = array('memory', Ark_Toolkit::formatSize($memusage[1]-$memusage[0]));
                     $custom = array(array('name', 'value'));
-                    $_custom = Trace::get('custom');
+                    $_custom = Ark_Trace::get('custom');
                     if ($_custom) {
                         foreach ($_custom as $k=> $v) {
                             if (is_array($v)) {
@@ -69,7 +63,7 @@ class Tracker
                 }
                 //IE sorry
                 //当前为CLI模式，并且为调试模式，并且显式的指明了要显示DEBUG信息时
-            } elseif (Server::isCli()
+            } elseif (Ark_Server::isCli()
                     && Ark_Core::getInstance()->request->get('debug')
                     && Ark_Core::getInstance()->config->global->debug) {
                 echo PHP_EOL. PHP_EOL. str_repeat('=', 20). ' Debug Info '. str_repeat('=', 40). PHP_EOL. PHP_EOL;
@@ -87,7 +81,7 @@ class Tracker
                 echo PHP_EOL. '>>> DBConnect Time Used'. PHP_EOL;
                 echo "\t". $dbconnect_time. 's'. PHP_EOL;
                 echo PHP_EOL. '>>> Memory Used'. PHP_EOL;
-                echo "\t". Toolkit::formatSize($memusage[1]-$memusage[0]). PHP_EOL;
+                echo "\t". Ark_Toolkit::formatSize($memusage[1]-$memusage[0]). PHP_EOL;
                 echo PHP_EOL. '>>> Url Mode'. PHP_EOL;
                 echo "\t". Ark_Core::getInstance()->router->getUrlModeName(). PHP_EOL;
                 echo PHP_EOL. '>>> Driver List'. PHP_EOL;
