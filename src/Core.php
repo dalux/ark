@@ -176,8 +176,8 @@ class Ark_Core
         if (!$this->_config_path) {
             $this->_config_path = function() {
                 $path = Ark_Loader::realPath('./config');
-                $host = Server::getDomain();
-                $full = Server::getDomain(false);
+                $host = Ark_Server::getDomain();
+                $full = Ark_Server::getDomain(false);
                 if (is_file($file = $path. '/'. $full. '.php')
                         || is_file($file = $path. '/'. $host. '.php')) {
                     return $file;
@@ -198,7 +198,7 @@ class Ark_Core
             foreach ($config_files as $file) {
                 $result = include($file);
                 if (!is_array($result)) {
-                    throw new Exception($this->lang->get('core.invalid_config_format', basename($file)));
+                    throw new Ark_Exception($this->lang->get('core.invalid_config_format', basename($file)));
                 }
                 $key = strtolower(basename($file));
                 $key = preg_replace('/\.php$/', '', $key);
@@ -209,10 +209,10 @@ class Ark_Core
         } elseif (is_file($config_path)) {
             $config = include($config_path);
             if (!is_array($config)) {
-                throw new Exception($this->lang->get('core.invalid_config_format', basename($config_path)));
+                throw new Ark_Exception($this->lang->get('core.invalid_config_format', basename($config_path)));
             }
         } else {
-            throw new Exception($this->lang->get('core.invalid_config_path'));
+            throw new Ark_Exception($this->lang->get('core.invalid_config_path'));
         }
         return $config;
     }
@@ -238,12 +238,12 @@ class Ark_Core
         //默认屏蔽错误提示
         ini_set('display_errors', '0');
         //启动时间
-        Timer::mark('sys_startup');
+        Ark_Timer::mark('sys_startup');
         //初始内存占用数
-        Trace::set('memory', $memory_usage);
+        Ark_Trace::set('memory', $memory_usage);
         //配置项默认为空对象
         $this->_storage['config'] = array(
-            'instance'=> new Container(),
+            'instance'=> new Ark_Container(),
             'system'=> 1
         );
         //定义常量
@@ -251,25 +251,25 @@ class Ark_Core
         defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
         defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
         //注册框架类库基地址
-        Loader::setNameSpace('Ark', PATH_LIB);
+        Ark_Loader::setNameSpace('Ark_', PATH_LIB);
         //语言包选择器
         $this->_storage['lang'] = array(
-            'instance'=> function() { return new Language(); },
+            'instance'=> function() { return new Ark_Language(); },
             'system'=> 1
         );
         //异常报告
-        Handler::setHandler('exception');
+        Ark_Handler::setHandler('exception');
         //后续类文件自动加载
-        Loader::addAutoLoader(array('\Ark\Core\Loader', 'autoLoad'));
+        Ark_Loader::addAutoLoader(array('Ark_Loader', 'autoLoad'));
         //初始化CLI模式
-        Server::isCli() && Server::initCli();
+        Ark_Server::isCli() && Ark_Server::initCli();
         //注册内置组件
         $this->_storage['container'] = array(
-            'instance'=> function() { return new Container(); },
+            'instance'=> function() { return new Ark_Container(); },
             'system'=> 1,
         );
         $this->_storage['response'] = array(
-            'instance'=> function() { return new Response(); },
+            'instance'=> function() { return new Ark_Response(); },
             'system'=> 1,
         );
         //准备就绪
@@ -287,28 +287,28 @@ class Ark_Core
     function run()
     {
         if (!$this->_ready) {
-            throw new Exception($this->lang->get('core.framework_not_ready'));
+            throw new Ark_Exception($this->lang->get('core.framework_not_ready'));
         }
         //检测必要应用配置
         if (!$this->_app_name) {
-            throw new Exception($this->lang->get('core.invalid_app_name'));
+            throw new Ark_Exception($this->lang->get('core.invalid_app_name'));
         } elseif (!is_dir($this->_app_path)) {
-            throw new Exception($this->lang->get('core.invalid_app_path'));
+            throw new Ark_Exception($this->lang->get('core.invalid_app_path'));
         }
         //注册应用程序基地址
-        Loader::setNameSpace($this->_app_name, $this->_app_path);
-        Loader::setAlias('@', $this->_app_path);
+        Ark_Loader::setNameSpace($this->_app_name, $this->_app_path);
+        Ark_Loader::setAlias('@', $this->_app_path);
         defined('PATH_APP') || define('PATH_APP', $this->_app_path);
         //配置文件
         if (!$config = $this->getConfig()) {
-            throw new Exception($this->lang->get('core.invalid_configuration'));
+            throw new Ark_Exception($this->lang->get('core.invalid_configuration'));
         }
-        $this->_storage['config']['instance'] = new Container($config);
+        $this->_storage['config']['instance'] = new Ark_Container($config);
         //控制器地址检测
         if (!$this->_controller_path) {
             $this->_controller_path = $this->_app_path . DIRECTORY_SEPARATOR . 'Controller';
         } elseif (strpos($this->_controller_path, $this->_app_path) === false) {
-            throw new Exception($this->lang->get('core.invalid_controller_path'));
+            throw new Ark_Exception($this->lang->get('core.invalid_controller_path'));
         }
         defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_path);
         //时区设置
@@ -325,19 +325,19 @@ class Ark_Core
         }
         //路由
         $this->_storage['router'] = array(
-            'instance'=>  function() { return RouterAdapter::getDriver(); },
+            'instance'=>  function() { return Ark_Router_Adapter::getDriver(); },
             'system'=> 1,
         );
         //监听系统启动就绪事件
-        Event::onListening('event.framework.ready');
-        if (!$this->router instanceof RouterInterface) {
-            $lang = Ark_Core::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), '\\Ark\\Contract\\Router');
+        Ark_Event::onListening('event.framework.ready');
+        if (!$this->router instanceof Ark_Router_Contract) {
+            $lang = Ark_Core::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), 'Ark_Router_Contract');
             throw new Exception($lang);
         }
         //路由调度准备
         $this->router->ready();
         //路由准备就绪
-        Event::onListening('event.router.ready');
+        Ark_Event::onListening('event.router.ready');
         //路由并呈现控制器内容
         $this->router->dispatch();
     }
@@ -347,7 +347,7 @@ class Ark_Core
      *
      * @param $name
      * @param $value
-     * @return Noah
+     * @return Ark_Core
      */
     function setMember($name, $value)
     {
@@ -369,7 +369,7 @@ class Ark_Core
     function setMethod($name, callable $method)
     {
         if (!is_callable($method)) {
-            throw new Exception($this->lang->get('core.invalid_custom_method', $name));
+            throw new Ark_Exception($this->lang->get('core.invalid_custom_method', $name));
         } elseif (!isset($this->_method[$name]) || !$this->_method[$name]['system']) {
             $this->_method[$name] = array('method' => $method, 'system' => 0);
         }
@@ -387,7 +387,7 @@ class Ark_Core
     {
         //常规取值
         if (!$instance = $this->_storage[$name]['instance']) {
-            throw new Exception($this->lang->get('core.object_not_found', $name));
+            throw new Ark_Exception($this->lang->get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {
@@ -420,7 +420,7 @@ class Ark_Core
     function call($name, $args)
     {
         if (!isset($this->_method[$name])) {
-            throw new Exception($this->lang->get('core.custom_method_notfound', $name));
+            throw new Ark_Exception($this->lang->get('core.custom_method_notfound', $name));
         }
         $method = $this->_method[$name]['method'];
         return call_user_func_array($method, $args);
@@ -448,11 +448,11 @@ class Ark_Core
     function __destruct()
     {
         //结束时间点
-        Timer::mark('sys_shutdown');
+        Ark_Timer::mark('sys_shutdown');
         //内存占用
-        Trace::set('memory', memory_get_usage());
+        Ark_Trace::set('memory', memory_get_usage());
         //结束事件
-        Event::onListening('event.framework.shutdown');
+        Ark_Event::onListening('event.framework.shutdown');
     }
 
 }

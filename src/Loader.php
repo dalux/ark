@@ -150,7 +150,7 @@ class Ark_Loader
     {
         $first_char = substr($spacename, 0, 1);
         if (!isset(self::$_alias[$first_char])) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('core.format_path_failed'));
+            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('core.format_path_failed'));
         }
         $parsed = self::_parse($spacename);
         list($alias, $space) = $parsed;
