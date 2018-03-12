@@ -3,6 +3,8 @@
 class Ark_Handler
 {
 
+    const TYPE_EXCEPTION = 1;
+
     /**
      * 获取异常处理句柄对象
      *
@@ -13,7 +15,7 @@ class Ark_Handler
      */
     static function setHandler($type, $handler = null)
     {
-        if ($type == 'exception') {
+        if ($type == self::TYPE_EXCEPTION) {
             restore_exception_handler();
             if (is_null($handler) || !is_callable($handler)) {
                 $handler = array(new self(), 'display');

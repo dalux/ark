@@ -251,14 +251,14 @@ class Ark_Core
         defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
         defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
         //注册框架类库基地址
-        Ark_Loader::setNameSpace('Ark_', PATH_LIB);
+        Ark_Loader::setNameSpace('Ark', PATH_LIB);
         //语言包选择器
         $this->_storage['lang'] = array(
             'instance'=> function() { return new Ark_Language(); },
             'system'=> 1
         );
         //异常报告
-        Ark_Handler::setHandler('exception');
+        Ark_Handler::setHandler(Ark_Handler::TYPE_EXCEPTION);
         //后续类文件自动加载
         Ark_Loader::addAutoLoader(array('Ark_Loader', 'autoLoad'));
         //初始化CLI模式
@@ -274,7 +274,6 @@ class Ark_Core
         );
         //准备就绪
         $this->_ready = true;
-        return $this;
     }
 
     /**
