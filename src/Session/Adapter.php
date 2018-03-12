@@ -6,22 +6,22 @@ class Ark_Session_Adapter
     /**
      * 获取会话引擎实例
      *
-     * @return SessionInterface
+     * @return Ark_Session_Contract
      * @throws Exception
      */
     static function getDriver()
     {
         $config = Ark_Core::getInstance()->config->session->toArray();
         if (!$driver = $config['driver']) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('sess.invalid_driver_name'));
-        } elseif (!Loader::findClass($driver)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('sess.driver_not_found', $driver));
+            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('sess.invalid_driver_name'));
+        } elseif (!Ark_Loader::findClass($driver)) {
+            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('sess.driver_not_found', $driver));
         }
         $instance = new $driver();
-        if (!$instance instanceof SessionInterface) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('sess.driver_implement_error', $driver, '\\Ark\\Contract\\Session'));
+        if (!$instance instanceof Ark_Session_Contract) {
+            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('sess.driver_implement_error', $driver, 'Ark_Session_Contract'));
         }
-        Trace::set('driver', array('session'=> $driver));
+        Ark_Trace::set('driver', array('session'=> $driver));
         return $instance;
     }
 
