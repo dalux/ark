@@ -331,7 +331,7 @@ class Ark_Core
         Ark_Event::onListening('event.framework.ready');
         if (!$this->router instanceof Ark_Router_Contract) {
             $lang = Ark_Core::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), 'Ark_Router_Contract');
-            throw new Exception($lang);
+            throw new Ark_Exception($lang);
         }
         //路由调度准备
         $this->router->ready();

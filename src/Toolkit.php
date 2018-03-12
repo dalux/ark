@@ -451,16 +451,16 @@ class Ark_Toolkit
      *
      * @static
      * @access public
-     * @param \SimpleXMLElement $object
+     * @param SimpleXMLElement $object
      * @return array
      */
-    static function xmlToArray(\SimpleXMLElement $object)
+    static function xmlToArray(SimpleXMLElement $object)
     {
         $i = 0;
         $return = array();
         $last_name = null;
         foreach ($object->children() as $val) {
-            /* @var \SimpleXMLElement $val */
+            /* @var SimpleXMLElement $val */
             if (isset($last_name) && $val->getName() == $last_name) {
                 $i == 1 && $return[$last_name] = array($return[$last_name]);
                 array_push($return[$last_name], self::xmlToArray($val));
