@@ -205,6 +205,8 @@ class Ark_Core
             require_once __DIR__. '/Language.php';
             //框架变量实例
 			self::$_instance = new self();
+			global $ark;    //暴露一个全局变量，使控制器中可用
+			$ark = self::$_instance;
 			//默认屏蔽错误提示
 			ini_set('display_errors', '1');
 			//启动时间

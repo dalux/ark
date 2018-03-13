@@ -40,7 +40,8 @@ abstract class Ark_Router_Father implements Ark_Router_Contract
      */
     function dispatch()
     {
-        $config = Ark_Core::getInstance()->config;;
+        global $ark;
+        $config = Ark_Core::getInstance()->config;
         //自动加载目录下引导文件
         if ($interceptor = $config->router->controller->interceptor) {
             if (basename($this->_controller) == $interceptor) {

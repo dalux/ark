@@ -99,6 +99,7 @@ class Ark_Router_Base extends Ark_Router_Father
      */
     function dispatch()
     {
+        global $ark;
         if (!is_file($this->_controller)) {
             throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
         }
