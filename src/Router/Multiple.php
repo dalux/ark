@@ -96,11 +96,6 @@ class Ark_Router_Multiple extends Ark_Router_Father
 	function dispatch()
 	{
         $config = Ark_Core::getInstance()->config->router;
-        $global_var = $config->global_var;
-        if (!is_null($global_var) && !preg_match('/^[0-9]+/', $global_var)) {
-            global ${$global_var};
-            ${$global_var} = Ark_Core::getInstance();
-        }
         //自动加载目录下引导文件
         if ($interceptor = $config->interceptor) {
             //获取目录树

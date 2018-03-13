@@ -80,12 +80,12 @@ class Ark_Loader
      * 设置自动加载器
      *
      * @param $loader
-     * @throws Exception
+     * @throws Ark_Exception
      */
     static function addAutoLoader($loader)
     {
         if (!is_callable($loader)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('core.invalid_autoloader'));
+            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('core.invalid_autoloader'));
         }
         spl_autoload_register($loader);
     }
@@ -94,12 +94,12 @@ class Ark_Loader
      * 本框架自动加载器
      *
      * @param $class
-     * @throws Exception
+     * @throws Ark_Exception
      */
     static function autoLoad($class)
     {
         if (!$path = self::findClass($class)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('core.class_path_notfound', $class));
+            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('core.class_path_notfound', $class));
         }
         self::import($path);
     }
@@ -144,7 +144,7 @@ class Ark_Loader
      *
      * @param $spacename
      * @return string
-     * @throws Exception
+     * @throws Ark_Exception
      */
     static function realPath($spacename)
     {
@@ -179,7 +179,7 @@ class Ark_Loader
      * @param string $path 命名空间
      * @param bool $once 是否只加载一次
      * @return mixed
-     * @throws Exception
+     * @throws Ark_Exception
      */
     static function import($path, $once = true)
     {

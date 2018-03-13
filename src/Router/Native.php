@@ -114,7 +114,7 @@ class Ark_Router_Native extends Ark_Router_Father
      */
     function addInterceptor($subspace, callable $operator)
     {
-        $subspace = trim($subspace, '\\');
+        $subspace = trim($subspace, '_');
         if (!is_callable($operator)) {
             throw new Exception(Ark_Core::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
         }
@@ -129,7 +129,7 @@ class Ark_Router_Native extends Ark_Router_Father
      */
     function getInterceptors($namespace)
     {
-        $namespace = trim($namespace, '\\');
+        $namespace = trim($namespace, '_');
         $result = array();
         foreach ($this->_interceptors as $subspace=> $operator) {
             if (strpos($namespace, $subspace) !== false) {
@@ -171,23 +171,18 @@ class Ark_Router_Native extends Ark_Router_Father
         if (strpos($uri, $url_suffix) !== false) {
             $uri = preg_replace(sprintf('~%s$~i', $url_suffix), '', $uri);
         }
-        $app_name = Ark_Core::getInstance()->getAppName();
         $controller_dir = Ark_Core::getInstance()->getControllerPath();
-        $app_dir = Ark_Core::getInstance()->getAppPath();
         $path_now = $controller_dir;
         if ($uri == '') {
-            $controller = ucfirst(Ark_Core::getInstance()->config->router->default->controller);
+            $controller = Ark_Core::getInstance()->config->router->controller;
         } else {
-            $controllers = array_map('ucfirst', explode($urlsep, $uri));
-            $controller = implode('\\', $controllers);
+            $controllers = explode($urlsep, $uri);
+            $controller = implode(DIRECTORY_SEPARATOR, $controllers);
             $path_now.= DIRECTORY_SEPARATOR. implode(DIRECTORY_SEPARATOR, $controllers);
             $path_now = dirname($path_now);
         }
-        $part = str_replace($app_dir, '', $controller_dir);
-        $part = trim(str_replace(array('/', '\\'), '\\', $part), '\\');
-        $part = array_map('ucfirst', explode('\\', $part));
-        $part = implode('\\', $part);
-        $namespace = $app_name. '\\'. $part. '\\'. $controller;
+        $file = $path_now. '/'. $controller;
+        var_dump($file, $controller);exit;
         $this->_namespace = $namespace;
         $this->_controller = '/'. $uri;
         $this->_action = Ark_Core::getInstance()->config->router->default->action;

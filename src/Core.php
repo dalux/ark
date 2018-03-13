@@ -3,9 +3,15 @@
 class Ark_Core
 {
 
+    /**
+     * 框架名称
+     */
     const Name      = 'Ark';
-    const Version   = '1.1';
-    const Eamil     = 'guodalu <guodalu@qq.com>';
+
+    /**
+     * 框架作者及联系方式
+     */
+    const Author    = 'guodalu <guodalu@qq.com>';
 
     /**
      * 配置文件获取器
@@ -164,17 +170,13 @@ class Ark_Core
                 }
                 $key = strtolower(basename($file));
                 $key = preg_replace('/\.php$/', '', $key);
-                if ($result) {
-                    $config[$key] = $result;
-                }
+                $config[$key] = $result;
             }
-        } elseif (is_file($config_path)) {
+        } elseif (is_file($config_path)) {  //是文件
             $config = include($config_path);
             if (!is_array($config)) {
                 throw new Ark_Exception($this->lang->get('core.invalid_config_format', basename($config_path)));
             }
-        } else {
-            throw new Ark_Exception($this->lang->get('core.invalid_config_path'));
         }
         return $config;
     }
@@ -185,7 +187,11 @@ class Ark_Core
      */
     static function init()
     {
+
 		if (!self::$_inited) {
+            //初始化内存占用
+            $memory_usage = memory_get_usage();
+            //引入必要文件
 			require_once __DIR__. '/Timer.php';
 			require_once __DIR__. '/Exception.php';
 			require_once __DIR__. '/Trace.php';
@@ -195,13 +201,12 @@ class Ark_Core
 			require_once __DIR__. '/Request.php';
 			require_once __DIR__. '/Event.php';
 			require_once __DIR__. '/Container.php';
-
+            require_once __DIR__. '/Server.php';
+            require_once __DIR__. '/Language.php';
+            //框架变量实例
 			self::$_instance = new self();
-
-			//初始化内存占用
-			$memory_usage = memory_get_usage();
 			//默认屏蔽错误提示
-			ini_set('display_errors', '0');
+			ini_set('display_errors', '1');
 			//启动时间
 			Ark_Timer::mark('sys_startup');
 			//初始内存占用数
@@ -213,8 +218,8 @@ class Ark_Core
 			);
 			//定义常量
 			$debug_trace = debug_backtrace();
-			defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
-			defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
+			defined('PATH_LIB') || define('PATH_LIB', __DIR__);
+			defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[0]['file']));
 			//注册框架类库基地址
 			Ark_Loader::setNameSpace('Ark', PATH_LIB);
 			//语言包选择器
@@ -240,6 +245,7 @@ class Ark_Core
 		}
         //准备就绪
         self::$_inited = true;
+
     }
 
     /**
@@ -266,6 +272,7 @@ class Ark_Core
         if (!$this->_app_name) {
             throw new Ark_Exception($this->lang->get('core.invalid_app_name'));
         } elseif (!is_dir($this->_app_path)) {
+            var_dump($this->_app_path);
             throw new Ark_Exception($this->lang->get('core.invalid_app_path'));
         }
         //注册应用程序基地址
@@ -326,7 +333,7 @@ class Ark_Core
     {
         if (!isset(self::$_storage[$name])
                 || !self::$_storage[$name]['system']) {
-            $self::_storage[$name] = array('instance'=> $value, 'system'=> 0);
+            self::$_storage[$name] = array('instance'=> $value, 'system'=> 0);
         }
     }
 

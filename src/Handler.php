@@ -55,7 +55,7 @@ class Ark_Handler
      *
      * @access public
      * @static
-     * @param \Throwable $e
+     * @param Throwable $e
      * @return string
      */
     function display($e)
@@ -72,7 +72,7 @@ class Ark_Handler
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
             $footerinfo.= ' '. $_SERVER['SERVER_SOFTWARE'];
         }
-        $footerinfo.= ' Provider by '. Ark_Core::Name. '/'. Ark_Core::Version;
+        $footerinfo.= ' Provider by '. Ark_Core::Name;
         $exception_name = get_class($e);
         $namespaces = array_keys(Ark_Loader::getNameSpace());
         usort($namespaces, function($a, $b) {
