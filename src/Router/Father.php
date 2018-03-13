@@ -4,6 +4,20 @@ abstract class Ark_Router_Father implements Ark_Router_Contract
 {
 
     /**
+     * 控制器名称
+     *
+     * @var string
+     */
+    protected $_controller;
+
+    /**
+     * 路由是否就绪
+     *
+     * @var bool
+     */
+    protected $_ready = false;
+
+    /**
      * 路由数据准备
      *
      * @return mixed
@@ -21,12 +35,17 @@ abstract class Ark_Router_Father implements Ark_Router_Contract
      * 路由调度
      *
      * @return mixed
+     * @throws Ark_Router_Exception
+     * @throws Exception
      */
     function dispatch()
     {
-        $config = Ark_Core::getInstance()->config->router;
+        $config = Ark_Core::getInstance()->config;;
         //自动加载目录下引导文件
-        if ($interceptor = $config->interceptor) {
+        if ($interceptor = $config->router->controller->interceptor) {
+            if (basename($this->_controller) == $interceptor) {
+                throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $interceptor));
+            }
             //获取目录树
             $path_nodes = array(PATH_NOW);
             if (PATH_NOW != PATH_CTRL) {

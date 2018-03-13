@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Router_Native extends Ark_Router_Father
+class Ark_Router_Base extends Ark_Router_Father
 {
 
     /**
@@ -8,14 +8,14 @@ class Ark_Router_Native extends Ark_Router_Father
      *
      * @var string
      */
-    private $_controller;
+    protected $_controller;
 
     /**
      * 路由是否就绪
      *
      * @var bool
      */
-    private $_ready = false;
+    protected $_ready = false;
 
     /**
      * 路由转换规则
@@ -72,21 +72,16 @@ class Ark_Router_Native extends Ark_Router_Father
         //重写
         $uri = trim($this->_rewrite($uri), '/');
         //处理URI,组装控制器类
-        $urlsep = Ark_Core::getInstance()->config->router->urlsep;
-        $url_suffix = Ark_Core::getInstance()->config->router->urlsuffix;
-        if (strpos($uri, $url_suffix) !== false) {
-            $uri = preg_replace(sprintf('~%s$~i', $url_suffix), '', $uri);
-        }
+        $uri = preg_replace('~\.(.*?)$~i', '', $uri);
         $controller_dir = Ark_Core::getInstance()->getControllerPath();
         $path_now = $controller_dir;
         if ($uri == '') {
-            $controller = Ark_Core::getInstance()->config->router->controller;
-            $path_now.= DIRECTORY_SEPARATOR. $controller;
+            $controller = Ark_Core::getInstance()->config->router->controller->default;
         } else {
-            $controllers = array_map('strtolower', explode($urlsep, $uri));
+            $controllers = array_map('strtolower', explode('/', $uri));
             $controller = implode(DIRECTORY_SEPARATOR, $controllers);
-            $path_now.= DIRECTORY_SEPARATOR. $controller;
         }
+        $path_now.= DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
         $this->_controller = $path_now;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', dirname($path_now));
@@ -104,6 +99,9 @@ class Ark_Router_Native extends Ark_Router_Father
      */
     function dispatch()
     {
+        if (!is_file($this->_controller)) {
+            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
+        }
         parent::dispatch();
         $output = include_once($this->_controller);
         if (is_string($output)) {

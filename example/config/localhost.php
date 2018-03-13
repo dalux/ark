@@ -10,10 +10,11 @@ return array(
         'error_reporting'=> E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED,
     ),
     'router'=> array(
-        'driver'=> 'Ark_Router_Native',
-        'urlsuffix'=> '.html',
-        'urlsep'=> '/',
-        'controller'=> 'index.php',
+        'driver'=> 'Ark_Router_Base',
+        'controller'=> array(
+            'default'=> 'index.php',
+            'interceptor'=> 'init.php',
+        ),
     ),
     'session'=> array(
         'driver'=> 'Ark_Session_File',

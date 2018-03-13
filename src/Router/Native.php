@@ -1,6 +1,6 @@
 <?php
 
-class Ark_Router_Multiple extends Ark_Router_Father
+class Ark_Router_Native extends Ark_Router_Father
 {
 
     /**
@@ -8,14 +8,14 @@ class Ark_Router_Multiple extends Ark_Router_Father
      *
      * @var string
      */
-    private $_controller;
+    protected $_controller;
 
     /**
      * 路由状态
      *
      * @var bool
      */
-    private $_ready = false;
+    protected $_ready = false;
 
     /**
      * 获取控制器名称

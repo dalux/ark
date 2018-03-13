@@ -285,7 +285,7 @@ class Ark_Core
         self::$_storage['config']['instance'] = new Ark_Container($config);
         //控制器地址检测
         if (!$this->_controller_path) {
-            $this->_controller_path = $this->_app_path . DIRECTORY_SEPARATOR . 'Controller';
+            $this->_controller_path = $this->_app_path . DIRECTORY_SEPARATOR . 'controller';
         } elseif (strpos($this->_controller_path, $this->_app_path) === false) {
             throw new Ark_Exception($this->lang->get('core.invalid_controller_path'));
         }

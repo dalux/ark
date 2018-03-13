@@ -148,6 +148,7 @@ class Ark_Toolkit
      *
      * @param $src
      * @param $dst
+     * @throws Ark_Exception
      */
     static function copyDir($src, $dst)
     {
@@ -164,15 +165,15 @@ class Ark_Toolkit
         }
         closedir($handle);
     }
-	
-	/**
-	 * 递归删除目录
-	 *
-	 * @static
-     * @param string $dir
+
+    /**
+     * 递归删除目录
+     *
+     * @static
+     * @param $dirName
      * @return bool
      * @throws Ark_Exception
-	 */
+     */
 	static function removeDir($dirName)
 	{
 		if (is_dir($dirName)) {

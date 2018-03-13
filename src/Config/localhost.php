@@ -11,11 +11,9 @@ return array(
     ),
     'router'=> array(
         'driver'=> 'Ark_Router_Native',
-        'urlsuffix'=> '.html',
-        'urlsep'=> '/',
-        'default'=> array(
-            'controller'=> 'index',
-            'action'=> 'index'
+        'controller'=> array(
+            'default'=> 'index.php',
+            'interceptor'=> 'init.php',
         ),
     ),
     'session'=> array(
