@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'driver'=> '\Ark\Assembly\Session\File',
+    'driver'=> 'Ark_Session_File',
     'expire_time'=> 1440,
-    'save_path'=> \Ark\Core\Loader::realPath('./runtime/session/'),
+    'save_path'=> Ark_Loader::realPath('./runtime/session/'),
 );

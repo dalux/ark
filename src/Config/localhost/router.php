@@ -3,8 +3,8 @@
 /*
 //通用单入口路由器
 return array(
-    'driver'=> '\Ark\Assembly\Router\Base',
-    'urlmode'=> \Ark\Assembly\Router\Base::URL_MODE_REWRITE,
+    'driver'=> 'Ark_Router_Base',
+    'urlmode'=> Ark_Router_Base::URL_MODE_REWRITE,
     'urlsuffix'=> '',
     'urlsep'=> '/',
     'urlvar'=> array(
@@ -22,7 +22,7 @@ return array(
 
 //模拟原生PHP单入口路由器
 return array(
-    'driver'=> '\Ark\Assembly\Router\Native',
+    'driver'=> 'Ark_Router_Native',
     'urlsuffix'=> '.html',
     'urlsep'=> '/',
     'default'=> array(

@@ -147,19 +147,6 @@ class Ark_Core
     function getConfig()
     {
         $config = array();
-        //如果未设置,默认使用应用程序目录config下的localhost.php配置文件
-        if (!$this->_config_path) {
-            $this->_config_path = function() {
-                $path = Ark_Loader::realPath('./config');
-                $host = Ark_Server::getDomain();
-                $full = Ark_Server::getDomain(false);
-                if (is_file($file = $path. '/'. $full. '.php')
-                        || is_file($file = $path. '/'. $host. '.php')) {
-                    return $file;
-                }
-                return $path. '/localhost.php';
-            };
-        }
         //如果配置文件目录是匿名函数
         if ($this->_config_path instanceof Closure) {
             $getter = $this->_config_path;
@@ -168,7 +155,7 @@ class Ark_Core
             $config_path = $this->_config_path;
         }
         //如果是目录
-        if (is_dir($this->_config_path)) {
+        if (is_dir($config_path)) {
             $config_files = glob($config_path . '/*.php');
             foreach ($config_files as $file) {
                 $result = include($file);
@@ -317,7 +304,7 @@ class Ark_Core
         //监听系统启动就绪事件
         Ark_Event::onListening('event.framework.ready');
         if (!$this->router instanceof Ark_Router_Contract) {
-            $lang = Ark_Core::getInstance()->lang->get('router.driver_implement_error', get_class($this->router), 'Ark_Router_Contract');
+            $lang = $this->lang->get('router.driver_implement_error', get_class($this->router), 'Ark_Router_Contract');
             throw new Ark_Exception($lang);
         }
         //路由调度准备
@@ -335,13 +322,12 @@ class Ark_Core
      * @param $value
      * @return Ark_Core
      */
-    function setMember($name, $value)
+    static function setMember($name, $value)
     {
         if (!isset(self::$_storage[$name])
                 || !self::$_storage[$name]['system']) {
-            $this->_storage[$name] = array('instance'=> $value, 'system'=> 0);
+            $self::_storage[$name] = array('instance'=> $value, 'system'=> 0);
         }
-        return $this;
     }
 
     /**
@@ -352,14 +338,11 @@ class Ark_Core
      * @return $this
      * @throws Exception
      */
-    function setMethod($name, callable $method)
+    static function setMethod($name, callable $method)
     {
-        if (!is_callable($method)) {
-            throw new Ark_Exception($this->lang->get('core.invalid_custom_method', $name));
-        } elseif (!isset(self::$_method[$name]) || !self::$_method[$name]['system']) {
+        if (!isset(self::$_method[$name]) || !self::$_method[$name]['system']) {
             self::$_method[$name] = array('method' => $method, 'system' => 0);
         }
-        return $this;
     }
 
     /**

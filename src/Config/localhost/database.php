@@ -2,7 +2,7 @@
 
 return array(
     'master'=> array(
-        'driver'=> '\Ark\Assembly\Database\Pdo\Mysql',
+        'driver'=> 'Ark_Database_Pdo_Mysql',
         'dsn'=> 'mysql://username:password@127.0.0.1:3306/dbname?charset=utf8',
         'option'=> array('type'=> 'new'),
         #option可选值:
