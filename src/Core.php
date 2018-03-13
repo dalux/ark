@@ -8,20 +8,6 @@ class Ark_Core
     const Eamil     = 'guodalu <guodalu@qq.com>';
 
     /**
-     * 存储区
-     *
-     * @var array
-     */
-    private $_storage = array();
-
-    /**
-     * 自定义方法体
-     *
-     * @var array
-     */
-    private $_method = array();
-
-    /**
      * 配置文件获取器
      *
      * @var array
@@ -54,7 +40,7 @@ class Ark_Core
      *
      * @var bool
      */
-    private $_ready = false;
+    private static $_inited = false;
 
     /**
      * 唯一实例
@@ -62,37 +48,26 @@ class Ark_Core
      * @var $this
      */
     private static $_instance;
+	
+    /**
+     * 存储区
+     *
+     * @var array
+     */
+    private static $_storage = array();
 
     /**
-     * 取实例化对象
+     * 自定义方法体
      *
-     * @access public
-     * @return Ark_Core
+     * @var array
      */
-    static function getInstance()
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self();
-        }
-        return self::$_instance;
-    }
+    private static $_method = array();
 
     /**
      * 私有构造方法
      *
      */
-    private function __construct()
-    {
-        require_once __DIR__. '/Timer.php';
-        require_once __DIR__. '/Exception.php';
-        require_once __DIR__. '/Trace.php';
-        require_once __DIR__. '/Loader.php';
-        require_once __DIR__. '/Toolkit.php';
-        require_once __DIR__. '/Handler.php';
-        require_once __DIR__. '/Request.php';
-        require_once __DIR__. '/Event.php';
-        require_once __DIR__. '/Container.php';
-    }
+    private function __construct() {}
 
     /**
      * 配置文件缓存目录
@@ -218,62 +193,77 @@ class Ark_Core
     }
 
     /**
-     * 框架是否准备就绪
-     *
-     * @return bool
-     */
-    function isReady()
-    {
-        return $this->_ready;
-    }
-
-    /**
      * 框架准备
      *
      */
-    function init()
+    static function init()
     {
-        //初始化内存占用
-        $memory_usage = memory_get_usage();
-        //默认屏蔽错误提示
-        ini_set('display_errors', '0');
-        //启动时间
-        Ark_Timer::mark('sys_startup');
-        //初始内存占用数
-        Ark_Trace::set('memory', $memory_usage);
-        //配置项默认为空对象
-        $this->_storage['config'] = array(
-            'instance'=> new Ark_Container(),
-            'system'=> 1
-        );
-        //定义常量
-        $debug_trace = debug_backtrace();
-        defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
-        defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
-        //注册框架类库基地址
-        Ark_Loader::setNameSpace('Ark', PATH_LIB);
-        //语言包选择器
-        $this->_storage['lang'] = array(
-            'instance'=> function() { return new Ark_Language(); },
-            'system'=> 1
-        );
-        //异常报告
-        Ark_Handler::setHandler(Ark_Handler::TYPE_EXCEPTION);
-        //后续类文件自动加载
-        Ark_Loader::addAutoLoader(array('Ark_Loader', 'autoLoad'));
-        //初始化CLI模式
-        Ark_Server::isCli() && Ark_Server::initCli();
-        //注册内置组件
-        $this->_storage['container'] = array(
-            'instance'=> function() { return new Ark_Container(); },
-            'system'=> 1,
-        );
-        $this->_storage['response'] = array(
-            'instance'=> function() { return new Ark_Response(); },
-            'system'=> 1,
-        );
+		if (!self::$_inited) {
+			require_once __DIR__. '/Timer.php';
+			require_once __DIR__. '/Exception.php';
+			require_once __DIR__. '/Trace.php';
+			require_once __DIR__. '/Loader.php';
+			require_once __DIR__. '/Toolkit.php';
+			require_once __DIR__. '/Handler.php';
+			require_once __DIR__. '/Request.php';
+			require_once __DIR__. '/Event.php';
+			require_once __DIR__. '/Container.php';
+
+			self::$_instance = new self();
+
+			//初始化内存占用
+			$memory_usage = memory_get_usage();
+			//默认屏蔽错误提示
+			ini_set('display_errors', '0');
+			//启动时间
+			Ark_Timer::mark('sys_startup');
+			//初始内存占用数
+			Ark_Trace::set('memory', $memory_usage);
+			//配置项默认为空对象
+			self::$_storage['config'] = array(
+				'instance'=> new Ark_Container(),
+				'system'=> 1
+			);
+			//定义常量
+			$debug_trace = debug_backtrace();
+			defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
+			defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[1]['file']));
+			//注册框架类库基地址
+			Ark_Loader::setNameSpace('Ark', PATH_LIB);
+			//语言包选择器
+			self::$_storage['lang'] = array(
+				'instance'=> function() { return new Ark_Language(); },
+				'system'=> 1
+			);
+			//异常报告
+			Ark_Handler::setHandler(Ark_Handler::TYPE_EXCEPTION);
+			//后续类文件自动加载
+			Ark_Loader::addAutoLoader(array('Ark_Loader', 'autoLoad'));
+			//初始化CLI模式
+			Ark_Server::isCli() && Ark_Server::initCli();
+			//注册内置组件
+			self::$_storage['container'] = array(
+				'instance'=> function() { return new Ark_Container(); },
+				'system'=> 1,
+			);
+			self::$_storage['response'] = array(
+				'instance'=> function() { return new Ark_Response(); },
+				'system'=> 1,
+			);
+		}
         //准备就绪
-        $this->_ready = true;
+        self::$_inited = true;
+    }
+
+    /**
+     * 取实例化对象
+     *
+     * @access public
+     * @return Ark_Core
+     */
+    static function getInstance()
+    {
+        return self::$_instance;
     }
 
     /**
@@ -285,9 +275,6 @@ class Ark_Core
      */
     function run()
     {
-        if (!$this->_ready) {
-            throw new Ark_Exception($this->lang->get('core.framework_not_ready'));
-        }
         //检测必要应用配置
         if (!$this->_app_name) {
             throw new Ark_Exception($this->lang->get('core.invalid_app_name'));
@@ -302,7 +289,7 @@ class Ark_Core
         if (!$config = $this->getConfig()) {
             throw new Ark_Exception($this->lang->get('core.invalid_configuration'));
         }
-        $this->_storage['config']['instance'] = new Ark_Container($config);
+        self::$_storage['config']['instance'] = new Ark_Container($config);
         //控制器地址检测
         if (!$this->_controller_path) {
             $this->_controller_path = $this->_app_path . DIRECTORY_SEPARATOR . 'Controller';
@@ -312,7 +299,7 @@ class Ark_Core
         defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_path);
         //时区设置
         $timezone = 'Asia/Shanghai';
-        $instance = $this->_storage['config']['instance'];
+        $instance = self::$_storage['config']['instance'];
         if ($instance->global->timezone) {
             $timezone = $instance->global->timezone;
         }
@@ -323,7 +310,7 @@ class Ark_Core
             error_reporting($instance->global->error_reporting);
         }
         //路由
-        $this->_storage['router'] = array(
+        self::$_storage['router'] = array(
             'instance'=>  function() { return Ark_Router_Adapter::getDriver(); },
             'system'=> 1,
         );
@@ -350,8 +337,8 @@ class Ark_Core
      */
     function setMember($name, $value)
     {
-        if (!isset($this->_storage[$name])
-                || !$this->_storage[$name]['system']) {
+        if (!isset(self::$_storage[$name])
+                || !self::$_storage[$name]['system']) {
             $this->_storage[$name] = array('instance'=> $value, 'system'=> 0);
         }
         return $this;
@@ -369,8 +356,8 @@ class Ark_Core
     {
         if (!is_callable($method)) {
             throw new Ark_Exception($this->lang->get('core.invalid_custom_method', $name));
-        } elseif (!isset($this->_method[$name]) || !$this->_method[$name]['system']) {
-            $this->_method[$name] = array('method' => $method, 'system' => 0);
+        } elseif (!isset(self::$_method[$name]) || !self::$_method[$name]['system']) {
+            self::$_method[$name] = array('method' => $method, 'system' => 0);
         }
         return $this;
     }
@@ -385,12 +372,12 @@ class Ark_Core
     function get($name)
     {
         //常规取值
-        if (!$instance = $this->_storage[$name]['instance']) {
+        if (!$instance = self::$_storage[$name]['instance']) {
             throw new Ark_Exception($this->lang->get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {
-                $this->_storage[$name]['instance'] = $instance;
+                self::$_storage[$name]['instance'] = $instance;
             }
         }
         return $instance;
@@ -418,10 +405,10 @@ class Ark_Core
      */
     function call($name, $args)
     {
-        if (!isset($this->_method[$name])) {
+        if (!isset(self::$_method[$name])) {
             throw new Ark_Exception($this->lang->get('core.custom_method_notfound', $name));
         }
-        $method = $this->_method[$name]['method'];
+        $method = self::$_method[$name]['method'];
         return call_user_func_array($method, $args);
     }
 
