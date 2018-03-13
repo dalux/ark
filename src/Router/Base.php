@@ -73,10 +73,10 @@ class Ark_Router_Base extends Ark_Router_Father
         $uri = trim($this->_rewrite($uri), '/');
         //处理URI,组装控制器类
         $uri = preg_replace('~\.(.*?)$~i', '', $uri);
-        $controller_dir = Ark_Core::getInstance()->getControllerPath();
+        $controller_dir = Ark_Core::getInst()->getControllerPath();
         $path_now = $controller_dir;
         if ($uri == '') {
-            $controller = Ark_Core::getInstance()->config->router->controller->default;
+            $controller = Ark_Core::getInst()->config->router->controller->default;
         } else {
             $controllers = array_map('strtolower', explode('/', $uri));
             $controller = implode(DIRECTORY_SEPARATOR, $controllers);
@@ -88,7 +88,7 @@ class Ark_Router_Base extends Ark_Router_Father
         Ark_Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Ark_Request::setReady(true);
-        Ark_Core::getInstance()->setMember('request', function() { return Ark_Request::getInstance(); });
+        Ark_Core::getInst()->setMember('request', function() { return Ark_Request::getInstance(); });
         $this->_ready = true;
     }
 
@@ -101,7 +101,7 @@ class Ark_Router_Base extends Ark_Router_Father
     {
         global $ark;
         if (!is_file($this->_controller)) {
-            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
+            throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
         }
         parent::dispatch();
         $output = include_once($this->_controller);
@@ -129,12 +129,12 @@ class Ark_Router_Base extends Ark_Router_Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.uri_must_string'));
+            throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.uri_must_string'));
         }
         return $uri;
     }

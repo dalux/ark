@@ -41,11 +41,11 @@ abstract class Ark_Router_Father implements Ark_Router_Contract
     function dispatch()
     {
         global $ark;
-        $config = Ark_Core::getInstance()->config;
+        $config = Ark_Core::getInst()->config;
         //自动加载目录下引导文件
         if ($interceptor = $config->router->controller->interceptor) {
             if (basename($this->_controller) == $interceptor) {
-                throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $interceptor));
+                throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.controller_is_protected', $interceptor));
             }
             //获取目录树
             $path_nodes = array(PATH_NOW);

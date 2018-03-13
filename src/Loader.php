@@ -30,7 +30,7 @@ class Ark_Loader
     static function setAlias($alias, $path)
     {
         if (in_array($alias, array('*', '.'))) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('core.deny_alias_redeclare', $alias));
+            throw new Exception(Ark_Core::getInst()->lang->get('core.deny_alias_redeclare', $alias));
         }
         self::$_alias[$alias] = $path;
     }
@@ -85,7 +85,7 @@ class Ark_Loader
     static function addAutoLoader($loader)
     {
         if (!is_callable($loader)) {
-            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('core.invalid_autoloader'));
+            throw new Ark_Exception(Ark_Core::getInst()->lang->get('core.invalid_autoloader'));
         }
         spl_autoload_register($loader);
     }
@@ -99,7 +99,7 @@ class Ark_Loader
     static function autoLoad($class)
     {
         if (!$path = self::findClass($class)) {
-            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('core.class_path_notfound', $class));
+            throw new Ark_Exception(Ark_Core::getInst()->lang->get('core.class_path_notfound', $class));
         }
         self::import($path);
     }
@@ -150,7 +150,7 @@ class Ark_Loader
     {
         $first_char = substr($spacename, 0, 1);
         if (!isset(self::$_alias[$first_char])) {
-            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('core.format_path_failed'));
+            throw new Ark_Exception(Ark_Core::getInst()->lang->get('core.format_path_failed'));
         }
         $parsed = self::_parse($spacename);
         list($alias, $space) = $parsed;

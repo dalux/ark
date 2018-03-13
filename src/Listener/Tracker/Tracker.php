@@ -6,7 +6,7 @@ class Tracker
     function handle(array $data)
     {
         if ($data['event'] == 'event.framework.ready') {
-            $debug = Ark_Core::getInstance()->config->global->debug;
+            $debug = Ark_Core::getInst()->config->global->debug;
             if ($debug && !Ark_Server::isCli()) {
                 ob_start();
             }
@@ -34,7 +34,7 @@ class Tracker
             //非CLI模式时，在浏览器调试工具中输出调试信息
             if (ob_get_length() > 0
                     && !Ark_Server::isCli()
-                    && Ark_Core::getInstance()->config->global->debug) {
+                    && Ark_Core::getInst()->config->global->debug) {
                 $user_agent = $_SERVER['HTTP_USER_AGENT'];
                 //chrome、火狐浏览器
                 require_once __DIR__ . '/Fb.php';
@@ -64,8 +64,8 @@ class Tracker
                 //IE sorry
                 //当前为CLI模式，并且为调试模式，并且显式的指明了要显示DEBUG信息时
             } elseif (Ark_Server::isCli()
-                    && Ark_Core::getInstance()->request->get('debug')
-                    && Ark_Core::getInstance()->config->global->debug) {
+                    && Ark_Core::getInst()->request->get('debug')
+                    && Ark_Core::getInst()->config->global->debug) {
                 echo PHP_EOL. PHP_EOL. str_repeat('=', 20). ' Debug Info '. str_repeat('=', 40). PHP_EOL. PHP_EOL;
                 echo '>>> Database Trace'. PHP_EOL;
                 $i = 1;
@@ -83,7 +83,7 @@ class Tracker
                 echo PHP_EOL. '>>> Memory Used'. PHP_EOL;
                 echo "\t". Ark_Toolkit::formatSize($memusage[1]-$memusage[0]). PHP_EOL;
                 echo PHP_EOL. '>>> Url Mode'. PHP_EOL;
-                echo "\t". Ark_Core::getInstance()->router->getUrlModeName(). PHP_EOL;
+                echo "\t". Ark_Core::getInst()->router->getUrlModeName(). PHP_EOL;
                 echo PHP_EOL. '>>> Driver List'. PHP_EOL;
                 foreach ($driver_trace as $k=> $v) {
                     if ($k == 'name') continue;

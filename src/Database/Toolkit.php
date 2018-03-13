@@ -45,7 +45,7 @@ class Ark_Database_Toolkit
     static function parseConnectUrl($url)
     {
         if (!$parsed = parse_url($url)) {
-            throw new Ark_Database_Exception(Ark_Core::getInstance()->lang->get('db.invalid_conn_string', $url));
+            throw new Ark_Database_Exception(Ark_Core::getInst()->lang->get('db.invalid_conn_string', $url));
         }
         $config = array(
             'type'=> $parsed['scheme'],

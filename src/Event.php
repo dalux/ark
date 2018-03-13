@@ -78,11 +78,11 @@ class Ark_Event
             $ori_keys = array_keys($data);
             $data = $item($data);
             if (!is_array($data)) {
-                throw new Ark_Exception(Ark_Core::getInstance()->lang->get('event.data_must_array', $event));
+                throw new Ark_Exception(Ark_Core::getInst()->lang->get('event.data_must_array', $event));
             }
             $now_keys = array_keys($data);
             if ($diff = array_diff($ori_keys, $now_keys)) {
-                throw new Ark_Exception(Ark_Core::getInstance()->lang->get('event.data_key_must_equal', $event));
+                throw new Ark_Exception(Ark_Core::getInst()->lang->get('event.data_key_must_equal', $event));
             }
         }
         return $data;

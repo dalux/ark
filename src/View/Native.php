@@ -33,7 +33,7 @@ class Ark_View_Native extends Ark_View_Father
      */
     function __construct()
     {
-        $config = Ark_Core::getInstance()->config->view;
+        $config = Ark_Core::getInst()->config->view;
         $config->template_ext && $this->_template_ext = $config->template_ext;
         $config->template_dir && $this->_template_dir = rtrim($config->template_dir, DIRECTORY_SEPARATOR);
     }
@@ -88,7 +88,7 @@ class Ark_View_Native extends Ark_View_Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $template;
         if (!is_file($template)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('view.template_not_found', Ark_Loader::reducePath($template)));
+            throw new Exception(Ark_Core::getInst()->lang->get('view.template_not_found', Ark_Loader::reducePath($template)));
         }
         $data = array(
             'template'=> $template,
@@ -123,7 +123,7 @@ class Ark_View_Native extends Ark_View_Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $path;
         if (!is_file($template)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('view.include_file_not_found', Ark_Loader::reducePath($template)));
+            throw new Exception(Ark_Core::getInst()->lang->get('view.include_file_not_found', Ark_Loader::reducePath($template)));
         }
         extract($this->_storage, EXTR_REFS);
         extract($params, EXTR_SKIP);

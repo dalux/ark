@@ -106,7 +106,7 @@ class Ark_Handler
             }
             //模板文件
             $tplcontent = $this->_getWebTpl();
-            if (Ark_Core::getInstance()->config->global->debug) {
+            if (Ark_Core::getInst()->config->global->debug) {
                 $content = str_replace(array('<{detail}>', '<{/detail}>'), '', $tplcontent);
             } else {
                 $content = preg_replace("/\\<\\{detail\\}\\>[\\s\\S]*?\\<\\{\\/detail\\}\\>/", '', $tplcontent);

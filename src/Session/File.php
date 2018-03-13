@@ -10,7 +10,7 @@ class Ark_Session_File extends Ark_Session_Father
      */
 	function __construct()
 	{
-		$config = Ark_Core::getInstance()->config->session->toArray();
+		$config = Ark_Core::getInst()->config->session->toArray();
 		ini_set('session.save_handler', 'files');
 		ini_set('session.cache_expire', $config['expire_time']);
 		if (file_exists($config['save_path'])

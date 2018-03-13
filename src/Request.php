@@ -113,7 +113,7 @@ class Ark_Request
     static function getInstance()
     {
         if (!self::$_ready) {
-            throw new Ark_Exception(Ark_Core::getInstance()->lang->get('http.request_not_ready'));
+            throw new Ark_Exception(Ark_Core::getInst()->lang->get('http.request_not_ready'));
         } elseif (is_null(self::$_instance)) {
             self::$_instance = new self();
         }

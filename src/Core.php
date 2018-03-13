@@ -256,7 +256,7 @@ class Ark_Core
      * @access public
      * @return Ark_Core
      */
-    static function getInstance()
+    static function getInst()
     {
         return self::$_instance;
     }

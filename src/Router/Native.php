@@ -51,7 +51,7 @@ class Ark_Router_Native extends Ark_Router_Father
         $this->_controller = $caller;
         //请求数据初始化完成
         Ark_Request::setReady(true);
-        Ark_Core::getInstance()->setMember('request', function() { return Ark_Request::getInstance(); });
+        Ark_Core::getInst()->setMember('request', function() { return Ark_Request::getInstance(); });
         $this->_ready = true;
 	}
 

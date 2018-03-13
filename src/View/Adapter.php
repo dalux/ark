@@ -11,15 +11,15 @@ class Ark_View_Adapter
      */
     static function getDriver()
     {
-        $config = Ark_Core::getInstance()->config->view->toArray();
+        $config = Ark_Core::getInst()->config->view->toArray();
         if (!$driver = $config['driver']) {
-            throw new Ark_View_Exception(Ark_Core::getInstance()->lang->get('view.invalid_driver_name'));
+            throw new Ark_View_Exception(Ark_Core::getInst()->lang->get('view.invalid_driver_name'));
         } elseif (!Ark_Loader::findClass($driver)) {
-            throw new Ark_View_Exception(Ark_Core::getInstance()->lang->get('view.driver_not_found', $driver));
+            throw new Ark_View_Exception(Ark_Core::getInst()->lang->get('view.driver_not_found', $driver));
         }
         $instance = new $driver();
         if (!$instance instanceof Ark_View_Contract) {
-            throw new Ark_View_Exception(Ark_Core::getInstance()->lang->get('view.driver_implement_error', $driver, 'Ark_View_Contract'));
+            throw new Ark_View_Exception(Ark_Core::getInst()->lang->get('view.driver_implement_error', $driver, 'Ark_View_Contract'));
         }
         Ark_Trace::set('driver', array('view'=> $driver));
         return $instance;

@@ -1,6 +1,6 @@
 <?php
 
-abstract class Ark_View_Father extends Ark_Sailor implements Ark_View_Contract
+abstract class Ark_View_Father implements Ark_View_Contract
 {
 
     /**

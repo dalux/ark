@@ -31,9 +31,9 @@ class Ark_Cache_File extends Ark_Cache_Father
     {
         $this->_dir = $save_path;
         if (!is_dir($this->_dir) && !Ark_Toolkit::mkDir($this->_dir)) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.dir_create_failed', $this->_dir));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.dir_create_failed', $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.dir_permission_error', $this->_dir));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.dir_permission_error', $this->_dir));
         }
         is_null($option['ext_name']) || $this->_ext_name = $option['ext_name'];
         is_null($option['flag']) || $this->_flag = $option['flag'];
@@ -147,12 +147,12 @@ class Ark_Cache_File extends Ark_Cache_Father
         }
         $format = $this->_format;
         if (!$part = $format($name)) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.path_mustbe_notnull'));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.path_mustbe_notnull'));
         }
         $path.= $part. $this->_ext_name;
         $path = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
         if (!file_exists(dirname($path)) && !Ark_Toolkit::mkDir(dirname($path))) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.dir_create_failed', $path));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.dir_create_failed', $path));
         }
         return $path;
     }

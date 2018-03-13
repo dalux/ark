@@ -21,7 +21,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
     function __construct($save_path, array $option = array())
     {
         if (!extension_loaded('memcached')) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.extension_load_failed', 'php_memcached'));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.extension_load_failed', 'php_memcached'));
         }
         is_array($save_path) || $save_path = array($save_path);
         $this->_container = new Memcached();
@@ -45,7 +45,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
             $this->_container->setOption($key, $val);
         }
         if (!$this->_container->getVersion()) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.cacher_create_failed', 'Memcached'));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.cacher_create_failed', 'Memcached'));
         }
     }
 
@@ -150,7 +150,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
         }
         $format = $this->_format;
         if (!$part = $format($name)) {
-            throw new Ark_Cache_Exception(Ark_Core::getInstance()->lang->get('cache.path_mustbe_notnull'));
+            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.path_mustbe_notnull'));
         }
         return $path. $part;
     }
