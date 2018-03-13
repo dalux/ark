@@ -328,7 +328,6 @@ class Ark_Core
      *
      * @param $name
      * @param $value
-     * @return Ark_Core
      */
     static function setMember($name, $value)
     {
@@ -343,8 +342,6 @@ class Ark_Core
      *
      * @param $name
      * @param callable $method
-     * @return $this
-     * @throws Exception
      */
     static function setMethod($name, callable $method)
     {
