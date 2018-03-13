@@ -272,7 +272,6 @@ class Ark_Core
         if (!$this->_app_name) {
             throw new Ark_Exception($this->lang->get('core.invalid_app_name'));
         } elseif (!is_dir($this->_app_path)) {
-            var_dump($this->_app_path);
             throw new Ark_Exception($this->lang->get('core.invalid_app_path'));
         }
         //注册应用程序基地址

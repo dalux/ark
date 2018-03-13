@@ -4,46 +4,11 @@ class Ark_Router_Native extends Ark_Router_Father
 {
 
     /**
-     * 路由转换规则
-     *
-     * @var array
-     */
-    private $_rules = array();
-
-    /**
-     * 拦截器
-     *
-     * @var array
-     */
-    private $_interceptors = array();
-
-    /**
-     * 控制器命名空间
-     *
-     * @var string
-     */
-    private $_namespace;
-
-    /**
-     * 模块名称
-     *
-     * @var string
-     */
-    private $_module;
-
-    /**
      * 控制器名称
      *
      * @var string
      */
     private $_controller;
-
-    /**
-     * 行为名称
-     *
-     * @var string
-     */
-    private $_action;
 
     /**
      * 路由是否就绪
@@ -53,14 +18,11 @@ class Ark_Router_Native extends Ark_Router_Father
     private $_ready = false;
 
     /**
-     * 获取模块名称
+     * 路由转换规则
      *
-     * @return string
+     * @var array
      */
-    function getModule()
-    {
-        return $this->_module;
-    }
+    private $_rules = array();
 
     /**
      * 获取控制器名称
@@ -70,16 +32,6 @@ class Ark_Router_Native extends Ark_Router_Father
     function getController()
     {
         return $this->_controller;
-    }
-
-    /**
-     * 获取控制器名称
-     *
-     * @return string
-     */
-    function getAction()
-    {
-        return $this->_action;
     }
 
     /**
@@ -106,55 +58,9 @@ class Ark_Router_Native extends Ark_Router_Father
     }
 
     /**
-     * 添加拦截器规则
-     *
-     * @param $subspace
-     * @param $operator
-     * @throws Exception
-     */
-    function addInterceptor($subspace, callable $operator)
-    {
-        $subspace = trim($subspace, '_');
-        if (!is_callable($operator)) {
-            throw new Exception(Ark_Core::getInstance()->lang->get('router.invalid_router_interceptor', $subspace));
-        }
-        $this->_interceptors[$subspace] = $operator;
-    }
-
-    /**
-     * 获取指定类的拦截器
-     *
-     * @param $namespace
-     * @return mixed
-     */
-    function getInterceptors($namespace)
-    {
-        $namespace = trim($namespace, '_');
-        $result = array();
-        foreach ($this->_interceptors as $subspace=> $operator) {
-            if (strpos($namespace, $subspace) !== false) {
-                $result[$subspace] = $operator;
-            }
-        }
-        //按subspace长短来重新排序
-        if ($result) {
-            uksort($result, function ($a, $b) {
-                $len_a = strlen($a);
-                $len_b = strlen($b);
-                if ($len_a == $len_b) {
-                    return 0;
-                }
-                return $len_a > $len_b ? 1 : -1;
-            });
-        }
-        return $result;
-    }
-
-    /**
      * 准备路由数据
      *
      * @throws Exception
-     * @throws Ark_Router_Exception
      */
     function ready()
     {
@@ -175,26 +81,19 @@ class Ark_Router_Native extends Ark_Router_Father
         $path_now = $controller_dir;
         if ($uri == '') {
             $controller = Ark_Core::getInstance()->config->router->controller;
+            $path_now.= DIRECTORY_SEPARATOR. $controller;
         } else {
-            $controllers = explode($urlsep, $uri);
+            $controllers = array_map('strtolower', explode($urlsep, $uri));
             $controller = implode(DIRECTORY_SEPARATOR, $controllers);
-            $path_now.= DIRECTORY_SEPARATOR. implode(DIRECTORY_SEPARATOR, $controllers);
-            $path_now = dirname($path_now);
+            $path_now.= DIRECTORY_SEPARATOR. $controller;
         }
-        $file = $path_now. '/'. $controller;
-        var_dump($file, $controller);exit;
-        $this->_namespace = $namespace;
-        $this->_controller = '/'. $uri;
-        $this->_action = Ark_Core::getInstance()->config->router->default->action;
+        $this->_controller = $path_now;
         //定义PATH_NOW常量
-        defined('PATH_NOW') || define('PATH_NOW', $path_now);
+        defined('PATH_NOW') || define('PATH_NOW', dirname($path_now));
         Ark_Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Ark_Request::setReady(true);
         Ark_Core::getInstance()->setMember('request', function() { return Ark_Request::getInstance(); });
-        if (!Ark_Loader::findClass($namespace)) {
-            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_not_found', $namespace));
-        }
         $this->_ready = true;
     }
 
@@ -205,37 +104,11 @@ class Ark_Router_Native extends Ark_Router_Father
      */
     function dispatch()
     {
-        $namespace = $this->_namespace;
-        $action = $this->_action;
-        $ref = new ReflectionClass($namespace);
-        if ($ref->isAbstract()) {
-            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.controller_is_protected', $namespace));
+        parent::dispatch();
+        $output = include_once($this->_controller);
+        if (is_string($output)) {
+            echo $output;
         }
-        //实现拦截器功能
-        if ($interceptors = $this->getInterceptors($namespace)) {
-            foreach ($interceptors as $interceptor) {
-                $result = call_user_func_array($interceptor, array());
-                if (is_string($result)) {
-                    echo $result;
-                    exit;
-                }
-            }
-        }
-        //实例化最终控制器对象
-        $instance = new $namespace();
-        if (!method_exists($instance, $action)) {
-            throw new Ark_Router_Exception(Ark_Core::getInstance()->lang->get('router.action_not_found', $namespace, $action));
-        }
-        $output = null;
-        //自动化类
-        if (method_exists($instance, '__init')) {
-            $output = $instance->__init();
-        }
-        //目标控制器行为
-        if (is_null($output)) {
-            $output = $instance->{$action}();
-        }
-        echo $output;
     }
 
     /**
@@ -243,7 +116,7 @@ class Ark_Router_Native extends Ark_Router_Father
      *
      * @param $uri
      * @return mixed
-     * @throws Exception
+     * @throws Ark_Router_Exception
      */
     private function _rewrite($uri)
     {
