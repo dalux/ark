@@ -116,7 +116,7 @@ class Ark_Cache_Redis extends Ark_Cache_Father
      *
      * @return Redis
      */
-    function getInstance()
+    function getInst()
     {
         return $this->_container;
     }

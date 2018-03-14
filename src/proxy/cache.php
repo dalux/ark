@@ -72,7 +72,6 @@ class Ark_Proxy_Cache
         $class_name = is_object($class)
             ? get_class($class)
             : (string)$class;
-        $class_name = str_replace('\\', '_', $class_name);
         return md5($class_name. '.'. $func. '.'.serialize($args));
     }
 

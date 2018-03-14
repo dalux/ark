@@ -84,9 +84,9 @@ class Ark_Core
     static function setApp($name, $option = array())
     {
         self::$_app_name = $name;
-        self::$_app_path = rtrim($option['app_path'], '/\\');
-        self::$_config_path = $option['config_path'];
-        self::$_controller_path = rtrim($option['controller_path'], '/\\');
+        isset($option['app_path']) && self::$_app_path = rtrim($option['app_path'], '/\\');
+        isset($option['config_path']) && self::$_config_path = $option['config_path'];
+        isset($option['controller_path']) && self::$_controller_path = rtrim($option['controller_path'], '/\\');
     }
 
     /**

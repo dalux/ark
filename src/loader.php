@@ -112,7 +112,6 @@ class Ark_Loader
     static function findClass($class_name)
     {
         $formal = array();
-        $class_name = trim($class_name, '_');
         foreach (self::$_namespaces as $key=> $val) {
             if (preg_match('/^'. addslashes($key). '/', $class_name)) {
                 if (!$formal || strlen($key) > strlen($formal['key'])) {

@@ -160,7 +160,7 @@ class Ark_Cache_Memcached extends Ark_Cache_Father
      *
      * @return Memcached
      */
-    function getInstance()
+    function getInst()
     {
         return $this->_container;
     }
