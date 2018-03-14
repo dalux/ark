@@ -27,7 +27,7 @@ class Ark_Database_Querier
     /**
      * 缓存代理
      *
-     * @var Proxy
+     * @var Ark_Proxy_Cache
      */
     protected $_proxy;
 
@@ -68,9 +68,9 @@ class Ark_Database_Querier
     /**
      * 指定数据库连接对象
      *
-     * @param Database $conn
+     * @param Ark_Database_Contract $conn
      */
-    static function setConnection(Database $conn)
+    static function setConnection(Ark_Database_Contract $conn)
     {
         self::$_conn = $conn;
     }
@@ -78,7 +78,7 @@ class Ark_Database_Querier
     /**
      * 获取当前数据库连接对象
      *
-     * @return Database
+     * @return Ark_Database_Contract
      */
     static function getConnection()
     {
@@ -99,9 +99,9 @@ class Ark_Database_Querier
      * 静态方法初始化
      *
      * @param $tb
-     * @return Querier
+     * @return Ark_Database_Querier
      */
-    static function init($tb)
+    static function create($tb)
     {
         return new self($tb);
     }
@@ -112,12 +112,12 @@ class Ark_Database_Querier
      * @access public
      * @param int $expire
      * @param null $name
-     * @param Cache $cache
-     * @return Querier
+     * @param Ark_Cache_Contract $cache
+     * @return Ark_Database_Querier
      */
-    function cache($expire, $name, Cache $cache)
+    function cache($expire, $name, Ark_Cache_Contract $cache)
     {
-        $this->_proxy = new Proxy();
+        $this->_proxy = new Ark_Proxy_Cache();
         $this->_proxy->setCacher($cache);
         $this->_expire = $expire;
         $this->_cache_name = $name;
@@ -136,7 +136,7 @@ class Ark_Database_Querier
      */
     function insert(array $data, $return = false)
     {
-        $insert = SQLBuilder::insert(self::$_conn->getDriverName())->into($this->_tb, $data);
+        $insert = Ark_Database_SQLBuilder::insert(self::$_conn->getDriverName())->into($this->_tb, $data);
         $added = self::$_conn->query($insert);
         return $added ? ($return ? self::$_conn->lastInsertId() : true) : false;
     }
@@ -153,7 +153,7 @@ class Ark_Database_Querier
      */
     function update(array $data, array $condition)
     {
-        $update = SQLBuilder::update(self::$_conn->getDriverName())->set($this->_tb, $data);
+        $update = Ark_Database_SQLBuilder::update(self::$_conn->getDriverName())->set($this->_tb, $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -164,7 +164,7 @@ class Ark_Database_Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $update->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = SQLBuilder::quote($vv);
+                        $vv = Ark_Database_SQLBuilder::quote($vv);
                         $update->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $update->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -188,7 +188,7 @@ class Ark_Database_Querier
      */
     function delete(array $condition = array())
     {
-        $delete = SQLBuilder::delete(self::$_conn->getDriverName())->from($this->_tb);
+        $delete = Ark_Database_SQLBuilder::delete(self::$_conn->getDriverName())->from($this->_tb);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -199,7 +199,7 @@ class Ark_Database_Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $delete->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = SQLBuilder::quote($vv);
+                        $vv = Ark_Database_SQLBuilder::quote($vv);
                         $delete->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $delete->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -222,11 +222,10 @@ class Ark_Database_Querier
      * @param array $fields 取值字段
      * @return array
      * @throws Exception
-     * @throws \Ark\Assembly\Proxy\Exception
      */
     function fetch($condition = array(), $fields = array('*'))
     {
-        $select = SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields);
+        $select = Ark_Database_SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -237,7 +236,7 @@ class Ark_Database_Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = SQLBuilder::quote($vv);
+                        $vv = Ark_Database_SQLBuilder::quote($vv);
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -262,11 +261,11 @@ class Ark_Database_Querier
      * @param array $fields
      * @return mixed
      * @throws Exception
-     * @throws \Ark\Assembly\Proxy\Exception
+     * @throws Ark_Proxy_Exception
      */
     function fetchOne($condition = array(), $fields = array('count(*)'))
     {
-        $select = SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields);
+        $select = Ark_Database_SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -277,7 +276,7 @@ class Ark_Database_Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = SQLBuilder::quote($vv);
+                        $vv = Ark_Database_SQLBuilder::quote($vv);
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);
@@ -305,11 +304,11 @@ class Ark_Database_Querier
      * @param array $fields
      * @return array
      * @throws Exception
-     * @throws \Ark\Assembly\Proxy\Exception
+     * @throws Ark_Proxy_Exception
      */
     function fetchAll($condition = array(), $order = array(), $count = 0, $offset = 0, $fields = array('*'))
     {
-        $select = SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields)->limit($count, $offset);
+        $select = Ark_Database_SQLBuilder::select(self::$_conn->getDriverName())->from($this->_tb, $fields)->limit($count, $offset);
         foreach ($order as $k=> $v) {
             $select->order($k, $v);
         }
@@ -323,7 +322,7 @@ class Ark_Database_Querier
                     } elseif (preg_match('/^(BETWEEN)$/i', $kk) && $vv[0] && $vv[1]) {
                         $select->where($k . $this->_where_mark[$kk] . $vv[0] . ' AND ' . $vv[1]);
                     } elseif (preg_match('/^(IN|NOTIN)$/i', $kk)) {
-                        $vv = SQLBuilder::quote($vv);
+                        $vv = Ark_Database_SQLBuilder::quote($vv);
                         $select->where($k . $this->_where_mark[$kk] . '('.$vv.')');
                     } else {
                         $select->where($k . $this->_where_mark[$kk] . ' ?', $vv);

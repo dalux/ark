@@ -44,7 +44,6 @@ class Ark_Loader
     static function setNameSpace($namespace, $path)
     {
         //如果要重定义系统内建命名空间
-        $namespace = str_replace(array_search('\\', '/'), '\\', $namespace);
         if (preg_match('/^Ark_/i', $namespace)) {
             $class_name = preg_replace('/^Ark/i', '', $namespace);
             $tmp_path = str_replace('_', DIRECTORY_SEPARATOR, PATH_LIB. $class_name);

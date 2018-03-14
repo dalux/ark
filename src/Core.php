@@ -192,17 +192,17 @@ class Ark_Core
             //初始化内存占用
             $memory_usage = memory_get_usage();
             //引入必要文件
-			require_once __DIR__. '/Timer.php';
-			require_once __DIR__. '/Exception.php';
-			require_once __DIR__. '/Trace.php';
-			require_once __DIR__. '/Loader.php';
-			require_once __DIR__. '/Toolkit.php';
-			require_once __DIR__. '/Handler.php';
-			require_once __DIR__. '/Request.php';
-			require_once __DIR__. '/Event.php';
-			require_once __DIR__. '/Container.php';
-            require_once __DIR__. '/Server.php';
-            require_once __DIR__. '/Language.php';
+			require_once __DIR__. '/timer.php';
+			require_once __DIR__. '/exception.php';
+			require_once __DIR__. '/trace.php';
+			require_once __DIR__. '/loader.php';
+			require_once __DIR__. '/toolkit.php';
+			require_once __DIR__. '/handler.php';
+			require_once __DIR__. '/request.php';
+			require_once __DIR__. '/event.php';
+			require_once __DIR__. '/container.php';
+            require_once __DIR__. '/server.php';
+            require_once __DIR__. '/language.php';
             //框架变量实例
 			self::$_instance = new self();
 			global $ark;    //暴露一个全局变量，使控制器中可用

@@ -55,12 +55,12 @@ class Ark_Database_SQLBuilder
      * 生成查询对象
      *
      * @param null $dbtype
-     * @return Select
+     * @return Ark_Database_SQLBuilder_Select
      */
     static function select($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = '\Ark\Toolkit\SQLBuilder\Select\\'. ucfirst($dbtype);
+        $namespace = 'Ark_Database_SQLBuilder_Select_'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -68,12 +68,12 @@ class Ark_Database_SQLBuilder
      * 生成插入对象
      *
      * @param null $dbtype
-     * @return Insert
+     * @return Ark_Database_SQLBuilder_Insert
      */
     static function insert($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = '\Ark\Toolkit\SQLBuilder\Insert\\'. ucfirst($dbtype);
+        $namespace = 'Ark_Database_SQLBuilder_Insert_'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -81,12 +81,12 @@ class Ark_Database_SQLBuilder
      * 生成更新对象
      *
      * @param null $dbtype
-     * @return Update
+     * @return Ark_Database_SQLBuilder_Update
      */
     static function update($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = '\Ark\Toolkit\SQLBuilder\Update\\'. ucfirst($dbtype);
+        $namespace = 'Ark_Database_SQLBuilder_Update_'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -94,12 +94,12 @@ class Ark_Database_SQLBuilder
      * 生成删除对象
      *
      * @param null $dbtype
-     * @return Delete
+     * @return Ark_Database_SQLBuilder_Delete
      */
     static function delete($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = '\Ark\Toolkit\SQLBuilder\Delete\\'. ucfirst($dbtype);
+        $namespace = 'Ark_Database_SQLBuilder_Delete_'. ucfirst($dbtype);
         return new $namespace;
     }
 
