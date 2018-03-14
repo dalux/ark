@@ -14,32 +14,32 @@ class Ark_Core
     const Author    = 'guodalu <guodalu@qq.com>';
 
     /**
-     * 配置文件获取器
-     *
-     * @var array
-     */
-    private $_config_path = array();
-
-    /**
      * 应用名称
      *
      * @var string
      */
-    private $_app_name;
+    private static $_app_name;
+
+    /**
+     * 配置文件获取器
+     *
+     * @var array
+     */
+    private static $_config_path = array();
 
     /**
      * 应用目录
      *
      * @var string
      */
-    private $_app_path;
+    private static $_app_path;
 
     /**
      * 控制器根目录
      *
      * @var string
      */
-    private $_controller_path;
+    private static $_controller_path;
 
     /**
      * 框架是否就绪
@@ -51,7 +51,7 @@ class Ark_Core
     /**
      * 唯一实例
      *
-     * @var $this
+     * @var Ark_Core
      */
     private static $_instance;
 	
@@ -76,62 +76,17 @@ class Ark_Core
     private function __construct() {}
 
     /**
-     * 配置文件缓存目录
-     *
-     * @param mixed $path
-     * @return Ark_Core
-     */
-    function setConfigPath($path)
-    {
-        $this->_config_path = $path;
-        return $this;
-    }
-
-    /**
      * 设置应用程序集根命名空间及其基本路径
      *
      * @param string $name
-     * @param null $path
-     * @return Ark_Core
+     * @param array $option
      */
-    function setApp($name, $path = null)
+    static function setApp($name, $option = array())
     {
-        $this->_app_name = $name;
-        $path || $path = PATH_WEB;
-        $this->_app_path = rtrim($path, '/\\');
-        return $this;
-    }
-
-    /**
-     * 获取App名称
-     *
-     * @return string
-     */
-    function getAppName()
-    {
-        return $this->_app_name;
-    }
-
-    /**
-     * 获取应用根目录地址
-     *
-     * @return string
-     */
-    function getAppPath()
-    {
-        return $this->_app_path;
-    }
-
-    /**
-     * 设置控制器根目录
-     *
-     * @param $controller_path
-     * @return Ark_Core
-     */
-    function setControllerPath($controller_path)
-    {
-        $this->_controller_path = rtrim($controller_path, '/\\');
-        return $this;
+        self::$_app_name = $name;
+        self::$_app_path = rtrim($option['app_path'], '/\\');
+        self::$_config_path = $option['config_path'];
+        self::$_controller_path = rtrim($option['controller_path'], '/\\');
     }
 
     /**
@@ -139,9 +94,9 @@ class Ark_Core
      *
      * @return string
      */
-    function getControllerPath()
+    static function getControllerPath()
     {
-        return $this->_controller_path;
+        return self::$_controller_path;
     }
 
     /**
@@ -154,11 +109,11 @@ class Ark_Core
     {
         $config = array();
         //如果配置文件目录是匿名函数
-        if ($this->_config_path instanceof Closure) {
-            $getter = $this->_config_path;
+        if (self::$_config_path instanceof Closure) {
+            $getter = self::$_config_path;
             $config_path = (string)$getter();
         } else {
-            $config_path = $this->_config_path;
+            $config_path = self::$_config_path;
         }
         //如果是目录
         if (is_dir($config_path)) {
@@ -166,7 +121,7 @@ class Ark_Core
             foreach ($config_files as $file) {
                 $result = include($file);
                 if (!is_array($result)) {
-                    throw new Ark_Exception($this->lang->get('core.invalid_config_format', basename($file)));
+                    throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($file)));
                 }
                 $key = strtolower(basename($file));
                 $key = preg_replace('/\.php$/', '', $key);
@@ -175,7 +130,7 @@ class Ark_Core
         } elseif (is_file($config_path)) {  //是文件
             $config = include($config_path);
             if (!is_array($config)) {
-                throw new Ark_Exception($this->lang->get('core.invalid_config_format', basename($config_path)));
+                throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($config_path)));
             }
         }
         return $config;
@@ -268,30 +223,32 @@ class Ark_Core
      * @return mixed
      * @throws Exception
      */
-    function run()
+    static function run()
     {
         //检测必要应用配置
-        if (!$this->_app_name) {
-            throw new Ark_Exception($this->lang->get('core.invalid_app_name'));
-        } elseif (!is_dir($this->_app_path)) {
-            throw new Ark_Exception($this->lang->get('core.invalid_app_path'));
+        if (!self::$_app_name) {
+            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_app_name'));
+        }
+        self::$_app_path || self::$_app_path = PATH_WEB;
+        if (!is_dir(self::$_app_path)) {
+            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_app_path'));
         }
         //注册应用程序基地址
-        Ark_Loader::setNameSpace($this->_app_name, $this->_app_path);
-        Ark_Loader::setAlias('@', $this->_app_path);
-        defined('PATH_APP') || define('PATH_APP', $this->_app_path);
+        Ark_Loader::setNameSpace(self::$_app_name, self::$_app_path);
+        Ark_Loader::setAlias('@', self::$_app_path);
+        defined('PATH_APP') || define('PATH_APP', self::$_app_path);
         //配置文件
-        if (!$config = $this->getConfig()) {
-            throw new Ark_Exception($this->lang->get('core.invalid_configuration'));
+        if (!$config = self::$_instance->getConfig()) {
+            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_configuration'));
         }
         self::$_storage['config']['instance'] = new Ark_Container($config);
         //控制器地址检测
-        if (!$this->_controller_path) {
-            $this->_controller_path = $this->_app_path . DIRECTORY_SEPARATOR . 'controller';
-        } elseif (strpos($this->_controller_path, $this->_app_path) === false) {
-            throw new Ark_Exception($this->lang->get('core.invalid_controller_path'));
+        if (!self::$_controller_path) {
+            self::$_controller_path = self::$_app_path . DIRECTORY_SEPARATOR . 'controller';
+        } elseif (strpos(self::$_controller_path, self::$_app_path) === false) {
+            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_controller_path'));
         }
-        defined('PATH_CTRL') || define('PATH_CTRL', $this->_controller_path);
+        defined('PATH_CTRL') || define('PATH_CTRL', self::$_controller_path);
         //时区设置
         $timezone = 'Asia/Shanghai';
         $instance = self::$_storage['config']['instance'];
@@ -311,16 +268,16 @@ class Ark_Core
         );
         //监听系统启动就绪事件
         Ark_Event::onListening('event.framework.ready');
-        if (!$this->router instanceof Ark_Router_Contract) {
-            $lang = $this->lang->get('router.driver_implement_error', get_class($this->router), 'Ark_Router_Contract');
+        if (!self::$_instance->router instanceof Ark_Router_Contract) {
+            $lang = self::$_instance->lang->get('router.driver_implement_error', get_class(self::$_instance->router), 'Ark_Router_Contract');
             throw new Ark_Exception($lang);
         }
         //路由调度准备
-        $this->router->ready();
+        self::$_instance->router->ready();
         //路由准备就绪
         Ark_Event::onListening('event.router.ready');
         //路由并呈现控制器内容
-        $this->router->dispatch();
+        self::$_instance->router->dispatch();
     }
 
     /**

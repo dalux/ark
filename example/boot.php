@@ -5,15 +5,20 @@ require_once __DIR__. '/../src/Core.php';
 
 //实例化框架
 Ark_Core::init();
+Ark_Core::setApp('App', array(
+    'app_path'          => Ark_Loader::realPath('./'),
+    'config_path'       => Ark_Loader::realPath('./config/localhost.php'),
+    'controller_path'   => Ark_Loader::realPath('./logic'),
+));
 Ark_Core::setMember('session', function() { return Ark_Session_Adapter::getDriver(); });
 Ark_Core::setMember('mysql', function() { return Ark_Database_Adapter::getDriver('mysql'); });
 Ark_Core::setMember('oracle', function() { return  Ark_Database_Adapter::getDriver('oracle'); });
 
 Ark_Core::setMethod('db', function($name = null) {
 	if ($name == 'mysql' || is_null($name)) {
-		return Ark_Core::getInstance()->mysql;
+		return Ark_Core::getInst()->mysql;
 	} elseif ($name == 'oracle') {
-		return Ark_Core::getInstance()->oracle;
+		return Ark_Core::getInst()->oracle;
 	}
 });
 
@@ -27,3 +32,5 @@ Ark_Event::addListener('event.query.before', function($data) {
 	}
 	return $data;
 });
+
+Ark_Core::run();
