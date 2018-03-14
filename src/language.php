@@ -31,7 +31,7 @@ class Ark_Language
      */
     function __construct()
     {
-        $this->addPackage(Ark_Loader::realPath('*/Language'));
+        $this->addPackage(Ark_Loader::realPath('*/lang'));
     }
 
     /**
