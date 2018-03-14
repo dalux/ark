@@ -73,15 +73,13 @@ class Ark_Router_Base extends Ark_Router_Father
         $uri = trim($this->_rewrite($uri), '/');
         //处理URI,组装控制器类
         $uri = preg_replace('~\.(.*?)$~i', '', $uri);
-        $controller_dir = Ark_Core::getInst()->getControllerPath();
-        $path_now = $controller_dir;
         if ($uri == '') {
             $controller = Ark_Core::getInst()->config->router->controller->default;
         } else {
             $controllers = array_map('strtolower', explode('/', $uri));
             $controller = implode(DIRECTORY_SEPARATOR, $controllers);
         }
-        $path_now.= DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
+        $path_now = Ark_Core::getAppInfo('controller_path'). DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
         $this->_controller = $path_now;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', dirname($path_now));

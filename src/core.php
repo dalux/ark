@@ -90,50 +90,20 @@ class Ark_Core
     }
 
     /**
-     * 获取控制器根目录地址
+     * 获取app相关数据
      *
-     * @return string
+     * @param null $item
+     * @return array
      */
-    static function getControllerPath()
+    static function getAppInfo($item = null)
     {
-        return self::$_controller_path;
-    }
-
-    /**
-     * 获取配置信息
-     *
-     * @return array|mixed
-     * @throws Exception
-     */
-    function getConfig()
-    {
-        $config = array();
-        //如果配置文件目录是匿名函数
-        if (self::$_config_path instanceof Closure) {
-            $getter = self::$_config_path;
-            $config_path = (string)$getter();
-        } else {
-            $config_path = self::$_config_path;
-        }
-        //如果是目录
-        if (is_dir($config_path)) {
-            $config_files = glob($config_path . '/*.php');
-            foreach ($config_files as $file) {
-                $result = include($file);
-                if (!is_array($result)) {
-                    throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($file)));
-                }
-                $key = strtolower(basename($file));
-                $key = preg_replace('/\.php$/', '', $key);
-                $config[$key] = $result;
-            }
-        } elseif (is_file($config_path)) {  //是文件
-            $config = include($config_path);
-            if (!is_array($config)) {
-                throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($config_path)));
-            }
-        }
-        return $config;
+        $info = array(
+            'app_name'          => self::$_app_name,
+            'app_path'          => self::$_app_path,
+            'config_path'       => self::$_config_path,
+            'controller_path'   => self::$_controller_path,
+        );
+        return is_null($item) ? $info : $info[$item];
     }
 
     /**
@@ -238,7 +208,33 @@ class Ark_Core
         Ark_Loader::setAlias('@', self::$_app_path);
         defined('PATH_APP') || define('PATH_APP', self::$_app_path);
         //配置文件
-        if (!$config = self::$_instance->getConfig()) {
+        $config = array();
+        //如果配置文件目录是匿名函数
+        if (self::$_config_path instanceof Closure) {
+            $getter = self::$_config_path;
+            $config_path = (string)$getter();
+        } else {
+            $config_path = self::$_config_path;
+        }
+        //如果是目录
+        if (is_dir($config_path)) {
+            $config_files = glob($config_path . '/*.php');
+            foreach ($config_files as $file) {
+                $result = include($file);
+                if (!is_array($result)) {
+                    throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($file)));
+                }
+                $key = strtolower(basename($file));
+                $key = preg_replace('/\.php$/', '', $key);
+                $config[$key] = $result;
+            }
+        } elseif (is_file($config_path)) {  //是文件
+            $config = include($config_path);
+            if (!is_array($config)) {
+                throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($config_path)));
+            }
+        }
+        if (!$config) {
             throw new Ark_Exception(self::$_instance->lang->get('core.invalid_configuration'));
         }
         self::$_storage['config']['instance'] = new Ark_Container($config);
