@@ -126,6 +126,7 @@ class Ark_Loader
         foreach ($formal['val'] as $item) {
             $item = rtrim($item, DIRECTORY_SEPARATOR). DIRECTORY_SEPARATOR;
             $class_name = preg_replace('/^'. addslashes($formal['key']). '/', '', $class_name);
+            $class_name = strtolower($class_name);    //文件名统一为类名小写而来
             $path = str_replace('_', DIRECTORY_SEPARATOR, $item. $class_name);
             if (!preg_match('/\.php$/', $path)) {
                 $path = $path. '.php';

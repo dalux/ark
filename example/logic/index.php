@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__. '/../public/index.php';
-
 $select = Ark_Database_SQLBuilder::select()
     ->from('abc', array('*'))
     ->where('tid=?', '123');
