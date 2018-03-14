@@ -30,7 +30,7 @@ abstract class Ark_Database_SQLBuilder_Father
      *
      * @access public
      * @param string $cond
-     * @return Ark_Toolkit_SQLBuilder_Select
+     * @return Ark_Database_SQLBuilder_Father
      */
     function where($cond)
     {
@@ -46,21 +46,21 @@ abstract class Ark_Database_SQLBuilder_Father
      * @access public
      * @param string $field
      * @param mixed $value
-     * @return Ark_Toolkit_SQLBuilder_Father
+     * @return Ark_Database_SQLBuilder_Father
      */
     function whereIn($field, $value)
     {
-        if ($value instanceof Ark_Toolkit_SQLBuilder_Select) {
+        if ($value instanceof Ark_Database_SQLBuilder_Select) {
             $value = $value->getRealSQL();
             $expr = $field. ' IN (' . $value. ')';
         } elseif (is_array($value) && count($value) == 1) {
             $value = current($value);
-            $expr = $field. '='. Ark_Toolkit_SQLBuilder::quote($value);
+            $expr = $field. '='. Ark_Database_SQLBuilder::quote($value);
         } elseif (is_array($value)) {
-            $value = Ark_Toolkit_SQLBuilder::quote($value);
+            $value = Ark_Database_SQLBuilder::quote($value);
             $expr = $field. ' IN ('. $value. ')';
         } else {
-            $expr = $field. '='. Ark_Toolkit_SQLBuilder::quote($value);
+            $expr = $field. '='. Ark_Database_SQLBuilder::quote($value);
         }
         return $this->where($expr);
     }
@@ -71,21 +71,21 @@ abstract class Ark_Database_SQLBuilder_Father
      * @access public
      * @param string $field
      * @param mixed $value
-     * @return Ark_Toolkit_SQLBuilder_Father
+     * @return Ark_Database_SQLBuilder_Father
      */
     function whereNotIn($field, $value)
     {
-        if ($value instanceof Ark_Toolkit_SQLBuilder_Select) {
+        if ($value instanceof Ark_Database_SQLBuilder_Select) {
             $value = $value->getRealSQL();
             $expr = $field . ' NOT IN (' . $value . ')';
         } elseif (is_array($value) && count($value) == 1) {
             $value = current($value);
-            $expr = $field. '!='. Ark_Toolkit_SQLBuilder::quote($value);
+            $expr = $field. '!='. Ark_Database_SQLBuilder::quote($value);
         } elseif (is_array($value)) {
-            $value = Ark_Toolkit_SQLBuilder::quote($value);
+            $value = Ark_Database_SQLBuilder::quote($value);
             $expr = $field. ' NOT IN ('. $value. ')';
         } else {
-            $expr = $field. '!='. Ark_Toolkit_SQLBuilder::quote($value);
+            $expr = $field. '!='. Ark_Database_SQLBuilder::quote($value);
         }
         return $this->where($expr);
     }
@@ -95,12 +95,12 @@ abstract class Ark_Database_SQLBuilder_Father
      *
      * @access public
      * @param mixed $query
-     * @return Ark_Toolkit_SQLBuilder_Father
+     * @return Ark_Database_SQLBuilder_Father
      */
     function whereExists($query)
     {
         $expr = 'EXISTS (?)';
-        if ($query instanceof Ark_Toolkit_SQLBuilder_Select) {
+        if ($query instanceof Ark_Database_SQLBuilder_Select) {
             $query = $query->getRealSQL();
         }
         $expr = str_replace('?', $query, $expr);
@@ -112,12 +112,12 @@ abstract class Ark_Database_SQLBuilder_Father
      *
      * @access public
      * @param mixed $query
-     * @return Ark_Toolkit_SQLBuilder_Father
+     * @return Ark_Database_SQLBuilder_Father
      */
     function whereNotExists($query)
     {
         $expr = 'NOT EXISTS (?)';
-        if ($query instanceof Ark_Toolkit_SQLBuilder_Select) {
+        if ($query instanceof Ark_Database_SQLBuilder_Select) {
             $query = $query->getRealSQL();
         }
         $expr = str_replace('?', $query, $expr);
@@ -131,7 +131,7 @@ abstract class Ark_Database_SQLBuilder_Father
      * @param $field
      * @param $expr
      * @param string $escape
-     * @return Ark_Toolkit_SQLBuilder_Father
+     * @return Ark_Database_SQLBuilder_Father
      */
     function whereLike($field, $expr, $escape = '')
     {
@@ -147,7 +147,7 @@ abstract class Ark_Database_SQLBuilder_Father
      * @param $field
      * @param $expr
      * @param string $escape
-     * @return Ark_Toolkit_SQLBuilder_Father
+     * @return Ark_Database_SQLBuilder_Father
      */
     function whereNotLike($field, $expr, $escape = '')
     {
@@ -205,7 +205,7 @@ abstract class Ark_Database_SQLBuilder_Father
         $sql = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', SQLBuilder::quote($val), $sql, 1);
+            $sql = preg_replace('/'. $key. '/', Ark_Database_SQLBuilder::quote($val), $sql, 1);
         }
         return $sql;
     }
@@ -256,7 +256,7 @@ abstract class Ark_Database_SQLBuilder_Father
                     } elseif (preg_match('/^\{\{.*?\}\}$/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
                         $val = str_replace(array('{{', '}}'), '', $val);
                     } else {
-                        $val = SQLBuilder::quote($val);
+                        $val = Ark_Database_SQLBuilder::quote($val);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {

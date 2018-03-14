@@ -304,7 +304,6 @@ class Ark_Database_Querier
      * @param array $fields
      * @return array
      * @throws Exception
-     * @throws Ark_Proxy_Exception
      */
     function fetchAll($condition = array(), $order = array(), $count = 0, $offset = 0, $fields = array('*'))
     {

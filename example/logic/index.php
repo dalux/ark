@@ -2,4 +2,7 @@
 
 require_once __DIR__. '/../public/index.php';
 
-var_dump($ark);
+$select = Ark_Database_SQLBuilder::select()
+    ->from('abc', array('*'))
+    ->where('tid=?', '123');
+echo $select;
