@@ -193,7 +193,7 @@ class Ark_Core
      * @return mixed
      * @throws Exception
      */
-    static function run()
+    static function start()
     {
         //检测必要应用配置
         if (!self::$_app_name) {

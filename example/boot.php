@@ -33,4 +33,4 @@ Ark_Event::addListener('event.query.before', function($data) {
 	return $data;
 });
 
-Ark_Core::run();
+Ark_Core::start();
