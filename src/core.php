@@ -239,6 +239,7 @@ class Ark_Core
         if (!self::$_controller_path) {
             self::$_controller_path = self::$_app_path . DIRECTORY_SEPARATOR . 'controller';
         }
+        defined('PATH_CTRL') || define('PATH_CTRL', self::$_controller_path);
         //时区设置
         $timezone = 'Asia/Shanghai';
         $instance = self::$_storage['config']['instance'];

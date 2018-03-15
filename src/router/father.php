@@ -52,7 +52,7 @@ abstract class Ark_Router_Father implements Ark_Router_Contract
             if (PATH_NOW != PATH_CTRL) {
                 $curr_path = PATH_NOW;
                 while (($curr_path = dirname($curr_path))
-                    && strlen($curr_path) >= strlen(PATH_CTRL)) {
+                        && strlen($curr_path) >= strlen(PATH_CTRL)) {
                     $path_nodes[] = $curr_path;
                 }
             }
