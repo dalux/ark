@@ -32,7 +32,7 @@ class Ark_Session_User extends Ark_Session_Father
             $this->_container = $config['save_path'];
         }
         if (!$this->_container instanceof Ark_Cache_Contract) {
-            throw new Ark_Session_Exception(Ark_Core::getInst()->lang->get('sess.cacher_implement_error'), 'Ark_Cache_Contract');
+            throw new Ark_Session_Exception(Ark_Language::get('sess.cacher_implement_error'), 'Ark_Cache_Contract');
         }
         $this->_container->setFlag('session');
         $this->_expire_time = $config['expire_time'];

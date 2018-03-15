@@ -45,7 +45,7 @@ abstract class Ark_Router_Father implements Ark_Router_Contract
         //自动加载目录下引导文件
         if ($interceptor = $config->router->controller->interceptor) {
             if (basename($this->_controller) == $interceptor) {
-                throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.controller_is_protected', $interceptor));
+                throw new Ark_Router_Exception(Ark_Language::get('router.controller_is_protected', $interceptor));
             }
             //获取目录树
             $path_nodes = array(PATH_NOW);

@@ -124,7 +124,7 @@ class Ark_Toolkit
     static function mkDir($dir)
     {
         if (!($dir = trim($dir))) {
-            throw new Ark_Exception(Ark_Core::getInst()->lang->get('tbox.invalid_create_path'));
+            throw new Ark_Exception(Ark_Language::get('tbox.invalid_create_path'));
         }
         $dirs = array($dir);
         while (!file_exists($dir)) {
@@ -442,7 +442,7 @@ class Ark_Toolkit
         if (!$data = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA)) {
             $error = libxml_get_last_error();
             libxml_clear_errors();
-            throw new Exception(Ark_Core::getInst()->lang->get('tbox.parse_string_failed', $error ? $error->message : '未知错误', $content));
+            throw new Exception(Ark_Language::get('tbox.parse_string_failed', $error ? $error->message : '未知错误', $content));
         }
         return $data;
     }

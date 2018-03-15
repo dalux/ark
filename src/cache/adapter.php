@@ -14,7 +14,7 @@ class Ark_Cache_Adapter
     {
         $config = Ark_Core::getInst()->config->cache->$name;
         if (!$config) {
-            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.config_not_found', $name));
+            throw new Ark_Cache_Exception(Ark_Language::get('cache.config_not_found', $name));
         }
         /* @var Ark_Container $config */
         $config = $config->toArray();
@@ -22,11 +22,11 @@ class Ark_Cache_Adapter
         $save_path = $config['save_path'];
         $option = $config['option'];
         if (!Ark_Loader::findClass($driver)) {
-            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.driver_not_found', $driver));
+            throw new Ark_Cache_Exception(Ark_Language::get('cache.driver_not_found', $driver));
         }
         $instance = new $driver($save_path, $option);
         if (!$instance instanceof Ark_Cache_Contract) {
-            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.driver_implement_error', $driver, 'Ark_Cache_Contract'));
+            throw new Ark_Cache_Exception(Ark_Language::get('cache.driver_implement_error', $driver, 'Ark_Cache_Contract'));
         }
         Ark_Trace::set('driver', array('cache'=> sprintf('%s[%s]', $name, $driver)));
         return $instance;

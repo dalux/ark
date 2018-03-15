@@ -89,7 +89,7 @@ class Ark_View_Native extends Ark_View_Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $template;
         if (!is_file($template)) {
-            throw new Ark_View_Exception(Ark_Core::getInst()->lang->get('view.template_not_found', Ark_Loader::reducePath($template)));
+            throw new Ark_View_Exception(Ark_Language::get('view.template_not_found', Ark_Loader::reducePath($template)));
         }
         $data = array(
             'template'=> $template,
@@ -125,7 +125,7 @@ class Ark_View_Native extends Ark_View_Father
         }
         $template = $this->_template_dir. DIRECTORY_SEPARATOR. $path;
         if (!is_file($template)) {
-            throw new Ark_View_Exception(Ark_Core::getInst()->lang->get('view.include_file_not_found', Ark_Loader::reducePath($template)));
+            throw new Ark_View_Exception(Ark_Language::get('view.include_file_not_found', Ark_Loader::reducePath($template)));
         }
         extract($this->_storage, EXTR_REFS);
         extract($params, EXTR_SKIP);

@@ -149,11 +149,8 @@ class Ark_Core
 			defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[0]['file']));
 			//注册框架类库基地址
 			Ark_Loader::setNameSpace('Ark', PATH_LIB);
-			//语言包选择器
-			self::$_storage['lang'] = array(
-				'instance'=> function() { return new Ark_Language(); },
-				'system'=> 1
-			);
+			//语言包
+            Ark_Language::addPackage(Ark_Loader::realPath('*/lang'));
 			//异常报告
 			Ark_Handler::setHandler(Ark_Handler::TYPE_EXCEPTION);
 			//后续类文件自动加载
@@ -197,11 +194,11 @@ class Ark_Core
     {
         //检测必要应用配置
         if (!self::$_app_name) {
-            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_app_name'));
+            throw new Ark_Exception(Ark_Language::get('core.invalid_app_name'));
         }
         self::$_app_path || self::$_app_path = PATH_WEB;
         if (!is_dir(self::$_app_path)) {
-            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_app_path'));
+            throw new Ark_Exception(Ark_Language::get('core.invalid_app_path'));
         }
         //注册应用程序基地址
         Ark_Loader::setNameSpace(self::$_app_name, self::$_app_path);
@@ -222,7 +219,7 @@ class Ark_Core
             foreach ($config_files as $file) {
                 $result = include($file);
                 if (!is_array($result)) {
-                    throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($file)));
+                    throw new Ark_Exception(Ark_Language::get('core.invalid_config_format', basename($file)));
                 }
                 $key = strtolower(basename($file));
                 $key = preg_replace('/\.php$/', '', $key);
@@ -231,20 +228,17 @@ class Ark_Core
         } elseif (is_file($config_path)) {  //是文件
             $config = include($config_path);
             if (!is_array($config)) {
-                throw new Ark_Exception(self::$_instance->lang->get('core.invalid_config_format', basename($config_path)));
+                throw new Ark_Exception(Ark_Language::get('core.invalid_config_format', basename($config_path)));
             }
         }
         if (!$config) {
-            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_configuration'));
+            throw new Ark_Exception(Ark_Language::get('core.invalid_configuration'));
         }
         self::$_storage['config']['instance'] = new Ark_Container($config);
         //控制器地址检测
         if (!self::$_controller_path) {
             self::$_controller_path = self::$_app_path . DIRECTORY_SEPARATOR . 'controller';
-        } elseif (strpos(self::$_controller_path, self::$_app_path) === false) {
-            throw new Ark_Exception(self::$_instance->lang->get('core.invalid_controller_path'));
         }
-        defined('PATH_CTRL') || define('PATH_CTRL', self::$_controller_path);
         //时区设置
         $timezone = 'Asia/Shanghai';
         $instance = self::$_storage['config']['instance'];
@@ -265,7 +259,7 @@ class Ark_Core
         //监听系统启动就绪事件
         Ark_Event::onListening('event.framework.ready');
         if (!self::$_instance->router instanceof Ark_Router_Contract) {
-            $lang = self::$_instance->lang->get('router.driver_implement_error', get_class(self::$_instance->router), 'Ark_Router_Contract');
+            $lang = Ark_Language::get('router.driver_implement_error', get_class(self::$_instance->router), 'Ark_Router_Contract');
             throw new Ark_Exception($lang);
         }
         //路由调度准备
@@ -314,7 +308,7 @@ class Ark_Core
     {
         //常规取值
         if (!$instance = self::$_storage[$name]['instance']) {
-            throw new Ark_Exception($this->lang->get('core.object_not_found', $name));
+            throw new Ark_Exception(Ark_Language::get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
             $instance = $instance();
             if (!is_null($instance)) {
@@ -347,7 +341,7 @@ class Ark_Core
     function call($name, $args)
     {
         if (!isset(self::$_method[$name])) {
-            throw new Ark_Exception($this->lang->get('core.custom_method_notfound', $name));
+            throw new Ark_Exception(Ark_Language::get('core.custom_method_notfound', $name));
         }
         $method = self::$_method[$name]['method'];
         return call_user_func_array($method, $args);

@@ -99,7 +99,7 @@ class Ark_Router_Base extends Ark_Router_Father
     {
         global $ark;
         if (!is_file($this->_controller)) {
-            throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
+            throw new Ark_Router_Exception(Ark_Language::get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
         }
         parent::dispatch();
         $output = include_once($this->_controller);
@@ -127,12 +127,12 @@ class Ark_Router_Base extends Ark_Router_Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new Ark_Router_Exception(Ark_Language::get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Ark_Router_Exception(Ark_Core::getInst()->lang->get('router.uri_must_string'));
+            throw new Ark_Router_Exception(Ark_Language::get('router.uri_must_string'));
         }
         return $uri;
     }

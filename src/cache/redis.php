@@ -106,7 +106,7 @@ class Ark_Cache_Redis extends Ark_Cache_Father
         }
         $format = $this->_format;
         if (!$part = $format($name)) {
-            throw new Ark_Cache_Exception(Ark_Core::getInst()->lang->get('cache.path_mustbe_notnull'));
+            throw new Ark_Cache_Exception(Ark_Language::get('cache.path_mustbe_notnull'));
         }
         return $path. $part;
     }
