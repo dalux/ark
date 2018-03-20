@@ -277,7 +277,7 @@ class Ark_Core
      * @param $name
      * @param $value
      */
-    static function setMember($name, $value)
+    static function setMember($name, Closure $value)
     {
         if (!isset(self::$_storage[$name])
                 || !self::$_storage[$name]['system']) {
