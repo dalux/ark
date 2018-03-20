@@ -63,13 +63,6 @@ class Ark_Core
     private static $_storage = array();
 
     /**
-     * 自定义方法体
-     *
-     * @var array
-     */
-    private static $_method = array();
-
-    /**
      * 私有构造方法
      *
      */
@@ -277,24 +270,11 @@ class Ark_Core
      * @param $name
      * @param $value
      */
-    static function setMember($name, Closure $value)
+    static function set($name, Closure $value)
     {
         if (!isset(self::$_storage[$name])
                 || !self::$_storage[$name]['system']) {
             self::$_storage[$name] = array('instance'=> $value, 'system'=> 0);
-        }
-    }
-
-    /**
-     * 设置自定义方法
-     *
-     * @param $name
-     * @param callable $method
-     */
-    static function setMethod($name, callable $method)
-    {
-        if (!isset(self::$_method[$name]) || !self::$_method[$name]['system']) {
-            self::$_method[$name] = array('method' => $method, 'system' => 0);
         }
     }
 
@@ -311,10 +291,10 @@ class Ark_Core
         if (!$instance = self::$_storage[$name]['instance']) {
             throw new Ark_Exception(Ark_Language::get('core.object_not_found', $name));
         } elseif ($instance instanceof Closure && is_callable($instance)) {    //支持匿名函数
-            $instance = $instance();
-            if (!is_null($instance)) {
-                self::$_storage[$name]['instance'] = $instance;
+            if (!$instance = $instance()) {
+                throw new Ark_Exception(Ark_Language::get('core.invlid_custom_member', $name));
             }
+            self::$_storage[$name]['instance'] = $instance;
         }
         return $instance;
     }
@@ -329,36 +309,6 @@ class Ark_Core
     function __get($name)
     {
         return $this->get($name);
-    }
-
-    /**
-     * 调用自定义方法
-     *
-     * @param $name
-     * @param $args
-     * @return mixed
-     * @throws Exception
-     */
-    function call($name, $args)
-    {
-        if (!isset(self::$_method[$name])) {
-            throw new Ark_Exception(Ark_Language::get('core.custom_method_notfound', $name));
-        }
-        $method = self::$_method[$name]['method'];
-        return call_user_func_array($method, $args);
-    }
-
-    /**
-     * 魔术方法调用自定义方法
-     *
-     * @param $name
-     * @param $args
-     * @return mixed
-     * @throws Exception
-     */
-    function __call($name, $args)
-    {
-        return $this->call($name, $args);
     }
 
     /**
