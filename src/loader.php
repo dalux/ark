@@ -25,12 +25,12 @@ class Ark_Loader
      *
      * @param $alias
      * @param $path
-     * @throws Exception
+     * @throws Ark_Exception
      */
     static function setAlias($alias, $path)
     {
         if (in_array($alias, array('*', '.'))) {
-            throw new Exception(Ark_Language::get('core.deny_alias_redeclare', $alias));
+            throw new Ark_Exception(Ark_Language::get('core.deny_alias_redeclare', $alias));
         }
         self::$_alias[$alias] = $path;
     }
@@ -126,7 +126,7 @@ class Ark_Loader
         foreach ($formal['val'] as $item) {
             $item = rtrim($item, DIRECTORY_SEPARATOR). DIRECTORY_SEPARATOR;
             $class_name = preg_replace('/^'. addslashes($formal['key']). '/', '', $class_name);
-            $class_name = strtolower($class_name);    //文件名统一为类名小写而来
+            $class_name = strtolower($class_name);    //文件名统一为类名小写
             $path = str_replace('_', DIRECTORY_SEPARATOR, $item. $class_name);
             if (!preg_match('/\.php$/', $path)) {
                 $path = $path. '.php';

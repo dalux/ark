@@ -12,8 +12,8 @@ class Ark_Cache_Adapter
      */
     static function getDriver($name)
     {
-        $config = Ark_Core::getInst()->config->cache->$name;
-        if (!$config) {
+        $config = Ark_Core::getInst()->config->cache;
+        if (!$config || !$config = $config->$name) {
             throw new Ark_Cache_Exception(Ark_Language::get('cache.config_not_found', $name));
         }
         /* @var Ark_Container $config */

@@ -10,13 +10,13 @@ class Ark_Database_Adapter
      * @static
      * @param $name
      * @return mixed
-     * @throws Exception
+     * @throws Ark_Database_Exception
      */
     static function getDriver($name)
     {
-        $config = Ark_Core::getInst()->config->database->$name;
-        if (!$config) {
-            throw new Exception(Ark_Language::get('db.config_not_found', $name));
+        $config = Ark_Core::getInst()->config->database;
+        if (!$config || !$config = $config->$name) {
+            throw new Ark_Database_Exception(Ark_Language::get('db.config_not_found', $name));
         }
         /* @var Ark_Container $config */
         $config = $config->toArray();

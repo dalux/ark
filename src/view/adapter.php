@@ -7,7 +7,7 @@ class Ark_View_Adapter
      * 获取视图引擎实例
      *
      * @return Ark_View_Contract
-     * @throws Exception
+     * @throws Ark_View_Exception
      */
     static function getDriver()
     {
