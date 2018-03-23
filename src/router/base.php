@@ -86,7 +86,7 @@ class Ark_Router_Base extends Ark_Router_Father
         Ark_Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Ark_Request::setReady(true);
-        Ark_Core::getInst()->setMember('request', function() { return Ark_Request::getInstance(); });
+        Ark_Core::set('request', function() { return Ark_Request::getInstance(); });
         $this->_ready = true;
     }
 
