@@ -44,9 +44,11 @@ class Ark_Loader
     static function setNameSpace($namespace, $path)
     {
         //如果要重定义系统内建命名空间
+        $namespace = rtrim($namespace, '_');
         if (preg_match('/^Ark_/i', $namespace)) {
-            $class_name = preg_replace('/^Ark/i', '', $namespace);
-            $tmp_path = str_replace('_', DIRECTORY_SEPARATOR, PATH_LIB. $class_name);
+            $class_name = preg_replace('/^Ark_/i', '', $namespace);
+            $class_name = strtolower($class_name);
+            $tmp_path = str_replace('_', DIRECTORY_SEPARATOR, PATH_LIB. DIRECTORY_SEPARATOR. $class_name);
             if (!isset(self::$_namespaces[$namespace])
                     || !in_array($tmp_path, self::$_namespaces[$namespace])) {
                 self::$_namespaces[$namespace][] = $tmp_path;
@@ -125,7 +127,7 @@ class Ark_Loader
         }
         foreach ($formal['val'] as $item) {
             $item = rtrim($item, DIRECTORY_SEPARATOR). DIRECTORY_SEPARATOR;
-            $class_name = preg_replace('/^'. addslashes($formal['key']). '/', '', $class_name);
+            $class_name = preg_replace('/^'. addslashes($formal['key']). '\_/', '', $class_name);
             $class_name = strtolower($class_name);    //文件名统一为类名小写
             $path = str_replace('_', DIRECTORY_SEPARATOR, $item. $class_name);
             if (!preg_match('/\.php$/', $path)) {

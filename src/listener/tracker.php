@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__. '/Tracker/Tracker.php';
+require_once __DIR__. '/tracker/tracker.php';
 
 //设置cookie
 Ark_Core::getInst()->container->__tracker__ = array(
