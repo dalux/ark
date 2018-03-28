@@ -1,23 +1,29 @@
 <?php
 
-class Ark_Proxy_Cache
+namespace Ark\Proxy;
+
+use Ark\Contract\ICache;
+use Ark\Core\Language;
+use Ark\Exception\ProxyException;
+
+class CacheProxy
 {
 
     /**
      * 缓存器
      * 
      * @access private
-     * @var Ark_Cache_Contract
+     * @var ICache
      */
     private $_cacher = null;
 
     /**
      * 设置代理缓存器
      *
-     * @param Ark_Cache_Contract $cache
+     * @param ICache $cache
      * @return $this
      */
-    function setCacher(Ark_Cache_Contract $cache)
+    function setCacher(ICache $cache)
     {
         $this->_cacher = $cache;
         return $this;
@@ -33,12 +39,12 @@ class Ark_Proxy_Cache
      * @param int $expire
      * @param string $name
      * @return mixed
-     * @throws Exception
+     * @throws ProxyException
      */
     function doProxy($adapter, $method, array $args, $expire = 86400, $name = null)
     {
         if (!is_callable(array($adapter, $method))) {
-            throw new Ark_Proxy_Exception(Ark_Language::get('proxy.target_not_callable'));
+            throw new ProxyException(Language::get('proxy.target_not_callable'));
         }
         $key = is_null($name)
             ? $this->name($adapter, $method, $args)

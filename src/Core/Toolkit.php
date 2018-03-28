@@ -2,6 +2,8 @@
 
 namespace Ark\Core;
 
+use Ark\Exception\CoreException;
+
 class Toolkit
 {
 
@@ -121,12 +123,12 @@ class Toolkit
      * @static
      * @param string $dir
      * @return bool
-     * @throws Exception
+     * @throws CoreException
      */
     static function mkDir($dir)
     {
         if (!($dir = trim($dir))) {
-            throw new Exception(Language::get('tbox.invalid_create_path'));
+            throw new CoreException(Language::get('tbox.invalid_create_path'));
         }
         $dirs = array($dir);
         while (!file_exists($dir)) {
@@ -150,7 +152,7 @@ class Toolkit
      *
      * @param $src
      * @param $dst
-     * @throws Exception
+     * @throws CoreException
      */
     static function copyDir($src, $dst)
     {
@@ -174,7 +176,7 @@ class Toolkit
      * @static
      * @param $dirName
      * @return bool
-     * @throws Exception
+     * @throws CoreException
      */
 	static function removeDir($dirName)
 	{

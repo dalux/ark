@@ -1,6 +1,10 @@
 <?php
 
-abstract class Ark_Cache_Father implements Ark_Cache_Contract
+namespace Ark\Cache;
+
+use Ark\Contract\ICache;
+
+abstract class CacheFather implements ICache
 {
 
     /**
@@ -42,10 +46,10 @@ abstract class Ark_Cache_Father implements Ark_Cache_Contract
     /**
      * 设置缓存名称格式化函数
      *
-     * @param Closure $format
+     * @param \Closure $format
      * @return $this
      */
-    function setFormat(Closure $format)
+    function setFormat(\Closure $format)
     {
         $this->_format = $format;
         return $this;

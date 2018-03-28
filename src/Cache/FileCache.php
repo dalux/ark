@@ -1,6 +1,13 @@
 <?php
 
-class Ark_Cache_File extends Ark_Cache_Father
+namespace Ark\Cache;
+
+use Ark\Core\Captain;
+use Ark\Core\Language;
+use Ark\Core\Toolkit;
+use Ark\Exception\CacheException;
+
+class FileCache extends CacheFather
 {
 	
 	/**i
@@ -24,16 +31,16 @@ class Ark_Cache_File extends Ark_Cache_Father
      *
      * @param $save_path
      * @param array $option
-     * @throws Ark_Exception
-     * @throws Ark_Cache_Exception
+     * @throws CacheException
+     * @throws \Ark\Exception\CoreException
      */
     function __construct($save_path, array $option = array())
     {
         $this->_dir = $save_path;
-        if (!is_dir($this->_dir) && !Ark_Toolkit::mkDir($this->_dir)) {
-            throw new Ark_Cache_Exception(Ark_Language::get('cache.dir_create_failed', $this->_dir));
+        if (!is_dir($this->_dir) && !Toolkit::mkDir($this->_dir)) {
+            throw new CacheException(Language::get('cache.dir_create_failed', $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
-            throw new Ark_Cache_Exception(Ark_Language::get('cache.dir_permission_error', $this->_dir));
+            throw new CacheException(Language::get('cache.dir_permission_error', $this->_dir));
         }
         is_null($option['ext_name']) || $this->_ext_name = $option['ext_name'];
         is_null($option['flag']) || $this->_flag = $option['flag'];
@@ -47,7 +54,7 @@ class Ark_Cache_File extends Ark_Cache_Father
      * @param mixed $value
      * @param mixed $expire
      * @return bool
-     * @throws Ark_Exception
+     * @throws
      */
     function set($name, $value, $expire = 86400)
     {
@@ -129,8 +136,8 @@ class Ark_Cache_File extends Ark_Cache_Father
      * @access private
      * @param string $name
      * @return string
-     * @throws Ark_Exception
-     * @throws Ark_Cache_Exception
+     * @throws CacheException
+     * @throws \Ark\Exception\CoreException
      */
     function getCachePath($name)
     {
@@ -139,7 +146,7 @@ class Ark_Cache_File extends Ark_Cache_Father
             $path.= "/{$this->_flag}";
         }
         $path.= '/';
-        if (!$this->_format instanceof Closure || !is_callable($this->_format)) {
+        if (!$this->_format instanceof \Closure || !is_callable($this->_format)) {
             $this->_format = function($name) {
                 $name = md5($name);
                 return "{$name[0]}/{$name[1]}/{$name}";
@@ -147,12 +154,12 @@ class Ark_Cache_File extends Ark_Cache_Father
         }
         $format = $this->_format;
         if (!$part = $format($name)) {
-            throw new Ark_Cache_Exception(Ark_Language::get('cache.path_mustbe_notnull'));
+            throw new CacheException(Language::get('cache.path_mustbe_notnull'));
         }
         $path.= $part. $this->_ext_name;
         $path = str_replace(array('\\', '/'), DIRECTORY_SEPARATOR, $path);
-        if (!file_exists(dirname($path)) && !Ark_Toolkit::mkDir(dirname($path))) {
-            throw new Ark_Cache_Exception(Ark_Language::get('cache.dir_create_failed', $path));
+        if (!file_exists(dirname($path)) && !Toolkit::mkDir(dirname($path))) {
+            throw new CacheException(Language::get('cache.dir_create_failed', $path));
         }
         return $path;
     }
