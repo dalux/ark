@@ -2,10 +2,12 @@
 
 namespace Ark\Router;
 
-use Ark\Core;
-use Ark\Language;
+use Ark\Contract\IRouter;
+use Ark\Core\Captain;
+use Ark\Core\Language;
+use Ark\Exception\RouterException;
 
-abstract class RouterFather implements RouterContract
+abstract class RouterFather implements IRouter
 {
 
     /**
@@ -45,7 +47,7 @@ abstract class RouterFather implements RouterContract
     function dispatch()
     {
         global $ark;
-        $config = Core::getInst()->config;
+        $config = Captain::getInst()->config;
         //自动加载目录下引导文件
         if ($interceptor = $config->router->controller->interceptor) {
             if (basename($this->_controller) == $interceptor) {

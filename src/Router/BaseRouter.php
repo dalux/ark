@@ -2,7 +2,14 @@
 
 namespace Ark\Router;
 
-class BaseRouter extends Ark_Router_Father
+use Ark\Core\Captain;
+use Ark\Core\Language;
+use Ark\Core\Loader;
+use Ark\Core\Request;
+use Ark\Exception\CoreException;
+use Ark\Exception\RouterException;
+
+class BaseRouter extends RouterFather
 {
 
     /**
@@ -62,7 +69,8 @@ class BaseRouter extends Ark_Router_Father
     /**
      * 准备路由数据
      *
-     * @throws Exception
+     * @throws RouterException
+     * @throws CoreException
      */
     function ready()
     {
@@ -76,32 +84,32 @@ class BaseRouter extends Ark_Router_Father
         //处理URI,组装控制器类
         $uri = preg_replace('~\.(.*?)$~i', '', $uri);
         if ($uri == '') {
-            $controller = Ark_Core::getInst()->config->router->controller->default;
+            $controller = Captain::getInst()->config->router->controller->default;
         } else {
             $controllers = array_map('strtolower', explode('/', $uri));
             $controller = implode(DIRECTORY_SEPARATOR, $controllers);
         }
-        $path_now = Ark_Core::getAppInfo('controller_path'). DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
+        $path_now = Captain::getAppInfo('controller_path'). DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
         $this->_controller = $path_now;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', dirname($path_now));
-        Ark_Loader::setAlias('~', PATH_NOW);
+        Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
-        Ark_Request::setReady(true);
-        Ark_Core::set('request', function() { return Ark_Request::getInstance(); });
+        Request::setReady(true);
+        Captain::set('request', function() { return Request::getInstance(); });
         $this->_ready = true;
     }
 
     /**
      * 调度
      *
-     * @throws Exception
+     * @throws RouterException
      */
     function dispatch()
     {
         global $ark;
         if (!is_file($this->_controller)) {
-            throw new Ark_Router_Exception(Ark_Language::get('router.controller_not_found', Ark_Loader::reducePath($this->_controller)));
+            throw new RouterException(Language::get('router.controller_not_found', Loader::reducePath($this->_controller)));
         }
         parent::dispatch();
         $output = include_once($this->_controller);
@@ -115,7 +123,7 @@ class BaseRouter extends Ark_Router_Father
      *
      * @param $uri
      * @return mixed
-     * @throws Ark_Router_Exception
+     * @throws RouterException
      */
     private function _rewrite($uri)
     {
@@ -129,12 +137,12 @@ class BaseRouter extends Ark_Router_Father
                     $uri = preg_replace_callback($key, $val, $uri);
                     break;
                 } elseif (!is_callable($val) && is_array($val)) {
-                    throw new Ark_Router_Exception(Ark_Language::get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
+                    throw new RouterException(Language::get('router.call_func_failed', $val[0]. '::'. $val[1]. '()'));
                 }
             }
         }
         if (!is_string($uri)) {
-            throw new Ark_Router_Exception(Ark_Language::get('router.uri_must_string'));
+            throw new RouterException(Language::get('router.uri_must_string'));
         }
         return $uri;
     }

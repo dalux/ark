@@ -1,12 +1,19 @@
 <?php
 
-class Ark_Session_User extends Ark_Session_Father
+namespace Ark\Session;
+
+use Ark\Contract\ICache;
+use Ark\Core\Captain;
+use Ark\Core\Language;
+use Ark\Exception\SessionException;
+
+class UserSession extends SessionFather
 {
 
     /**
      * 缓存器
      *
-     * @var Ark_Cache_Contract
+     * @var ICache
      */
     protected $_container;
 
@@ -24,15 +31,15 @@ class Ark_Session_User extends Ark_Session_Father
      */
 	function __construct()
 	{
-        $config = Ark_Core::getInst()->config->session->toArray();
+        $config = Captain::getInst()->config->session->toArray();
         //检查
-        if ($config['save_path'] instanceof Closure) {    //支持匿名函数
+        if ($config['save_path'] instanceof \Closure) {    //支持匿名函数
             $this->_container = $config['save_path']();
         } else {
             $this->_container = $config['save_path'];
         }
-        if (!$this->_container instanceof Ark_Cache_Contract) {
-            throw new Ark_Session_Exception(Ark_Language::get('sess.cacher_implement_error'), 'Ark_Cache_Contract');
+        if (!$this->_container instanceof ICache) {
+            throw new SessionException(Language::get('sess.cacher_implement_error'), 'Ark_Cache_Contract');
         }
         $this->_container->setFlag('session');
         $this->_expire_time = $config['expire_time'];

@@ -1,6 +1,11 @@
 <?php
 
-class Ark_Router_Native extends Ark_Router_Father
+namespace Ark\Router;
+
+use Ark\Core\Captain;
+use Ark\Core\Request;
+
+class NativeRouter extends RouterFather
 {
 
     /**
@@ -50,8 +55,8 @@ class Ark_Router_Native extends Ark_Router_Father
         define('PATH_NOW', dirname($caller));
         $this->_controller = $caller;
         //请求数据初始化完成
-        Ark_Request::setReady(true);
-        Ark_Core::set('request', function() { return Ark_Request::getInstance(); });
+        Request::setReady(true);
+        Captain::set('request', function() { return Request::getInstance(); });
         $this->_ready = true;
 	}
 
