@@ -5,7 +5,7 @@ namespace Ark\Database;
 use Ark\Core\Language;
 use Ark\Exception\DatabaseException;
 
-class Toolkit
+class DatabaseToolkit
 {
 
     /**

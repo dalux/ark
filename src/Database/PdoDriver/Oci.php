@@ -2,8 +2,8 @@
 
 namespace Ark\Database\PdoDriver;
 
+use Ark\Database\DatabaseToolkit;
 use Ark\Database\PdoDriver;
-use Ark\Database\Toolkit;
 use Ark\Exception\DatabaseException;
 use Ark\Exception\EventException;
 
@@ -20,7 +20,7 @@ class Oci extends PdoDriver
      */
     function __construct($dsn, array $option = array())
     {
-        $database = Toolkit::parseConnectUrl($dsn);
+        $database = DatabaseToolkit::parseConnectUrl($dsn);
         $conn_str = $database['host'];
         if ($database['host'] && $database['name']) {
             $database['port'] || $database['port'] = 1521;
