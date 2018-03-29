@@ -37,7 +37,6 @@ abstract class InsertBuilder extends BuilderFather
         return $result;
     }
 
-
     /**
      * 取得VALUES片段
      *

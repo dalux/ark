@@ -5,7 +5,6 @@ namespace Ark\Toolkit;
 use Ark\Contract\ICache;
 use Ark\Contract\IDatabase;
 use Ark\Exception\ProxyException;
-use Ark\Exception\ToolkitException;
 use Ark\Proxy\CacheProxy;
 
 class Querier
@@ -156,7 +155,6 @@ class Querier
      * @param array $data 数据键值对
      * @param array $condition 编辑条件
      * @return integer
-     * @throws Exception
      */
     function update(array $data, array $condition)
     {
@@ -191,7 +189,6 @@ class Querier
      * @final
      * @param array $condition 删除条件
      * @return int
-     * @throws Exception
      */
     function delete(array $condition = array())
     {

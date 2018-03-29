@@ -2,10 +2,10 @@
 
 namespace Ark\Cache;
 
-use Ark\Core\Captain;
 use Ark\Core\Language;
 use Ark\Core\Toolkit;
 use Ark\Exception\CacheException;
+use Ark\Exception\CoreException;
 
 class FileCache extends CacheFather
 {
@@ -69,8 +69,8 @@ class FileCache extends CacheFather
      * @access public
      * @param string $name
      * @return mixed
-     * @throws Ark_Exception
-     * @throws Ark_Cache_Exception
+     * @throws CacheException
+     * @throws CoreException
      */
     function get($name)
     {
@@ -92,7 +92,8 @@ class FileCache extends CacheFather
      * @access public
      * @param $name
      * @return bool
-     * @throws Ark_Exception
+     * @throws CacheException
+     * @throws CoreException
      */
     function delete($name)
     {
@@ -110,7 +111,6 @@ class FileCache extends CacheFather
      * @param string $name
      * @param $value
      * @return bool
-     * @throws Ark_Exception
      */
     function __set($name, $value)
     {
@@ -123,7 +123,6 @@ class FileCache extends CacheFather
      * @access public
      * @param string $name
      * @return mixed
-     * @throws Ark_Exception
      */
     function __get($name)
     {
@@ -137,7 +136,7 @@ class FileCache extends CacheFather
      * @param string $name
      * @return string
      * @throws CacheException
-     * @throws \Ark\Exception\CoreException
+     * @throws CoreException
      */
     function getCachePath($name)
     {
