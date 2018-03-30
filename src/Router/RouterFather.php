@@ -3,8 +3,8 @@
 namespace Brisk\Router;
 
 use Brisk\Contract\IRouter;
-use Brisk\Core\Captain;
-use Brisk\Core\Language;
+use Brisk\Assembly\Core;
+use Brisk\Assembly\Language;
 use Brisk\Exception\RouterException;
 
 abstract class RouterFather implements IRouter
@@ -47,7 +47,7 @@ abstract class RouterFather implements IRouter
     function dispatch()
     {
         global $ark;
-        $config = Captain::getInst()->config;
+        $config = Core::getInst()->config;
         //自动加载目录下引导文件
         if ($interceptor = $config->router->controller->interceptor) {
             if (basename($this->_controller) == $interceptor) {

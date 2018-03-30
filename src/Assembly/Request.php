@@ -1,6 +1,8 @@
 <?php
 
-namespace Brisk\Core;
+namespace Brisk\Assembly;
+
+use Brisk\Exception\CoreException;
 
 class Request
 {
@@ -110,12 +112,12 @@ class Request
     /**
      * 取请求实例
      * @return Request
-     * @throws Exception
+     * @throws CoreException
      */
     static function getInstance()
     {
         if (!self::$_ready) {
-            throw new Exception(Language::get('http.request_not_ready'));
+            throw new CoreException(Language::get('http.request_not_ready'));
         } elseif (is_null(self::$_instance)) {
             self::$_instance = new self();
         }

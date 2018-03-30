@@ -1,12 +1,12 @@
 <?php
 
-namespace Brisk\Core;
+namespace Brisk\Assembly;
 
 use Brisk\Contract\IRouter;
 use Brisk\Exception\CoreException;
 use Brisk\Exception\EventException;
 
-class Captain
+class Core
 {
 
     /**
@@ -145,7 +145,7 @@ class Captain
 			//异常报告
 			Handler::setHandler(Handler::TYPE_EXCEPTION);
 			//后续类文件自动加载
-			Loader::addAutoLoader(array('\Brisk\Core\Loader', 'autoLoad'));
+			Loader::addAutoLoader(array('\Brisk\Assembly\Loader', 'autoLoad'));
 			//初始化CLI模式
 			Server::isCli() && Server::initCli();
 			//注册内置组件
@@ -229,7 +229,7 @@ class Captain
         self::$_storage['config']['instance'] = new Container($config);
         //控制器地址检测
         if (!self::$_controller_path) {
-            self::$_controller_path = self::$_app_path . DIRECTORY_SEPARATOR . 'controller';
+            self::$_controller_path = self::$_app_path . DIRECTORY_SEPARATOR . 'Controller';
         }
         defined('PATH_CTRL') || define('PATH_CTRL', self::$_controller_path);
         //时区设置

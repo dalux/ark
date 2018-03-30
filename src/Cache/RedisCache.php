@@ -2,7 +2,7 @@
 
 namespace Brisk\Cache;
 
-use Brisk\Core\Language;
+use Brisk\Assembly\Language;
 use Brisk\Exception\CacheException;
 
 class RedisCache extends CacheFather

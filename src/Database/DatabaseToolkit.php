@@ -2,7 +2,7 @@
 
 namespace Brisk\Database;
 
-use Brisk\Core\Language;
+use Brisk\Assembly\Language;
 use Brisk\Exception\DatabaseException;
 
 class DatabaseToolkit

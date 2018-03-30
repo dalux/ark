@@ -2,8 +2,8 @@
 
 namespace Brisk\Router;
 
-use Brisk\Core\Captain;
-use Brisk\Core\Request;
+use Brisk\Assembly\Core;
+use Brisk\Assembly\Request;
 
 class NativeRouter extends RouterFather
 {
@@ -56,7 +56,7 @@ class NativeRouter extends RouterFather
         $this->_controller = $caller;
         //请求数据初始化完成
         Request::setReady(true);
-        Captain::set('request', function() { return Request::getInstance(); });
+        Core::set('request', function() { return Request::getInstance(); });
         $this->_ready = true;
 	}
 

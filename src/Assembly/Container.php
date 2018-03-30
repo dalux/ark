@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Core;
+namespace Brisk\Assembly;
 
 use Countable;
 use Iterator;

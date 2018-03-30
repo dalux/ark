@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Core;
+namespace Brisk\Assembly;
 
 use Brisk\Exception\CoreException;
 
@@ -52,7 +52,7 @@ class Loader
         if (preg_match('/^Brisk\/i', $namespace)) {
             $class_name = preg_replace('/^Brisk\/i', '', $namespace);
             $class_name = strtolower($class_name);
-            $tmp_path = str_replace('_', DIRECTORY_SEPARATOR, PATH_LIB. DIRECTORY_SEPARATOR. $class_name);
+            $tmp_path = str_replace('\\', DIRECTORY_SEPARATOR, PATH_LIB. DIRECTORY_SEPARATOR. $class_name);
             if (!isset(self::$_namespaces[$namespace])
                     || !in_array($tmp_path, self::$_namespaces[$namespace])) {
                 self::$_namespaces[$namespace][] = $tmp_path;
@@ -131,9 +131,9 @@ class Loader
         }
         foreach ($formal['val'] as $item) {
             $item = rtrim($item, DIRECTORY_SEPARATOR). DIRECTORY_SEPARATOR;
-            $class_name = preg_replace('/^'. addslashes($formal['key']). '\_/', '', $class_name);
+            $class_name = preg_replace('/^'. addslashes($formal['key']). '\/', '', $class_name);
             $class_name = strtolower($class_name);    //文件名统一为类名小写
-            $path = str_replace('_', DIRECTORY_SEPARATOR, $item. $class_name);
+            $path = str_replace('\\', DIRECTORY_SEPARATOR, $item. $class_name);
             if (!preg_match('/\.php$/', $path)) {
                 $path = $path. '.php';
             }

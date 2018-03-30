@@ -2,9 +2,9 @@
 
 namespace Brisk\Database;
 
-use Brisk\Core\Event;
-use Brisk\Core\Timer;
-use Brisk\Core\Trace;
+use Brisk\Assembly\Event;
+use Brisk\Assembly\Timer;
+use Brisk\Assembly\Trace;
 use Brisk\Exception\DatabaseException;
 use Brisk\Exception\EventException;
 

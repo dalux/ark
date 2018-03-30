@@ -2,8 +2,8 @@
 
 namespace Brisk\Cache;
 
-use Brisk\Core\Language;
-use Brisk\Core\Toolkit;
+use Brisk\Assembly\Language;
+use Brisk\Assembly\Toolkit;
 use Brisk\Exception\CacheException;
 use Brisk\Exception\CoreException;
 
@@ -32,7 +32,7 @@ class FileCache extends CacheFather
      * @param $save_path
      * @param array $option
      * @throws CacheException
-     * @throws \Brisk\Exception\CoreException
+     * @throws CoreException
      */
     function __construct($save_path, array $option = array())
     {
@@ -123,6 +123,8 @@ class FileCache extends CacheFather
      * @access public
      * @param string $name
      * @return mixed
+     * @throws CacheException
+     * @throws CoreException
      */
     function __get($name)
     {

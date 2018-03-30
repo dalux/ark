@@ -3,7 +3,7 @@
 namespace Brisk\Proxy;
 
 use Brisk\Contract\ICache;
-use Brisk\Core\Language;
+use Brisk\Assembly\Language;
 use Brisk\Exception\ProxyException;
 
 class CacheProxy

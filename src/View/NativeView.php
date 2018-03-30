@@ -2,10 +2,10 @@
 
 namespace Brisk\View;
 
-use Brisk\Core\Captain;
-use Brisk\Core\Event;
-use Brisk\Core\Language;
-use Brisk\Core\Loader;
+use Brisk\Assembly\Core;
+use Brisk\Assembly\Event;
+use Brisk\Assembly\Language;
+use Brisk\Assembly\Loader;
 use Brisk\Exception\EventException;
 use Brisk\Exception\ViewException;
 
@@ -42,7 +42,7 @@ class NativeView extends ViewFather
      */
     function __construct()
     {
-        $config = Captain::getInst()->config->view;
+        $config = Core::getInst()->config->view;
         $config->template_ext && $this->_template_ext = $config->template_ext;
         $config->template_dir && $this->_template_dir = rtrim($config->template_dir, DIRECTORY_SEPARATOR);
     }

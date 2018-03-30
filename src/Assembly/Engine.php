@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Core;
+namespace Brisk\Assembly;
 
 use Brisk\Contract\ICache;
 use Brisk\Contract\IDatabase;
@@ -24,7 +24,7 @@ class Engine
      */
     static function getCacheDriver($name)
     {
-        $config = Captain::getInst()->config->cache;
+        $config = Core::getInst()->config->cache;
         if (!$config || !$config = $config->$name) {
             throw new CacheException(Language::get('cache.config_not_found', $name));
         }
@@ -56,7 +56,7 @@ class Engine
      */
     static function getDatabaseDriver($name)
     {
-        $config = Captain::getInst()->config->database;
+        $config = Core::getInst()->config->database;
         if (!$config || !$config = $config->$name) {
             throw new DatabaseException(Language::get('db.config_not_found', $name));
         }
@@ -84,7 +84,7 @@ class Engine
      */
     static function getRouterDriver()
     {
-        $config = Captain::getInst()->config->router->toArray();
+        $config = Core::getInst()->config->router->toArray();
         if (!$driver = $config['driver']) {
             throw new RouterException(Language::get('router.invalid_driver_name'));
         } elseif (!Loader::findClass($driver)) {
@@ -106,7 +106,7 @@ class Engine
      */
     static function getSessionDriver()
     {
-        $config = Captain::getInst()->config->session->toArray();
+        $config = Core::getInst()->config->session->toArray();
         if (!$driver = $config['driver']) {
             throw new SessionException(Language::get('sess.invalid_driver_name'));
         } elseif (!Loader::findClass($driver)) {
@@ -128,7 +128,7 @@ class Engine
      */
     static function getViewDriver()
     {
-        $config = Captain::getInst()->config->view->toArray();
+        $config = Core::getInst()->config->view->toArray();
         if (!$driver = $config['driver']) {
             throw new ViewException(Language::get('view.invalid_driver_name'));
         } elseif (!Loader::findClass($driver)) {

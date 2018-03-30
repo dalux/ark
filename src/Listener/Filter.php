@@ -1,7 +1,7 @@
 <?php
 
 //请求初始化时过滤攻击威胁
-\Brisk\Core\Event::addListener('event.request.ready', function($data) {
+\Brisk\Assembly\Event::addListener('event.request.ready', function($data) {
     foreach ($data as $key=> $val) {
         $pattern = '';
         switch($key) {

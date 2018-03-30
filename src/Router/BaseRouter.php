@@ -2,10 +2,10 @@
 
 namespace Brisk\Router;
 
-use Brisk\Core\Captain;
-use Brisk\Core\Language;
-use Brisk\Core\Loader;
-use Brisk\Core\Request;
+use Brisk\Assembly\Core;
+use Brisk\Assembly\Language;
+use Brisk\Assembly\Loader;
+use Brisk\Assembly\Request;
 use Brisk\Exception\CoreException;
 use Brisk\Exception\RouterException;
 
@@ -84,19 +84,19 @@ class BaseRouter extends RouterFather
         //处理URI,组装控制器类
         $uri = preg_replace('~\.(.*?)$~i', '', $uri);
         if ($uri == '') {
-            $controller = Captain::getInst()->config->router->controller->default;
+            $controller = Core::getInst()->config->router->controller->default;
         } else {
             $controllers = array_map('strtolower', explode('/', $uri));
             $controller = implode(DIRECTORY_SEPARATOR, $controllers);
         }
-        $path_now = Captain::getAppInfo('controller_path'). DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
+        $path_now = Core::getAppInfo('controller_path'). DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
         $this->_controller = $path_now;
         //定义PATH_NOW常量
         defined('PATH_NOW') || define('PATH_NOW', dirname($path_now));
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::setReady(true);
-        Captain::set('request', function() { return Request::getInstance(); });
+        Core::set('request', function() { return Request::getInstance(); });
         $this->_ready = true;
     }
 
@@ -107,7 +107,6 @@ class BaseRouter extends RouterFather
      */
     function dispatch()
     {
-        global $ark;
         if (!is_file($this->_controller)) {
             throw new RouterException(Language::get('router.controller_not_found', Loader::reducePath($this->_controller)));
         }

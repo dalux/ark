@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Core;
+namespace Brisk\Assembly;
 
 class Handler
 {
@@ -113,7 +113,7 @@ class Handler
             }
             //模板文件
             $tplcontent = $this->_getWebTpl();
-            if (Captain::getInst()->config->global->debug) {
+            if (Core::getInst()->config->global->debug) {
                 $content = str_replace(array('<{detail}>', '<{/detail}>'), '', $tplcontent);
             } else {
                 $content = preg_replace("/\\<\\{detail\\}\\>[\\s\\S]*?\\<\\{\\/detail\\}\\>/", '', $tplcontent);
