@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\SQLBuilder\InsertBuilder;
+namespace Brisk\Toolkit\SQLBuilder\InsertBuilder;
 
-use Ark\Toolkit\SQLBuilder\InsertBuilder;
+use Brisk\Toolkit\SQLBuilder\InsertBuilder;
 
 class Sqlsrv extends InsertBuilder
 {

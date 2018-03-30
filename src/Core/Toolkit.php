@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Core;
+namespace Brisk\Core;
 
-use Ark\Exception\CoreException;
+use Brisk\Exception\CoreException;
 
 class Toolkit
 {

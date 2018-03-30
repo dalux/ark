@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Session;
+namespace Brisk\Session;
 
-use Ark\Core\Captain;
-use Ark\Core\Toolkit;
+use Brisk\Core\Captain;
+use Brisk\Core\Toolkit;
 
 class FileSession extends SessionFather
 {

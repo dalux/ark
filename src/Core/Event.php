@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Core;
+namespace Brisk\Core;
 
-use Ark\Exception\EventException;
+use Brisk\Exception\EventException;
 
 class Event
 {

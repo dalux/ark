@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Cache;
+namespace Brisk\Cache;
 
-use Ark\Contract\ICache;
+use Brisk\Contract\ICache;
 
 abstract class CacheFather implements ICache
 {

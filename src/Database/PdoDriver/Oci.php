@@ -1,11 +1,11 @@
 <?php
 
-namespace Ark\Database\PdoDriver;
+namespace Brisk\Database\PdoDriver;
 
-use Ark\Database\DatabaseToolkit;
-use Ark\Database\PdoDriver;
-use Ark\Exception\DatabaseException;
-use Ark\Exception\EventException;
+use Brisk\Database\DatabaseToolkit;
+use Brisk\Database\PdoDriver;
+use Brisk\Exception\DatabaseException;
+use Brisk\Exception\EventException;
 
 class Oci extends PdoDriver
 {

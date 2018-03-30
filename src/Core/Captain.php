@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Core;
+namespace Brisk\Core;
 
-use Ark\Contract\IRouter;
-use Ark\Exception\CoreException;
-use Ark\Exception\EventException;
+use Brisk\Contract\IRouter;
+use Brisk\Exception\CoreException;
+use Brisk\Exception\EventException;
 
 class Captain
 {
@@ -139,13 +139,13 @@ class Captain
 			defined('PATH_LIB') || define('PATH_LIB', __DIR__);
 			defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[0]['file']));
 			//注册框架类库基地址
-			Loader::setNameSpace('Ark', PATH_LIB);
+			Loader::setNameSpace('Brisk', PATH_LIB);
 			//语言包
-            Language::addPackage(Loader::realPath('*/lang'));
+            Language::addPackage(Loader::realPath('*/Language'));
 			//异常报告
 			Handler::setHandler(Handler::TYPE_EXCEPTION);
 			//后续类文件自动加载
-			Loader::addAutoLoader(array('\Ark\Loader', 'autoLoad'));
+			Loader::addAutoLoader(array('\Brisk\Core\Loader', 'autoLoad'));
 			//初始化CLI模式
 			Server::isCli() && Server::initCli();
 			//注册内置组件
@@ -252,7 +252,7 @@ class Captain
         //监听系统启动就绪事件
         Event::onListening('event.framework.ready');
         if (!self::$_instance->router instanceof IRouter) {
-            $lang = Language::get('router.driver_implement_error', get_class(self::$_instance->router), 'Ark\Contract\IRouter');
+            $lang = Language::get('router.driver_implement_error', get_class(self::$_instance->router), '\Brisk\Contract\IRouter');
             throw new CoreException($lang);
         }
         //路由调度准备

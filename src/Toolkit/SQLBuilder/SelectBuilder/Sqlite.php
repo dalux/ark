@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\SQLBuilder\SelectBuilder;
+namespace Brisk\Toolkit\SQLBuilder\SelectBuilder;
 
-use Ark\Toolkit\SQLBuilder\SelectBuilder;
+use Brisk\Toolkit\SQLBuilder\SelectBuilder;
 
 class Sqlite extends SelectBuilder
 {

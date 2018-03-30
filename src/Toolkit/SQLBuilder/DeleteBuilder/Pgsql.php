@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\SQLBuilder\DeleteBuilder;
+namespace Brisk\Toolkit\SQLBuilder\DeleteBuilder;
 
-use Ark\Toolkit\SQLBuilder\DeleteBuilder;
+use Brisk\Toolkit\SQLBuilder\DeleteBuilder;
 
 class Pgsql extends DeleteBuilder
 {

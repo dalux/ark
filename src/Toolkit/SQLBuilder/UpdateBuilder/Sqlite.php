@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\SQLBuilder\UpdateBuilder;
+namespace Brisk\Toolkit\SQLBuilder\UpdateBuilder;
 
-use Ark\Toolkit\SQLBuilder\UpdateBuilder;
+use Brisk\Toolkit\SQLBuilder\UpdateBuilder;
 
 class Sqlite extends UpdateBuilder
 {

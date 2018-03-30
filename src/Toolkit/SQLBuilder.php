@@ -1,11 +1,11 @@
 <?php
 
-namespace Ark\Toolkit;
+namespace Brisk\Toolkit;
 
-use Ark\Toolkit\SQLBuilder\DeleteBuilder;
-use Ark\Toolkit\SQLBuilder\InsertBuilder;
-use Ark\Toolkit\SQLBuilder\SelectBuilder;
-use Ark\Toolkit\SQLBuilder\UpdateBuilder;
+use Brisk\Toolkit\SQLBuilder\DeleteBuilder;
+use Brisk\Toolkit\SQLBuilder\InsertBuilder;
+use Brisk\Toolkit\SQLBuilder\SelectBuilder;
+use Brisk\Toolkit\SQLBuilder\UpdateBuilder;
 
 class SQLBuilder
 {
@@ -67,7 +67,7 @@ class SQLBuilder
     static function select($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = 'Ark\Toolkit\SQLBuilder\SelectBuilder\\'. ucfirst($dbtype);
+        $namespace = 'Brisk\Toolkit\SQLBuilder\SelectBuilder\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -80,7 +80,7 @@ class SQLBuilder
     static function insert($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = 'Ark\Toolkit\SQLBuilder\InsertBuilder\\'. ucfirst($dbtype);
+        $namespace = 'Brisk\Toolkit\SQLBuilder\InsertBuilder\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -93,7 +93,7 @@ class SQLBuilder
     static function update($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = 'Ark\Toolkit\SQLBuilder\UpdateBuilder\\'. ucfirst($dbtype);
+        $namespace = 'Brisk\Toolkit\SQLBuilder\UpdateBuilder\\'. ucfirst($dbtype);
         return new $namespace;
     }
 
@@ -106,7 +106,7 @@ class SQLBuilder
     static function delete($dbtype = null)
     {
         is_null($dbtype) && $dbtype = self::$_db_type;
-        $namespace = 'Ark\Toolkit\SQLBuilder\DeleteBuilder\\'. ucfirst($dbtype);
+        $namespace = 'Brisk\Toolkit\SQLBuilder\DeleteBuilder\\'. ucfirst($dbtype);
         return new $namespace;
     }
 

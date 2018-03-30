@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Toolkit\SQLBuilder;
+namespace Brisk\Toolkit\SQLBuilder;
 
 abstract class SelectBuilder extends BuilderFather
 {

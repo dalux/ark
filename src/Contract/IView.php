@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Contract;
+namespace Brisk\Contract;
 
 interface IView
 {

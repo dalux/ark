@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Database\PdoDriver;
+namespace Brisk\Database\PdoDriver;
 
-use Ark\Database\PdoDriver;
-use Ark\Exception\DatabaseException;
-use Ark\Exception\EventException;
+use Brisk\Database\PdoDriver;
+use Brisk\Exception\DatabaseException;
+use Brisk\Exception\EventException;
 
 class Sqlite extends PdoDriver
 {

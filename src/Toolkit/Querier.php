@@ -1,11 +1,11 @@
 <?php
 
-namespace Ark\Toolkit;
+namespace Brisk\Toolkit;
 
-use Ark\Contract\ICache;
-use Ark\Contract\IDatabase;
-use Ark\Exception\ProxyException;
-use Ark\Proxy\CacheProxy;
+use Brisk\Contract\ICache;
+use Brisk\Contract\IDatabase;
+use Brisk\Exception\ProxyException;
+use Brisk\Proxy\CacheProxy;
 
 class Querier
 {

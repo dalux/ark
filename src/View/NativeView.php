@@ -1,13 +1,13 @@
 <?php
 
-namespace Ark\View;
+namespace Brisk\View;
 
-use Ark\Core\Captain;
-use Ark\Core\Event;
-use Ark\Core\Language;
-use Ark\Core\Loader;
-use Ark\Exception\EventException;
-use Ark\Exception\ViewException;
+use Brisk\Core\Captain;
+use Brisk\Core\Event;
+use Brisk\Core\Language;
+use Brisk\Core\Loader;
+use Brisk\Exception\EventException;
+use Brisk\Exception\ViewException;
 
 class NativeView extends ViewFather
 {

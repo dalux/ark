@@ -1,11 +1,11 @@
 <?php
 
-namespace Ark\Session;
+namespace Brisk\Session;
 
-use Ark\Contract\ICache;
-use Ark\Core\Captain;
-use Ark\Core\Language;
-use Ark\Exception\SessionException;
+use Brisk\Contract\ICache;
+use Brisk\Core\Captain;
+use Brisk\Core\Language;
+use Brisk\Exception\SessionException;
 
 class UserSession extends SessionFather
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Router;
+namespace Brisk\Router;
 
-use Ark\Core\Captain;
-use Ark\Core\Request;
+use Brisk\Core\Captain;
+use Brisk\Core\Request;
 
 class NativeRouter extends RouterFather
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Session;
+namespace Brisk\Session;
 
-use Ark\Contract\ISession;
+use Brisk\Contract\ISession;
 
 abstract class SessionFather implements ISession
 {

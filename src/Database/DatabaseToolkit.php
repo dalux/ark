@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Database;
+namespace Brisk\Database;
 
-use Ark\Core\Language;
-use Ark\Exception\DatabaseException;
+use Brisk\Core\Language;
+use Brisk\Exception\DatabaseException;
 
 class DatabaseToolkit
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Ark\Cache;
+namespace Brisk\Cache;
 
-use Ark\Core\Language;
-use Ark\Exception\CacheException;
+use Brisk\Core\Language;
+use Brisk\Exception\CacheException;
 
 class MemCache extends CacheFather
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Exception;
+namespace Brisk\Exception;
 
 class CacheException extends \Exception
 {

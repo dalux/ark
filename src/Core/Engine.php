@@ -1,17 +1,17 @@
 <?php
 
-namespace Ark\Core;
+namespace Brisk\Core;
 
-use Ark\Contract\ICache;
-use Ark\Contract\IDatabase;
-use Ark\Contract\IRouter;
-use Ark\Contract\ISession;
-use Ark\Contract\IView;
-use Ark\Exception\CacheException;
-use Ark\Exception\DatabaseException;
-use Ark\Exception\RouterException;
-use Ark\Exception\SessionException;
-use Ark\Exception\ViewException;
+use Brisk\Contract\ICache;
+use Brisk\Contract\IDatabase;
+use Brisk\Contract\IRouter;
+use Brisk\Contract\ISession;
+use Brisk\Contract\IView;
+use Brisk\Exception\CacheException;
+use Brisk\Exception\DatabaseException;
+use Brisk\Exception\RouterException;
+use Brisk\Exception\SessionException;
+use Brisk\Exception\ViewException;
 
 class Engine
 {
@@ -38,7 +38,7 @@ class Engine
         }
         $instance = new $driver($save_path, $option);
         if (!$instance instanceof ICache) {
-            throw new CacheException(Language::get('cache.driver_implement_error', $driver, 'Ark\Contract\ICache'));
+            throw new CacheException(Language::get('cache.driver_implement_error', $driver, 'Brisk\Contract\ICache'));
         }
         Trace::set('driver', array('cache'=> sprintf('%s[%s]', $name, $driver)));
         return $instance;
@@ -70,7 +70,7 @@ class Engine
         }
         $instance = new $driver($dsn, $option);
         if (!$instance instanceof IDatabase) {
-            throw new DatabaseException(Language::get('db.driver_implement_error', $driver, 'Ark\Contract\IDatabase'));
+            throw new DatabaseException(Language::get('db.driver_implement_error', $driver, 'Brisk\Contract\IDatabase'));
         }
         Trace::set('driver', array('database'=> sprintf('%s[%s]', $name, $driver)));
         return $instance;
@@ -92,7 +92,7 @@ class Engine
         }
         $instance = new $driver();
         if (!$instance instanceof IRouter) {
-            throw new RouterException(Language::get('router.driver_implement_error', $driver, 'Ark\Contract\IRouter'));
+            throw new RouterException(Language::get('router.driver_implement_error', $driver, 'Brisk\Contract\IRouter'));
         }
         Trace::set('driver', array('router'=> $driver));
         return $instance;
@@ -114,7 +114,7 @@ class Engine
         }
         $instance = new $driver();
         if (!$instance instanceof ISession) {
-            throw new SessionException(Language::get('sess.driver_implement_error', $driver, 'Ark\Contract\ISession'));
+            throw new SessionException(Language::get('sess.driver_implement_error', $driver, 'Brisk\Contract\ISession'));
         }
         Trace::set('driver', array('session'=> $driver));
         return $instance;
@@ -136,7 +136,7 @@ class Engine
         }
         $instance = new $driver();
         if (!$instance instanceof IView) {
-            throw new ViewException(Language::get('view.driver_implement_error', $driver, 'Ark\Contract\IView'));
+            throw new ViewException(Language::get('view.driver_implement_error', $driver, 'Brisk\Contract\IView'));
         }
         Trace::set('driver', array('view'=> $driver));
         return $instance;

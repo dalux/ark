@@ -1,12 +1,12 @@
 <?php
 
-namespace Ark\Database;
+namespace Brisk\Database;
 
-use Ark\Core\Event;
-use Ark\Core\Timer;
-use Ark\Core\Trace;
-use Ark\Exception\DatabaseException;
-use Ark\Exception\EventException;
+use Brisk\Core\Event;
+use Brisk\Core\Timer;
+use Brisk\Core\Trace;
+use Brisk\Exception\DatabaseException;
+use Brisk\Exception\EventException;
 
 class PdoDriver extends DatabaseFather
 {

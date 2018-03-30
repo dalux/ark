@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'driver'=> 'Ark\Session\FileSession',
+    'driver'=> 'Brisk\Session\FileSession',
     'expire_time'=> 1440,
-    'save_path'=> \Ark\Core\Loader::realPath('./runtime/session/'),
+    'save_path'=> \Brisk\Core\Loader::realPath('./runtime/session/'),
 );

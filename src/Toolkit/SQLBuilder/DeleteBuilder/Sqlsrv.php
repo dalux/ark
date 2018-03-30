@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Sql\Builder\DeleteBuilder;
+namespace Brisk\Sql\Builder\DeleteBuilder;
 
-use Ark\Toolkit\SQLBuilder\DeleteBuilder;
+use Brisk\Toolkit\SQLBuilder\DeleteBuilder;
 
 class Sqlsrv extends DeleteBuilder
 {

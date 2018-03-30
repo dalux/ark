@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Database;
+namespace Brisk\Database;
 
-use Ark\Contract\IDatabase;
+use Brisk\Contract\IDatabase;
 
 abstract class DatabaseFather implements IDatabase
 {

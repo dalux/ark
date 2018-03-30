@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Core;
+namespace Brisk\Core;
 
-use Ark\Exception\CoreException;
+use Brisk\Exception\CoreException;
 
 class Loader
 {
@@ -49,8 +49,8 @@ class Loader
     {
         //如果要重定义系统内建命名空间
         $namespace = rtrim($namespace, '_');
-        if (preg_match('/^Ark\/i', $namespace)) {
-            $class_name = preg_replace('/^Ark\/i', '', $namespace);
+        if (preg_match('/^Brisk\/i', $namespace)) {
+            $class_name = preg_replace('/^Brisk\/i', '', $namespace);
             $class_name = strtolower($class_name);
             $tmp_path = str_replace('_', DIRECTORY_SEPARATOR, PATH_LIB. DIRECTORY_SEPARATOR. $class_name);
             if (!isset(self::$_namespaces[$namespace])

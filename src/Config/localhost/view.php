@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'driver'=> 'Ark\View\NativeView',
+    'driver'=> 'Brisk\View\NativeView',
     'template_ext'=> '.phtml',
-    'template_dir'=> \Ark\Core\Loader::realPath('@/view/'),
+    'template_dir'=> \Brisk\Core\Loader::realPath('@/view/'),
 );

@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\Toolkit\SQLBuilder;
+namespace Brisk\Toolkit\SQLBuilder;
 
-use Ark\Toolkit\SQLBuilder;
+use Brisk\Toolkit\SQLBuilder;
 
 abstract class BuilderFather
 {

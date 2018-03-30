@@ -1,10 +1,10 @@
 <?php
 
-namespace Ark\Proxy;
+namespace Brisk\Proxy;
 
-use Ark\Contract\ICache;
-use Ark\Core\Language;
-use Ark\Exception\ProxyException;
+use Brisk\Contract\ICache;
+use Brisk\Core\Language;
+use Brisk\Exception\ProxyException;
 
 class CacheProxy
 {

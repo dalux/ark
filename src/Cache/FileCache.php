@@ -1,11 +1,11 @@
 <?php
 
-namespace Ark\Cache;
+namespace Brisk\Cache;
 
-use Ark\Core\Language;
-use Ark\Core\Toolkit;
-use Ark\Exception\CacheException;
-use Ark\Exception\CoreException;
+use Brisk\Core\Language;
+use Brisk\Core\Toolkit;
+use Brisk\Exception\CacheException;
+use Brisk\Exception\CoreException;
 
 class FileCache extends CacheFather
 {
@@ -32,7 +32,7 @@ class FileCache extends CacheFather
      * @param $save_path
      * @param array $option
      * @throws CacheException
-     * @throws \Ark\Exception\CoreException
+     * @throws \Brisk\Exception\CoreException
      */
     function __construct($save_path, array $option = array())
     {

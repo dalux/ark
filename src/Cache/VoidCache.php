@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Cache;
+namespace Brisk\Cache;
 
 class VoidCache extends CacheFather
 {

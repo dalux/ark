@@ -1,6 +1,6 @@
 <?php
 
-namespace Ark\Core;
+namespace Brisk\Core;
 
 class Request
 {

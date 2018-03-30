@@ -1,7 +1,7 @@
 <?php
 
 return array(
-    'driver'=> 'Ark\Router\BaseRouter',
+    'driver'=> 'Brisk\Router\BaseRouter',
     'controller'=> array(
         'default'=> 'index.php',
         'interceptor'=> 'init.php',

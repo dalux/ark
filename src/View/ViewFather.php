@@ -1,8 +1,8 @@
 <?php
 
-namespace Ark\View;
+namespace Brisk\View;
 
-use Ark\Contract\IView;
+use Brisk\Contract\IView;
 
 abstract class ViewFather implements IView
 {
