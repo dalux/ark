@@ -39,7 +39,7 @@ class UserSession extends SessionFather
             $this->_container = $config['save_path'];
         }
         if (!$this->_container instanceof ICache) {
-            throw new SessionException(Language::get('sess.cacher_implement_error'), 'Ark_Cache_Contract');
+            throw new SessionException(Language::get('sess.cacher_implement_error'), 'Brisk\Contract\ICache');
         }
         $this->_container->setFlag('session');
         $this->_expire_time = $config['expire_time'];

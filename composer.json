@@ -1,9 +1,9 @@
 {
-  "name": "dalux/ark",
+  "name": "dalux/brisk",
   "description": "A PHP Framework.",
   "type": "library",
   "license": "Apache2",
-  "keywords": ["framework", "ark", "dalux"],
+  "keywords": ["framework", "brisk", "dalux"],
   "version": "1.0.0",
   "authors": [
     {
@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Ark\\": "src/"
+      "Brisk\\": "src/"
     }
   }
 }
