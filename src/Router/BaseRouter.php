@@ -13,57 +13,97 @@ class BaseRouter extends RouterFather
 {
 
     /**
-     * 控制器名称
+     * 当前路由命名空间
      *
      * @var string
      */
-    protected $_controller;
-
-    /**
-     * 路由是否就绪
-     *
-     * @var bool
-     */
-    protected $_ready = false;
+    private static $_current_namespace;
 
     /**
      * 路由转换规则
      *
      * @var array
      */
-    private $_rules = array();
+    private static $_rules = array();
 
     /**
-     * 获取控制器名称
+     * 控制器中的自动执行方法
      *
-     * @return string
+     * @var string
      */
-    function getController()
+    private static $_auto_method = '__init';
+
+    /**
+     * 默认控制器
+     *
+     * @var string
+     */
+    private static $_default_controller = 'Index';
+
+    /**
+     * 默认行为
+     *
+     * @var string
+     */
+    private static $_default_action = 'index';
+
+    /**
+     * URL 后缀
+     *
+     * @var string
+     */
+    private static $_url_suffix = '.html';
+
+    /**
+     * 设置默认控制器名称
+     *
+     * @param string $controller
+     */
+    static function setDefaultController($controller)
     {
-        return $this->_controller;
+        self::$_default_controller = $controller;
+    }
+
+    /**
+     * 设置默认行为名称
+     *
+     * @param string $action
+     */
+    static function setDefaultAction($action)
+    {
+        self::$_default_action = $action;
+    }
+
+    /**
+     * 设置URL 后缀名称
+     *
+     * @param string $suffix
+     */
+    static function setUrlSuffix($suffix)
+    {
+        self::$_url_suffix = $suffix;
+    }
+
+    /**
+     * 设置类自动方法
+     *
+     * @param $auto_method
+     */
+    static function setAutoMethod($auto_method)
+    {
+        self::$_auto_method = $auto_method;
     }
 
     /**
      * 添加路由规则
      *
+     * @static
      * @param string $rule
      * @param string $redirect
-     * @return $this
      */
-    function addRule($rule, $redirect)
+    static function addRule($rule, $redirect)
     {
-        $this->_rules[$rule] = $redirect;
-        return $this;
-    }
-
-    /**
-     * 路由是否就绪
-     *
-     * @return bool
-     */
-    function isReady()
-    {
-        return $this->_ready;
+        self::$_rules[$rule] = $redirect;
     }
 
     /**
@@ -79,42 +119,74 @@ class BaseRouter extends RouterFather
         if (strpos($uri, '?') !== false) {
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
-        //重写
+        //重写URI
         $uri = trim($this->_rewrite($uri), '/');
-        //处理URI,组装控制器类
-        $uri = preg_replace('~\.(.*?)$~i', '', $uri);
-        if ($uri == '') {
-            $controller = Core::getInst()->config->router->controller->default;
-        } else {
-            $controllers = array_map('strtolower', explode('/', $uri));
-            $controller = implode(DIRECTORY_SEPARATOR, $controllers);
+        //去除url后缀
+        if (self::$_url_suffix
+                && strpos($uri, self::$_url_suffix) !== false) {
+            $uri = preg_replace(sprintf('~%s$~i', self::$_url_suffix), '', $uri);
         }
-        $path_now = Core::getAppInfo('controller_path'). DIRECTORY_SEPARATOR. rtrim($controller, '.php'). '.php';
-        $this->_controller = $path_now;
+        $app_info = Core::getAppInfo();
+        $path_now = $app_info['controller_path'];
+        $controller = self::$_default_controller;
+        if ($uri) {
+            $controllers = array_map('ucfirst', explode('/', $uri));
+            $controller = implode('\\', $controllers);
+            $path_now.= DIRECTORY_SEPARATOR. implode(DIRECTORY_SEPARATOR, $controllers);
+            $path_now = dirname($path_now);
+        }
+        //拼凑当前控制器命名空间
+        $ns_part = str_replace($app_info['app_path'], '', $app_info['controller_path']);
+        $ns_part = trim(str_replace(array('/', '\\'), '\\', $ns_part), '\\');
+        $ns_part = array_map('ucfirst', explode('\\', $ns_part));
+        $ns_part = implode('\\', $ns_part);
+        $namespace = $app_info['app_name']. '\\'. $ns_part. '\\'. $controller;
         //定义PATH_NOW常量
-        defined('PATH_NOW') || define('PATH_NOW', dirname($path_now));
+        defined('PATH_NOW') || define('PATH_NOW', $path_now);
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::setReady(true);
-        Core::set('request', function() { return Request::getInstance(); });
-        $this->_ready = true;
+        Core::set('request', function() { return Request::getInst(); });
+        if (!Loader::findClass($namespace)) {
+            throw new RouterException(Language::get('router.controller_not_found', $namespace));
+        }
+        self::$_current_namespace = $namespace;
     }
 
     /**
      * 调度
      *
      * @throws RouterException
+     * @throws \ReflectionException
      */
     function dispatch()
     {
-        if (!is_file($this->_controller)) {
-            throw new RouterException(Language::get('router.controller_not_found', Loader::reducePath($this->_controller)));
+        $namespace = self::$_current_namespace;
+        $action = self::$_default_action;
+        $auto_method = self::$_auto_method;
+        //是否被保护对象
+        if (!class_exists($namespace)) {
+            throw new RouterException(Language::get('router.class_not_found', $namespace));
         }
-        parent::dispatch();
-        $output = include_once($this->_controller);
-        if (is_string($output)) {
-            echo $output;
+        $ref = new \ReflectionClass($namespace);
+        if ($ref->isAbstract()) {
+            throw new RouterException(Language::get('router.controller_is_protected', $namespace));
         }
+        //实例化最终控制器对象
+        $instance = new $namespace();
+        if (!method_exists($instance, $action)) {
+            throw new RouterException(Language::get('router.action_not_found', $action));
+        }
+        $output = null;
+        //自动化类
+        if (method_exists($instance, $auto_method)) {
+            $output = $instance->{$auto_method}();
+        }
+        //目标控制器行为
+        if (is_null($output)) {
+            $output = $instance->{$action}();
+        }
+        echo $output;
     }
 
     /**
@@ -126,7 +198,7 @@ class BaseRouter extends RouterFather
      */
     private function _rewrite($uri)
     {
-        foreach ($this->_rules as $key=> $val) {
+        foreach (self::$_rules as $key=> $val) {
             $key = '~'. $key. '~i';
             if (preg_match($key, $uri)) {
                 if (is_string($val)) {

@@ -79,7 +79,7 @@ class Handler
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
             $footerinfo.= ' '. $_SERVER['SERVER_SOFTWARE'];
         }
-        $footerinfo.= ' Provider by Ark.';
+        $footerinfo.= ' Provider by Brisk.';
         $exception_name = get_class($e);
         $namespaces = array_keys(Loader::getNameSpace());
         usort($namespaces, function($a, $b) {
@@ -87,8 +87,8 @@ class Handler
         });
         $exception_name = array_map(function($item) {
             return ucfirst($item);
-        }, explode('_', $exception_name));
-        $exception_name = implode('.', $exception_name);
+        }, explode('\\', $exception_name));
+        $exception_name = implode('\\', $exception_name);
         //跟踪信息
         if (!Server::isCli()) {
             $trace_array = $e->getTrace();

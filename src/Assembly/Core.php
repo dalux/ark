@@ -121,8 +121,6 @@ class Core
             require_once __DIR__. '/../Exception/CoreException.php';
             //框架变量实例
 			self::$_instance = new self();
-			global $ark;    //暴露一个全局变量，使控制器中可用
-			$ark = self::$_instance;
 			//默认屏蔽错误提示
 			ini_set('display_errors', '1');
 			//启动时间
@@ -136,7 +134,7 @@ class Core
 			);
 			//定义常量
 			$debug_trace = debug_backtrace();
-			defined('PATH_LIB') || define('PATH_LIB', __DIR__);
+			defined('PATH_LIB') || define('PATH_LIB', dirname(__DIR__));
 			defined('PATH_WEB') || define('PATH_WEB', dirname($debug_trace[0]['file']));
 			//注册框架类库基地址
 			Loader::setNameSpace('Brisk', PATH_LIB);
@@ -145,7 +143,7 @@ class Core
 			//异常报告
 			Handler::setHandler(Handler::TYPE_EXCEPTION);
 			//后续类文件自动加载
-			Loader::addAutoLoader(array('\Brisk\Assembly\Loader', 'autoLoad'));
+			Loader::addAutoLoader(array('Brisk\Assembly\Loader', 'autoLoad'));
 			//初始化CLI模式
 			Server::isCli() && Server::initCli();
 			//注册内置组件

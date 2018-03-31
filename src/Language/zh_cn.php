@@ -43,6 +43,8 @@ return array(
 
     'router.uri_parse_failed'           => '路由解析结果异常[%s]',
     'router.invalid_controller_name'    => '无有效的控制器名称',
+    'router.class_not_found'            => '请求的控制器类名称[%s]不存在',
+    'router.action_not_found'           => '默认的控制器行为[%s]不存在',
     'router.controller_not_found'       => '请求的控制器[%s]不存在',
     'router.invalid_driver_name'        => '无有效的路由驱动器名称',
     'router.driver_not_found'           => '路由驱动器类[%s]不存在',

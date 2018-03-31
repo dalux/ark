@@ -119,6 +119,8 @@ class Loader
     {
         $formal = array();
         foreach (self::$_namespaces as $key=> $val) {
+            $key = ltrim($key, '\\');
+            $class_name = ltrim($class_name, '\\');
             if (preg_match('/^'. addslashes($key). '/', $class_name)) {
                 if (!$formal || strlen($key) > strlen($formal['key'])) {
                     $formal['key'] = $key;
@@ -131,8 +133,7 @@ class Loader
         }
         foreach ($formal['val'] as $item) {
             $item = rtrim($item, DIRECTORY_SEPARATOR). DIRECTORY_SEPARATOR;
-            $class_name = preg_replace('/^'. addslashes($formal['key']). '\/', '', $class_name);
-            $class_name = strtolower($class_name);    //文件名统一为类名小写
+            $class_name = preg_replace('/^'. addslashes($formal['key']). '\\\\/', '', $class_name);
             $path = str_replace('\\', DIRECTORY_SEPARATOR, $item. $class_name);
             if (!preg_match('/\.php$/', $path)) {
                 $path = $path. '.php';

@@ -114,7 +114,7 @@ class Request
      * @return Request
      * @throws CoreException
      */
-    static function getInstance()
+    static function getInst()
     {
         if (!self::$_ready) {
             throw new CoreException(Language::get('http.request_not_ready'));
