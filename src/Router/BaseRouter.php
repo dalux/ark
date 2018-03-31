@@ -128,7 +128,7 @@ class BaseRouter extends RouterFather
         }
         $app_info = Core::getAppInfo();
         $path_now = $app_info['controller_path'];
-        $controller = self::$_default_controller;
+        $controller = ucfirst(self::$_default_controller);
         if ($uri) {
             $controllers = array_map('ucfirst', explode('/', $uri));
             $controller = implode('\\', $controllers);
