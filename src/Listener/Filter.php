@@ -1,7 +1,7 @@
 <?php
 
 //请求初始化时过滤攻击威胁
-\Brisk\Assembly\Event::addListener('event.request.ready', function($data) {
+Brisk\Assembly\Event::addListener('event.request.ready', function($data) {
     foreach ($data as $key=> $val) {
         $pattern = '';
         switch($key) {
@@ -18,7 +18,7 @@
         if ($pattern) {
             foreach ($val as $k => $v) {
                 if (preg_match("/$pattern/is", $v)) {
-                    throw new \Brisk\Exception\EventException(sprintf('无效的%s参数:[%s],IP已记录,请勿尝试注入', strtoupper($key), $k));
+                    throw new Brisk\Exception\EventException(sprintf('无效的%s参数:[%s],IP已记录,请勿尝试注入', strtoupper($key), $k));
                 }
             }
         }
