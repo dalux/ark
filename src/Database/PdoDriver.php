@@ -303,7 +303,7 @@ class PdoDriver extends DatabaseFather
     /**
      * 获取PDO对象实例
      *
-     * @return PDO
+     * @return \PDO
      */
     function getInstance()
     {
