@@ -108,7 +108,7 @@ class Querier
      * @param $tb
      * @return Querier
      */
-    static function create($tb)
+    static function forTable($tb)
     {
         return new self($tb);
     }

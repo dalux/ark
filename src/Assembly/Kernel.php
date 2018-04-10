@@ -3,10 +3,10 @@
 namespace Brisk\Assembly;
 
 use Brisk\Contract\IRouter;
-use Brisk\Exception\CoreException;
+use Brisk\Exception\KernelException;
 use Brisk\Exception\EventException;
 
-class Core
+class Kernel
 {
 
     /**
@@ -118,7 +118,7 @@ class Core
 			require_once __DIR__. '/Container.php';
             require_once __DIR__. '/Server.php';
             require_once __DIR__. '/Language.php';
-            require_once __DIR__. '/../Exception/CoreException.php';
+            require_once __DIR__. '/../Exception/KernelException.php';
             //框架变量实例
 			self::$_instance = new self();
 			//默认屏蔽错误提示
@@ -167,7 +167,7 @@ class Core
      * @access public
      * @return Engine
      */
-    static function getInst()
+    static function getInstance()
     {
         return self::$_instance;
     }
@@ -177,18 +177,18 @@ class Core
      *
      * @access public
      * @return mixed
-     * @throws CoreException
+     * @throws KernelException
      * @throws EventException
      */
     static function start()
     {
         //检测必要应用配置
         if (!self::$_app_name) {
-            throw new CoreException(Language::get('core.invalid_app_name'));
+            throw new KernelException(Language::get('core.invalid_app_name'));
         }
         self::$_app_path || self::$_app_path = PATH_WEB;
         if (!is_dir(self::$_app_path)) {
-            throw new CoreException(Language::get('core.invalid_app_path'));
+            throw new KernelException(Language::get('core.invalid_app_path'));
         }
         //注册应用程序基地址
         Loader::setNameSpace(self::$_app_name, self::$_app_path);
@@ -209,7 +209,7 @@ class Core
             foreach ($config_files as $file) {
                 $result = include($file);
                 if (!is_array($result)) {
-                    throw new CoreException(Language::get('core.invalid_config_format', basename($file)));
+                    throw new KernelException(Language::get('core.invalid_config_format', basename($file)));
                 }
                 $key = strtolower(basename($file));
                 $key = preg_replace('/\.php$/', '', $key);
@@ -218,11 +218,11 @@ class Core
         } elseif (is_file($config_path)) {  //是文件
             $config = include($config_path);
             if (!is_array($config)) {
-                throw new CoreException(Language::get('core.invalid_config_format', basename($config_path)));
+                throw new KernelException(Language::get('core.invalid_config_format', basename($config_path)));
             }
         }
         if (!$config) {
-            throw new CoreException(Language::get('core.invalid_configuration'));
+            throw new KernelException(Language::get('core.invalid_configuration'));
         }
         self::$_storage['config']['instance'] = new Container($config);
         //控制器地址检测
@@ -251,7 +251,7 @@ class Core
         Event::onListening('event.framework.ready');
         if (!self::$_instance->router instanceof IRouter) {
             $lang = Language::get('router.driver_implement_error', get_class(self::$_instance->router), '\Brisk\Contract\IRouter');
-            throw new CoreException($lang);
+            throw new KernelException($lang);
         }
         //路由调度准备
         self::$_instance->router->ready();
@@ -267,7 +267,7 @@ class Core
      * @param $name
      * @param $value
      */
-    static function set($name, \Closure $value)
+    static function setComponent($name, \Closure $value)
     {
         if (!isset(self::$_storage[$name])
                 || !self::$_storage[$name]['system']) {
@@ -280,16 +280,16 @@ class Core
      *
      * @param $name
      * @return mixed
-     * @throws CoreException
+     * @throws KernelException
      */
-    function get($name)
+    function getComponent($name)
     {
         //常规取值
         if (!$instance = self::$_storage[$name]['instance']) {
-            throw new CoreException(Language::get('core.object_not_found', $name));
+            throw new KernelException(Language::get('core.object_not_found', $name));
         } elseif ($instance instanceof \Closure && is_callable($instance)) {    //支持匿名函数
             if (!$instance = $instance()) {
-                throw new CoreException(Language::get('core.invlid_custom_member', $name));
+                throw new KernelException(Language::get('core.invlid_custom_member', $name));
             }
             self::$_storage[$name]['instance'] = $instance;
         }
@@ -301,11 +301,11 @@ class Core
      *
      * @param $name
      * @return mixed
-     * @throws CoreException
+     * @throws KernelException
      */
     function __get($name)
     {
-        return $this->get($name);
+        return $this->getComponent($name);
     }
 
     /**

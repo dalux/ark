@@ -2,11 +2,11 @@
 
 namespace Brisk\Router;
 
-use Brisk\Assembly\Core;
+use Brisk\Assembly\Kernel;
 use Brisk\Assembly\Language;
 use Brisk\Assembly\Loader;
 use Brisk\Assembly\Request;
-use Brisk\Exception\CoreException;
+use Brisk\Exception\KernelException;
 use Brisk\Exception\RouterException;
 
 class BaseRouter extends RouterFather
@@ -110,7 +110,7 @@ class BaseRouter extends RouterFather
      * 准备路由数据
      *
      * @throws RouterException
-     * @throws CoreException
+     * @throws KernelException
      */
     function ready()
     {
@@ -126,11 +126,18 @@ class BaseRouter extends RouterFather
                 && strpos($uri, self::$_url_suffix) !== false) {
             $uri = preg_replace(sprintf('~%s$~i', self::$_url_suffix), '', $uri);
         }
-        $app_info = Core::getAppInfo();
+        $app_info = Kernel::getAppInfo();
         $path_now = $app_info['controller_path'];
         $controller = ucfirst(self::$_default_controller);
         if ($uri) {
             $controllers = array_map('ucfirst', explode('/', $uri));
+            $dist = end($controllers);
+            if (strpos($dist, '.') || strpos($dist, '_')) {
+                $dist = str_replace(array('.', '_'), '.', $dist);
+                $dist = array_map('ucfirst', explode('.', $dist));
+                $dist = implode('', $dist);
+                $controllers[count($controllers) - 1] = $dist;
+            }
             $controller = implode('\\', $controllers);
             $path_now.= DIRECTORY_SEPARATOR. implode(DIRECTORY_SEPARATOR, $controllers);
             $path_now = dirname($path_now);
@@ -146,7 +153,7 @@ class BaseRouter extends RouterFather
         Loader::setAlias('~', PATH_NOW);
         //请求数据初始化完成
         Request::setReady(true);
-        Core::set('request', function() { return Request::getInst(); });
+        Kernel::setComponent('request', function() { return Request::getInstance(); });
         if (!Loader::findClass($namespace)) {
             throw new RouterException(Language::get('router.controller_not_found', $namespace));
         }

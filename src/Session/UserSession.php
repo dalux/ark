@@ -3,7 +3,7 @@
 namespace Brisk\Session;
 
 use Brisk\Contract\ICache;
-use Brisk\Assembly\Core;
+use Brisk\Assembly\Kernel;
 use Brisk\Assembly\Language;
 use Brisk\Exception\SessionException;
 
@@ -31,7 +31,7 @@ class UserSession extends SessionFather
      */
 	function __construct()
 	{
-        $config = Core::getInst()->config->session->toArray();
+        $config = Kernel::getInstance()->config->session->toArray();
         //检查
         if ($config['save_path'] instanceof \Closure) {    //支持匿名函数
             $this->_container = $config['save_path']();

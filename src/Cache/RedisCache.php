@@ -121,7 +121,7 @@ class RedisCache extends CacheFather
      *
      * @return \Redis
      */
-    function getInst()
+    function getInstance()
     {
         return $this->_container;
     }

@@ -165,7 +165,7 @@ class MemCache extends CacheFather
      *
      * @return \Memcached
      */
-    function getInst()
+    function getInstance()
     {
         return $this->_container;
     }

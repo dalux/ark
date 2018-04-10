@@ -2,7 +2,7 @@
 
 namespace Brisk\Session;
 
-use Brisk\Assembly\Core;
+use Brisk\Assembly\Kernel;
 use Brisk\Assembly\Toolkit;
 
 class FileSession extends SessionFather
@@ -15,7 +15,7 @@ class FileSession extends SessionFather
      */
 	function __construct()
 	{
-		$config = Core::getInst()->config->session->toArray();
+		$config = Kernel::getInstance()->config->session->toArray();
 		ini_set('session.save_handler', 'files');
 		ini_set('session.cache_expire', $config['expire_time']);
 		if (file_exists($config['save_path'])

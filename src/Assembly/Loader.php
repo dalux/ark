@@ -2,7 +2,7 @@
 
 namespace Brisk\Assembly;
 
-use Brisk\Exception\CoreException;
+use Brisk\Exception\KernelException;
 
 class Loader
 {
@@ -29,12 +29,12 @@ class Loader
      *
      * @param $alias
      * @param $path
-     * @throws CoreException
+     * @throws KernelException
      */
     static function setAlias($alias, $path)
     {
         if (in_array($alias, array('*', '.'))) {
-            throw new CoreException(Language::get('core.deny_alias_redeclare', $alias));
+            throw new KernelException(Language::get('core.deny_alias_redeclare', $alias));
         }
         self::$_alias[$alias] = $path;
     }
@@ -85,12 +85,12 @@ class Loader
      * 设置自动加载器
      *
      * @param $loader
-     * @throws CoreException
+     * @throws KernelException
      */
     static function addAutoLoader($loader)
     {
         if (!is_callable($loader)) {
-            throw new CoreException(Language::get('core.invalid_autoloader'));
+            throw new KernelException(Language::get('core.invalid_autoloader'));
         }
         spl_autoload_register($loader);
     }
@@ -99,12 +99,12 @@ class Loader
      * 本框架自动加载器
      *
      * @param $class
-     * @throws CoreException
+     * @throws KernelException
      */
     static function autoLoad($class)
     {
         if (!$path = self::findClass($class)) {
-            throw new CoreException(Language::get('core.class_path_notfound', $class));
+            throw new KernelException(Language::get('core.class_path_notfound', $class));
         }
         self::import($path);
     }
@@ -150,13 +150,13 @@ class Loader
      *
      * @param $spacename
      * @return string
-     * @throws CoreException
+     * @throws KernelException
      */
     static function realPath($spacename)
     {
         $first_char = substr($spacename, 0, 1);
         if (!isset(self::$_alias[$first_char])) {
-            throw new CoreException(Language::get('core.format_path_failed'));
+            throw new KernelException(Language::get('core.format_path_failed'));
         }
         $parsed = self::_parse($spacename);
         list($alias, $space) = $parsed;
@@ -185,7 +185,7 @@ class Loader
      * @param string $path 命名空间
      * @param bool $once 是否只加载一次
      * @return mixed
-     * @throws CoreException
+     * @throws KernelException
      */
     static function import($path, $once = true)
     {

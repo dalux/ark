@@ -2,7 +2,7 @@
 
 namespace Brisk\Assembly;
 
-use Brisk\Exception\CoreException;
+use Brisk\Exception\KernelException;
 
 class Toolkit
 {
@@ -123,12 +123,12 @@ class Toolkit
      * @static
      * @param string $dir
      * @return bool
-     * @throws CoreException
+     * @throws KernelException
      */
     static function mkDir($dir)
     {
         if (!($dir = trim($dir))) {
-            throw new CoreException(Language::get('tbox.invalid_create_path'));
+            throw new KernelException(Language::get('tbox.invalid_create_path'));
         }
         $dirs = array($dir);
         while (!file_exists($dir)) {
@@ -152,7 +152,7 @@ class Toolkit
      *
      * @param $src
      * @param $dst
-     * @throws CoreException
+     * @throws KernelException
      */
     static function copyDir($src, $dst)
     {
@@ -176,7 +176,7 @@ class Toolkit
      * @static
      * @param $dirName
      * @return bool
-     * @throws CoreException
+     * @throws KernelException
      */
 	static function removeDir($dirName)
 	{
