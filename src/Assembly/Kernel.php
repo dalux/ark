@@ -61,6 +61,13 @@ class Kernel
     private static $_storage = array();
 
     /**
+     * 自定义方法区
+     *
+     * @var array
+     */
+    private static $_methods = array();
+
+    /**
      * 私有构造方法
      *
      */
@@ -306,6 +313,51 @@ class Kernel
     function __get($name)
     {
         return $this->getComponent($name);
+    }
+
+    /**
+     * 设置自定义方法
+     *
+     * @param $name
+     * @param callable $method
+     * @throws KernelException
+     */
+    static function setMethod($name, callable $method)
+    {
+        if (!is_callable($method)) {
+            throw new  KernelException(Language::get('core.invalid_custom_method', $name));
+        }
+        self::$_methods[$name] = $method;
+    }
+
+    /**
+     * 调用自定义方法
+     *
+     * @param $name
+     * @param $args
+     * @return mixed
+     * @throws KernelException
+     */
+    function callMethod($name, $args)
+    {
+        if (!isset(self::$_methods[$name])) {
+            throw new KernelException(Language::get('core.custom_method_notfound', $name));
+        }
+        $method = self::$_methods[$name];
+        return call_user_func_array($method, $args);
+    }
+
+    /**
+     * 魔术方法调用自定义方法
+     *
+     * @param $name
+     * @param $args
+     * @return mixed
+     * @throws KernelException
+     */
+    function __call($name, $args)
+    {
+        return $this->callMethod($name, $args);
     }
 
     /**
