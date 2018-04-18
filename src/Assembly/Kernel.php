@@ -49,7 +49,7 @@ class Kernel
     /**
      * 唯一实例
      *
-     * @var Engine
+     * @var Kernel
      */
     private static $_instance;
 	
@@ -172,7 +172,7 @@ class Kernel
      * 取实例化对象
      *
      * @access public
-     * @return Engine
+     * @return Kernel
      */
     static function getInstance()
     {
