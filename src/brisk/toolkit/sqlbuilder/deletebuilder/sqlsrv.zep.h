@@ -1,0 +1,5 @@
+
+extern zend_class_entry *brisk_toolkit_sqlbuilder_deletebuilder_sqlsrv_ce;
+
+ZEPHIR_INIT_CLASS(Brisk_Toolkit_SQLBuilder_DeleteBuilder_Sqlsrv);
+
