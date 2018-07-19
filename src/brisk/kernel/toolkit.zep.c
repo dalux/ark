@@ -12,16 +12,15 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/memory.h"
-#include "kernel/main.h"
 #include "kernel/fcall.h"
+#include "kernel/memory.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/exception.h"
 #include "kernel/array.h"
 #include "kernel/variables.h"
 #include "kernel/string.h"
 #include "kernel/operators.h"
-#include "kernel/exception.h"
 #include "kernel/file.h"
-#include "ext/spl/spl_exceptions.h"
 #include "kernel/concat.h"
 
 
@@ -35,12 +34,13 @@ ZEPHIR_INIT_CLASS(Brisk_Kernel_Toolkit) {
 
 PHP_METHOD(Brisk_Kernel_Toolkit, sprintr) {
 
-	zval args, arg, *_0, _3, _4, _5, _2$$3;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *params_param = NULL, arg, *_0, _3, _4, _5, _2$$3;
+	zval params;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&args);
+	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&arg);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
@@ -48,13 +48,15 @@ PHP_METHOD(Brisk_Kernel_Toolkit, sprintr) {
 	ZVAL_UNDEF(&_2$$3);
 
 	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &params_param);
 
-	ZEPHIR_INIT_VAR(&args);
-	zephir_get_args(&args);
+	ZEPHIR_OBS_COPY_OR_DUP(&params, params_param);
+
+
 	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 57);
 	zephir_check_call_status();
-	zephir_is_iterable(&args, 0, "brisk/Kernel/Toolkit.zep", 17);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&args), _0)
+	zephir_is_iterable(&params, 0, "brisk/Kernel/Toolkit.zep", 16);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&params), _0)
 	{
 		ZEPHIR_INIT_NVAR(&arg);
 		ZVAL_COPY(&arg, _0);
@@ -79,22 +81,25 @@ PHP_METHOD(Brisk_Kernel_Toolkit, sprintr) {
 
 PHP_METHOD(Brisk_Kernel_Toolkit, printr) {
 
-	zval _0;
-	zval params, result, _1, _2, _3;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *params_param = NULL, result, _1, _3, _4;
+	zval params, _0, _2;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&params);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_4);
 
 	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &params_param);
 
-	ZEPHIR_INIT_VAR(&params);
-	zephir_get_args(&params);
+	ZEPHIR_OBS_COPY_OR_DUP(&params, params_param);
+
+
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 2, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&_1);
@@ -103,40 +108,46 @@ PHP_METHOD(Brisk_Kernel_Toolkit, printr) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "sprintr");
 	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_create_array(&_2, 1, 0 TSRMLS_CC);
+	zephir_array_fast_append(&_2, &params);
 	ZEPHIR_INIT_VAR(&result);
-	ZEPHIR_CALL_USER_FUNC_ARRAY(&result, &_0, &params);
+	ZEPHIR_CALL_USER_FUNC_ARRAY(&result, &_0, &_2);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&_2, "htmlspecialchars", NULL, 35, &result);
+	ZEPHIR_CALL_FUNCTION(&_3, "htmlspecialchars", NULL, 36, &result);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "<pre>%s</pre>");
-	ZEPHIR_CALL_FUNCTION(&_3, "sprintf", NULL, 4, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_4, "sprintf", NULL, 4, &_1, &_3);
 	zephir_check_call_status();
-	zend_print_zval(&_3, 0);
+	zend_print_zval(&_4, 0);
 	ZEPHIR_MM_RESTORE();
 
 }
 
 PHP_METHOD(Brisk_Kernel_Toolkit, svardump) {
 
-	zval args, arg, *_0, _1, _2, _3;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *params_param = NULL, arg, *_0, _1, _2, _3;
+	zval params;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&args);
+	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&arg);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 
 	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &params_param);
 
-	ZEPHIR_INIT_VAR(&args);
-	zephir_get_args(&args);
+	ZEPHIR_OBS_COPY_OR_DUP(&params, params_param);
+
+
 	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 57);
 	zephir_check_call_status();
-	zephir_is_iterable(&args, 0, "brisk/Kernel/Toolkit.zep", 35);
-	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&args), _0)
+	zephir_is_iterable(&params, 0, "brisk/Kernel/Toolkit.zep", 32);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&params), _0)
 	{
 		ZEPHIR_INIT_NVAR(&arg);
 		ZVAL_COPY(&arg, _0);
@@ -157,22 +168,25 @@ PHP_METHOD(Brisk_Kernel_Toolkit, svardump) {
 
 PHP_METHOD(Brisk_Kernel_Toolkit, vardump) {
 
-	zval _0;
-	zval params, result, _1, _2, _3;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *params_param = NULL, result, _1, _3, _4;
+	zval params, _0, _2;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&params);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_4);
 
 	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &params_param);
 
-	ZEPHIR_INIT_VAR(&params);
-	zephir_get_args(&params);
+	ZEPHIR_OBS_COPY_OR_DUP(&params, params_param);
+
+
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 2, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&_1);
@@ -181,16 +195,19 @@ PHP_METHOD(Brisk_Kernel_Toolkit, vardump) {
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "svardump");
 	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_VAR(&_2);
+	zephir_create_array(&_2, 1, 0 TSRMLS_CC);
+	zephir_array_fast_append(&_2, &params);
 	ZEPHIR_INIT_VAR(&result);
-	ZEPHIR_CALL_USER_FUNC_ARRAY(&result, &_0, &params);
+	ZEPHIR_CALL_USER_FUNC_ARRAY(&result, &_0, &_2);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&_2, "htmlspecialchars", NULL, 35, &result);
+	ZEPHIR_CALL_FUNCTION(&_3, "htmlspecialchars", NULL, 36, &result);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "<pre>%s</pre>");
-	ZEPHIR_CALL_FUNCTION(&_3, "sprintf", NULL, 4, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_4, "sprintf", NULL, 4, &_1, &_3);
 	zephir_check_call_status();
-	zend_print_zval(&_3, 0);
+	zend_print_zval(&_4, 0);
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -248,7 +265,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, mkDir) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, &_1$$3, "__construct", NULL, 3, &_2$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(&_1$$3, "brisk/Kernel/Toolkit.zep", 49 TSRMLS_CC);
+		zephir_throw_exception_debug(&_1$$3, "brisk/Kernel/Toolkit.zep", 45 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -262,14 +279,14 @@ PHP_METHOD(Brisk_Kernel_Toolkit, mkDir) {
 		ZEPHIR_CALL_FUNCTION(&_5$$4, "dirname", &_6, 18, &dir);
 		zephir_check_call_status();
 		zephir_get_strval(&dir, &_5$$4);
-		zephir_array_append(&dirs, &dir, PH_SEPARATE, "brisk/Kernel/Toolkit.zep", 54);
+		zephir_array_append(&dirs, &dir, PH_SEPARATE, "brisk/Kernel/Toolkit.zep", 50);
 	}
 	if (zephir_fast_count_int(&dirs TSRMLS_CC) > 1) {
 		ZEPHIR_CALL_FUNCTION(&_7$$5, "array_reverse", NULL, 60, &dirs);
 		zephir_check_call_status();
 		ZEPHIR_CPY_WRT(&dirs, &_7$$5);
 		ZEPHIR_INIT_VAR(&_8$$5);
-		zephir_is_iterable(&dirs, 0, "brisk/Kernel/Toolkit.zep", 65);
+		zephir_is_iterable(&dirs, 0, "brisk/Kernel/Toolkit.zep", 61);
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&dirs), _10$$5, _11$$5, _9$$5)
 		{
 			ZEPHIR_INIT_NVAR(&_8$$5);

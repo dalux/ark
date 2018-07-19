@@ -9,10 +9,18 @@ class Language
      * 添加语言包
      *
      * @param string $language
-     * @param array $package
+     * @param string $path
      * @return null
      */
-    public static function addPackage($language, array $package) {}
+    public static function addPackage($language, $path) {}
+
+    /**
+     * 获取语言包
+     *
+     * @param string $language
+     * @return array
+     */
+    public static function getPackage($language = "") {}
 
     /**
      * 设置当前语言

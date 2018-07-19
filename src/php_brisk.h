@@ -11,11 +11,11 @@
 #include "kernel/globals.h"
 
 #define PHP_BRISK_NAME        "brisk"
-#define PHP_BRISK_VERSION     "1.0.2"
+#define PHP_BRISK_VERSION     "1.0.3"
 #define PHP_BRISK_EXTNAME     "brisk"
 #define PHP_BRISK_AUTHOR      "guodalu <112183883@qq.com>"
 #define PHP_BRISK_ZEPVERSION  "0.10.10"
-#define PHP_BRISK_DESCRIPTION ""
+#define PHP_BRISK_DESCRIPTION "Brisk PHP Framework."
 
 
 

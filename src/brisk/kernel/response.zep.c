@@ -99,7 +99,7 @@ PHP_METHOD(Brisk_Kernel_Response, status) {
 	ZVAL_LONG(&_2, status_code);
 	ZEPHIR_INIT_VAR(&header_str);
 	ZEPHIR_CONCAT_VSVSV(&header_str, &protocol, " ", &_2, " ", &status_text);
-	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 48, &header_str);
+	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 24, &header_str);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -474,7 +474,7 @@ PHP_METHOD(Brisk_Kernel_Response, header) {
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_VSV(&_0, &item, ": ", &val);
 	ZVAL_BOOL(&_1, (replace ? 1 : 0));
-	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 48, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 24, &_0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

@@ -8,30 +8,34 @@ class Toolkit
     /**
      * 返回数组的print_r结果字符串表示
      *
+     * @param array $params
      * @return string
      */
-    public static function sprintr() {}
+    public static function sprintr(array $params) {}
 
     /**
      * 有格式打印数组
      *
+     * @param array $params
      * @return null
      */
-    public static function printr() {}
+    public static function printr(array $params) {}
 
     /**
      * 返回数组的var_dump结果字符串表示
      *
+     * @param array $params
      * @return string
      */
-    public static function svardump() {}
+    public static function svardump(array $params) {}
 
     /**
      * 有格式的打印数组
      *
+     * @param array $params
      * @return null
      */
-    public static function vardump() {}
+    public static function vardump(array $params) {}
 
     /**
      * 递归创建目录

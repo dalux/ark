@@ -10,87 +10,74 @@ class App
     const VERSION   = "1.0.2";
 
     /**
-     * 设置app属性
-     *
-     * @param string $name
-     * @param array $options
-     * @return null
-     */
-    public static function set($name, array $options = array()) {}
-
-    /**
      * 设置app名称
      *
-     * @param string $name
-     * @return null
+     * @param string $name 应用名称，用作根命名空间
+     * @param string $base_dir 应用根目录
+     * @return $this
      */
-    public static function setName($name) {}
-
-    /**
-     * 设置app项目根目录地址
-     *
-     * @param string $path
-     * @return null
-     */
-    public static function setBaseDir($path) {}
+    public function setApp($name, $base_dir) {}
 
     /**
      * 设置配置文件获取函数
      *
-     * @param \Closure $config
-     * @return null
+     * @param \Closure $config  获取配置文件函数，返回值为array
+     * @return $this
      */
-    public static function setConfig(\Closure $config) {}
+    public function setConfig(\Closure $config) {}
 
     /**
      * 设置控制器目录地址
      *
-     * @param string $path
-     * @return null
+     * @param string $path 当前应用控制器路径
+     * @return $this
      */
-    public static function setControllerDir($path) {}
+    public function setControllerDir($path) {}
 
     /**
      * 获取app名称
      *
-     * @return string
+     * @param string $item 获取app应用项，可选值name|base_dir
+     * @return mixed
      */
-    public static function getName() {}
-
-    /**
-     * 获取app项目目录路径
-     *
-     * @return string
-     */
-    public static function getBaseDir() {}
+    public function getApp($item = '') {}
 
     /**
      * 获取控制器目录路径
      *
      * @return string
      */
-    public static function getControllerDir() {}
-
-    /**
-     * 初始化框架
-     *
-     * @return null
-     */
-    public static function init() {}
+    public function getControllerDir() {}
 
     /**
      * 获取框架实例
      *
-     * @return App
+     * @return $this
      */
-    public static function getInstance() {}
+    public function getInstance() {}
 
     /**
      * 启动框架
      *
      * @return null
      */
-    public static function start() {}
+    public function start() {}
+
+    /**
+     * 添加语言包
+     * @param $language 语言
+     * @param $path 包文件路径，需返回数组
+     * @return $this
+     */
+    public function addLanguagePackage($language, $path) {}
+
+    /**
+     * 设置应用语言
+     *
+     * @param $language 语言名称
+     * @return $this
+     */
+    public function setLanguage($language) {}
 
     /**
      * 设置组件对象
@@ -99,7 +86,16 @@ class App
      * @param callable $value
      * @return null
      */
-    public static function setComponent($name, $value) {}
+    public function setComponent($name, $value) {}
+
+    /**
+     * 添加事件监听器
+     *
+     * @param $event 事件名称
+     * @param $listener 监听器匿名函数
+     * @return $this
+     */
+    public function addEventListener($event, $listener) {}
 
     /**
      * 获取组件对象
@@ -124,7 +120,7 @@ class App
      * @param callable $method
      * @return null
      */
-    public static function setMethod($name, $method) {}
+    public function setMethod($name, $method) {}
 
     /**
      * 调用自定义方法

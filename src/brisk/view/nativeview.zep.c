@@ -242,7 +242,7 @@ PHP_METHOD(Brisk_View_NativeView, display) {
 	ZEPHIR_INIT_VAR(&_5);
 	ZEPHIR_CONCAT_VSV(&_5, &_4, "/", &template);
 	zephir_get_strval(&template, &_5);
-	ZEPHIR_CALL_FUNCTION(&_6, "is_file", NULL, 43, &template);
+	ZEPHIR_CALL_FUNCTION(&_6, "is_file", NULL, 42, &template);
 	zephir_check_call_status();
 	if (!zephir_is_true(&_6)) {
 		ZEPHIR_INIT_VAR(&_7$$4);
@@ -371,7 +371,7 @@ PHP_METHOD(Brisk_View_NativeView, import) {
 	zephir_read_property(&_4, this_ptr, SL("_template_dir"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_INIT_VAR(&template);
 	ZEPHIR_CONCAT_VSV(&template, &_4, "/", &path);
-	ZEPHIR_CALL_FUNCTION(&_5, "is_file", NULL, 43, &template);
+	ZEPHIR_CALL_FUNCTION(&_5, "is_file", NULL, 42, &template);
 	zephir_check_call_status();
 	if (!zephir_is_true(&_5)) {
 		ZEPHIR_INIT_VAR(&_6$$4);

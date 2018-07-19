@@ -48,9 +48,10 @@ PHP_METHOD(Brisk_Kernel_Config, getExample) {
 
 	zephir_create_array(return_value, 6, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0 TSRMLS_CC);
+	zephir_create_array(&_0, 4, 0 TSRMLS_CC);
 	zephir_array_update_string(&_0, SL("debug"), &__$true, PH_COPY | PH_SEPARATE);
 	add_assoc_stringl_ex(&_0, SL("timezone"), SL("Asia/Shanghai"));
+	add_assoc_stringl_ex(&_0, SL("header"), SL("Content-type: text/html;charset=utf-8"));
 	add_assoc_long_ex(&_0, SL("error_reporting"), (((32767 ^ 8) ^ 2) ^ 8192));
 	zephir_array_update_string(return_value, SL("global"), &_0, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_NVAR(&_0);

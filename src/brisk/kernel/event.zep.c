@@ -307,7 +307,7 @@ PHP_METHOD(Brisk_Kernel_Event, onListening) {
 		}
 		ZEPHIR_INIT_NVAR(&now_keys$$4);
 		zephir_array_keys(&now_keys$$4, &data TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(&diff$$4, "array_diff", &_12, 29, &ori_keys$$4, &now_keys$$4);
+		ZEPHIR_CALL_FUNCTION(&diff$$4, "array_diff", &_12, 30, &ori_keys$$4, &now_keys$$4);
 		zephir_check_call_status();
 		if (zephir_fast_count_int(&diff$$4 TSRMLS_CC) > 0) {
 			ZEPHIR_INIT_NVAR(&_13$$6);

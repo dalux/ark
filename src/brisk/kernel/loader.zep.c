@@ -229,7 +229,7 @@ PHP_METHOD(Brisk_Kernel_Loader, addAutoLoader) {
 	}
 
 
-	ZEPHIR_CALL_FUNCTION(NULL, "spl_autoload_register", NULL, 42, loader);
+	ZEPHIR_CALL_FUNCTION(NULL, "spl_autoload_register", NULL, 44, loader);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -381,7 +381,7 @@ PHP_METHOD(Brisk_Kernel_Loader, findClass) {
 			ZEPHIR_CONCAT_VS(&_28$$8, &path$$7, ".php");
 			ZEPHIR_CPY_WRT(&path$$7, &_28$$8);
 		}
-		ZEPHIR_CALL_FUNCTION(&_29$$7, "is_file", &_30, 43, &path$$7);
+		ZEPHIR_CALL_FUNCTION(&_29$$7, "is_file", &_30, 42, &path$$7);
 		zephir_check_call_status();
 		if (zephir_is_true(&_29$$7)) {
 			RETURN_CCTOR(&path$$7);
@@ -431,7 +431,7 @@ PHP_METHOD(Brisk_Kernel_Loader, realPath) {
 	}
 
 
-	ZEPHIR_CALL_SELF(&parsed, "_parse", &_0, 44, &spacename);
+	ZEPHIR_CALL_SELF(&parsed, "_parse", &_0, 45, &spacename);
 	zephir_check_call_status();
 	if (zephir_fast_count_int(&parsed TSRMLS_CC) > 0) {
 		ZEPHIR_OBS_VAR(&alias$$3);
