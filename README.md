@@ -9,6 +9,8 @@
 make  
 make install  
 
+添加extension=brisk.so到对应的php.ini文件即可使用。
+
 ### Windows扩展:  
 
 [php-brisk-1.0.3-forwindows-x86(x64).zip](https://github.com/dalux/brisk/files/2208465/php-brisk-1.0.3-all.zip)
