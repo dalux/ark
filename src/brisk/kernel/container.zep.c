@@ -181,7 +181,7 @@ PHP_METHOD(Brisk_Kernel_Container, hasKey) {
 }
 
 /**
- * Check if value exists
+ * Check whether data exists at the current node
  *
  * @return bool
  */
@@ -201,7 +201,7 @@ PHP_METHOD(Brisk_Kernel_Container, hasValue) {
 }
 
 /**
- * Get current value
+ * Get data from the current node
  *
  * @return mixed
  */
@@ -279,32 +279,120 @@ PHP_METHOD(Brisk_Kernel_Container, getValue) {
 
 }
 
+/**
+ * Get the data corresponding to the specified key
+ *
+ * @param string key
+ * @return mixed
+ */
+PHP_METHOD(Brisk_Kernel_Container, get) {
+
+	HashTable *_8$$3;
+	HashPosition _7$$3;
+	zval *_1;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *key_param = NULL, *_0, *_2 = NULL, _3, _4, *nodes = NULL, *node = NULL, *instance = NULL, *_5 = NULL, *v$$3 = NULL, *_6$$3 = NULL, **_9$$3, *_10$$4 = NULL, *_11$$5 = NULL;
+	zval *key = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &key_param);
+
+	if (UNEXPECTED(Z_TYPE_P(key_param) != IS_STRING && Z_TYPE_P(key_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'key' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+	if (EXPECTED(Z_TYPE_P(key_param) == IS_STRING)) {
+		zephir_get_strval(key, key_param);
+	} else {
+		ZEPHIR_INIT_VAR(key);
+		ZVAL_EMPTY_STRING(key);
+	}
+
+
+	ZEPHIR_INIT_VAR(_0);
+	ZEPHIR_INIT_VAR(_1);
+	zephir_create_array(_1, 3, 0 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_2);
+	ZVAL_STRING(_2, ">", 1);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, ".", 1);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_INIT_NVAR(_2);
+	ZVAL_STRING(_2, "/", 1);
+	zephir_array_fast_append(_1, _2);
+	ZEPHIR_SINIT_VAR(_3);
+	ZVAL_STRING(&_3, ">", 0);
+	zephir_fast_str_replace(&_0, _1, &_3, key TSRMLS_CC);
+	zephir_get_strval(key, _0);
+	ZEPHIR_INIT_NVAR(_2);
+	ZEPHIR_SINIT_VAR(_4);
+	ZVAL_STRING(&_4, ">", 0);
+	zephir_fast_trim(_2, key, &_4, ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	zephir_get_strval(key, _2);
+	ZEPHIR_INIT_VAR(nodes);
+	zephir_fast_explode_str(nodes, SL(">"), key, LONG_MAX TSRMLS_CC);
+	ZEPHIR_MAKE_REF(nodes);
+	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 7, nodes);
+	ZEPHIR_UNREF(nodes);
+	zephir_check_call_status();
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "haskey", NULL, 0, node);
+	zephir_check_call_status();
+	if (zephir_is_true(_5)) {
+		ZEPHIR_OBS_VAR(instance);
+		zephir_read_property_zval(&instance, this_ptr, node, PH_NOISY_CC);
+		ZEPHIR_INIT_VAR(_6$$3);
+		zephir_is_iterable(nodes, &_8$$3, &_7$$3, 0, 0, "brisk/Kernel/Container.zep", 126);
+		for (
+		  ; zend_hash_get_current_data_ex(_8$$3, (void**) &_9$$3, &_7$$3) == SUCCESS
+		  ; zend_hash_move_forward_ex(_8$$3, &_7$$3)
+		) {
+			ZEPHIR_GET_HMKEY(_6$$3, _8$$3, _7$$3);
+			ZEPHIR_GET_HVALUE(v$$3, _9$$3);
+			ZEPHIR_CALL_METHOD(&_10$$4, instance, "haskey", NULL, 0, v$$3);
+			zephir_check_call_status();
+			if (zephir_is_true(_10$$4)) {
+				ZEPHIR_OBS_NVAR(_11$$5);
+				zephir_read_property_zval(&_11$$5, instance, v$$3, PH_NOISY_CC);
+				ZEPHIR_CPY_WRT(instance, _11$$5);
+			} else {
+				RETURN_MM_NULL();
+			}
+		}
+		ZEPHIR_RETURN_CALL_METHOD(instance, "getvalue", NULL, 0);
+		zephir_check_call_status();
+		RETURN_MM();
+	}
+	RETURN_MM_NULL();
+
+}
+
 PHP_METHOD(Brisk_Kernel_Container, __get) {
 
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *name_param = NULL, *_0 = NULL, *_1$$3, *_2$$3;
-	zval *name = NULL;
+	zval *key_param = NULL, *_0 = NULL, *_1$$3, *_2$$3;
+	zval *key = NULL;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &name_param);
+	zephir_fetch_params(1, 1, 0, &key_param);
 
-	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be a string") TSRMLS_CC);
+	if (UNEXPECTED(Z_TYPE_P(key_param) != IS_STRING && Z_TYPE_P(key_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'key' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-	if (EXPECTED(Z_TYPE_P(name_param) == IS_STRING)) {
-		zephir_get_strval(name, name_param);
+	if (EXPECTED(Z_TYPE_P(key_param) == IS_STRING)) {
+		zephir_get_strval(key, key_param);
 	} else {
-		ZEPHIR_INIT_VAR(name);
-		ZVAL_EMPTY_STRING(name);
+		ZEPHIR_INIT_VAR(key);
+		ZVAL_EMPTY_STRING(key);
 	}
 
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "haskey", NULL, 0, name);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "haskey", NULL, 0, key);
 	zephir_check_call_status();
 	if (zephir_is_true(_0)) {
 		_1$$3 = zephir_fetch_nproperty_this(this_ptr, SL("_container"), PH_NOISY_CC);
-		zephir_array_fetch(&_2$$3, _1$$3, name, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 106 TSRMLS_CC);
+		zephir_array_fetch(&_2$$3, _1$$3, key, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 134 TSRMLS_CC);
 		RETURN_CTOR(_2$$3);
 	} else {
 		object_init_ex(return_value, brisk_kernel_container_ce);
@@ -318,21 +406,21 @@ PHP_METHOD(Brisk_Kernel_Container, __get) {
 PHP_METHOD(Brisk_Kernel_Container, __set) {
 
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *name_param = NULL, *value, *_0, *_2, *_1$$3;
-	zval *name = NULL;
+	zval *key_param = NULL, *value, *_0, *_2, *_1$$3;
+	zval *key = NULL;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &name_param, &value);
+	zephir_fetch_params(1, 2, 0, &key_param, &value);
 
-	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be a string") TSRMLS_CC);
+	if (UNEXPECTED(Z_TYPE_P(key_param) != IS_STRING && Z_TYPE_P(key_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'key' must be a string") TSRMLS_CC);
 		RETURN_MM_NULL();
 	}
-	if (EXPECTED(Z_TYPE_P(name_param) == IS_STRING)) {
-		zephir_get_strval(name, name_param);
+	if (EXPECTED(Z_TYPE_P(key_param) == IS_STRING)) {
+		zephir_get_strval(key, key_param);
 	} else {
-		ZEPHIR_INIT_VAR(name);
-		ZVAL_EMPTY_STRING(name);
+		ZEPHIR_INIT_VAR(key);
+		ZVAL_EMPTY_STRING(key);
 	}
 
 
@@ -346,7 +434,7 @@ PHP_METHOD(Brisk_Kernel_Container, __set) {
 	object_init_ex(_2, brisk_kernel_container_ce);
 	ZEPHIR_CALL_METHOD(NULL, _2, "__construct", NULL, 13, value);
 	zephir_check_call_status();
-	zephir_update_property_array(this_ptr, SL("_container"), name, _2 TSRMLS_CC);
+	zephir_update_property_array(this_ptr, SL("_container"), key, _2 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }

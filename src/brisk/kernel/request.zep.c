@@ -44,41 +44,6 @@ ZEPHIR_INIT_CLASS(Brisk_Kernel_Request) {
 
 	zend_declare_property_null(brisk_kernel_request_ce, SL("_flag"), ZEND_ACC_PRIVATE TSRMLS_CC);
 
-	/**
-	 * Request type
-	 *
-	 * @var Request
-	 */
-	zend_declare_property_null(brisk_kernel_request_ce, SL("request"), ZEND_ACC_PUBLIC TSRMLS_CC);
-
-	/**
-	 * Get type
-	 *
-	 * @var Request
-	 */
-	zend_declare_property_null(brisk_kernel_request_ce, SL("get"), ZEND_ACC_PUBLIC TSRMLS_CC);
-
-	/**
-	 * Post type
-	 *
-	 * @var Request
-	 */
-	zend_declare_property_null(brisk_kernel_request_ce, SL("post"), ZEND_ACC_PUBLIC TSRMLS_CC);
-
-	/**
-	 * Files type
-	 *
-	 * @var Request
-	 */
-	zend_declare_property_null(brisk_kernel_request_ce, SL("files"), ZEND_ACC_PUBLIC TSRMLS_CC);
-
-	/**
-	 * Cookie type
-	 *
-	 * @var Request
-	 */
-	zend_declare_property_null(brisk_kernel_request_ce, SL("cookie"), ZEND_ACC_PUBLIC TSRMLS_CC);
-
 	brisk_kernel_request_ce->create_object = zephir_init_properties_Brisk_Kernel_Request;
 	return SUCCESS;
 
@@ -160,7 +125,7 @@ PHP_METHOD(Brisk_Kernel_Request, getInstance) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 28, _3$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_2$$3, "brisk/Kernel/Request.zep", 85 TSRMLS_CC);
+		zephir_throw_exception_debug(_2$$3, "brisk/Kernel/Request.zep", 50 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	} else if (Z_TYPE_P(_1) == IS_NULL) {
@@ -205,13 +170,13 @@ PHP_METHOD(Brisk_Kernel_Request, __construct) {
 	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _1);
-	zephir_array_fetch_string(&_4, data, SL("get"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 102 TSRMLS_CC);
+	zephir_array_fetch_string(&_4, data, SL("get"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 67 TSRMLS_CC);
 	zephir_update_property_this(getThis(), SL("_get"), _4 TSRMLS_CC);
-	zephir_array_fetch_string(&_5, data, SL("post"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 103 TSRMLS_CC);
+	zephir_array_fetch_string(&_5, data, SL("post"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 68 TSRMLS_CC);
 	zephir_update_property_this(getThis(), SL("_post"), _5 TSRMLS_CC);
-	zephir_array_fetch_string(&_6, data, SL("cookie"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 104 TSRMLS_CC);
+	zephir_array_fetch_string(&_6, data, SL("cookie"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 69 TSRMLS_CC);
 	zephir_update_property_this(getThis(), SL("_cookie"), _6 TSRMLS_CC);
-	zephir_array_fetch_string(&_7, data, SL("files"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 105 TSRMLS_CC);
+	zephir_array_fetch_string(&_7, data, SL("files"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 70 TSRMLS_CC);
 	zephir_update_property_this(getThis(), SL("_files"), _7 TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(_3);
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_get"), PH_NOISY_CC);
@@ -235,7 +200,7 @@ PHP_METHOD(Brisk_Kernel_Request, isPost) {
 	zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
 
 	ZEPHIR_INIT_VAR(_0);
-	zephir_array_fetch_string(&_1, _SERVER, SL("REQUEST_METHOD"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 116 TSRMLS_CC);
+	zephir_array_fetch_string(&_1, _SERVER, SL("REQUEST_METHOD"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 81 TSRMLS_CC);
 	zephir_fast_strtoupper(_0, _1);
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_STRING(&_2, "POST", 0);
@@ -256,7 +221,7 @@ PHP_METHOD(Brisk_Kernel_Request, isAjax) {
 	zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
 
 	if (zephir_array_isset_string(_SERVER, SS("HTTP_X_REQUESTED_WITH"))) {
-		zephir_array_fetch_string(&_0$$3, _SERVER, SL("HTTP_X_REQUESTED_WITH"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 127 TSRMLS_CC);
+		zephir_array_fetch_string(&_0$$3, _SERVER, SL("HTTP_X_REQUESTED_WITH"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 92 TSRMLS_CC);
 		RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0$$3, "XMLHttpRequest"));
 	}
 	RETURN_MM_BOOL(0);
@@ -295,37 +260,37 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 	ZEPHIR_INIT_VAR(ips);
 	array_init(ips);
 	if (zephir_array_isset_string(_SERVER, SS("HTTP_CLIENT_IP"))) {
-		zephir_array_fetch_string(&_0$$3, _SERVER, SL("HTTP_CLIENT_IP"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 142 TSRMLS_CC);
-		zephir_array_append(&ips, _0$$3, PH_SEPARATE, "brisk/Kernel/Request.zep", 142);
+		zephir_array_fetch_string(&_0$$3, _SERVER, SL("HTTP_CLIENT_IP"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 107 TSRMLS_CC);
+		zephir_array_append(&ips, _0$$3, PH_SEPARATE, "brisk/Kernel/Request.zep", 107);
 	}
 	if (zephir_array_isset_string(_SERVER, SS("HTTP_X_FORWARDED_FOR"))) {
-		zephir_array_fetch_string(&_1$$4, _SERVER, SL("HTTP_X_FORWARDED_FOR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 146 TSRMLS_CC);
+		zephir_array_fetch_string(&_1$$4, _SERVER, SL("HTTP_X_FORWARDED_FOR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 111 TSRMLS_CC);
 		ZEPHIR_INIT_VAR(forwarded$$4);
 		zephir_fast_explode_str(forwarded$$4, SL(","), _1$$4, LONG_MAX TSRMLS_CC);
-		zephir_is_iterable(forwarded$$4, &_3$$4, &_2$$4, 0, 0, "brisk/Kernel/Request.zep", 150);
+		zephir_is_iterable(forwarded$$4, &_3$$4, &_2$$4, 0, 0, "brisk/Kernel/Request.zep", 115);
 		for (
 		  ; zend_hash_get_current_data_ex(_3$$4, (void**) &_4$$4, &_2$$4) == SUCCESS
 		  ; zend_hash_move_forward_ex(_3$$4, &_2$$4)
 		) {
 			ZEPHIR_GET_HVALUE(ip, _4$$4);
-			zephir_array_append(&ips, ip, PH_SEPARATE, "brisk/Kernel/Request.zep", 148);
+			zephir_array_append(&ips, ip, PH_SEPARATE, "brisk/Kernel/Request.zep", 113);
 		}
 	}
 	if (zephir_array_isset_string(_SERVER, SS("HTTP_X_FORWARDED"))) {
-		zephir_array_fetch_string(&_5$$6, _SERVER, SL("HTTP_X_FORWARDED"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 152 TSRMLS_CC);
-		zephir_array_append(&ips, _5$$6, PH_SEPARATE, "brisk/Kernel/Request.zep", 152);
+		zephir_array_fetch_string(&_5$$6, _SERVER, SL("HTTP_X_FORWARDED"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 117 TSRMLS_CC);
+		zephir_array_append(&ips, _5$$6, PH_SEPARATE, "brisk/Kernel/Request.zep", 117);
 	}
 	if (zephir_array_isset_string(_SERVER, SS("HTTP_FORWARDED_FOR"))) {
-		zephir_array_fetch_string(&_6$$7, _SERVER, SL("HTTP_FORWARDED_FOR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 155 TSRMLS_CC);
-		zephir_array_append(&ips, _6$$7, PH_SEPARATE, "brisk/Kernel/Request.zep", 155);
+		zephir_array_fetch_string(&_6$$7, _SERVER, SL("HTTP_FORWARDED_FOR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 120 TSRMLS_CC);
+		zephir_array_append(&ips, _6$$7, PH_SEPARATE, "brisk/Kernel/Request.zep", 120);
 	}
 	if (zephir_array_isset_string(_SERVER, SS("HTTP_FORWARDED"))) {
-		zephir_array_fetch_string(&_7$$8, _SERVER, SL("HTTP_FORWARDED"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 158 TSRMLS_CC);
-		zephir_array_append(&ips, _7$$8, PH_SEPARATE, "brisk/Kernel/Request.zep", 158);
+		zephir_array_fetch_string(&_7$$8, _SERVER, SL("HTTP_FORWARDED"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 123 TSRMLS_CC);
+		zephir_array_append(&ips, _7$$8, PH_SEPARATE, "brisk/Kernel/Request.zep", 123);
 	}
 	if (zephir_array_isset_string(_SERVER, SS("REMOTE_ADDR"))) {
-		zephir_array_fetch_string(&_8$$9, _SERVER, SL("REMOTE_ADDR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 161 TSRMLS_CC);
-		zephir_array_append(&ips, _8$$9, PH_SEPARATE, "brisk/Kernel/Request.zep", 161);
+		zephir_array_fetch_string(&_8$$9, _SERVER, SL("REMOTE_ADDR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 126 TSRMLS_CC);
+		zephir_array_append(&ips, _8$$9, PH_SEPARATE, "brisk/Kernel/Request.zep", 126);
 	}
 	ZEPHIR_CALL_FUNCTION(&_9, "array_filter", NULL, 53, ips);
 	zephir_check_call_status();
@@ -407,7 +372,7 @@ PHP_METHOD(Brisk_Kernel_Request, add) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 28, _4$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_3$$3, "brisk/Kernel/Request.zep", 183 TSRMLS_CC);
+		zephir_throw_exception_debug(_3$$3, "brisk/Kernel/Request.zep", 148 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	} else if (ZEPHIR_IS_STRING(_1, "get")) {
@@ -468,7 +433,7 @@ PHP_METHOD(Brisk_Kernel_Request, del) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 28, _4$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_3$$3, "brisk/Kernel/Request.zep", 203 TSRMLS_CC);
+		zephir_throw_exception_debug(_3$$3, "brisk/Kernel/Request.zep", 168 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	} else if (ZEPHIR_IS_STRING(_1, "get")) {
@@ -549,7 +514,7 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 28, _2$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_1$$3, "brisk/Kernel/Request.zep", 223 TSRMLS_CC);
+		zephir_throw_exception_debug(_1$$3, "brisk/Kernel/Request.zep", 188 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -565,7 +530,7 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		} else {
 			_11$$6 = zephir_fetch_nproperty_this(this_ptr, SL("_get"), PH_NOISY_CC);
 			ZEPHIR_OBS_NVAR(value);
-			zephir_array_fetch(&value, _11$$6, name, PH_NOISY, "brisk/Kernel/Request.zep", 230 TSRMLS_CC);
+			zephir_array_fetch(&value, _11$$6, name, PH_NOISY, "brisk/Kernel/Request.zep", 195 TSRMLS_CC);
 		}
 	} else if (ZEPHIR_IS_STRING(_7, "post")) {
 		if (ZEPHIR_IS_STRING(name, "")) {
@@ -574,7 +539,7 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		} else {
 			_12$$9 = zephir_fetch_nproperty_this(this_ptr, SL("_post"), PH_NOISY_CC);
 			ZEPHIR_OBS_NVAR(value);
-			zephir_array_fetch(&value, _12$$9, name, PH_NOISY, "brisk/Kernel/Request.zep", 236 TSRMLS_CC);
+			zephir_array_fetch(&value, _12$$9, name, PH_NOISY, "brisk/Kernel/Request.zep", 201 TSRMLS_CC);
 		}
 	} else if (ZEPHIR_IS_STRING(_8, "request")) {
 		if (ZEPHIR_IS_STRING(name, "")) {
@@ -583,7 +548,7 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		} else {
 			_13$$12 = zephir_fetch_nproperty_this(this_ptr, SL("_request"), PH_NOISY_CC);
 			ZEPHIR_OBS_NVAR(value);
-			zephir_array_fetch(&value, _13$$12, name, PH_NOISY, "brisk/Kernel/Request.zep", 242 TSRMLS_CC);
+			zephir_array_fetch(&value, _13$$12, name, PH_NOISY, "brisk/Kernel/Request.zep", 207 TSRMLS_CC);
 		}
 	} else if (ZEPHIR_IS_STRING(_9, "cookie")) {
 		if (ZEPHIR_IS_STRING(name, "")) {
@@ -592,7 +557,7 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		} else {
 			_14$$15 = zephir_fetch_nproperty_this(this_ptr, SL("_cookie"), PH_NOISY_CC);
 			ZEPHIR_OBS_NVAR(value);
-			zephir_array_fetch(&value, _14$$15, name, PH_NOISY, "brisk/Kernel/Request.zep", 248 TSRMLS_CC);
+			zephir_array_fetch(&value, _14$$15, name, PH_NOISY, "brisk/Kernel/Request.zep", 213 TSRMLS_CC);
 		}
 	} else if (ZEPHIR_IS_STRING(_10, "files")) {
 		if (ZEPHIR_IS_STRING(name, "")) {
@@ -601,7 +566,7 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		} else {
 			_15$$18 = zephir_fetch_nproperty_this(this_ptr, SL("_files"), PH_NOISY_CC);
 			ZEPHIR_OBS_NVAR(value);
-			zephir_array_fetch(&value, _15$$18, name, PH_NOISY, "brisk/Kernel/Request.zep", 254 TSRMLS_CC);
+			zephir_array_fetch(&value, _15$$18, name, PH_NOISY, "brisk/Kernel/Request.zep", 219 TSRMLS_CC);
 		}
 	}
 	zephir_update_property_this(getThis(), SL("_flag"), ZEPHIR_GLOBAL(global_null) TSRMLS_CC);
@@ -665,7 +630,7 @@ PHP_METHOD(Brisk_Kernel_Request, __get) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 28, _3$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_2$$3, "brisk/Kernel/Request.zep", 267 TSRMLS_CC);
+		zephir_throw_exception_debug(_2$$3, "brisk/Kernel/Request.zep", 232 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
