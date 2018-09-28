@@ -2,12 +2,10 @@
 
 namespace Brisk\Kernel;
 
-
 class Container
 {
 
     private $_container;
-
 
     /**
      * construct
@@ -33,22 +31,30 @@ class Container
     public function hasValue() {}
 
     /**
-     * Get current value
+     * Get data from the current node
      *
      * @param bool $in_loop
      * @return mixed
      */
-    public function getValue($in_loop = false) {}
+    public function getValue() {}
 
     /**
-     * @param string $name
+     * Get the data corresponding to the specified key
+     *
+     * @param string key
+     * @return mixed
      */
-    public function __get($name) {}
+    public function get($key) {}
 
     /**
-     * @param string $name
+     * @param string $key
+     */
+    public function __get($key) {}
+
+    /**
+     * @param string $key
      * @param mixed $value
      */
-    public function __set($name, $value) {}
+    public function __set($key, $value) {}
 
 }

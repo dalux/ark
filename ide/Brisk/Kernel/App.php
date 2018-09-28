@@ -2,31 +2,27 @@
 
 namespace Brisk\Kernel;
 
-
 class App
 {
 
     const NAME = 'Brisk';
-
-
     const AUTHOR = 'guodalu <112183883@qq.com>';
-
-
     const VERSION = '1.0.0';
 
+    /**
+     * Session
+     * 
+     * @var \Brisk\Kernel\Session
+     */
+    public $session;
 
-    private $_config;
-
-
-    static private $_instance;
-
-
-    static private $_storage = array();
-
-
-    static private $_methods = array();
-
-
+    /**
+     * Config
+     * 
+     * @var \Brisk\Kernel\Container
+     */
+    public $config;
+    
     /**
      * Set get configuration item method
      *
