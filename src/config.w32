@@ -1,0 +1,28 @@
+ARG_ENABLE("brisk", "enable brisk", "no");
+
+if (PHP_BRISK != "no") {
+  EXTENSION("brisk", "brisk.c", null, "-I"+configure_module_dirname);
+  ADD_SOURCES(configure_module_dirname + "/kernel", "main.c memory.c exception.c debug.c backtrace.c object.c array.c string.c fcall.c require.c file.c operators.c math.c concat.c variables.c filter.c iterator.c exit.c time.c", "brisk");
+  ADD_SOURCES(configure_module_dirname + "/kernel/extended", "fcall.c", "brisk");
+  /* PCRE is always included on WIN32 */
+  AC_DEFINE("ZEPHIR_USE_PHP_PCRE", 1, "Whether PHP pcre extension is present at compile time");
+  if (PHP_JSON != "no") {
+    ADD_EXTENSION_DEP("brisk", "json");
+    AC_DEFINE("ZEPHIR_USE_PHP_JSON", 1, "Whether PHP json extension is present at compile time");
+  }
+  
+  ADD_SOURCES(configure_module_dirname + "/brisk/vendor/querier", "querierfather.zep.c delete.zep.c insert.zep.c select.zep.c update.zep.c querieradapter.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/exception", "runtimeexception.zep.c actionnotfoundexception.zep.c classnotfoundexception.zep.c configurationexception.zep.c controllerexception.zep.c controllernotfoundexception.zep.c drivernotfoundexception.zep.c eventexception.zep.c methodnotfoundexception.zep.c pdoexception.zep.c routerexception.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/cache", "cachefather.zep.c cacheadapter.zep.c cacheproxy.zep.c file.zep.c memcached.zep.c redis.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/kernel/router", "routerfather.zep.c classic.zep.c rewrite.zep.c routeradapter.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/db", "dbfather.zep.c dbadapter.zep.c dbquerier.zep.c dbtoolkit.zep.c pdo.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/view", "viewfather.zep.c native.zep.c viewadapter.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/kernel", "app.zep.c config.zep.c container.zep.c event.zep.c handler.zep.c language.zep.c loader.zep.c request.zep.c server.zep.c session.zep.c timer.zep.c toolkit.zep.c trace.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/querier/delete", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/querier/insert", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/querier/select", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/querier/update", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");
+  ADD_FLAG("CFLAGS_BRISK", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
+  ADD_FLAG("CFLAGS", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
+  ADD_FLAG("LDFLAGS", "/LTCG");
+}

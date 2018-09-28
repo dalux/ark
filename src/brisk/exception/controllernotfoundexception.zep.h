@@ -1,0 +1,5 @@
+
+extern zend_class_entry *brisk_exception_controllernotfoundexception_ce;
+
+ZEPHIR_INIT_CLASS(Brisk_Exception_ControllerNotFoundException);
+
