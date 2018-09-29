@@ -82,7 +82,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, __construct) {
 		ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_timer_ce, "mark", &_0, 11, _1$$3);
 		zephir_check_temp_parameter(_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
-		ZEPHIR_CALL_METHOD(&instance$$3, this_ptr, "_getconnection", NULL, 103, dsn, option);
+		ZEPHIR_CALL_METHOD(&instance$$3, this_ptr, "_getconnection", NULL, 106, dsn, option);
 		zephir_check_call_status_or_jump(try_end_1);
 		ZEPHIR_INIT_NVAR(_1$$3);
 		ZVAL_STRING(_1$$3, "db_connect_end", ZEPHIR_TEMP_PARAM_COPY);
@@ -183,7 +183,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, query) {
 	ZEPHIR_CPY_WRT(data, _0);
 	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 63 TSRMLS_CC);
 	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 63 TSRMLS_CC);
-	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 104, _3, _4);
+	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	result = 1;
 	ZEPHIR_INIT_NVAR(_2);
@@ -252,7 +252,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchAll) {
 	ZEPHIR_CPY_WRT(data, _0);
 	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 88 TSRMLS_CC);
 	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 88 TSRMLS_CC);
-	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 104, _3, _4);
+	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_fetch_mode"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&result, smt, "fetchall", NULL, 0, _5);
@@ -321,7 +321,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchOne) {
 	ZEPHIR_CPY_WRT(data, _0);
 	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 112 TSRMLS_CC);
 	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 112 TSRMLS_CC);
-	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 104, _3, _4);
+	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_2);
 	ZVAL_LONG(_2, 0);
@@ -391,7 +391,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchRow) {
 	ZEPHIR_CPY_WRT(data, _0);
 	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 137 TSRMLS_CC);
 	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 137 TSRMLS_CC);
-	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 104, _3, _4);
+	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(func);
 	ZVAL_STRING(func, "fetch", 1);
@@ -691,7 +691,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _query) {
 		ZEPHIR_OBS_VAR(_14$$3);
 		zephir_read_property(&_14$$3, smt, SL("queryString"), PH_NOISY_CC);
 		zephir_array_fast_append(_13$$3, _14$$3);
-		ZEPHIR_CALL_CE_STATIC(&_15$$3, brisk_kernel_timer_ce, "lastused", &_16, 105);
+		ZEPHIR_CALL_CE_STATIC(&_15$$3, brisk_kernel_timer_ce, "lastused", &_16, 108);
 		zephir_check_call_status_or_jump(try_end_1);
 		ZEPHIR_SINIT_VAR(_17$$3);
 		ZVAL_STRING(&_17$$3, "%.4f", 0);
@@ -774,7 +774,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
 	}
 
 
-	ZEPHIR_CALL_CE_STATIC(&database, brisk_vendor_db_dbtoolkit_ce, "parseconnecturl", &_0, 106, dsn);
+	ZEPHIR_CALL_CE_STATIC(&database, brisk_vendor_db_dbtoolkit_ce, "parseconnecturl", &_0, 109, dsn);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_1);
 	zephir_array_fetch_string(&_2, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 286 TSRMLS_CC);

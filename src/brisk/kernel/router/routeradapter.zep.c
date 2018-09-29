@@ -38,9 +38,9 @@ PHP_METHOD(Brisk_Kernel_Router_RouterAdapter, getDriver) {
 	zval *_35, *_11$$3, *_15$$4, *_26$$5, *_32$$6;
 	zend_class_entry *_29;
 	zend_bool _21;
-	zval *_0 = NULL, *_2, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_6, *_7 = NULL, *driver = NULL, *_17 = NULL, *_18, *_19, *_20, *_22 = NULL, *instance = NULL, *_28 = NULL, *_8$$3, *_9$$3 = NULL, *_12$$3 = NULL, *_13$$4, *_14$$4 = NULL, *_16$$4 = NULL, *_24$$5, *_25$$5 = NULL, *_27$$5, *_30$$6, *_31$$6 = NULL, *_33$$6 = NULL;
+	zval *_0 = NULL, *_2, *_3 = NULL, *_4 = NULL, *_5 = NULL, *_6, *_7 = NULL, *driver = NULL, *instance = NULL, *_17 = NULL, *_18, *_19 = NULL, *_22 = NULL, *_28 = NULL, *_8$$3, *_9$$3 = NULL, *_12$$3 = NULL, *_13$$4, *_14$$4 = NULL, *_16$$4 = NULL, *_24$$5, *_25$$5 = NULL, *_27$$5, *_30$$6, *_31$$6 = NULL, *_33$$6 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_1 = NULL, *_10 = NULL, *_23 = NULL, *_34 = NULL;
+	zephir_fcall_cache_entry *_1 = NULL, *_10 = NULL, *_20 = NULL, *_23 = NULL, *_34 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -77,7 +77,7 @@ PHP_METHOD(Brisk_Kernel_Router_RouterAdapter, getDriver) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _8$$3, "__construct", NULL, 28, _9$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_8$$3, "brisk/Kernel/Router/RouterAdapter.zep", 22 TSRMLS_CC);
+		zephir_throw_exception_debug(_8$$3, "brisk/Kernel/Router/RouterAdapter.zep", 23 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	} else if (!zephir_is_true(_7)) {
@@ -95,7 +95,7 @@ PHP_METHOD(Brisk_Kernel_Router_RouterAdapter, getDriver) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _13$$4, "__construct", NULL, 28, _14$$4);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_13$$4, "brisk/Kernel/Router/RouterAdapter.zep", 24 TSRMLS_CC);
+		zephir_throw_exception_debug(_13$$4, "brisk/Kernel/Router/RouterAdapter.zep", 25 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -103,15 +103,16 @@ PHP_METHOD(Brisk_Kernel_Router_RouterAdapter, getDriver) {
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_18);
 	zephir_read_property(&_18, _17, SL("config"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(_19);
-	zephir_read_property(&_19, _18, SL("router"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(_20);
-	zephir_read_property(&_20, _19, SL("driver"), PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(&driver, _20, "getvalue", NULL, 0);
+	ZEPHIR_INIT_NVAR(_4);
+	ZVAL_STRING(_4, "router/driver", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_METHOD(&driver, _18, "get", NULL, 0, _4);
+	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	_21 = !(zephir_class_exists(driver, zephir_is_true(ZEPHIR_GLOBAL(global_false))  TSRMLS_CC));
+	ZEPHIR_CALL_CE_STATIC(&_19, brisk_kernel_toolkit_ce, "classdeclared", &_20, 61, driver);
+	zephir_check_call_status();
+	_21 = !zephir_is_true(_19);
 	if (_21) {
-		ZEPHIR_CALL_CE_STATIC(&_22, brisk_kernel_loader_ce, "findclass", &_23, 60, driver);
+		ZEPHIR_CALL_CE_STATIC(&_22, brisk_kernel_loader_ce, "findclass", &_23, 62, driver);
 		zephir_check_call_status();
 		_21 = !zephir_is_true(_22);
 	}
@@ -128,7 +129,7 @@ PHP_METHOD(Brisk_Kernel_Router_RouterAdapter, getDriver) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _24$$5, "__construct", NULL, 28, _25$$5);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_24$$5, "brisk/Kernel/Router/RouterAdapter.zep", 28 TSRMLS_CC);
+		zephir_throw_exception_debug(_24$$5, "brisk/Kernel/Router/RouterAdapter.zep", 30 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -156,7 +157,7 @@ PHP_METHOD(Brisk_Kernel_Router_RouterAdapter, getDriver) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _30$$6, "__construct", NULL, 28, _31$$6);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_30$$6, "brisk/Kernel/Router/RouterAdapter.zep", 33 TSRMLS_CC);
+		zephir_throw_exception_debug(_30$$6, "brisk/Kernel/Router/RouterAdapter.zep", 34 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}

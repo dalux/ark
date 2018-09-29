@@ -76,22 +76,22 @@ PHP_METHOD(Brisk_Vendor_Cache_File, __construct) {
 
 	zephir_update_property_this(getThis(), SL("_dir"), save_path TSRMLS_CC);
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-	ZEPHIR_CALL_FUNCTION(&_1, "is_dir", NULL, 85, _0);
+	ZEPHIR_CALL_FUNCTION(&_1, "is_dir", NULL, 87, _0);
 	zephir_check_call_status();
 	_2 = !zephir_is_true(_1);
 	if (_2) {
 		_5 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_toolkit_ce, "mkdir", &_4, 93, _5);
+		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_toolkit_ce, "mkdir", &_4, 96, _5);
 		zephir_check_call_status();
 		_2 = !zephir_is_true(_3);
 	}
 	_6 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-	ZEPHIR_CALL_FUNCTION(&_7, "is_readable", NULL, 94, _6);
+	ZEPHIR_CALL_FUNCTION(&_7, "is_readable", NULL, 97, _6);
 	zephir_check_call_status();
 	_8 = !zephir_is_true(_7);
 	if (!(_8)) {
 		_9 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-		ZEPHIR_CALL_FUNCTION(&_10, "is_writable", NULL, 95, _9);
+		ZEPHIR_CALL_FUNCTION(&_10, "is_writable", NULL, 98, _9);
 		zephir_check_call_status();
 		_8 = !zephir_is_true(_10);
 	}
@@ -192,7 +192,7 @@ PHP_METHOD(Brisk_Vendor_Cache_File, set) {
 	ZVAL_LONG(expire_time, (zephir_get_numberval(_0) + expire));
 	ZEPHIR_INIT_VAR(_1);
 	ZEPHIR_INIT_VAR(_2);
-	ZEPHIR_CALL_FUNCTION(&_3, "serialize", NULL, 92, value);
+	ZEPHIR_CALL_FUNCTION(&_3, "serialize", NULL, 95, value);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_4);
 	ZEPHIR_CONCAT_VV(_4, expire_time, _3);
@@ -243,14 +243,14 @@ PHP_METHOD(Brisk_Vendor_Cache_File, get) {
 		_0 = !zephir_is_true(_1);
 	}
 	if (_0) {
-		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 88, path);
+		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 90, path);
 		zephir_check_call_status();
 		RETURN_MM_NULL();
 	}
 	ZEPHIR_INIT_VAR(content);
 	zephir_file_get_contents(content, path TSRMLS_CC);
 	if (ZEPHIR_IS_FALSE_IDENTICAL(content)) {
-		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 88, path);
+		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 90, path);
 		zephir_check_call_status();
 		RETURN_MM_NULL();
 	}
@@ -265,7 +265,7 @@ PHP_METHOD(Brisk_Vendor_Cache_File, get) {
 	ZEPHIR_INIT_VAR(_6);
 	zephir_time(_6);
 	if (ZEPHIR_LT(timeflag, _6)) {
-		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 88, path);
+		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 90, path);
 		zephir_check_call_status();
 		RETURN_MM_NULL();
 	}
@@ -273,7 +273,7 @@ PHP_METHOD(Brisk_Vendor_Cache_File, get) {
 	ZVAL_LONG(&_7, 10);
 	ZEPHIR_INIT_VAR(_8);
 	zephir_substr(_8, content, 10 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
-	ZEPHIR_CALL_FUNCTION(&tmp, "unserialize", NULL, 96, _8);
+	ZEPHIR_CALL_FUNCTION(&tmp, "unserialize", NULL, 99, _8);
 	zephir_check_call_status();
 	if (!ZEPHIR_IS_FALSE_IDENTICAL(tmp)) {
 		RETURN_CCTOR(tmp);
@@ -312,7 +312,7 @@ PHP_METHOD(Brisk_Vendor_Cache_File, delete) {
 	ZEPHIR_CALL_METHOD(&path, this_ptr, "getcachepath", NULL, 0, name);
 	zephir_check_call_status();
 	if ((zephir_file_exists(path TSRMLS_CC) == SUCCESS)) {
-		ZEPHIR_CALL_FUNCTION(&deleted$$3, "unlink", NULL, 88, path);
+		ZEPHIR_CALL_FUNCTION(&deleted$$3, "unlink", NULL, 90, path);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(_0$$3);
 		if (zephir_is_true(deleted$$3)) {
@@ -479,7 +479,7 @@ PHP_METHOD(Brisk_Vendor_Cache_File, getCachePath) {
 	if (_22) {
 		ZEPHIR_CALL_FUNCTION(&_25, "dirname", &_21, 16, path);
 		zephir_check_call_status();
-		ZEPHIR_CALL_CE_STATIC(&_23, brisk_kernel_toolkit_ce, "mkdir", &_24, 93, _25);
+		ZEPHIR_CALL_CE_STATIC(&_23, brisk_kernel_toolkit_ce, "mkdir", &_24, 96, _25);
 		zephir_check_call_status();
 		_22 = !zephir_is_true(_23);
 	}

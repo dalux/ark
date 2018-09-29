@@ -74,7 +74,7 @@ PHP_METHOD(Brisk_Vendor_Cache_Memcached, __construct) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "memcached", 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "extension_loaded", NULL, 97, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "extension_loaded", NULL, 100, &_0);
 	zephir_check_call_status();
 	if (!zephir_is_true(_1)) {
 		ZEPHIR_INIT_VAR(_2$$3);
@@ -115,7 +115,7 @@ PHP_METHOD(Brisk_Vendor_Cache_Memcached, __construct) {
 	) {
 		ZEPHIR_GET_HMKEY(_8, _10, _9);
 		ZEPHIR_GET_HVALUE(v, _11);
-		ZEPHIR_CALL_FUNCTION(&url, "parse_url", &_12, 70, v);
+		ZEPHIR_CALL_FUNCTION(&url, "parse_url", &_12, 72, v);
 		zephir_check_call_status();
 		zephir_array_fetch_string(&_13$$6, url, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Cache/Memcached.zep", 33 TSRMLS_CC);
 		_14$$6 = !ZEPHIR_IS_STRING(_13$$6, "");

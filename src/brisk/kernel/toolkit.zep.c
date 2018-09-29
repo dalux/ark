@@ -22,6 +22,7 @@
 #include "kernel/operators.h"
 #include "kernel/file.h"
 #include "kernel/concat.h"
+#include "kernel/require.h"
 
 
 ZEPHIR_INIT_CLASS(Brisk_Kernel_Toolkit) {
@@ -53,7 +54,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, sprintr) {
 	params = params_param;
 
 
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 78);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 80);
 	zephir_check_call_status();
 	zephir_is_iterable(params, &_1, &_0, 0, 0, "brisk/Kernel/Toolkit.zep", 22);
 	for (
@@ -61,13 +62,13 @@ PHP_METHOD(Brisk_Kernel_Toolkit, sprintr) {
 	  ; zend_hash_move_forward_ex(_1, &_0)
 	) {
 		ZEPHIR_GET_HVALUE(arg, _2);
-		ZEPHIR_CALL_FUNCTION(NULL, "print_r", &_3, 79, arg);
+		ZEPHIR_CALL_FUNCTION(NULL, "print_r", &_3, 81, arg);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(_4$$3);
 		ZEPHIR_GET_CONSTANT(_4$$3, "PHP_EOL");
 		zend_print_zval(_4$$3, 0);
 	}
-	ZEPHIR_CALL_FUNCTION(&_5, "ob_get_clean", NULL, 80);
+	ZEPHIR_CALL_FUNCTION(&_5, "ob_get_clean", NULL, 82);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_6);
 	ZVAL_STRING(_6, "/\\]\\=\\>\\n(\\s+)/m", ZEPHIR_TEMP_PARAM_COPY);
@@ -144,7 +145,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, svardump) {
 	params = params_param;
 
 
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 78);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 80);
 	zephir_check_call_status();
 	zephir_is_iterable(params, &_1, &_0, 0, 0, "brisk/Kernel/Toolkit.zep", 50);
 	for (
@@ -154,7 +155,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, svardump) {
 		ZEPHIR_GET_HVALUE(arg, _2);
 		zephir_var_dump(&arg TSRMLS_CC);
 	}
-	ZEPHIR_CALL_FUNCTION(&_3, "ob_get_clean", NULL, 80);
+	ZEPHIR_CALL_FUNCTION(&_3, "ob_get_clean", NULL, 82);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_4);
 	ZVAL_STRING(_4, "/\\]\\=\\>\\n(\\s+)/m", ZEPHIR_TEMP_PARAM_COPY);
@@ -272,7 +273,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, mkDir) {
 		zephir_array_append(&dirs, dir, PH_SEPARATE, "brisk/Kernel/Toolkit.zep", 80);
 	}
 	if (zephir_fast_count_int(dirs TSRMLS_CC) > 1) {
-		ZEPHIR_CALL_FUNCTION(&_7$$5, "array_reverse", NULL, 81, dirs);
+		ZEPHIR_CALL_FUNCTION(&_7$$5, "array_reverse", NULL, 83, dirs);
 		zephir_check_call_status();
 		ZEPHIR_CPY_WRT(dirs, _7$$5);
 		ZEPHIR_INIT_VAR(_8$$5);
@@ -292,7 +293,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, mkDir) {
 			if (_14$$6) {
 				ZEPHIR_SINIT_NVAR(_15$$6);
 				ZVAL_LONG(&_15$$6, 0777);
-				ZEPHIR_CALL_FUNCTION(&_16$$6, "mkdir", &_17, 82, v$$5, &_15$$6);
+				ZEPHIR_CALL_FUNCTION(&_16$$6, "mkdir", &_17, 84, v$$5, &_15$$6);
 				zephir_check_call_status();
 				_14$$6 = !zephir_is_true(_16$$6);
 			}
@@ -345,7 +346,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, copyDir) {
 	}
 
 
-	ZEPHIR_CALL_FUNCTION(&handle, "opendir", NULL, 83, src);
+	ZEPHIR_CALL_FUNCTION(&handle, "opendir", NULL, 85, src);
 	zephir_check_call_status();
 	ZEPHIR_CALL_SELF(NULL, "mkdir", NULL, 0, dst);
 	zephir_check_call_status();
@@ -353,7 +354,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, copyDir) {
 		if (!(1)) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&file, "readdir", &_0, 84, handle);
+		ZEPHIR_CALL_FUNCTION(&file, "readdir", &_0, 86, handle);
 		zephir_check_call_status();
 		if (ZEPHIR_IS_FALSE(file)) {
 			break;
@@ -365,7 +366,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, copyDir) {
 		if (_1$$3) {
 			ZEPHIR_INIT_LNVAR(_2$$5);
 			ZEPHIR_CONCAT_VSV(_2$$5, src, "/", file);
-			ZEPHIR_CALL_FUNCTION(&_3$$5, "is_dir", &_4, 85, _2$$5);
+			ZEPHIR_CALL_FUNCTION(&_3$$5, "is_dir", &_4, 87, _2$$5);
 			zephir_check_call_status();
 			if (zephir_is_true(_3$$5)) {
 				ZEPHIR_INIT_LNVAR(_6$$6);
@@ -379,12 +380,12 @@ PHP_METHOD(Brisk_Kernel_Toolkit, copyDir) {
 				ZEPHIR_CONCAT_VSV(_8$$7, src, "/", file);
 				ZEPHIR_INIT_LNVAR(_9$$7);
 				ZEPHIR_CONCAT_VSV(_9$$7, dst, "/", file);
-				ZEPHIR_CALL_FUNCTION(NULL, "copy", &_10, 86, _8$$7, _9$$7);
+				ZEPHIR_CALL_FUNCTION(NULL, "copy", &_10, 88, _8$$7, _9$$7);
 				zephir_check_call_status();
 			}
 		}
 	}
-	ZEPHIR_CALL_FUNCTION(NULL, "closedir", NULL, 87, handle);
+	ZEPHIR_CALL_FUNCTION(NULL, "closedir", NULL, 89, handle);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -419,16 +420,16 @@ PHP_METHOD(Brisk_Kernel_Toolkit, removeDir) {
 	}
 
 
-	ZEPHIR_CALL_FUNCTION(&_0, "is_dir", &_1, 85, dir_name);
+	ZEPHIR_CALL_FUNCTION(&_0, "is_dir", &_1, 87, dir_name);
 	zephir_check_call_status();
 	if (zephir_is_true(_0)) {
-		ZEPHIR_CALL_FUNCTION(&handle$$3, "opendir", NULL, 83, dir_name);
+		ZEPHIR_CALL_FUNCTION(&handle$$3, "opendir", NULL, 85, dir_name);
 		zephir_check_call_status();
 		while (1) {
 			if (!(1)) {
 				break;
 			}
-			ZEPHIR_CALL_FUNCTION(&file$$3, "readdir", &_2, 84, handle$$3);
+			ZEPHIR_CALL_FUNCTION(&file$$3, "readdir", &_2, 86, handle$$3);
 			zephir_check_call_status();
 			if (ZEPHIR_IS_FALSE(file$$3)) {
 				break;
@@ -444,24 +445,128 @@ PHP_METHOD(Brisk_Kernel_Toolkit, removeDir) {
 			if (!(zephir_fast_in_array(file$$3, _3$$4 TSRMLS_CC))) {
 				ZEPHIR_INIT_NVAR(dir$$6);
 				ZEPHIR_CONCAT_VSV(dir$$6, dir_name, "/", file$$3);
-				ZEPHIR_CALL_FUNCTION(&_5$$6, "is_dir", &_1, 85, dir$$6);
+				ZEPHIR_CALL_FUNCTION(&_5$$6, "is_dir", &_1, 87, dir$$6);
 				zephir_check_call_status();
 				if (zephir_is_true(_5$$6)) {
 					ZEPHIR_CALL_SELF(NULL, "removedir", &_6, 0, dir$$6);
 					zephir_check_call_status();
 				} else {
-					ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_7, 88, dir$$6);
+					ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_7, 90, dir$$6);
 					zephir_check_call_status();
 				}
 			}
 		}
-		ZEPHIR_CALL_FUNCTION(NULL, "closedir", NULL, 87, handle$$3);
+		ZEPHIR_CALL_FUNCTION(NULL, "closedir", NULL, 89, handle$$3);
 		zephir_check_call_status();
-		ZEPHIR_RETURN_CALL_FUNCTION("rmdir", NULL, 89, dir_name);
+		ZEPHIR_RETURN_CALL_FUNCTION("rmdir", NULL, 91, dir_name);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
 	ZEPHIR_MM_RESTORE();
+
+}
+
+/**
+ * Once include file
+ *
+ * @param string file
+ * @return null
+ */
+PHP_METHOD(Brisk_Kernel_Toolkit, includeOnce) {
+
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *file_param = NULL, *_0 = NULL;
+	zval *file = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &file_param);
+
+	if (UNEXPECTED(Z_TYPE_P(file_param) != IS_STRING && Z_TYPE_P(file_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+	if (EXPECTED(Z_TYPE_P(file_param) == IS_STRING)) {
+		zephir_get_strval(file, file_param);
+	} else {
+		ZEPHIR_INIT_VAR(file);
+		ZVAL_EMPTY_STRING(file);
+	}
+
+
+	ZEPHIR_CALL_SELF(&_0, "fileincluded", NULL, 0, file);
+	zephir_check_call_status();
+	if (!zephir_is_true(_0)) {
+		if (zephir_require_zval(file TSRMLS_CC) == FAILURE) {
+			RETURN_MM_NULL();
+		}
+	}
+	ZEPHIR_MM_RESTORE();
+
+}
+
+/**
+ * Check to see if the classname declared
+ *
+ * @param string classname
+ * @return null
+ */
+PHP_METHOD(Brisk_Kernel_Toolkit, classDeclared) {
+
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *classname_param = NULL, *declared = NULL;
+	zval *classname = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &classname_param);
+
+	if (UNEXPECTED(Z_TYPE_P(classname_param) != IS_STRING && Z_TYPE_P(classname_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'classname' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+	if (EXPECTED(Z_TYPE_P(classname_param) == IS_STRING)) {
+		zephir_get_strval(classname, classname_param);
+	} else {
+		ZEPHIR_INIT_VAR(classname);
+		ZVAL_EMPTY_STRING(classname);
+	}
+
+
+	ZEPHIR_CALL_FUNCTION(&declared, "get_declared_classes", NULL, 92);
+	zephir_check_call_status();
+	RETURN_MM_BOOL(zephir_fast_in_array(classname, declared TSRMLS_CC));
+
+}
+
+/**
+ * Check to see if the file included
+ *
+ * @param string file
+ * @return null
+ */
+PHP_METHOD(Brisk_Kernel_Toolkit, fileIncluded) {
+
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *file_param = NULL, *included = NULL;
+	zval *file = NULL;
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &file_param);
+
+	if (UNEXPECTED(Z_TYPE_P(file_param) != IS_STRING && Z_TYPE_P(file_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be a string") TSRMLS_CC);
+		RETURN_MM_NULL();
+	}
+	if (EXPECTED(Z_TYPE_P(file_param) == IS_STRING)) {
+		zephir_get_strval(file, file_param);
+	} else {
+		ZEPHIR_INIT_VAR(file);
+		ZVAL_EMPTY_STRING(file);
+	}
+
+
+	ZEPHIR_CALL_FUNCTION(&included, "get_included_files", NULL, 42);
+	zephir_check_call_status();
+	RETURN_MM_BOOL(zephir_fast_in_array(file, included TSRMLS_CC));
 
 }
 

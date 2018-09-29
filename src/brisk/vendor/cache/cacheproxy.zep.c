@@ -131,7 +131,7 @@ PHP_METHOD(Brisk_Vendor_Cache_CacheProxy, doProxy) {
 	}
 	ZEPHIR_CPY_WRT(key, name);
 	if (ZEPHIR_IS_STRING(name, "")) {
-		ZEPHIR_CALL_METHOD(&key, this_ptr, "_name", NULL, 91, target, method, args);
+		ZEPHIR_CALL_METHOD(&key, this_ptr, "_name", NULL, 94, target, method, args);
 		zephir_check_call_status();
 	}
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_cache"), PH_NOISY_CC);
@@ -193,7 +193,7 @@ PHP_METHOD(Brisk_Vendor_Cache_CacheProxy, _name) {
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_get_class(_0, target, 0 TSRMLS_CC);
-	ZEPHIR_CALL_FUNCTION(&_1, "serialize", NULL, 92, args);
+	ZEPHIR_CALL_FUNCTION(&_1, "serialize", NULL, 95, args);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_2);
 	ZEPHIR_CONCAT_VSVSV(_2, _0, ".", func, ".", _1);

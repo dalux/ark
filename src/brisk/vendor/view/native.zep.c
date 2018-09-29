@@ -215,7 +215,7 @@ PHP_METHOD(Brisk_Vendor_View_Native, display) {
 		object_init_ex(_7$$4, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_10$$4);
 		zephir_create_array(_10$$4, 1, 0 TSRMLS_CC);
-		ZEPHIR_CALL_CE_STATIC(&_11$$4, brisk_kernel_loader_ce, "reducepath", &_12, 107, template);
+		ZEPHIR_CALL_CE_STATIC(&_11$$4, brisk_kernel_loader_ce, "reducepath", &_12, 110, template);
 		zephir_check_call_status();
 		zephir_array_fast_append(_10$$4, _11$$4);
 		ZEPHIR_INIT_VAR(_13$$4);
@@ -243,15 +243,15 @@ PHP_METHOD(Brisk_Vendor_View_Native, display) {
 	ZEPHIR_INIT_NVAR(_16);
 	ZVAL_LONG(_16, 256);
 	ZEPHIR_MAKE_REF(_17);
-	ZEPHIR_CALL_FUNCTION(NULL, "extract", NULL, 108, _17, _16);
+	ZEPHIR_CALL_FUNCTION(NULL, "extract", NULL, 111, _17, _16);
 	ZEPHIR_UNREF(_17);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 78);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 80);
 	zephir_check_call_status();
 	if (zephir_require_zval(template TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	ZEPHIR_CALL_FUNCTION(&_14, "ob_get_clean", NULL, 80);
+	ZEPHIR_CALL_FUNCTION(&_14, "ob_get_clean", NULL, 82);
 	zephir_check_call_status();
 	zephir_array_update_string(&data, SL("content"), &_14, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_NVAR(_16);
@@ -337,7 +337,7 @@ PHP_METHOD(Brisk_Vendor_View_Native, import) {
 		object_init_ex(_6$$4, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_9$$4);
 		zephir_create_array(_9$$4, 1, 0 TSRMLS_CC);
-		ZEPHIR_CALL_CE_STATIC(&_10$$4, brisk_kernel_loader_ce, "reducepath", &_11, 107, template);
+		ZEPHIR_CALL_CE_STATIC(&_10$$4, brisk_kernel_loader_ce, "reducepath", &_11, 110, template);
 		zephir_check_call_status();
 		zephir_array_fast_append(_9$$4, _10$$4);
 		ZEPHIR_INIT_VAR(_12$$4);
@@ -355,21 +355,21 @@ PHP_METHOD(Brisk_Vendor_View_Native, import) {
 	ZEPHIR_INIT_VAR(_14);
 	ZVAL_LONG(_14, 256);
 	ZEPHIR_MAKE_REF(_13);
-	ZEPHIR_CALL_FUNCTION(NULL, "extract", &_15, 108, _13, _14);
+	ZEPHIR_CALL_FUNCTION(NULL, "extract", &_15, 111, _13, _14);
 	ZEPHIR_UNREF(_13);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_14);
 	ZVAL_LONG(_14, 1);
 	ZEPHIR_MAKE_REF(params);
-	ZEPHIR_CALL_FUNCTION(NULL, "extract", &_15, 108, params, _14);
+	ZEPHIR_CALL_FUNCTION(NULL, "extract", &_15, 111, params, _14);
 	ZEPHIR_UNREF(params);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 78);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 80);
 	zephir_check_call_status();
 	if (zephir_require_zval(template TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	ZEPHIR_CALL_FUNCTION(&content, "ob_get_clean", NULL, 80);
+	ZEPHIR_CALL_FUNCTION(&content, "ob_get_clean", NULL, 82);
 	zephir_check_call_status();
 	if (output) {
 		zend_print_zval(content, 0);

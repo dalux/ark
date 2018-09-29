@@ -131,7 +131,7 @@ PHP_METHOD(Brisk_Kernel_Request, getInstance) {
 	} else if (Z_TYPE_P(_1) == IS_NULL) {
 		ZEPHIR_INIT_VAR(_6$$4);
 		object_init_ex(_6$$4, brisk_kernel_request_ce);
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 52);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 53);
 		zephir_check_call_status();
 		zephir_update_static_property_ce(brisk_kernel_request_ce, SL("_instance"), &_6$$4 TSRMLS_CC);
 	}
@@ -292,7 +292,7 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 		zephir_array_fetch_string(&_8$$9, _SERVER, SL("REMOTE_ADDR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 126 TSRMLS_CC);
 		zephir_array_append(&ips, _8$$9, PH_SEPARATE, "brisk/Kernel/Request.zep", 126);
 	}
-	ZEPHIR_CALL_FUNCTION(&_9, "array_filter", NULL, 53, ips);
+	ZEPHIR_CALL_FUNCTION(&_9, "array_filter", NULL, 54, ips);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(ips, _9);
 	while (1) {
@@ -303,7 +303,7 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 		ZEPHIR_CALL_FUNCTION(&ip, "array_shift", &_10, 7, ips);
 		ZEPHIR_UNREF(ips);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_11$$10, "ip2long", &_12, 54, ip);
+		ZEPHIR_CALL_FUNCTION(&_11$$10, "ip2long", &_12, 55, ip);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(_11$$10)) {
 			break;
@@ -311,7 +311,7 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 	}
 	ZEPHIR_INIT_VAR(_13);
 	if (convert) {
-		ZEPHIR_CALL_FUNCTION(&_9, "ip2long", &_12, 54, ip);
+		ZEPHIR_CALL_FUNCTION(&_9, "ip2long", &_12, 55, ip);
 		zephir_check_call_status();
 		ZEPHIR_SINIT_VAR(_14);
 		ZVAL_STRING(&_14, "%u", 0);

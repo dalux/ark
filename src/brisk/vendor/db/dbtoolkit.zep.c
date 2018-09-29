@@ -61,7 +61,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbToolkit, parseConnectUrl) {
 	}
 
 
-	ZEPHIR_CALL_FUNCTION(&parsed, "parse_url", NULL, 70, url);
+	ZEPHIR_CALL_FUNCTION(&parsed, "parse_url", NULL, 72, url);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_FALSE(parsed)) {
 		ZEPHIR_INIT_VAR(_0$$3);

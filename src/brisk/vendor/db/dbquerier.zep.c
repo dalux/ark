@@ -135,7 +135,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, forTable) {
 
 
 	object_init_ex(return_value, brisk_vendor_db_dbquerier_ce);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 98, tb);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 101, tb);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -231,7 +231,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, insert) {
 	_2 = zephir_fetch_static_property_ce(brisk_vendor_db_dbquerier_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_3, _2, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_vendor_querier_querieradapter_ce, "getinsertquerier", &_1, 99, _3);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_vendor_querier_querieradapter_ce, "getinsertquerier", &_1, 102, _3);
 	zephir_check_call_status();
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&insert, _0, "into", NULL, 0, _4, data);
@@ -280,7 +280,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, update) {
 	_2 = zephir_fetch_static_property_ce(brisk_vendor_db_dbquerier_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_3, _2, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_vendor_querier_querieradapter_ce, "getupdatequerier", &_1, 100, _3);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_vendor_querier_querieradapter_ce, "getupdatequerier", &_1, 103, _3);
 	zephir_check_call_status();
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&update, _0, "set", NULL, 0, _4, data);
@@ -411,7 +411,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, delete) {
 	_2 = zephir_fetch_static_property_ce(brisk_vendor_db_dbquerier_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_3, _2, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_vendor_querier_querieradapter_ce, "getdeletequerier", &_1, 101, _3);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_vendor_querier_querieradapter_ce, "getdeletequerier", &_1, 104, _3);
 	zephir_check_call_status();
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&delete, _0, "from", NULL, 0, _4);
@@ -556,7 +556,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, fetchRow) {
 	_3 = zephir_fetch_static_property_ce(brisk_vendor_db_dbquerier_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_4, _3, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_vendor_querier_querieradapter_ce, "getselectquerier", &_2, 102, _4);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_vendor_querier_querieradapter_ce, "getselectquerier", &_2, 105, _4);
 	zephir_check_call_status();
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&select, _1, "from", NULL, 0, _5, fields);
@@ -724,7 +724,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, fetchOne) {
 	_3 = zephir_fetch_static_property_ce(brisk_vendor_db_dbquerier_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_4, _3, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_vendor_querier_querieradapter_ce, "getselectquerier", &_2, 102, _4);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_vendor_querier_querieradapter_ce, "getselectquerier", &_2, 105, _4);
 	zephir_check_call_status();
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&select, _1, "from", NULL, 0, _5, fields);
@@ -919,7 +919,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbQuerier, fetchAll) {
 	_3 = zephir_fetch_static_property_ce(brisk_vendor_db_dbquerier_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_4, _3, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_vendor_querier_querieradapter_ce, "getselectquerier", &_2, 102, _4);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_vendor_querier_querieradapter_ce, "getselectquerier", &_2, 105, _4);
 	zephir_check_call_status();
 	_6 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&_5, _1, "from", NULL, 0, _6, fields);

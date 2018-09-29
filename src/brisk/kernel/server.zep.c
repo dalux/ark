@@ -45,7 +45,7 @@ PHP_METHOD(Brisk_Kernel_Server, isCli) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_FUNCTION(&_0, "php_sapi_name", NULL, 69);
+	ZEPHIR_CALL_FUNCTION(&_0, "php_sapi_name", NULL, 71);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "cli"));
 
@@ -209,7 +209,7 @@ PHP_METHOD(Brisk_Kernel_Server, initCli) {
 		ZEPHIR_INIT_NVAR(val);
 		zephir_substr(val, arg, zephir_get_intval(&_10$$3), 0, ZEPHIR_SUBSTR_NO_LENGTH);
 		if (ZEPHIR_IS_STRING(key, "url")) {
-			ZEPHIR_CALL_FUNCTION(&info, "parse_url", &_11, 70, val);
+			ZEPHIR_CALL_FUNCTION(&info, "parse_url", &_11, 72, val);
 			zephir_check_call_status();
 			zephir_array_fetch_string(&_12$$4, info, SL("host"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 72 TSRMLS_CC);
 			zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &_12$$4 TSRMLS_CC, SL("s"), 2, SL("HTTP_HOST"));
@@ -231,7 +231,7 @@ PHP_METHOD(Brisk_Kernel_Server, initCli) {
 			zephir_array_update_zval(&data, key, &val, PH_COPY | PH_SEPARATE);
 		}
 	}
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_16, 58, data);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_16, 59, data);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

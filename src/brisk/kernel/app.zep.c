@@ -549,7 +549,7 @@ PHP_METHOD(Brisk_Kernel_App, start) {
 		zephir_get_class(_38$$8, _40$$8, 0 TSRMLS_CC);
 		zephir_array_fast_append(_37$$8, _38$$8);
 		ZEPHIR_INIT_NVAR(_38$$8);
-		ZVAL_STRING(_38$$8, "\\Brisk\\Contract\\IRouter", 1);
+		ZVAL_STRING(_38$$8, "\\Brisk\\Kernel\\Router\\RouterFather", 1);
 		zephir_array_fast_append(_37$$8, _38$$8);
 		ZEPHIR_INIT_NVAR(_38$$8);
 		ZVAL_STRING(_38$$8, "router.driver_implement_error", ZEPHIR_TEMP_PARAM_COPY);

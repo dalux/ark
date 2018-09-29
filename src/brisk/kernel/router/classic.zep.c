@@ -207,7 +207,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, getInterceptors) {
 	ZEPHIR_INIT_VAR(result);
 	array_init(result);
 	_2 = zephir_fetch_static_property_ce(brisk_kernel_router_classic_ce, SL("_interceptors") TSRMLS_CC);
-	zephir_is_iterable(_2, &_4, &_3, 0, 0, "brisk/Kernel/Router/Classic.zep", 99);
+	zephir_is_iterable(_2, &_4, &_3, 0, 0, "brisk/Kernel/Router/Classic.zep", 100);
 	for (
 	  ; zend_hash_get_current_data_ex(_4, (void**) &_5, &_3) == SUCCESS
 	  ; zend_hash_move_forward_ex(_4, &_3)
@@ -234,7 +234,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, getInterceptors) {
 		ZVAL_STRING(_8$$5, "todoUKSort", 1);
 		zephir_array_fast_append(_7$$5, _8$$5);
 		ZEPHIR_MAKE_REF(result);
-		ZEPHIR_CALL_FUNCTION(NULL, "uksort", NULL, 55, result, _7$$5);
+		ZEPHIR_CALL_FUNCTION(NULL, "uksort", NULL, 56, result, _7$$5);
 		ZEPHIR_UNREF(result);
 		zephir_check_call_status();
 	}
@@ -249,11 +249,10 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, getInterceptors) {
  */
 PHP_METHOD(Brisk_Kernel_Router_Classic, ready) {
 
-	zval *_8$$3, *_38$$6;
-	zend_bool _33;
-	zval *_0 = NULL, *_2, *_3 = NULL, *_4 = NULL, *config = NULL, *base_namespace = NULL, *_10 = NULL, *_11, *_12, *_13 = NULL, *_17, *_18, _19, *uri = NULL, *result = NULL, *params = NULL, *_21, *_22, *_23, *ns_space = NULL, *_24, *_28, *_29, *_32, *_34 = NULL, *_5$$3, *_6$$3 = NULL, *_9$$3 = NULL, *_14$$4 = NULL, *_15$$4, *_16$$4, *_25$$5, *_26$$5, *_27$$5, *_36$$6, *_37$$6 = NULL, *_39$$6;
+	zval *_8$$3;
+	zval *_0 = NULL, *_2, *_3 = NULL, *_4 = NULL, *base_namespace = NULL, *_10 = NULL, *_11, *_12 = NULL, _13, *uri = NULL, *result = NULL, *params = NULL, *_15, *_16, *_17, *ns_space = NULL, *_18, *_22, *_23, *_26, *_5$$3, *_6$$3 = NULL, *_9$$3 = NULL, *_19$$4, *_20$$4, *_21$$4;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_1 = NULL, *_7 = NULL, *_20 = NULL, *_30 = NULL, *_31 = NULL, *_35 = NULL;
+	zephir_fcall_cache_entry *_1 = NULL, *_7 = NULL, *_14 = NULL, *_24 = NULL, *_25 = NULL;
 
 	ZEPHIR_MM_GROW();
 
@@ -281,97 +280,61 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, ready) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 28, _6$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_5$$3, "brisk/Kernel/Router/Classic.zep", 113 TSRMLS_CC);
+		zephir_throw_exception_debug(_5$$3, "brisk/Kernel/Router/Classic.zep", 114 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_INIT_VAR(config);
-	array_init(config);
 	ZEPHIR_CALL_CE_STATIC(&_10, brisk_kernel_app_ce, "getinstance", &_1, 46);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_11);
 	zephir_read_property(&_11, _10, SL("config"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(_12);
-	zephir_read_property(&_12, _11, SL("router"), PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(&_13, _12, "hasvalue", NULL, 0);
-	zephir_check_call_status();
-	if (zephir_is_true(_13)) {
-		ZEPHIR_CALL_CE_STATIC(&_14$$4, brisk_kernel_app_ce, "getinstance", &_1, 46);
-		zephir_check_call_status();
-		ZEPHIR_OBS_VAR(_15$$4);
-		zephir_read_property(&_15$$4, _14$$4, SL("config"), PH_NOISY_CC);
-		ZEPHIR_OBS_VAR(_16$$4);
-		zephir_read_property(&_16$$4, _15$$4, SL("router"), PH_NOISY_CC);
-		ZEPHIR_CALL_METHOD(&config, _16$$4, "getvalue", NULL, 0);
-		zephir_check_call_status();
-	}
-	zephir_array_fetch_string(&_17, config, SL("options"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 120 TSRMLS_CC);
-	zephir_array_fetch_string(&_18, _17, SL("base_namespace"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 120 TSRMLS_CC);
-	ZEPHIR_SINIT_VAR(_19);
-	ZVAL_STRING(&_19, "\\", 0);
-	ZEPHIR_INIT_VAR(base_namespace);
-	zephir_fast_trim(base_namespace, _18, &_19, ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(_4);
-	ZVAL_STRING(_4, "REQUEST_URI", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&uri, brisk_kernel_server_ce, "getitem", &_20, 56, _4);
+	ZVAL_STRING(_4, "router/options/base_namespace", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_METHOD(&_12, _11, "get", NULL, 0, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&result, this_ptr, "_parseuri", NULL, 57, uri);
+	ZEPHIR_SINIT_VAR(_13);
+	ZVAL_STRING(&_13, "\\", 0);
+	ZEPHIR_INIT_VAR(base_namespace);
+	zephir_fast_trim(base_namespace, _12, &_13, ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	ZEPHIR_INIT_NVAR(_4);
+	ZVAL_STRING(_4, "REQUEST_URI", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_CE_STATIC(&uri, brisk_kernel_server_ce, "getitem", &_14, 57, _4);
+	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	zephir_array_fetch_string(&_21, result, SL("module"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 126 TSRMLS_CC);
-	zephir_update_property_this(getThis(), SL("_module"), _21 TSRMLS_CC);
-	zephir_array_fetch_string(&_22, result, SL("controller"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 127 TSRMLS_CC);
-	zephir_update_property_this(getThis(), SL("_controller"), _22 TSRMLS_CC);
-	zephir_array_fetch_string(&_23, result, SL("action"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 128 TSRMLS_CC);
-	zephir_update_property_this(getThis(), SL("_action"), _23 TSRMLS_CC);
+	ZEPHIR_CALL_METHOD(&result, this_ptr, "_parseuri", NULL, 58, uri);
+	zephir_check_call_status();
+	zephir_array_fetch_string(&_15, result, SL("module"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 123 TSRMLS_CC);
+	zephir_update_property_this(getThis(), SL("_module"), _15 TSRMLS_CC);
+	zephir_array_fetch_string(&_16, result, SL("controller"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 124 TSRMLS_CC);
+	zephir_update_property_this(getThis(), SL("_controller"), _16 TSRMLS_CC);
+	zephir_array_fetch_string(&_17, result, SL("action"), PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 125 TSRMLS_CC);
+	zephir_update_property_this(getThis(), SL("_action"), _17 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(params);
-	zephir_array_fetch_string(&params, result, SL("params"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 129 TSRMLS_CC);
+	zephir_array_fetch_string(&params, result, SL("params"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 126 TSRMLS_CC);
 	ZEPHIR_CPY_WRT(ns_space, base_namespace);
-	_24 = zephir_fetch_nproperty_this(this_ptr, SL("_module"), PH_NOISY_CC);
-	if (!ZEPHIR_IS_STRING(_24, "")) {
-		ZEPHIR_INIT_VAR(_25$$5);
-		_26$$5 = zephir_fetch_nproperty_this(this_ptr, SL("_module"), PH_NOISY_CC);
-		zephir_ucfirst(_25$$5, _26$$5);
-		ZEPHIR_INIT_VAR(_27$$5);
-		ZEPHIR_CONCAT_VSV(_27$$5, ns_space, "\\", _25$$5);
-		ZEPHIR_CPY_WRT(ns_space, _27$$5);
+	_18 = zephir_fetch_nproperty_this(this_ptr, SL("_module"), PH_NOISY_CC);
+	if (!ZEPHIR_IS_STRING(_18, "")) {
+		ZEPHIR_INIT_VAR(_19$$4);
+		_20$$4 = zephir_fetch_nproperty_this(this_ptr, SL("_module"), PH_NOISY_CC);
+		zephir_ucfirst(_19$$4, _20$$4);
+		ZEPHIR_INIT_VAR(_21$$4);
+		ZEPHIR_CONCAT_VSV(_21$$4, ns_space, "\\", _19$$4);
+		ZEPHIR_CPY_WRT(ns_space, _21$$4);
 	}
 	ZEPHIR_INIT_NVAR(_4);
-	_28 = zephir_fetch_nproperty_this(this_ptr, SL("_controller"), PH_NOISY_CC);
-	zephir_ucfirst(_4, _28);
-	ZEPHIR_INIT_VAR(_29);
-	ZEPHIR_CONCAT_VSV(_29, ns_space, "\\", _4);
-	ZEPHIR_CPY_WRT(ns_space, _29);
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_30, 58, params);
-	zephir_check_call_status();
-	ZEPHIR_INIT_VAR(_32);
-	ZVAL_BOOL(_32, 1);
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setready", &_31, 59, _32);
-	zephir_check_call_status();
-	_33 = !(zephir_class_exists(ns_space, zephir_is_true(ZEPHIR_GLOBAL(global_false))  TSRMLS_CC));
-	if (_33) {
-		ZEPHIR_CALL_CE_STATIC(&_34, brisk_kernel_loader_ce, "findclass", &_35, 60, ns_space);
-		zephir_check_call_status();
-		_33 = !zephir_is_true(_34);
-	}
-	if (_33) {
-		ZEPHIR_INIT_VAR(_36$$6);
-		object_init_ex(_36$$6, brisk_exception_controllernotfoundexception_ce);
-		ZEPHIR_INIT_VAR(_38$$6);
-		zephir_create_array(_38$$6, 1, 0 TSRMLS_CC);
-		zephir_array_fast_append(_38$$6, ns_space);
-		ZEPHIR_INIT_VAR(_39$$6);
-		ZVAL_STRING(_39$$6, "router.controller_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_37$$6, brisk_kernel_language_ce, "get", &_7, 27, _39$$6, _38$$6);
-		zephir_check_temp_parameter(_39$$6);
-		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _36$$6, "__construct", NULL, 28, _37$$6);
-		zephir_check_call_status();
-		zephir_throw_exception_debug(_36$$6, "brisk/Kernel/Router/Classic.zep", 143 TSRMLS_CC);
-		ZEPHIR_MM_RESTORE();
-		return;
-	}
+	_22 = zephir_fetch_nproperty_this(this_ptr, SL("_controller"), PH_NOISY_CC);
+	zephir_ucfirst(_4, _22);
+	ZEPHIR_INIT_VAR(_23);
+	ZEPHIR_CONCAT_VSV(_23, ns_space, "\\", _4);
+	ZEPHIR_CPY_WRT(ns_space, _23);
 	zephir_update_property_this(getThis(), SL("_namespace"), ns_space TSRMLS_CC);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_24, 59, params);
+	zephir_check_call_status();
+	ZEPHIR_INIT_VAR(_26);
+	ZVAL_BOOL(_26, 1);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setready", &_25, 60, _26);
+	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -383,137 +346,145 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, ready) {
  */
 PHP_METHOD(Brisk_Kernel_Router_Classic, dispatch) {
 
-	HashTable *_23$$7;
-	HashPosition _22$$7;
-	zval *_13$$5, *_19$$6, *_30$$10;
-	zend_class_entry *_27;
-	zval *ns_space = NULL, *action = NULL, *auto_method = NULL, *options = NULL, *_0 = NULL, *_2, *_3, *_4, *_5 = NULL, *ref = NULL, *_16 = NULL, *interceptors = NULL, *instance = NULL, *_26 = NULL, *output = NULL, *_6$$3 = NULL, *_7$$3, *_8$$3, *_9$$3, *_10$$5, *_11$$5 = NULL, *_14$$5, *_15$$5, *_17$$6, *_18$$6 = NULL, *_20$$6, *op$$7 = NULL, *result$$7 = NULL, *_21$$7 = NULL, **_24$$7, *_25$$8 = NULL, *_28$$10, *_29$$10 = NULL, *_31$$10;
+	HashTable *_21$$6;
+	HashPosition _20$$6;
+	zval *_8$$3, *_12$$4, *_17$$5, *_32$$10;
+	zend_class_entry *_25;
+	zend_bool _2;
+	zval *ns_space = NULL, *_0 = NULL, *_3 = NULL, *ref = NULL, *_14 = NULL, *interceptors = NULL, *instance = NULL, *options = NULL, *action = NULL, *auto_method = NULL, *_24 = NULL, *_26 = NULL, *_28, *_29, *output = NULL, *_5$$3, *_6$$3 = NULL, *_9$$3, *_10$$4, *_11$$4 = NULL, *_13$$4, *_15$$5, *_16$$5 = NULL, *_18$$5, *op$$6 = NULL, *result$$6 = NULL, *_19$$6 = NULL, **_22$$6, *_23$$7 = NULL, *_30$$10, *_31$$10 = NULL, *_33$$10;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_1 = NULL, *_12 = NULL;
+	zephir_fcall_cache_entry *_1 = NULL, *_4 = NULL, *_7 = NULL, *_27 = NULL;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_INIT_VAR(options);
-	array_init(options);
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 46);
-	zephir_check_call_status();
-	ZEPHIR_OBS_VAR(_2);
-	zephir_read_property(&_2, _0, SL("config"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(_3);
-	zephir_read_property(&_3, _2, SL("router"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(_4);
-	zephir_read_property(&_4, _3, SL("options"), PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(&_5, _4, "hasvalue", NULL, 0);
-	zephir_check_call_status();
-	if (zephir_is_true(_5)) {
-		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_app_ce, "getinstance", &_1, 46);
-		zephir_check_call_status();
-		ZEPHIR_OBS_VAR(_7$$3);
-		zephir_read_property(&_7$$3, _6$$3, SL("config"), PH_NOISY_CC);
-		ZEPHIR_OBS_VAR(_8$$3);
-		zephir_read_property(&_8$$3, _7$$3, SL("router"), PH_NOISY_CC);
-		ZEPHIR_OBS_VAR(_9$$3);
-		zephir_read_property(&_9$$3, _8$$3, SL("options"), PH_NOISY_CC);
-		ZEPHIR_CALL_METHOD(&options, _9$$3, "getvalue", NULL, 0);
-		zephir_check_call_status();
-	}
-	ZEPHIR_OBS_VAR(auto_method);
-	zephir_read_static_property_ce(&auto_method, brisk_kernel_router_classic_ce, SL("_auto_method") TSRMLS_CC);
-	if (zephir_array_isset_string(options, SS("auto_method"))) {
-		ZEPHIR_OBS_NVAR(auto_method);
-		zephir_array_fetch_string(&auto_method, options, SL("auto_method"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 164 TSRMLS_CC);
-	}
 	ZEPHIR_OBS_VAR(ns_space);
 	zephir_read_property_this(&ns_space, this_ptr, SL("_namespace"), PH_NOISY_CC);
-	if (!(zephir_class_exists(ns_space, 1 TSRMLS_CC))) {
-		ZEPHIR_INIT_VAR(_10$$5);
-		object_init_ex(_10$$5, brisk_exception_classnotfoundexception_ce);
-		ZEPHIR_INIT_VAR(_13$$5);
-		zephir_create_array(_13$$5, 1, 0 TSRMLS_CC);
-		ZEPHIR_OBS_VAR(_14$$5);
-		zephir_read_property_this(&_14$$5, this_ptr, SL("_namespace"), PH_NOISY_CC);
-		zephir_array_fast_append(_13$$5, _14$$5);
-		ZEPHIR_INIT_VAR(_15$$5);
-		ZVAL_STRING(_15$$5, "router.class_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_11$$5, brisk_kernel_language_ce, "get", &_12, 27, _15$$5, _13$$5);
-		zephir_check_temp_parameter(_15$$5);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_toolkit_ce, "classdeclared", &_1, 61, ns_space);
+	zephir_check_call_status();
+	_2 = !zephir_is_true(_0);
+	if (_2) {
+		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_loader_ce, "findclass", &_4, 62, ns_space);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _10$$5, "__construct", NULL, 28, _11$$5);
+		_2 = !zephir_is_true(_3);
+	}
+	if (_2) {
+		ZEPHIR_INIT_VAR(_5$$3);
+		object_init_ex(_5$$3, brisk_exception_controllernotfoundexception_ce);
+		ZEPHIR_INIT_VAR(_8$$3);
+		zephir_create_array(_8$$3, 1, 0 TSRMLS_CC);
+		zephir_array_fast_append(_8$$3, ns_space);
+		ZEPHIR_INIT_VAR(_9$$3);
+		ZVAL_STRING(_9$$3, "router.controller_not_found", ZEPHIR_TEMP_PARAM_COPY);
+		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 27, _9$$3, _8$$3);
+		zephir_check_temp_parameter(_9$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_10$$5, "brisk/Kernel/Router/Classic.zep", 168 TSRMLS_CC);
+		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 28, _6$$3);
+		zephir_check_call_status();
+		zephir_throw_exception_debug(_5$$3, "brisk/Kernel/Router/Classic.zep", 151 TSRMLS_CC);
+		ZEPHIR_MM_RESTORE();
+		return;
+	} else if (!(zephir_class_exists(ns_space, 1 TSRMLS_CC))) {
+		ZEPHIR_INIT_VAR(_10$$4);
+		object_init_ex(_10$$4, brisk_exception_classnotfoundexception_ce);
+		ZEPHIR_INIT_VAR(_12$$4);
+		zephir_create_array(_12$$4, 1, 0 TSRMLS_CC);
+		zephir_array_fast_append(_12$$4, ns_space);
+		ZEPHIR_INIT_VAR(_13$$4);
+		ZVAL_STRING(_13$$4, "router.class_not_found", ZEPHIR_TEMP_PARAM_COPY);
+		ZEPHIR_CALL_CE_STATIC(&_11$$4, brisk_kernel_language_ce, "get", &_7, 27, _13$$4, _12$$4);
+		zephir_check_temp_parameter(_13$$4);
+		zephir_check_call_status();
+		ZEPHIR_CALL_METHOD(NULL, _10$$4, "__construct", NULL, 28, _11$$4);
+		zephir_check_call_status();
+		zephir_throw_exception_debug(_10$$4, "brisk/Kernel/Router/Classic.zep", 153 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	ZEPHIR_INIT_VAR(ref);
 	object_init_ex(ref, zephir_get_internal_ce(SS("reflectionclass") TSRMLS_CC));
-	ZEPHIR_CALL_METHOD(NULL, ref, "__construct", NULL, 61, ns_space);
+	ZEPHIR_CALL_METHOD(NULL, ref, "__construct", NULL, 63, ns_space);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_16, ref, "isabstract", NULL, 62);
+	ZEPHIR_CALL_METHOD(&_14, ref, "isabstract", NULL, 64);
 	zephir_check_call_status();
-	if (zephir_is_true(_16)) {
-		ZEPHIR_INIT_VAR(_17$$6);
-		object_init_ex(_17$$6, brisk_exception_controllerexception_ce);
-		ZEPHIR_INIT_VAR(_19$$6);
-		zephir_create_array(_19$$6, 1, 0 TSRMLS_CC);
-		zephir_array_fast_append(_19$$6, ns_space);
-		ZEPHIR_INIT_VAR(_20$$6);
-		ZVAL_STRING(_20$$6, "router.controller_is_protected", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_18$$6, brisk_kernel_language_ce, "get", &_12, 27, _20$$6, _19$$6);
-		zephir_check_temp_parameter(_20$$6);
+	if (zephir_is_true(_14)) {
+		ZEPHIR_INIT_VAR(_15$$5);
+		object_init_ex(_15$$5, brisk_exception_controllerexception_ce);
+		ZEPHIR_INIT_VAR(_17$$5);
+		zephir_create_array(_17$$5, 1, 0 TSRMLS_CC);
+		zephir_array_fast_append(_17$$5, ns_space);
+		ZEPHIR_INIT_VAR(_18$$5);
+		ZVAL_STRING(_18$$5, "router.controller_is_protected", ZEPHIR_TEMP_PARAM_COPY);
+		ZEPHIR_CALL_CE_STATIC(&_16$$5, brisk_kernel_language_ce, "get", &_7, 27, _18$$5, _17$$5);
+		zephir_check_temp_parameter(_18$$5);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _17$$6, "__construct", NULL, 28, _18$$6);
+		ZEPHIR_CALL_METHOD(NULL, _15$$5, "__construct", NULL, 28, _16$$5);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_17$$6, "brisk/Kernel/Router/Classic.zep", 174 TSRMLS_CC);
+		zephir_throw_exception_debug(_15$$5, "brisk/Kernel/Router/Classic.zep", 159 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	ZEPHIR_CALL_SELF(&interceptors, "getinterceptors", NULL, 0, ns_space);
 	zephir_check_call_status();
 	if (zephir_fast_count_int(interceptors TSRMLS_CC) > 0) {
-		ZEPHIR_INIT_VAR(_21$$7);
-		zephir_is_iterable(interceptors, &_23$$7, &_22$$7, 0, 0, "brisk/Kernel/Router/Classic.zep", 188);
+		ZEPHIR_INIT_VAR(_19$$6);
+		zephir_is_iterable(interceptors, &_21$$6, &_20$$6, 0, 0, "brisk/Kernel/Router/Classic.zep", 173);
 		for (
-		  ; zend_hash_get_current_data_ex(_23$$7, (void**) &_24$$7, &_22$$7) == SUCCESS
-		  ; zend_hash_move_forward_ex(_23$$7, &_22$$7)
+		  ; zend_hash_get_current_data_ex(_21$$6, (void**) &_22$$6, &_20$$6) == SUCCESS
+		  ; zend_hash_move_forward_ex(_21$$6, &_20$$6)
 		) {
-			ZEPHIR_GET_HMKEY(_21$$7, _23$$7, _22$$7);
-			ZEPHIR_GET_HVALUE(op$$7, _24$$7);
-			ZEPHIR_INIT_NVAR(_25$$8);
-			array_init(_25$$8);
-			ZEPHIR_INIT_NVAR(result$$7);
-			ZEPHIR_CALL_USER_FUNC_ARRAY(result$$7, op$$7, _25$$8);
+			ZEPHIR_GET_HMKEY(_19$$6, _21$$6, _20$$6);
+			ZEPHIR_GET_HVALUE(op$$6, _22$$6);
+			ZEPHIR_INIT_NVAR(_23$$7);
+			array_init(_23$$7);
+			ZEPHIR_INIT_NVAR(result$$6);
+			ZEPHIR_CALL_USER_FUNC_ARRAY(result$$6, op$$6, _23$$7);
 			zephir_check_call_status();
-			if (Z_TYPE_P(result$$7) == IS_STRING) {
-				zend_print_zval(result$$7, 0);
+			if (Z_TYPE_P(result$$6) == IS_STRING) {
+				zend_print_zval(result$$6, 0);
 				ZEPHIR_MM_RESTORE();
 				zephir_exit_empty();
 			}
 		}
 	}
 	ZEPHIR_INIT_VAR(instance);
-	zephir_fetch_safe_class(_26, ns_space);
-		_27 = zend_fetch_class(Z_STRVAL_P(_26), Z_STRLEN_P(_26), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
-	object_init_ex(instance, _27);
+	zephir_fetch_safe_class(_24, ns_space);
+		_25 = zend_fetch_class(Z_STRVAL_P(_24), Z_STRLEN_P(_24), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
+	object_init_ex(instance, _25);
 	if (zephir_has_constructor(instance TSRMLS_CC)) {
 		ZEPHIR_CALL_METHOD(NULL, instance, "__construct", NULL, 0);
 		zephir_check_call_status();
 	}
 	ZEPHIR_OBS_VAR(action);
 	zephir_read_property_this(&action, this_ptr, SL("_action"), PH_NOISY_CC);
+	ZEPHIR_CALL_CE_STATIC(&_26, brisk_kernel_app_ce, "getinstance", &_27, 46);
+	zephir_check_call_status();
+	ZEPHIR_OBS_VAR(_28);
+	zephir_read_property(&_28, _26, SL("config"), PH_NOISY_CC);
+	ZEPHIR_INIT_VAR(_29);
+	ZVAL_STRING(_29, "router/options", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_METHOD(&options, _28, "get", NULL, 0, _29);
+	zephir_check_temp_parameter(_29);
+	zephir_check_call_status();
+	ZEPHIR_OBS_VAR(auto_method);
+	zephir_read_static_property_ce(&auto_method, brisk_kernel_router_classic_ce, SL("_auto_method") TSRMLS_CC);
+	if (zephir_array_isset_string(options, SS("auto_method"))) {
+		ZEPHIR_OBS_NVAR(auto_method);
+		zephir_array_fetch_string(&auto_method, options, SL("auto_method"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 181 TSRMLS_CC);
+	}
 	if (!((zephir_method_exists(instance, action TSRMLS_CC)  == SUCCESS))) {
-		ZEPHIR_INIT_VAR(_28$$10);
-		object_init_ex(_28$$10, brisk_exception_actionnotfoundexception_ce);
 		ZEPHIR_INIT_VAR(_30$$10);
-		zephir_create_array(_30$$10, 1, 0 TSRMLS_CC);
-		zephir_array_fast_append(_30$$10, action);
-		ZEPHIR_INIT_VAR(_31$$10);
-		ZVAL_STRING(_31$$10, "router.action_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_29$$10, brisk_kernel_language_ce, "get", &_12, 27, _31$$10, _30$$10);
-		zephir_check_temp_parameter(_31$$10);
+		object_init_ex(_30$$10, brisk_exception_actionnotfoundexception_ce);
+		ZEPHIR_INIT_VAR(_32$$10);
+		zephir_create_array(_32$$10, 1, 0 TSRMLS_CC);
+		zephir_array_fast_append(_32$$10, action);
+		ZEPHIR_INIT_VAR(_33$$10);
+		ZVAL_STRING(_33$$10, "router.action_not_found", ZEPHIR_TEMP_PARAM_COPY);
+		ZEPHIR_CALL_CE_STATIC(&_31$$10, brisk_kernel_language_ce, "get", &_7, 27, _33$$10, _32$$10);
+		zephir_check_temp_parameter(_33$$10);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _28$$10, "__construct", NULL, 28, _29$$10);
+		ZEPHIR_CALL_METHOD(NULL, _30$$10, "__construct", NULL, 28, _31$$10);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_28$$10, "brisk/Kernel/Router/Classic.zep", 194 TSRMLS_CC);
+		zephir_throw_exception_debug(_30$$10, "brisk/Kernel/Router/Classic.zep", 184 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -581,12 +552,12 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, todoUKSort) {
 
 PHP_METHOD(Brisk_Kernel_Router_Classic, _parseUri) {
 
-	HashTable *_31$$13, *_37$$15;
-	HashPosition _30$$13, _36$$15;
-	zend_bool _14;
+	HashTable *_26$$12, *_32$$14;
+	HashPosition _25$$12, _31$$14;
+	zend_bool _9;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_1 = NULL, *_9 = NULL, *_13 = NULL, *_26 = NULL;
-	zval *uri_param = NULL, *module = NULL, *controller = NULL, *action = NULL, *url_suffix = NULL, *script_name = NULL, *query = NULL, *pos = NULL, *uri_items = NULL, *result = NULL, *config = NULL, *_0 = NULL, *_2, *_3, *_4 = NULL, *_8 = NULL, *_10 = NULL, *_11, *_12 = NULL, _17, *_21 = NULL, _22, *_23, *_24 = NULL, *_25, *val = NULL, *_5$$3 = NULL, *_6$$3, *_7$$3, *_15$$4, *_16$$4, _18$$9, _19$$9, *_20$$9, _27$$13, *_28$$13 = NULL, *_29$$13 = NULL, **_32$$13, *_33$$14, *_34$$14 = NULL, *_35$$15 = NULL, **_38$$15, *_39$$16 = NULL, *_40$$16, *_41$$16 = NULL;
+	zephir_fcall_cache_entry *_1 = NULL, *_5 = NULL, *_8 = NULL, *_21 = NULL;
+	zval *uri_param = NULL, *module = NULL, *controller = NULL, *action = NULL, *url_suffix = NULL, *script_name = NULL, *query = NULL, *pos = NULL, *uri_items = NULL, *result = NULL, *config = NULL, *_0 = NULL, *_2, *_3 = NULL, *_4 = NULL, *_6, *_7 = NULL, _12, *_16 = NULL, _17, *_18, *_19 = NULL, *_20, *val = NULL, *_10$$3, *_11$$3, _13$$8, _14$$8, *_15$$8, _22$$12, *_23$$12 = NULL, *_24$$12 = NULL, **_27$$12, *_28$$13, *_29$$13 = NULL, *_30$$14 = NULL, **_33$$14, *_34$$15 = NULL, *_35$$15, *_36$$15 = NULL;
 	zval *uri = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -604,50 +575,39 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _parseUri) {
 	}
 
 
-	ZEPHIR_INIT_VAR(config);
-	array_init(config);
 	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 46);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_2);
 	zephir_read_property(&_2, _0, SL("config"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(_3);
-	zephir_read_property(&_3, _2, SL("router"), PH_NOISY_CC);
-	ZEPHIR_CALL_METHOD(&_4, _3, "hasvalue", NULL, 0);
+	ZEPHIR_INIT_VAR(_3);
+	ZVAL_STRING(_3, "router/options", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_METHOD(&config, _2, "get", NULL, 0, _3);
+	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
-	if (zephir_is_true(_4)) {
-		ZEPHIR_CALL_CE_STATIC(&_5$$3, brisk_kernel_app_ce, "getinstance", &_1, 46);
-		zephir_check_call_status();
-		ZEPHIR_OBS_VAR(_6$$3);
-		zephir_read_property(&_6$$3, _5$$3, SL("config"), PH_NOISY_CC);
-		ZEPHIR_OBS_VAR(_7$$3);
-		zephir_read_property(&_7$$3, _6$$3, SL("router"), PH_NOISY_CC);
-		ZEPHIR_CALL_METHOD(&config, _7$$3, "getvalue", NULL, 0);
-		zephir_check_call_status();
-	}
-	ZEPHIR_INIT_VAR(_10);
-	ZVAL_STRING(_10, "SCRIPT_FILENAME", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&_8, brisk_kernel_server_ce, "getitem", &_9, 56, _10);
-	zephir_check_temp_parameter(_10);
+	ZEPHIR_INIT_NVAR(_3);
+	ZVAL_STRING(_3, "SCRIPT_FILENAME", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_server_ce, "getitem", &_5, 57, _3);
+	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(script_name);
-	zephir_basename(script_name, _8 TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_11);
-	ZEPHIR_CONCAT_SVS(_11, "~/", script_name, "~i");
-	ZEPHIR_INIT_NVAR(_10);
-	ZVAL_STRING(_10, "", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_FUNCTION(&_12, "preg_replace", &_13, 4, _11, _10, uri);
-	zephir_check_temp_parameter(_10);
+	zephir_basename(script_name, _4 TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_6);
+	ZEPHIR_CONCAT_SVS(_6, "~/", script_name, "~i");
+	ZEPHIR_INIT_NVAR(_3);
+	ZVAL_STRING(_3, "", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_FUNCTION(&_7, "preg_replace", &_8, 4, _6, _3, uri);
+	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
-	zephir_get_strval(uri, _12);
-	_14 = ZEPHIR_IS_STRING(uri, "");
-	if (!(_14)) {
-		_14 = ZEPHIR_IS_STRING(uri, "/");
+	zephir_get_strval(uri, _7);
+	_9 = ZEPHIR_IS_STRING(uri, "");
+	if (!(_9)) {
+		_9 = ZEPHIR_IS_STRING(uri, "/");
 	}
-	if (_14) {
+	if (_9) {
 		ZEPHIR_INIT_VAR(module);
 		ZVAL_STRING(module, "", 1);
-		_15$$4 = zephir_fetch_static_property_ce(brisk_kernel_router_classic_ce, SL("_module_support") TSRMLS_CC);
-		if (zephir_is_true(_15$$4)) {
+		_10$$3 = zephir_fetch_static_property_ce(brisk_kernel_router_classic_ce, SL("_module_support") TSRMLS_CC);
+		if (zephir_is_true(_10$$3)) {
 			ZEPHIR_OBS_NVAR(module);
 			zephir_read_static_property_ce(&module, brisk_kernel_router_classic_ce, SL("_default_module") TSRMLS_CC);
 		}
@@ -657,71 +617,71 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _parseUri) {
 		zephir_read_static_property_ce(&action, brisk_kernel_router_classic_ce, SL("_default_action") TSRMLS_CC);
 		if (zephir_array_isset_string(config, SS("default_controller"))) {
 			ZEPHIR_OBS_NVAR(controller);
-			zephir_array_fetch_string(&controller, config, SL("default_controller"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 240 TSRMLS_CC);
+			zephir_array_fetch_string(&controller, config, SL("default_controller"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 227 TSRMLS_CC);
 		}
 		if (zephir_array_isset_string(config, SS("default_action"))) {
 			ZEPHIR_OBS_NVAR(action);
-			zephir_array_fetch_string(&action, config, SL("default_action"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 243 TSRMLS_CC);
+			zephir_array_fetch_string(&action, config, SL("default_action"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 230 TSRMLS_CC);
 		}
 		zephir_create_array(return_value, 4, 0 TSRMLS_CC);
 		zephir_array_update_string(&return_value, SL("module"), &module, PH_COPY | PH_SEPARATE);
 		zephir_array_update_string(&return_value, SL("controller"), &controller, PH_COPY | PH_SEPARATE);
 		zephir_array_update_string(&return_value, SL("action"), &action, PH_COPY | PH_SEPARATE);
-		ZEPHIR_INIT_VAR(_16$$4);
-		array_init(_16$$4);
-		zephir_array_update_string(&return_value, SL("params"), &_16$$4, PH_COPY | PH_SEPARATE);
+		ZEPHIR_INIT_VAR(_11$$3);
+		array_init(_11$$3);
+		zephir_array_update_string(&return_value, SL("params"), &_11$$3, PH_COPY | PH_SEPARATE);
 		RETURN_MM();
 	}
 	ZEPHIR_OBS_VAR(url_suffix);
 	zephir_read_static_property_ce(&url_suffix, brisk_kernel_router_classic_ce, SL("_url_suffix") TSRMLS_CC);
 	if (zephir_array_isset_string(config, SS("url_suffix"))) {
 		ZEPHIR_OBS_NVAR(url_suffix);
-		zephir_array_fetch_string(&url_suffix, config, SL("url_suffix"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 254 TSRMLS_CC);
+		zephir_array_fetch_string(&url_suffix, config, SL("url_suffix"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 241 TSRMLS_CC);
 	}
 	ZEPHIR_INIT_VAR(query);
 	ZVAL_STRING(query, "", 1);
-	ZEPHIR_SINIT_VAR(_17);
-	ZVAL_STRING(&_17, "?", 0);
+	ZEPHIR_SINIT_VAR(_12);
+	ZVAL_STRING(&_12, "?", 0);
 	ZEPHIR_INIT_VAR(pos);
-	zephir_fast_strpos(pos, uri, &_17, 0 );
+	zephir_fast_strpos(pos, uri, &_12, 0 );
 	if (!ZEPHIR_IS_FALSE_IDENTICAL(pos)) {
-		ZEPHIR_SINIT_VAR(_18$$9);
-		ZVAL_LONG(&_18$$9, (zephir_get_numberval(pos) + 1));
+		ZEPHIR_SINIT_VAR(_13$$8);
+		ZVAL_LONG(&_13$$8, (zephir_get_numberval(pos) + 1));
 		ZEPHIR_INIT_NVAR(query);
-		zephir_substr(query, uri, zephir_get_intval(&_18$$9), 0, ZEPHIR_SUBSTR_NO_LENGTH);
-		ZEPHIR_SINIT_VAR(_19$$9);
-		ZVAL_LONG(&_19$$9, 0);
-		ZEPHIR_INIT_VAR(_20$$9);
-		zephir_substr(_20$$9, uri, 0 , zephir_get_intval(pos), 0);
-		zephir_get_strval(uri, _20$$9);
+		zephir_substr(query, uri, zephir_get_intval(&_13$$8), 0, ZEPHIR_SUBSTR_NO_LENGTH);
+		ZEPHIR_SINIT_VAR(_14$$8);
+		ZVAL_LONG(&_14$$8, 0);
+		ZEPHIR_INIT_VAR(_15$$8);
+		zephir_substr(_15$$8, uri, 0 , zephir_get_intval(pos), 0);
+		zephir_get_strval(uri, _15$$8);
 	}
-	ZEPHIR_CALL_METHOD(&_21, this_ptr, "_rewrite", NULL, 63, uri);
+	ZEPHIR_CALL_METHOD(&_16, this_ptr, "_rewrite", NULL, 65, uri);
 	zephir_check_call_status();
-	ZEPHIR_SINIT_VAR(_22);
-	ZVAL_STRING(&_22, "/", 0);
+	ZEPHIR_SINIT_VAR(_17);
+	ZVAL_STRING(&_17, "/", 0);
 	ZEPHIR_INIT_NVAR(uri);
-	zephir_fast_trim(uri, _21, &_22, ZEPHIR_TRIM_BOTH TSRMLS_CC);
-	ZEPHIR_INIT_VAR(_23);
-	ZEPHIR_CONCAT_SVS(_23, "~", url_suffix, "$~i");
-	ZEPHIR_INIT_NVAR(_10);
-	ZVAL_STRING(_10, "", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_FUNCTION(&_24, "preg_replace", &_13, 4, _23, _10, uri);
-	zephir_check_temp_parameter(_10);
+	zephir_fast_trim(uri, _16, &_17, ZEPHIR_TRIM_BOTH TSRMLS_CC);
+	ZEPHIR_INIT_VAR(_18);
+	ZEPHIR_CONCAT_SVS(_18, "~", url_suffix, "$~i");
+	ZEPHIR_INIT_NVAR(_3);
+	ZVAL_STRING(_3, "", ZEPHIR_TEMP_PARAM_COPY);
+	ZEPHIR_CALL_FUNCTION(&_19, "preg_replace", &_8, 4, _18, _3, uri);
+	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
-	zephir_get_strval(uri, _24);
+	zephir_get_strval(uri, _19);
 	ZEPHIR_INIT_VAR(uri_items);
 	zephir_fast_explode_str(uri_items, SL("/"), uri, LONG_MAX TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(module);
 	ZVAL_STRING(module, "", 1);
-	_25 = zephir_fetch_static_property_ce(brisk_kernel_router_classic_ce, SL("_module_support") TSRMLS_CC);
-	if (zephir_is_true(_25)) {
+	_20 = zephir_fetch_static_property_ce(brisk_kernel_router_classic_ce, SL("_module_support") TSRMLS_CC);
+	if (zephir_is_true(_20)) {
 		ZEPHIR_MAKE_REF(uri_items);
-		ZEPHIR_CALL_FUNCTION(&module, "array_shift", &_26, 7, uri_items);
+		ZEPHIR_CALL_FUNCTION(&module, "array_shift", &_21, 7, uri_items);
 		ZEPHIR_UNREF(uri_items);
 		zephir_check_call_status();
 	}
 	ZEPHIR_MAKE_REF(uri_items);
-	ZEPHIR_CALL_FUNCTION(&controller, "array_shift", &_26, 7, uri_items);
+	ZEPHIR_CALL_FUNCTION(&controller, "array_shift", &_21, 7, uri_items);
 	ZEPHIR_UNREF(uri_items);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_STRING(controller, "")) {
@@ -729,7 +689,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _parseUri) {
 		zephir_read_static_property_ce(&controller, brisk_kernel_router_classic_ce, SL("_default_controller") TSRMLS_CC);
 	}
 	ZEPHIR_MAKE_REF(uri_items);
-	ZEPHIR_CALL_FUNCTION(&action, "array_shift", &_26, 7, uri_items);
+	ZEPHIR_CALL_FUNCTION(&action, "array_shift", &_21, 7, uri_items);
 	ZEPHIR_UNREF(uri_items);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_STRING(action, "")) {
@@ -739,59 +699,59 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _parseUri) {
 	ZEPHIR_INIT_VAR(result);
 	array_init(result);
 	if (zephir_fast_count_int(uri_items TSRMLS_CC) > 0) {
-		ZEPHIR_SINIT_VAR(_27$$13);
-		ZVAL_LONG(&_27$$13, 2);
-		ZEPHIR_CALL_FUNCTION(&_28$$13, "array_chunk", NULL, 64, uri_items, &_27$$13);
+		ZEPHIR_SINIT_VAR(_22$$12);
+		ZVAL_LONG(&_22$$12, 2);
+		ZEPHIR_CALL_FUNCTION(&_23$$12, "array_chunk", NULL, 66, uri_items, &_22$$12);
 		zephir_check_call_status();
-		ZEPHIR_CPY_WRT(uri_items, _28$$13);
-		ZEPHIR_INIT_VAR(_29$$13);
-		zephir_is_iterable(uri_items, &_31$$13, &_30$$13, 0, 0, "brisk/Kernel/Router/Classic.zep", 285);
+		ZEPHIR_CPY_WRT(uri_items, _23$$12);
+		ZEPHIR_INIT_VAR(_24$$12);
+		zephir_is_iterable(uri_items, &_26$$12, &_25$$12, 0, 0, "brisk/Kernel/Router/Classic.zep", 272);
 		for (
-		  ; zend_hash_get_current_data_ex(_31$$13, (void**) &_32$$13, &_30$$13) == SUCCESS
-		  ; zend_hash_move_forward_ex(_31$$13, &_30$$13)
+		  ; zend_hash_get_current_data_ex(_26$$12, (void**) &_27$$12, &_25$$12) == SUCCESS
+		  ; zend_hash_move_forward_ex(_26$$12, &_25$$12)
 		) {
-			ZEPHIR_GET_HMKEY(_29$$13, _31$$13, _30$$13);
-			ZEPHIR_GET_HVALUE(val, _32$$13);
-			zephir_array_fetch_long(&_33$$14, val, 1, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 283 TSRMLS_CC);
-			ZEPHIR_OBS_NVAR(_34$$14);
-			zephir_array_fetch_long(&_34$$14, val, 0, PH_NOISY, "brisk/Kernel/Router/Classic.zep", 283 TSRMLS_CC);
-			zephir_array_update_zval(&result, _34$$14, &_33$$14, PH_COPY | PH_SEPARATE);
+			ZEPHIR_GET_HMKEY(_24$$12, _26$$12, _25$$12);
+			ZEPHIR_GET_HVALUE(val, _27$$12);
+			zephir_array_fetch_long(&_28$$13, val, 1, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 270 TSRMLS_CC);
+			ZEPHIR_OBS_NVAR(_29$$13);
+			zephir_array_fetch_long(&_29$$13, val, 0, PH_NOISY, "brisk/Kernel/Router/Classic.zep", 270 TSRMLS_CC);
+			zephir_array_update_zval(&result, _29$$13, &_28$$13, PH_COPY | PH_SEPARATE);
 		}
 	}
 	if (!ZEPHIR_IS_STRING(query, "")) {
-		ZEPHIR_INIT_VAR(_35$$15);
-		zephir_fast_explode_str(_35$$15, SL("&"), query, LONG_MAX TSRMLS_CC);
-		ZEPHIR_CPY_WRT(query, _35$$15);
-		ZEPHIR_INIT_NVAR(_35$$15);
-		zephir_is_iterable(query, &_37$$15, &_36$$15, 0, 0, "brisk/Kernel/Router/Classic.zep", 292);
+		ZEPHIR_INIT_VAR(_30$$14);
+		zephir_fast_explode_str(_30$$14, SL("&"), query, LONG_MAX TSRMLS_CC);
+		ZEPHIR_CPY_WRT(query, _30$$14);
+		ZEPHIR_INIT_NVAR(_30$$14);
+		zephir_is_iterable(query, &_32$$14, &_31$$14, 0, 0, "brisk/Kernel/Router/Classic.zep", 279);
 		for (
-		  ; zend_hash_get_current_data_ex(_37$$15, (void**) &_38$$15, &_36$$15) == SUCCESS
-		  ; zend_hash_move_forward_ex(_37$$15, &_36$$15)
+		  ; zend_hash_get_current_data_ex(_32$$14, (void**) &_33$$14, &_31$$14) == SUCCESS
+		  ; zend_hash_move_forward_ex(_32$$14, &_31$$14)
 		) {
-			ZEPHIR_GET_HMKEY(_35$$15, _37$$15, _36$$15);
-			ZEPHIR_GET_HVALUE(val, _38$$15);
-			ZEPHIR_INIT_NVAR(_39$$16);
-			zephir_fast_explode_str(_39$$16, SL("="), val, LONG_MAX TSRMLS_CC);
-			ZEPHIR_CPY_WRT(val, _39$$16);
-			zephir_array_fetch_long(&_40$$16, val, 1, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 290 TSRMLS_CC);
-			ZEPHIR_OBS_NVAR(_41$$16);
-			zephir_array_fetch_long(&_41$$16, val, 0, PH_NOISY, "brisk/Kernel/Router/Classic.zep", 290 TSRMLS_CC);
-			zephir_array_update_zval(&result, _41$$16, &_40$$16, PH_COPY | PH_SEPARATE);
+			ZEPHIR_GET_HMKEY(_30$$14, _32$$14, _31$$14);
+			ZEPHIR_GET_HVALUE(val, _33$$14);
+			ZEPHIR_INIT_NVAR(_34$$15);
+			zephir_fast_explode_str(_34$$15, SL("="), val, LONG_MAX TSRMLS_CC);
+			ZEPHIR_CPY_WRT(val, _34$$15);
+			zephir_array_fetch_long(&_35$$15, val, 1, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 277 TSRMLS_CC);
+			ZEPHIR_OBS_NVAR(_36$$15);
+			zephir_array_fetch_long(&_36$$15, val, 0, PH_NOISY, "brisk/Kernel/Router/Classic.zep", 277 TSRMLS_CC);
+			zephir_array_update_zval(&result, _36$$15, &_35$$15, PH_COPY | PH_SEPARATE);
 		}
 	}
 	if (zephir_array_isset_string(result, SS("_m"))) {
 		ZEPHIR_OBS_NVAR(module);
-		zephir_array_fetch_string(&module, result, SL("_m"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 294 TSRMLS_CC);
+		zephir_array_fetch_string(&module, result, SL("_m"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 281 TSRMLS_CC);
 		zephir_array_unset_string(&result, SS("_m"), PH_SEPARATE);
 	}
 	if (zephir_array_isset_string(result, SS("_c"))) {
 		ZEPHIR_OBS_NVAR(controller);
-		zephir_array_fetch_string(&controller, result, SL("_c"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 298 TSRMLS_CC);
+		zephir_array_fetch_string(&controller, result, SL("_c"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 285 TSRMLS_CC);
 		zephir_array_unset_string(&result, SS("_c"), PH_SEPARATE);
 	}
 	if (zephir_array_isset_string(result, SS("_a"))) {
 		ZEPHIR_OBS_NVAR(action);
-		zephir_array_fetch_string(&action, result, SL("_a"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 302 TSRMLS_CC);
+		zephir_array_fetch_string(&action, result, SL("_a"), PH_NOISY, "brisk/Kernel/Router/Classic.zep", 289 TSRMLS_CC);
 		zephir_array_unset_string(&result, SS("_a"), PH_SEPARATE);
 	}
 	zephir_create_array(return_value, 4, 0 TSRMLS_CC);
@@ -830,7 +790,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _rewrite) {
 
 
 	_0 = zephir_fetch_static_property_ce(brisk_kernel_router_classic_ce, SL("_rules") TSRMLS_CC);
-	zephir_is_iterable(_0, &_2, &_1, 0, 0, "brisk/Kernel/Router/Classic.zep", 330);
+	zephir_is_iterable(_0, &_2, &_1, 0, 0, "brisk/Kernel/Router/Classic.zep", 317);
 	for (
 	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zend_hash_move_forward_ex(_2, &_1)
@@ -854,7 +814,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _rewrite) {
 				zephir_get_strval(uri, _8$$5);
 				break;
 			} else if (zephir_is_callable(val TSRMLS_CC)) {
-				ZEPHIR_CALL_FUNCTION(&_10$$6, "preg_replace_callback", &_11, 65, key, val, uri);
+				ZEPHIR_CALL_FUNCTION(&_10$$6, "preg_replace_callback", &_11, 67, key, val, uri);
 				zephir_check_call_status();
 				zephir_get_strval(uri, _10$$6);
 				break;
@@ -863,8 +823,8 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _rewrite) {
 				object_init_ex(_12$$7, brisk_exception_routerexception_ce);
 				ZEPHIR_INIT_NVAR(_15$$7);
 				zephir_create_array(_15$$7, 1, 0 TSRMLS_CC);
-				zephir_array_fetch_long(&_16$$7, val, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 326 TSRMLS_CC);
-				zephir_array_fetch_long(&_17$$7, val, 1, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 326 TSRMLS_CC);
+				zephir_array_fetch_long(&_16$$7, val, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 313 TSRMLS_CC);
+				zephir_array_fetch_long(&_17$$7, val, 1, PH_NOISY | PH_READONLY, "brisk/Kernel/Router/Classic.zep", 313 TSRMLS_CC);
 				ZEPHIR_INIT_LNVAR(_18$$7);
 				ZEPHIR_CONCAT_VSVS(_18$$7, _16$$7, "::", _17$$7, "()");
 				zephir_array_fast_append(_15$$7, _18$$7);
@@ -875,7 +835,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _rewrite) {
 				zephir_check_call_status();
 				ZEPHIR_CALL_METHOD(NULL, _12$$7, "__construct", &_20, 28, _13$$7);
 				zephir_check_call_status();
-				zephir_throw_exception_debug(_12$$7, "brisk/Kernel/Router/Classic.zep", 326 TSRMLS_CC);
+				zephir_throw_exception_debug(_12$$7, "brisk/Kernel/Router/Classic.zep", 313 TSRMLS_CC);
 				ZEPHIR_MM_RESTORE();
 				return;
 			}
@@ -891,7 +851,7 @@ PHP_METHOD(Brisk_Kernel_Router_Classic, _rewrite) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _21$$8, "__construct", &_20, 28, _22$$8);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_21$$8, "brisk/Kernel/Router/Classic.zep", 331 TSRMLS_CC);
+		zephir_throw_exception_debug(_21$$8, "brisk/Kernel/Router/Classic.zep", 318 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
