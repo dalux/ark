@@ -76,7 +76,7 @@ PHP_METHOD(Brisk_Kernel_Language, addPackage) {
 	}
 	ZEPHIR_INIT_VAR(_2);
 	_3 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-	zephir_array_fetch(&_4, _3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 95 TSRMLS_CC);
+	zephir_array_fetch(&_4, _3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 96 TSRMLS_CC);
 	zephir_fast_array_merge(_2, &(_4), &(package) TSRMLS_CC);
 	zephir_update_static_property_array_multi_ce(brisk_kernel_language_ce, SL("_package"), &_2 TSRMLS_CC, SL("z"), 1, language);
 	ZEPHIR_MM_RESTORE();
@@ -140,7 +140,7 @@ PHP_METHOD(Brisk_Kernel_Language, addPackageFile) {
 	if (zephir_array_isset(_2, language)) {
 		ZEPHIR_INIT_VAR(_3$$5);
 		_4$$5 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_5$$5, _4$$5, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 115 TSRMLS_CC);
+		zephir_array_fetch(&_5$$5, _4$$5, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 116 TSRMLS_CC);
 		zephir_fast_array_merge(_3$$5, &(_5$$5), &(package) TSRMLS_CC);
 		zephir_update_static_property_array_multi_ce(brisk_kernel_language_ce, SL("_package"), &_3$$5 TSRMLS_CC, SL("z"), 1, language);
 	} else {
@@ -186,7 +186,7 @@ PHP_METHOD(Brisk_Kernel_Language, getPackage) {
 		zephir_read_static_property_ce(&_0, brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
 	} else {
 		_1 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_0, _1, language, PH_NOISY, "brisk/Kernel/Language.zep", 129 TSRMLS_CC);
+		zephir_array_fetch(&_0, _1, language, PH_NOISY, "brisk/Kernel/Language.zep", 130 TSRMLS_CC);
 	}
 	RETURN_CCTOR(_0);
 
@@ -263,19 +263,19 @@ PHP_METHOD(Brisk_Kernel_Language, get) {
 	ZEPHIR_INIT_VAR(result);
 	ZVAL_BOOL(result, 0);
 	_0 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-	zephir_array_fetch(&_1, _0, language, PH_READONLY, "brisk/Kernel/Language.zep", 154 TSRMLS_CC);
+	zephir_array_fetch(&_1, _0, language, PH_READONLY, "brisk/Kernel/Language.zep", 155 TSRMLS_CC);
 	if (zephir_array_isset(_1, label)) {
 		_2$$3 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_3$$3, _2$$3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 155 TSRMLS_CC);
-		zephir_array_fetch(&_4$$3, _3$$3, label, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 155 TSRMLS_CC);
+		zephir_array_fetch(&_3$$3, _2$$3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 156 TSRMLS_CC);
+		zephir_array_fetch(&_4$$3, _3$$3, label, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 156 TSRMLS_CC);
 		ZEPHIR_CALL_FUNCTION(&result, "vsprintf", NULL, 50, _4$$3, params);
 		zephir_check_call_status();
 	}
 	if (!zephir_is_true(result)) {
 		_5$$4 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_6$$4, _5$$4, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 158 TSRMLS_CC);
+		zephir_array_fetch(&_6$$4, _5$$4, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 159 TSRMLS_CC);
 		ZEPHIR_OBS_NVAR(result);
-		zephir_array_fetch(&result, _6$$4, label, PH_NOISY, "brisk/Kernel/Language.zep", 158 TSRMLS_CC);
+		zephir_array_fetch(&result, _6$$4, label, PH_NOISY, "brisk/Kernel/Language.zep", 159 TSRMLS_CC);
 	}
 	RETURN_CCTOR(result);
 
@@ -290,7 +290,7 @@ void zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_D) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_create_array(_0, 1, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_1);
-	zephir_create_array(_1, 58, 0 TSRMLS_CC);
+	zephir_create_array(_1, 59, 0 TSRMLS_CC);
 	add_assoc_stringl_ex(_1, SS("core.framework_not_ready"), SL("Framework not initialized"), 1);
 	add_assoc_stringl_ex(_1, SS("core.invalid_controller_path"), SL("Invalid controller directory"), 1);
 	add_assoc_stringl_ex(_1, SS("core.invalid_configuration"), SL("No valid configuration information found"), 1);
@@ -303,6 +303,7 @@ void zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_D) {
 	add_assoc_stringl_ex(_1, SS("core.invlid_custom_method"), SL("Custom methods[%s] must be callable"), 1);
 	add_assoc_stringl_ex(_1, SS("core.custom_method_notfound"), SL("Cannot find custom method[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("core.config_not_found"), SL("Unable to find a configuration item[%s]"), 1);
+	add_assoc_stringl_ex(_1, SS("core.namespace_not_defined"), SL("Unmatched namespace definition[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("http.request_not_ready"), SL("Http request data not ready"), 1);
 	add_assoc_stringl_ex(_1, SS("http.method_not_found"), SL("The called method[%s] does not exist"), 1);
 	add_assoc_stringl_ex(_1, SS("http.property_not_found"), SL("The called attribute object[%s] does not exist"), 1);
