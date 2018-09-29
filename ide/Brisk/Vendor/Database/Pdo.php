@@ -1,9 +1,9 @@
 <?php
 
-namespace Brisk\Vendor\Db;
+namespace Brisk\Vendor\Database;
 
 
-class Pdo extends \Brisk\Vendor\Db\DbFather
+class Pdo extends \Brisk\Vendor\Database\DbFather
 {
 
     private $_instance;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Vendor\Db;
+namespace Brisk\Vendor\Database;
 
 
 abstract class DbFather

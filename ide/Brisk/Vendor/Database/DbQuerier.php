@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Vendor\Db;
+namespace Brisk\Vendor\Database;
 
 
 class DbQuerier
@@ -30,7 +30,7 @@ class DbQuerier
      * @param DbFather $conn
      * @return null
      */
-    public static function setConnection(\Brisk\Vendor\Db\DbFather $conn) {}
+    public static function setConnection(\Brisk\Vendor\Database\DbFather $conn) {}
 
     /**
      * Get database connection objects

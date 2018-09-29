@@ -14,9 +14,9 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Brisk_Vendor_Db_DbFather) {
+ZEPHIR_INIT_CLASS(Brisk_Vendor_Database_DbFather) {
 
-	ZEPHIR_REGISTER_CLASS(Brisk\\Vendor\\Db, DbFather, brisk, vendor_db_dbfather, brisk_vendor_db_dbfather_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
+	ZEPHIR_REGISTER_CLASS(Brisk\\Vendor\\Database, DbFather, brisk, vendor_database_dbfather, brisk_vendor_database_dbfather_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
 	return SUCCESS;
 
@@ -29,7 +29,7 @@ ZEPHIR_INIT_CLASS(Brisk_Vendor_Db_DbFather) {
  * @param array bind
  * @return mixed
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, query) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, query) {
 
 }
 
@@ -40,7 +40,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, query) {
  * @param array bind
  * @return array
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, fetchAll) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, fetchAll) {
 
 }
 
@@ -51,7 +51,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, fetchAll) {
  * @param array bind
  * @return mixed
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, fetchRow) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, fetchRow) {
 
 }
 
@@ -62,7 +62,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, fetchRow) {
  * @param array bind
  * @return mixed
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, fetchOne) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, fetchOne) {
 
 }
 
@@ -71,7 +71,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, fetchOne) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, beginTransaction) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, beginTransaction) {
 
 }
 
@@ -80,7 +80,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, beginTransaction) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, commit) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, commit) {
 
 }
 
@@ -89,7 +89,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, commit) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, rollback) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, rollback) {
 
 }
 
@@ -98,7 +98,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, rollback) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, inTransaction) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, inTransaction) {
 
 }
 
@@ -108,7 +108,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, inTransaction) {
  * @param string seq
  * @return int
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, lastInsertId) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, lastInsertId) {
 
 }
 
@@ -117,7 +117,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, lastInsertId) {
  *
  * @return int
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, lastRowCount) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, lastRowCount) {
 
 }
 
@@ -126,7 +126,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, lastRowCount) {
  *
  * @return string
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, getDriverName) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, getDriverName) {
 
 }
 
@@ -135,7 +135,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbFather, getDriverName) {
  *
  * @return \PDO
  */
-PHP_METHOD(Brisk_Vendor_Db_DbFather, getInstance) {
+PHP_METHOD(Brisk_Vendor_Database_DbFather, getInstance) {
 
 }
 

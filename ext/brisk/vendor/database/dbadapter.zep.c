@@ -22,9 +22,9 @@
 #include "kernel/concat.h"
 
 
-ZEPHIR_INIT_CLASS(Brisk_Vendor_Db_DbAdapter) {
+ZEPHIR_INIT_CLASS(Brisk_Vendor_Database_DbAdapter) {
 
-	ZEPHIR_REGISTER_CLASS(Brisk\\Vendor\\Db, DbAdapter, brisk, vendor_db_dbadapter, brisk_vendor_db_dbadapter_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Brisk\\Vendor\\Database, DbAdapter, brisk, vendor_database_dbadapter, brisk_vendor_database_dbadapter_method_entry, 0);
 
 	return SUCCESS;
 
@@ -38,7 +38,7 @@ ZEPHIR_INIT_CLASS(Brisk_Vendor_Db_DbAdapter) {
  * @param array option
  * @return DbFather
  */
-PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriver) {
+PHP_METHOD(Brisk_Vendor_Database_DbAdapter, getDriver) {
 
 	zend_class_entry *_11;
 	zend_bool _2;
@@ -100,7 +100,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriver) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 28, _6$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_5$$3, "brisk/Vendor/Db/DbAdapter.zep", 26 TSRMLS_CC);
+		zephir_throw_exception_debug(_5$$3, "brisk/Vendor/Database/DbAdapter.zep", 26 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -112,14 +112,14 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriver) {
 		ZEPHIR_CALL_METHOD(NULL, instance, "__construct", NULL, 0, dsn, option);
 		zephir_check_call_status();
 	}
-	if (!((zephir_instance_of_ev(instance, brisk_vendor_db_dbfather_ce TSRMLS_CC)))) {
+	if (!((zephir_instance_of_ev(instance, brisk_vendor_database_dbfather_ce TSRMLS_CC)))) {
 		ZEPHIR_INIT_VAR(_12$$4);
 		object_init_ex(_12$$4, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_14$$4);
 		zephir_create_array(_14$$4, 2, 0 TSRMLS_CC);
 		zephir_array_fast_append(_14$$4, driver);
 		ZEPHIR_INIT_VAR(_15$$4);
-		ZVAL_STRING(_15$$4, "\\Brisk\\Vendor\\Db\\DbFather", 1);
+		ZVAL_STRING(_15$$4, "\\Brisk\\Vendor\\Database\\DbFather", 1);
 		zephir_array_fast_append(_14$$4, _15$$4);
 		ZEPHIR_INIT_NVAR(_15$$4);
 		ZVAL_STRING(_15$$4, "db.driver_implement_error", ZEPHIR_TEMP_PARAM_COPY);
@@ -128,7 +128,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriver) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _12$$4, "__construct", NULL, 28, _13$$4);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_12$$4, "brisk/Vendor/Db/DbAdapter.zep", 31 TSRMLS_CC);
+		zephir_throw_exception_debug(_12$$4, "brisk/Vendor/Database/DbAdapter.zep", 31 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -156,7 +156,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriver) {
  * @param string name
  * @return DbFather
  */
-PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
+PHP_METHOD(Brisk_Vendor_Database_DbAdapter, getDriverFromConfig) {
 
 	zval *_52, *_16$$3, *_20$$4, *_25$$5, *_41$$6, *_49$$7;
 	zend_class_entry *_44;
@@ -219,7 +219,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _13$$3, "__construct", NULL, 28, _14$$3);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_13$$3, "brisk/Vendor/Db/DbAdapter.zep", 48 TSRMLS_CC);
+		zephir_throw_exception_debug(_13$$3, "brisk/Vendor/Database/DbAdapter.zep", 48 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	} else if (!zephir_is_true(_7)) {
@@ -237,7 +237,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _18$$4, "__construct", NULL, 28, _19$$4);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_18$$4, "brisk/Vendor/Db/DbAdapter.zep", 50 TSRMLS_CC);
+		zephir_throw_exception_debug(_18$$4, "brisk/Vendor/Database/DbAdapter.zep", 50 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	} else if (!zephir_is_true(_11)) {
@@ -255,7 +255,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _23$$5, "__construct", NULL, 28, _24$$5);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_23$$5, "brisk/Vendor/Db/DbAdapter.zep", 52 TSRMLS_CC);
+		zephir_throw_exception_debug(_23$$5, "brisk/Vendor/Database/DbAdapter.zep", 52 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -296,7 +296,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _39$$6, "__construct", NULL, 28, _40$$6);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_39$$6, "brisk/Vendor/Db/DbAdapter.zep", 58 TSRMLS_CC);
+		zephir_throw_exception_debug(_39$$6, "brisk/Vendor/Database/DbAdapter.zep", 58 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
@@ -305,19 +305,19 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
 		_44 = zend_fetch_class(Z_STRVAL_P(_43), Z_STRLEN_P(_43), ZEND_FETCH_CLASS_AUTO TSRMLS_CC);
 	object_init_ex(instance, _44);
 	if (zephir_has_constructor(instance TSRMLS_CC)) {
-		zephir_array_fetch_string(&_45, options, SL("dsn"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/DbAdapter.zep", 60 TSRMLS_CC);
-		zephir_array_fetch_string(&_46, options, SL("option"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/DbAdapter.zep", 60 TSRMLS_CC);
+		zephir_array_fetch_string(&_45, options, SL("dsn"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/DbAdapter.zep", 60 TSRMLS_CC);
+		zephir_array_fetch_string(&_46, options, SL("option"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/DbAdapter.zep", 60 TSRMLS_CC);
 		ZEPHIR_CALL_METHOD(NULL, instance, "__construct", NULL, 0, _45, _46);
 		zephir_check_call_status();
 	}
-	if (!((zephir_instance_of_ev(instance, brisk_vendor_db_dbfather_ce TSRMLS_CC)))) {
+	if (!((zephir_instance_of_ev(instance, brisk_vendor_database_dbfather_ce TSRMLS_CC)))) {
 		ZEPHIR_INIT_VAR(_47$$7);
 		object_init_ex(_47$$7, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_49$$7);
 		zephir_create_array(_49$$7, 2, 0 TSRMLS_CC);
 		zephir_array_fast_append(_49$$7, driver);
 		ZEPHIR_INIT_VAR(_50$$7);
-		ZVAL_STRING(_50$$7, "\\Brisk\\Vendor\\Db\\DbFather", 1);
+		ZVAL_STRING(_50$$7, "\\Brisk\\Vendor\\Database\\DbFather", 1);
 		zephir_array_fast_append(_49$$7, _50$$7);
 		ZEPHIR_INIT_NVAR(_50$$7);
 		ZVAL_STRING(_50$$7, "db.driver_implement_error", ZEPHIR_TEMP_PARAM_COPY);
@@ -326,7 +326,7 @@ PHP_METHOD(Brisk_Vendor_Db_DbAdapter, getDriverFromConfig) {
 		zephir_check_call_status();
 		ZEPHIR_CALL_METHOD(NULL, _47$$7, "__construct", NULL, 28, _48$$7);
 		zephir_check_call_status();
-		zephir_throw_exception_debug(_47$$7, "brisk/Vendor/Db/DbAdapter.zep", 62 TSRMLS_CC);
+		zephir_throw_exception_debug(_47$$7, "brisk/Vendor/Database/DbAdapter.zep", 62 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}

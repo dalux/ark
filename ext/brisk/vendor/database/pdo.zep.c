@@ -24,15 +24,15 @@
 #include "kernel/concat.h"
 
 
-ZEPHIR_INIT_CLASS(Brisk_Vendor_Db_Pdo) {
+ZEPHIR_INIT_CLASS(Brisk_Vendor_Database_Pdo) {
 
-	ZEPHIR_REGISTER_CLASS_EX(Brisk\\Vendor\\Db, Pdo, brisk, vendor_db_pdo, brisk_vendor_db_dbfather_ce, brisk_vendor_db_pdo_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Brisk\\Vendor\\Database, Pdo, brisk, vendor_database_pdo, brisk_vendor_database_dbfather_ce, brisk_vendor_database_pdo_method_entry, 0);
 
-	zend_declare_property_null(brisk_vendor_db_pdo_ce, SL("_instance"), ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_null(brisk_vendor_database_pdo_ce, SL("_instance"), ZEND_ACC_PRIVATE TSRMLS_CC);
 
-	zend_declare_property_long(brisk_vendor_db_pdo_ce, SL("_fetch_mode"), 2, ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_long(brisk_vendor_database_pdo_ce, SL("_fetch_mode"), 2, ZEND_ACC_PRIVATE TSRMLS_CC);
 
-	zend_declare_property_long(brisk_vendor_db_pdo_ce, SL("_row_count"), 0, ZEND_ACC_PRIVATE TSRMLS_CC);
+	zend_declare_property_long(brisk_vendor_database_pdo_ce, SL("_row_count"), 0, ZEND_ACC_PRIVATE TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -45,7 +45,7 @@ ZEPHIR_INIT_CLASS(Brisk_Vendor_Db_Pdo) {
  * @param array option
  * @return null
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, __construct) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, __construct) {
 
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_0 = NULL, *_3 = NULL;
@@ -104,7 +104,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, __construct) {
 		zephir_check_temp_parameter(_1$$3);
 		zephir_check_call_status_or_jump(try_end_1);
 		ZEPHIR_CPY_WRT(data$$3, _2$$3);
-		zephir_array_fetch_string(&_4$$3, data$$3, SL("instance"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 39 TSRMLS_CC);
+		zephir_array_fetch_string(&_4$$3, data$$3, SL("instance"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 39 TSRMLS_CC);
 		zephir_update_property_this(getThis(), SL("_instance"), _4$$3 TSRMLS_CC);
 
 	try_end_1:
@@ -121,7 +121,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, __construct) {
 			zephir_check_call_status();
 			ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 28, _7$$4);
 			zephir_check_call_status();
-			zephir_throw_exception_debug(_6$$4, "brisk/Vendor/Db/Pdo.zep", 41 TSRMLS_CC);
+			zephir_throw_exception_debug(_6$$4, "brisk/Vendor/Database/Pdo.zep", 41 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
@@ -137,7 +137,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, __construct) {
  * @param array bind
  * @return mixed
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, query) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, query) {
 
 	zend_bool result = 0;
 	zephir_fcall_cache_entry *_1 = NULL;
@@ -181,8 +181,8 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, query) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 63 TSRMLS_CC);
-	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 63 TSRMLS_CC);
+	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 63 TSRMLS_CC);
+	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 63 TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	result = 1;
@@ -195,7 +195,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, query) {
 	zephir_check_temp_parameter(_5);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_6, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 67 TSRMLS_CC);
+	zephir_array_fetch_string(&_6, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 67 TSRMLS_CC);
 	RETURN_CTOR(_6);
 
 }
@@ -207,7 +207,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, query) {
  * @param array bind
  * @return array
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchAll) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, fetchAll) {
 
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -250,8 +250,8 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchAll) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 88 TSRMLS_CC);
-	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 88 TSRMLS_CC);
+	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 88 TSRMLS_CC);
+	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 88 TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_fetch_mode"), PH_NOISY_CC);
@@ -264,7 +264,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchAll) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_6, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 92 TSRMLS_CC);
+	zephir_array_fetch_string(&_6, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 92 TSRMLS_CC);
 	RETURN_CTOR(_6);
 
 }
@@ -276,7 +276,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchAll) {
  * @param array bind
  * @return mixed
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchOne) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, fetchOne) {
 
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -319,8 +319,8 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchOne) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 112 TSRMLS_CC);
-	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 112 TSRMLS_CC);
+	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 112 TSRMLS_CC);
+	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 112 TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_2);
@@ -334,7 +334,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchOne) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_5, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 116 TSRMLS_CC);
+	zephir_array_fetch_string(&_5, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 116 TSRMLS_CC);
 	RETURN_CTOR(_5);
 
 }
@@ -346,7 +346,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchOne) {
  * @param array bind
  * @return array
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchRow) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, fetchRow) {
 
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -389,8 +389,8 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchRow) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 137 TSRMLS_CC);
-	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 137 TSRMLS_CC);
+	zephir_array_fetch_string(&_3, data, SL("sql"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 137 TSRMLS_CC);
+	zephir_array_fetch_string(&_4, data, SL("bind"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 137 TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&smt, this_ptr, "_query", NULL, 107, _3, _4);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(func);
@@ -405,7 +405,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchRow) {
 	zephir_check_temp_parameter(_2);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _0);
-	zephir_array_fetch_string(&_6, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 142 TSRMLS_CC);
+	zephir_array_fetch_string(&_6, data, SL("result"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 142 TSRMLS_CC);
 	RETURN_CTOR(_6);
 
 }
@@ -415,7 +415,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, fetchRow) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, beginTransaction) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, beginTransaction) {
 
 	zval *_0;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -434,7 +434,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, beginTransaction) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, commit) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, commit) {
 
 	zval *_0;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -453,7 +453,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, commit) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, rollback) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, rollback) {
 
 	zval *_0;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -472,7 +472,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, rollback) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, inTransaction) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, inTransaction) {
 
 	zval *_0;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -491,7 +491,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, inTransaction) {
  *
  * @return int
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, nextInsertId) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, nextInsertId) {
 
 	
 
@@ -505,7 +505,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, nextInsertId) {
  * @param string seq
  * @return int
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, lastInsertId) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, lastInsertId) {
 
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *seq_param = NULL, *_0;
@@ -543,7 +543,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, lastInsertId) {
  *
  * @return int
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, lastRowCount) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, lastRowCount) {
 
 	
 
@@ -557,7 +557,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, lastRowCount) {
  * @param int mode
  * @return Pdo
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, setFetchMode) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, setFetchMode) {
 
 	zval *mode_param = NULL, *_0;
 	zend_long mode;
@@ -583,7 +583,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, setFetchMode) {
  *
  * @return string
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, getDriverName) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, getDriverName) {
 
 	zval *_0, *_1;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -604,7 +604,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, getDriverName) {
  *
  * @return \PDO
  */
-PHP_METHOD(Brisk_Vendor_Db_Pdo, getInstance) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, getInstance) {
 
 	
 
@@ -612,7 +612,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, getInstance) {
 
 }
 
-PHP_METHOD(Brisk_Vendor_Db_Pdo, _query) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, _query) {
 
 	HashTable *_5$$4;
 	HashPosition _4$$4;
@@ -656,7 +656,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _query) {
 		zephir_check_call_status_or_jump(try_end_1);
 		if (zephir_fast_count_int(bind TSRMLS_CC) > 0) {
 			ZEPHIR_INIT_VAR(_3$$4);
-			zephir_is_iterable(bind, &_5$$4, &_4$$4, 0, 0, "brisk/Vendor/Db/Pdo.zep", 263);
+			zephir_is_iterable(bind, &_5$$4, &_4$$4, 0, 0, "brisk/Vendor/Database/Pdo.zep", 263);
 			for (
 			  ; zend_hash_get_current_data_ex(_5$$4, (void**) &_6$$4, &_4$$4) == SUCCESS
 			  ; zend_hash_move_forward_ex(_5$$4, &_4$$4)
@@ -668,7 +668,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _query) {
 					ZEPHIR_INIT_NVAR(key$$4);
 					ZVAL_LONG(key$$4, _7$$6);
 				}
-				zephir_array_fetch(&_8$$5, bind, key$$4, PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 261 TSRMLS_CC);
+				zephir_array_fetch(&_8$$5, bind, key$$4, PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 261 TSRMLS_CC);
 				ZEPHIR_CALL_METHOD(NULL, smt, "bindparam", &_9, 0, key$$4, _8$$5);
 				zephir_check_call_status_or_jump(try_end_1);
 			}
@@ -732,10 +732,10 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _query) {
 			ZEPHIR_CPY_WRT(data$$7, _21$$7);
 			ZEPHIR_INIT_NVAR(_23$$7);
 			object_init_ex(_23$$7, brisk_exception_pdoexception_ce);
-			zephir_array_fetch_string(&_24$$7, data$$7, SL("error"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 278 TSRMLS_CC);
+			zephir_array_fetch_string(&_24$$7, data$$7, SL("error"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 278 TSRMLS_CC);
 			ZEPHIR_CALL_METHOD(NULL, _23$$7, "__construct", NULL, 28, _24$$7);
 			zephir_check_call_status();
-			zephir_throw_exception_debug(_23$$7, "brisk/Vendor/Db/Pdo.zep", 278 TSRMLS_CC);
+			zephir_throw_exception_debug(_23$$7, "brisk/Vendor/Database/Pdo.zep", 278 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
 			return;
 		}
@@ -744,7 +744,7 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _query) {
 
 }
 
-PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
+PHP_METHOD(Brisk_Vendor_Database_Pdo, _getConnection) {
 
 	zend_bool _4$$3;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -774,42 +774,42 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
 	}
 
 
-	ZEPHIR_CALL_CE_STATIC(&database, brisk_vendor_db_dbtoolkit_ce, "parseconnecturl", &_0, 109, dsn);
+	ZEPHIR_CALL_CE_STATIC(&database, brisk_vendor_database_dbtoolkit_ce, "parseconnecturl", &_0, 109, dsn);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_1);
-	zephir_array_fetch_string(&_2, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 286 TSRMLS_CC);
+	zephir_array_fetch_string(&_2, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 286 TSRMLS_CC);
 	zephir_fast_strtolower(_1, _2);
 	do {
 		if (ZEPHIR_IS_STRING(_1, "oci")) {
 			ZEPHIR_OBS_VAR(conn_str);
-			zephir_array_fetch_string(&conn_str, database, SL("host"), PH_NOISY, "brisk/Vendor/Db/Pdo.zep", 288 TSRMLS_CC);
-			zephir_array_fetch_string(&_3$$3, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 289 TSRMLS_CC);
+			zephir_array_fetch_string(&conn_str, database, SL("host"), PH_NOISY, "brisk/Vendor/Database/Pdo.zep", 288 TSRMLS_CC);
+			zephir_array_fetch_string(&_3$$3, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 289 TSRMLS_CC);
 			_4$$3 = !ZEPHIR_IS_STRING(_3$$3, "");
 			if (_4$$3) {
-				zephir_array_fetch_string(&_5$$3, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 289 TSRMLS_CC);
+				zephir_array_fetch_string(&_5$$3, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 289 TSRMLS_CC);
 				_4$$3 = !ZEPHIR_IS_STRING(_5$$3, "");
 			}
 			if (_4$$3) {
-				zephir_array_fetch_string(&_6$$4, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 290 TSRMLS_CC);
+				zephir_array_fetch_string(&_6$$4, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 290 TSRMLS_CC);
 				if (ZEPHIR_IS_STRING(_6$$4, "")) {
 					ZEPHIR_INIT_VAR(_7$$5);
 					ZVAL_LONG(_7$$5, 1521);
 					zephir_array_update_string(&database, SL("port"), &_7$$5, PH_COPY | PH_SEPARATE);
 				}
-				zephir_array_fetch_string(&_8$$4, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 293 TSRMLS_CC);
-				zephir_array_fetch_string(&_9$$4, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 293 TSRMLS_CC);
-				zephir_array_fetch_string(&_10$$4, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 293 TSRMLS_CC);
+				zephir_array_fetch_string(&_8$$4, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 293 TSRMLS_CC);
+				zephir_array_fetch_string(&_9$$4, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 293 TSRMLS_CC);
+				zephir_array_fetch_string(&_10$$4, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 293 TSRMLS_CC);
 				ZEPHIR_INIT_NVAR(conn_str);
 				ZEPHIR_CONCAT_SVSVSV(conn_str, "//", _8$$4, ":", _9$$4, "/", _10$$4);
 			}
-			zephir_array_fetch_string(&_11$$3, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 295 TSRMLS_CC);
+			zephir_array_fetch_string(&_11$$3, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 295 TSRMLS_CC);
 			ZEPHIR_SINIT_VAR(_12$$3);
 			ZVAL_STRING(&_12$$3, "%s:dbname=%s;", 0);
 			ZEPHIR_CALL_FUNCTION(&_13$$3, "sprintf", &_14, 40, &_12$$3, _11$$3, conn_str);
 			zephir_check_call_status();
 			ZEPHIR_CPY_WRT(conn_str, _13$$3);
 			ZEPHIR_OBS_VAR(charset);
-			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Db/Pdo.zep", 296 TSRMLS_CC);
+			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Database/Pdo.zep", 296 TSRMLS_CC);
 			if (!ZEPHIR_IS_STRING(charset, "")) {
 				ZEPHIR_SINIT_VAR(_15$$6);
 				ZVAL_STRING(&_15$$6, "charset=%s", 0);
@@ -828,16 +828,16 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
 			break;
 		}
 		if (ZEPHIR_IS_STRING(_1, "mysql")) {
-			zephir_array_fetch_string(&_18$$7, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 308 TSRMLS_CC);
-			zephir_array_fetch_string(&_19$$7, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 308 TSRMLS_CC);
-			zephir_array_fetch_string(&_20$$7, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 308 TSRMLS_CC);
-			zephir_array_fetch_string(&_21$$7, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 308 TSRMLS_CC);
+			zephir_array_fetch_string(&_18$$7, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 308 TSRMLS_CC);
+			zephir_array_fetch_string(&_19$$7, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 308 TSRMLS_CC);
+			zephir_array_fetch_string(&_20$$7, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 308 TSRMLS_CC);
+			zephir_array_fetch_string(&_21$$7, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 308 TSRMLS_CC);
 			ZEPHIR_SINIT_VAR(_22$$7);
 			ZVAL_STRING(&_22$$7, "%s:host=%s;port=%s;dbname=%s;", 0);
 			ZEPHIR_CALL_FUNCTION(&conn_str, "sprintf", &_14, 40, &_22$$7, _18$$7, _19$$7, _20$$7, _21$$7);
 			zephir_check_call_status();
 			ZEPHIR_OBS_NVAR(charset);
-			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Db/Pdo.zep", 309 TSRMLS_CC);
+			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Database/Pdo.zep", 309 TSRMLS_CC);
 			if (!ZEPHIR_IS_STRING(charset, "")) {
 				ZEPHIR_SINIT_VAR(_23$$8);
 				ZVAL_STRING(&_23$$8, "charset=%s", 0);
@@ -855,16 +855,16 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
 			break;
 		}
 		if (ZEPHIR_IS_STRING(_1, "pgsql")) {
-			zephir_array_fetch_string(&_26$$9, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 320 TSRMLS_CC);
-			zephir_array_fetch_string(&_27$$9, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 320 TSRMLS_CC);
-			zephir_array_fetch_string(&_28$$9, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 320 TSRMLS_CC);
-			zephir_array_fetch_string(&_29$$9, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 320 TSRMLS_CC);
+			zephir_array_fetch_string(&_26$$9, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 320 TSRMLS_CC);
+			zephir_array_fetch_string(&_27$$9, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 320 TSRMLS_CC);
+			zephir_array_fetch_string(&_28$$9, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 320 TSRMLS_CC);
+			zephir_array_fetch_string(&_29$$9, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 320 TSRMLS_CC);
 			ZEPHIR_SINIT_VAR(_30$$9);
 			ZVAL_STRING(&_30$$9, "%s:host=%s;port=%s;dbname=%s;", 0);
 			ZEPHIR_CALL_FUNCTION(&conn_str, "sprintf", &_14, 40, &_30$$9, _26$$9, _27$$9, _28$$9, _29$$9);
 			zephir_check_call_status();
 			ZEPHIR_OBS_NVAR(charset);
-			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Db/Pdo.zep", 321 TSRMLS_CC);
+			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Database/Pdo.zep", 321 TSRMLS_CC);
 			if (!ZEPHIR_IS_STRING(charset, "")) {
 				ZEPHIR_SINIT_VAR(_31$$10);
 				ZVAL_STRING(&_31$$10, "charset=%s", 0);
@@ -890,16 +890,16 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
 			break;
 		}
 		if (ZEPHIR_IS_STRING(_1, "sqlsrv")) {
-			zephir_array_fetch_string(&_34$$12, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 339 TSRMLS_CC);
-			zephir_array_fetch_string(&_35$$12, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 339 TSRMLS_CC);
-			zephir_array_fetch_string(&_36$$12, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 339 TSRMLS_CC);
-			zephir_array_fetch_string(&_37$$12, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 339 TSRMLS_CC);
+			zephir_array_fetch_string(&_34$$12, database, SL("type"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 339 TSRMLS_CC);
+			zephir_array_fetch_string(&_35$$12, database, SL("host"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 339 TSRMLS_CC);
+			zephir_array_fetch_string(&_36$$12, database, SL("port"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 339 TSRMLS_CC);
+			zephir_array_fetch_string(&_37$$12, database, SL("name"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 339 TSRMLS_CC);
 			ZEPHIR_SINIT_VAR(_38$$12);
 			ZVAL_STRING(&_38$$12, "%s:Server=%s,%s;Database=%s;", 0);
 			ZEPHIR_CALL_FUNCTION(&conn_str, "sprintf", &_14, 40, &_38$$12, _34$$12, _35$$12, _36$$12, _37$$12);
 			zephir_check_call_status();
 			ZEPHIR_OBS_NVAR(charset);
-			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Db/Pdo.zep", 340 TSRMLS_CC);
+			zephir_array_fetch_string(&charset, database, SL("charset"), PH_NOISY, "brisk/Vendor/Database/Pdo.zep", 340 TSRMLS_CC);
 			if (!ZEPHIR_IS_STRING(charset, "")) {
 				ZEPHIR_SINIT_VAR(_39$$13);
 				ZVAL_STRING(&_39$$13, "charset=%s", 0);
@@ -925,8 +925,8 @@ PHP_METHOD(Brisk_Vendor_Db_Pdo, _getConnection) {
 	}
 	ZEPHIR_INIT_VAR(instance);
 	object_init_ex(instance, php_pdo_get_dbh_ce());
-	zephir_array_fetch_string(&_43, database, SL("user"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 355 TSRMLS_CC);
-	zephir_array_fetch_string(&_44, database, SL("pass"), PH_NOISY | PH_READONLY, "brisk/Vendor/Db/Pdo.zep", 355 TSRMLS_CC);
+	zephir_array_fetch_string(&_43, database, SL("user"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 355 TSRMLS_CC);
+	zephir_array_fetch_string(&_44, database, SL("pass"), PH_NOISY | PH_READONLY, "brisk/Vendor/Database/Pdo.zep", 355 TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(NULL, instance, "__construct", NULL, 0, conn_str, _43, _44, params);
 	zephir_check_call_status();
 	RETURN_CCTOR(instance);

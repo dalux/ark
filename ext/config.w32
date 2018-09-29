@@ -15,7 +15,7 @@ if (PHP_BRISK != "no") {
 	ADD_SOURCES(configure_module_dirname + "/brisk/exception", "runtimeexception.zep.c actionnotfoundexception.zep.c classnotfoundexception.zep.c configurationexception.zep.c controllerexception.zep.c controllernotfoundexception.zep.c drivernotfoundexception.zep.c eventexception.zep.c methodnotfoundexception.zep.c pdoexception.zep.c routerexception.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/cache", "cachefather.zep.c cacheadapter.zep.c cacheproxy.zep.c file.zep.c memcached.zep.c redis.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/kernel/router", "routerfather.zep.c classic.zep.c rewrite.zep.c routeradapter.zep.c", "brisk");
-	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/db", "dbfather.zep.c dbadapter.zep.c dbquerier.zep.c dbtoolkit.zep.c pdo.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/database", "dbfather.zep.c dbadapter.zep.c dbquerier.zep.c dbtoolkit.zep.c pdo.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/view", "viewfather.zep.c native.zep.c viewadapter.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/kernel", "app.zep.c config.zep.c container.zep.c event.zep.c handler.zep.c language.zep.c loader.zep.c request.zep.c server.zep.c session.zep.c timer.zep.c toolkit.zep.c trace.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/vendor/querier/delete", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");

@@ -17,7 +17,7 @@ if test "$PHP_BRISK" = "yes"; then
 	brisk/vendor/querier/update.zep.c
 	brisk/vendor/cache/cachefather.zep.c
 	brisk/kernel/router/routerfather.zep.c
-	brisk/vendor/db/dbfather.zep.c
+	brisk/vendor/database/dbfather.zep.c
 	brisk/vendor/view/viewfather.zep.c
 	brisk/exception/actionnotfoundexception.zep.c
 	brisk/exception/classnotfoundexception.zep.c
@@ -50,10 +50,10 @@ if test "$PHP_BRISK" = "yes"; then
 	brisk/vendor/cache/file.zep.c
 	brisk/vendor/cache/memcached.zep.c
 	brisk/vendor/cache/redis.zep.c
-	brisk/vendor/db/dbadapter.zep.c
-	brisk/vendor/db/dbquerier.zep.c
-	brisk/vendor/db/dbtoolkit.zep.c
-	brisk/vendor/db/pdo.zep.c
+	brisk/vendor/database/dbadapter.zep.c
+	brisk/vendor/database/dbquerier.zep.c
+	brisk/vendor/database/dbtoolkit.zep.c
+	brisk/vendor/database/pdo.zep.c
 	brisk/vendor/querier/delete/mysql.zep.c
 	brisk/vendor/querier/delete/oci.zep.c
 	brisk/vendor/querier/delete/pgsql.zep.c

@@ -68,7 +68,7 @@ PHP_METHOD(Brisk_Kernel_Config, getExample) {
 	zephir_create_array(_0, 1, 0 TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(_1);
 	zephir_create_array(_1, 2, 0 TSRMLS_CC);
-	add_assoc_stringl_ex(_1, SS("driver"), SL("Brisk\\Vendor\\Db\\Pdo"), 1);
+	add_assoc_stringl_ex(_1, SS("driver"), SL("Brisk\\Vendor\\Database\\Pdo"), 1);
 	ZEPHIR_INIT_VAR(_2);
 	zephir_create_array(_2, 2, 0 TSRMLS_CC);
 	add_assoc_stringl_ex(_2, SS("dsn"), SL("mysql://username:password@127.0.0.1:3306/dbname?charset=utf8"), 1);
