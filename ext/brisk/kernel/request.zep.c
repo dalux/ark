@@ -120,10 +120,10 @@ PHP_METHOD(Brisk_Kernel_Request, getInstance) {
 		object_init_ex(_2$$3, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_5$$3);
 		ZVAL_STRING(_5$$3, "http.request_not_ready", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 27, _5$$3);
+		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 26, _5$$3);
 		zephir_check_temp_parameter(_5$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 28, _3$$3);
+		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 27, _3$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_2$$3, "brisk/Kernel/Request.zep", 50 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -131,7 +131,7 @@ PHP_METHOD(Brisk_Kernel_Request, getInstance) {
 	} else if (Z_TYPE_P(_1) == IS_NULL) {
 		ZEPHIR_INIT_VAR(_6$$4);
 		object_init_ex(_6$$4, brisk_kernel_request_ce);
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 53);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 52);
 		zephir_check_call_status();
 		zephir_update_static_property_ce(brisk_kernel_request_ce, SL("_instance"), &_6$$4 TSRMLS_CC);
 	}
@@ -166,7 +166,7 @@ PHP_METHOD(Brisk_Kernel_Request, __construct) {
 	zephir_array_update_string(&data, SL("files"), &_FILES, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_VAR(_3);
 	ZVAL_STRING(_3, "event.request.ready", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_event_ce, "fire", &_2, 32, _3, data);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_event_ce, "fire", &_2, 31, _3, data);
 	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _1);
@@ -292,7 +292,7 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 		zephir_array_fetch_string(&_8$$9, _SERVER, SL("REMOTE_ADDR"), PH_NOISY | PH_READONLY, "brisk/Kernel/Request.zep", 126 TSRMLS_CC);
 		zephir_array_append(&ips, _8$$9, PH_SEPARATE, "brisk/Kernel/Request.zep", 126);
 	}
-	ZEPHIR_CALL_FUNCTION(&_9, "array_filter", NULL, 54, ips);
+	ZEPHIR_CALL_FUNCTION(&_9, "array_filter", NULL, 53, ips);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(ips, _9);
 	while (1) {
@@ -303,7 +303,7 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 		ZEPHIR_CALL_FUNCTION(&ip, "array_shift", &_10, 7, ips);
 		ZEPHIR_UNREF(ips);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_11$$10, "ip2long", &_12, 55, ip);
+		ZEPHIR_CALL_FUNCTION(&_11$$10, "ip2long", &_12, 54, ip);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(_11$$10)) {
 			break;
@@ -311,11 +311,11 @@ PHP_METHOD(Brisk_Kernel_Request, getIpAddress) {
 	}
 	ZEPHIR_INIT_VAR(_13);
 	if (convert) {
-		ZEPHIR_CALL_FUNCTION(&_9, "ip2long", &_12, 55, ip);
+		ZEPHIR_CALL_FUNCTION(&_9, "ip2long", &_12, 54, ip);
 		zephir_check_call_status();
 		ZEPHIR_SINIT_VAR(_14);
 		ZVAL_STRING(&_14, "%u", 0);
-		ZEPHIR_CALL_FUNCTION(&_13, "sprintf", NULL, 40, &_14, _9);
+		ZEPHIR_CALL_FUNCTION(&_13, "sprintf", NULL, 39, &_14, _9);
 		zephir_check_call_status();
 	} else {
 		ZEPHIR_CPY_WRT(_13, ip);
@@ -367,10 +367,10 @@ PHP_METHOD(Brisk_Kernel_Request, add) {
 		zephir_array_fast_append(_6$$3, _7$$3);
 		ZEPHIR_INIT_NVAR(_7$$3);
 		ZVAL_STRING(_7$$3, "http.method_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_4$$3, brisk_kernel_language_ce, "get", &_5, 27, _7$$3, _6$$3);
+		ZEPHIR_CALL_CE_STATIC(&_4$$3, brisk_kernel_language_ce, "get", &_5, 26, _7$$3, _6$$3);
 		zephir_check_temp_parameter(_7$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 28, _4$$3);
+		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 27, _4$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_3$$3, "brisk/Kernel/Request.zep", 148 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -428,10 +428,10 @@ PHP_METHOD(Brisk_Kernel_Request, del) {
 		zephir_array_fast_append(_6$$3, _7$$3);
 		ZEPHIR_INIT_NVAR(_7$$3);
 		ZVAL_STRING(_7$$3, "http.method_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_4$$3, brisk_kernel_language_ce, "get", &_5, 27, _7$$3, _6$$3);
+		ZEPHIR_CALL_CE_STATIC(&_4$$3, brisk_kernel_language_ce, "get", &_5, 26, _7$$3, _6$$3);
 		zephir_check_temp_parameter(_7$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 28, _4$$3);
+		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 27, _4$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_3$$3, "brisk/Kernel/Request.zep", 168 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -509,10 +509,10 @@ PHP_METHOD(Brisk_Kernel_Request, data) {
 		zephir_array_fast_append(_4$$3, _5$$3);
 		ZEPHIR_INIT_NVAR(_5$$3);
 		ZVAL_STRING(_5$$3, "http.method_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 27, _5$$3, _4$$3);
+		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 26, _5$$3, _4$$3);
 		zephir_check_temp_parameter(_5$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 28, _2$$3);
+		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 27, _2$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_1$$3, "brisk/Kernel/Request.zep", 188 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -625,10 +625,10 @@ PHP_METHOD(Brisk_Kernel_Request, __get) {
 		zephir_array_fast_append(_5$$3, flag);
 		ZEPHIR_INIT_VAR(_6$$3);
 		ZVAL_STRING(_6$$3, "http.property_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 27, _6$$3, _5$$3);
+		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 26, _6$$3, _5$$3);
 		zephir_check_temp_parameter(_6$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 28, _3$$3);
+		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 27, _3$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_2$$3, "brisk/Kernel/Request.zep", 232 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

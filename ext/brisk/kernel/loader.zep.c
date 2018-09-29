@@ -200,16 +200,16 @@ PHP_METHOD(Brisk_Kernel_Loader, autoLoad) {
 		object_init_ex(_0$$3, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_3$$3);
 		ZVAL_STRING(_3$$3, "core.class_path_notfound", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 27, _3$$3, classname);
+		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 26, _3$$3, classname);
 		zephir_check_temp_parameter(_3$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 28, _1$$3);
+		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 27, _1$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_0$$3, "brisk/Kernel/Loader.zep", 75 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_toolkit_ce, "includeonce", &_4, 51, path);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_toolkit_ce, "includeonce", &_4, 50, path);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -290,10 +290,10 @@ PHP_METHOD(Brisk_Kernel_Loader, findClass) {
 		object_init_ex(_13$$6, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_16$$6);
 		ZVAL_STRING(_16$$6, "core.namespace_not_defined", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_14$$6, brisk_kernel_language_ce, "get", &_15, 27, _16$$6, classname);
+		ZEPHIR_CALL_CE_STATIC(&_14$$6, brisk_kernel_language_ce, "get", &_15, 26, _16$$6, classname);
 		zephir_check_temp_parameter(_16$$6);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _13$$6, "__construct", NULL, 28, _14$$6);
+		ZEPHIR_CALL_METHOD(NULL, _13$$6, "__construct", NULL, 27, _14$$6);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_13$$6, "brisk/Kernel/Loader.zep", 101 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -345,7 +345,7 @@ PHP_METHOD(Brisk_Kernel_Loader, findClass) {
 		ZEPHIR_INIT_LNVAR(_34$$7);
 		ZEPHIR_CONCAT_VS(_34$$7, _33$$7, ".php");
 		ZEPHIR_CPY_WRT(_path, _34$$7);
-		ZEPHIR_CALL_FUNCTION(&_35$$7, "is_file", &_36, 49, _path);
+		ZEPHIR_CALL_FUNCTION(&_35$$7, "is_file", &_36, 48, _path);
 		zephir_check_call_status();
 		if (zephir_is_true(_35$$7)) {
 			ZEPHIR_CPY_WRT(path, _path);
@@ -384,7 +384,7 @@ PHP_METHOD(Brisk_Kernel_Loader, realPath) {
 	}
 
 
-	ZEPHIR_CALL_SELF(&parsed, "_parse", &_0, 52, spacename);
+	ZEPHIR_CALL_SELF(&parsed, "_parse", &_0, 51, spacename);
 	zephir_check_call_status();
 	if (zephir_fast_count_int(parsed TSRMLS_CC) > 0) {
 		ZEPHIR_OBS_VAR(alias$$3);
@@ -416,10 +416,10 @@ PHP_METHOD(Brisk_Kernel_Loader, realPath) {
 	zephir_array_fast_append(_10, spacename);
 	ZEPHIR_INIT_VAR(_11);
 	ZVAL_STRING(_11, "core.format_path_failed", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&_8, brisk_kernel_language_ce, "get", &_9, 27, _11, _10);
+	ZEPHIR_CALL_CE_STATIC(&_8, brisk_kernel_language_ce, "get", &_9, 26, _11, _10);
 	zephir_check_temp_parameter(_11);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(NULL, _7, "__construct", NULL, 28, _8);
+	ZEPHIR_CALL_METHOD(NULL, _7, "__construct", NULL, 27, _8);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(_7, "brisk/Kernel/Loader.zep", 132 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();

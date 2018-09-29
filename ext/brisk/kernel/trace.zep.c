@@ -83,7 +83,7 @@ PHP_METHOD(Brisk_Kernel_Trace, set) {
 		zephir_array_fetch(&_9$$5, _8$$5, flag, PH_NOISY | PH_READONLY, "brisk/Kernel/Trace.zep", 23 TSRMLS_CC);
 		ZEPHIR_SINIT_VAR(_10$$5);
 		ZVAL_LONG(&_10$$5, -1000);
-		ZEPHIR_CALL_FUNCTION(&_11$$5, "array_slice", NULL, 93, _9$$5, &_10$$5);
+		ZEPHIR_CALL_FUNCTION(&_11$$5, "array_slice", NULL, 92, _9$$5, &_10$$5);
 		zephir_check_call_status();
 		zephir_update_static_property_array_multi_ce(brisk_kernel_trace_ce, SL("_trace"), &_11$$5 TSRMLS_CC, SL("z"), 1, flag);
 	}

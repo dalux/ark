@@ -184,7 +184,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, getInterceptors) {
 		ZVAL_STRING(_8$$5, "todoUKSort", 1);
 		zephir_array_fast_append(_7$$5, _8$$5);
 		ZEPHIR_MAKE_REF(result);
-		ZEPHIR_CALL_FUNCTION(NULL, "uksort", NULL, 56, result, _7$$5);
+		ZEPHIR_CALL_FUNCTION(NULL, "uksort", NULL, 55, result, _7$$5);
 		ZEPHIR_UNREF(result);
 		zephir_check_call_status();
 	}
@@ -210,7 +210,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 	ZEPHIR_MM_GROW();
 	zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 46);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_2);
 	zephir_read_property(&_2, _0, SL("config"), PH_NOISY_CC);
@@ -229,16 +229,16 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 		zephir_array_fast_append(_8$$3, _9$$3);
 		ZEPHIR_INIT_NVAR(_9$$3);
 		ZVAL_STRING(_9$$3, "core.config_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 27, _9$$3, _8$$3);
+		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 26, _9$$3, _8$$3);
 		zephir_check_temp_parameter(_9$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 28, _6$$3);
+		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 27, _6$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_5$$3, "brisk/Kernel/Router/Rewrite.zep", 89 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_CE_STATIC(&_10, brisk_kernel_app_ce, "getinstance", &_1, 46);
+	ZEPHIR_CALL_CE_STATIC(&_10, brisk_kernel_app_ce, "getinstance", &_1, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_11);
 	zephir_read_property(&_11, _10, SL("config"), PH_NOISY_CC);
@@ -254,7 +254,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 	zephir_fast_trim(base_namespace, _12, &_13, ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(_4);
 	ZVAL_STRING(_4, "REQUEST_URI", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&uri, brisk_kernel_server_ce, "getitem", &_14, 57, _4);
+	ZEPHIR_CALL_CE_STATIC(&uri, brisk_kernel_server_ce, "getitem", &_14, 56, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(controller);
@@ -294,7 +294,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 		ZEPHIR_INIT_VAR(_22$$6);
 		zephir_substr(_22$$6, uri, 0 , zephir_get_intval(_20$$6), 0);
 		ZEPHIR_CPY_WRT(uri, _22$$6);
-		ZEPHIR_CALL_CE_STATIC(&_23$$6, brisk_kernel_server_ce, "iscli", &_24, 20);
+		ZEPHIR_CALL_CE_STATIC(&_23$$6, brisk_kernel_server_ce, "iscli", &_24, 19);
 		zephir_check_call_status();
 		_25$$6 = zephir_is_true(_23$$6);
 		if (_25$$6) {
@@ -333,7 +333,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 			}
 		}
 	}
-	ZEPHIR_CALL_METHOD(&_36, this_ptr, "_rewrite", NULL, 68, uri);
+	ZEPHIR_CALL_METHOD(&_36, this_ptr, "_rewrite", NULL, 67, uri);
 	zephir_check_call_status();
 	ZEPHIR_SINIT_VAR(_37);
 	ZVAL_STRING(&_37, "/", 0);
@@ -348,7 +348,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 	if (_38) {
 		ZEPHIR_SINIT_VAR(_40$$10);
 		ZVAL_STRING(&_40$$10, "~%s$~i", 0);
-		ZEPHIR_CALL_FUNCTION(&_41$$10, "sprintf", NULL, 40, &_40$$10, url_suffix);
+		ZEPHIR_CALL_FUNCTION(&_41$$10, "sprintf", NULL, 39, &_40$$10, url_suffix);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(_42$$10);
 		ZVAL_STRING(_42$$10, "", ZEPHIR_TEMP_PARAM_COPY);
@@ -362,10 +362,10 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 		zephir_fast_explode_str(_44$$11, SL("/"), uri, LONG_MAX TSRMLS_CC);
 		ZEPHIR_SINIT_VAR(_45$$11);
 		ZVAL_STRING(&_45$$11, "ucfirst", 0);
-		ZEPHIR_CALL_FUNCTION(&controllers$$11, "array_map", &_46, 69, &_45$$11, _44$$11);
+		ZEPHIR_CALL_FUNCTION(&controllers$$11, "array_map", &_46, 68, &_45$$11, _44$$11);
 		zephir_check_call_status();
 		ZEPHIR_MAKE_REF(controllers$$11);
-		ZEPHIR_CALL_FUNCTION(&dist$$11, "end", NULL, 70, controllers$$11);
+		ZEPHIR_CALL_FUNCTION(&dist$$11, "end", NULL, 69, controllers$$11);
 		ZEPHIR_UNREF(controllers$$11);
 		zephir_check_call_status();
 		ZEPHIR_SINIT_NVAR(_45$$11);
@@ -399,7 +399,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 			ZEPHIR_CPY_WRT(dist$$11, _51$$12);
 			ZEPHIR_SINIT_VAR(_55$$12);
 			ZVAL_STRING(&_55$$12, "ucfirst", 0);
-			ZEPHIR_CALL_FUNCTION(&_56$$12, "array_map", &_46, 69, &_55$$12, dist$$11);
+			ZEPHIR_CALL_FUNCTION(&_56$$12, "array_map", &_46, 68, &_55$$12, dist$$11);
 			zephir_check_call_status();
 			ZEPHIR_CPY_WRT(dist$$11, _56$$12);
 			ZEPHIR_INIT_NVAR(_51$$12);
@@ -415,11 +415,11 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, ready) {
 	ZEPHIR_INIT_VAR(ns_space);
 	ZEPHIR_CONCAT_VSV(ns_space, base_namespace, "\\", controller);
 	zephir_update_static_property_ce(brisk_kernel_router_rewrite_ce, SL("_current_namespace"), &ns_space TSRMLS_CC);
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_57, 59, _GET);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_57, 58, _GET);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_59);
 	ZVAL_BOOL(_59, 1);
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setready", &_58, 60, _59);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setready", &_58, 59, _59);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -445,11 +445,11 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, dispatch) {
 
 	ZEPHIR_OBS_VAR(ns_space);
 	zephir_read_static_property_ce(&ns_space, brisk_kernel_router_rewrite_ce, SL("_current_namespace") TSRMLS_CC);
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_toolkit_ce, "classdeclared", &_1, 61, ns_space);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_toolkit_ce, "classdeclared", &_1, 60, ns_space);
 	zephir_check_call_status();
 	_2 = !zephir_is_true(_0);
 	if (_2) {
-		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_loader_ce, "findclass", &_4, 62, ns_space);
+		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_loader_ce, "findclass", &_4, 61, ns_space);
 		zephir_check_call_status();
 		_2 = !zephir_is_true(_3);
 	}
@@ -461,10 +461,10 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, dispatch) {
 		zephir_array_fast_append(_8$$3, ns_space);
 		ZEPHIR_INIT_VAR(_9$$3);
 		ZVAL_STRING(_9$$3, "router.controller_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 27, _9$$3, _8$$3);
+		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 26, _9$$3, _8$$3);
 		zephir_check_temp_parameter(_9$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 28, _6$$3);
+		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 27, _6$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_5$$3, "brisk/Kernel/Router/Rewrite.zep", 166 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -477,16 +477,16 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, dispatch) {
 		zephir_array_fast_append(_12$$4, ns_space);
 		ZEPHIR_INIT_VAR(_13$$4);
 		ZVAL_STRING(_13$$4, "router.class_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_11$$4, brisk_kernel_language_ce, "get", &_7, 27, _13$$4, _12$$4);
+		ZEPHIR_CALL_CE_STATIC(&_11$$4, brisk_kernel_language_ce, "get", &_7, 26, _13$$4, _12$$4);
 		zephir_check_temp_parameter(_13$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _10$$4, "__construct", NULL, 28, _11$$4);
+		ZEPHIR_CALL_METHOD(NULL, _10$$4, "__construct", NULL, 27, _11$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_10$$4, "brisk/Kernel/Router/Rewrite.zep", 168 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_CE_STATIC(&_14, brisk_kernel_app_ce, "getinstance", &_15, 46);
+	ZEPHIR_CALL_CE_STATIC(&_14, brisk_kernel_app_ce, "getinstance", &_15, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_16);
 	zephir_read_property(&_16, _14, SL("config"), PH_NOISY_CC);
@@ -509,9 +509,9 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, dispatch) {
 	}
 	ZEPHIR_INIT_VAR(ref);
 	object_init_ex(ref, zephir_get_internal_ce(SS("reflectionclass") TSRMLS_CC));
-	ZEPHIR_CALL_METHOD(NULL, ref, "__construct", NULL, 63, ns_space);
+	ZEPHIR_CALL_METHOD(NULL, ref, "__construct", NULL, 62, ns_space);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_18, ref, "isabstract", NULL, 64);
+	ZEPHIR_CALL_METHOD(&_18, ref, "isabstract", NULL, 63);
 	zephir_check_call_status();
 	if (zephir_is_true(_18)) {
 		ZEPHIR_INIT_VAR(_19$$7);
@@ -521,10 +521,10 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, dispatch) {
 		zephir_array_fast_append(_21$$7, ns_space);
 		ZEPHIR_INIT_VAR(_22$$7);
 		ZVAL_STRING(_22$$7, "router.controller_is_protected", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_20$$7, brisk_kernel_language_ce, "get", &_7, 27, _22$$7, _21$$7);
+		ZEPHIR_CALL_CE_STATIC(&_20$$7, brisk_kernel_language_ce, "get", &_7, 26, _22$$7, _21$$7);
 		zephir_check_temp_parameter(_22$$7);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _19$$7, "__construct", NULL, 28, _20$$7);
+		ZEPHIR_CALL_METHOD(NULL, _19$$7, "__construct", NULL, 27, _20$$7);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_19$$7, "brisk/Kernel/Router/Rewrite.zep", 184 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -569,10 +569,10 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, dispatch) {
 		zephir_array_fast_append(_32$$11, action);
 		ZEPHIR_INIT_VAR(_33$$11);
 		ZVAL_STRING(_33$$11, "router.action_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_31$$11, brisk_kernel_language_ce, "get", &_7, 27, _33$$11, _32$$11);
+		ZEPHIR_CALL_CE_STATIC(&_31$$11, brisk_kernel_language_ce, "get", &_7, 26, _33$$11, _32$$11);
 		zephir_check_temp_parameter(_33$$11);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _30$$11, "__construct", NULL, 28, _31$$11);
+		ZEPHIR_CALL_METHOD(NULL, _30$$11, "__construct", NULL, 27, _31$$11);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_30$$11, "brisk/Kernel/Router/Rewrite.zep", 203 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -691,7 +691,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, _rewrite) {
 				zephir_get_strval(uri, _8$$5);
 				break;
 			} else if (zephir_is_callable(val TSRMLS_CC)) {
-				ZEPHIR_CALL_FUNCTION(&_10$$6, "preg_replace_callback", &_11, 67, key, val, uri);
+				ZEPHIR_CALL_FUNCTION(&_10$$6, "preg_replace_callback", &_11, 66, key, val, uri);
 				zephir_check_call_status();
 				zephir_get_strval(uri, _10$$6);
 				break;
@@ -710,7 +710,7 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, _rewrite) {
 				ZEPHIR_CALL_CE_STATIC(&_13$$7, brisk_kernel_language_ce, "get", &_14, 0, _19$$7, _15$$7);
 				zephir_check_temp_parameter(_19$$7);
 				zephir_check_call_status();
-				ZEPHIR_CALL_METHOD(NULL, _12$$7, "__construct", &_20, 28, _13$$7);
+				ZEPHIR_CALL_METHOD(NULL, _12$$7, "__construct", &_20, 27, _13$$7);
 				zephir_check_call_status();
 				zephir_throw_exception_debug(_12$$7, "brisk/Kernel/Router/Rewrite.zep", 241 TSRMLS_CC);
 				ZEPHIR_MM_RESTORE();
@@ -723,10 +723,10 @@ PHP_METHOD(Brisk_Kernel_Router_Rewrite, _rewrite) {
 		object_init_ex(_21$$8, brisk_exception_routerexception_ce);
 		ZEPHIR_INIT_VAR(_23$$8);
 		ZVAL_STRING(_23$$8, "router.uri_must_string", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_22$$8, brisk_kernel_language_ce, "get", &_14, 27, _23$$8);
+		ZEPHIR_CALL_CE_STATIC(&_22$$8, brisk_kernel_language_ce, "get", &_14, 26, _23$$8);
 		zephir_check_temp_parameter(_23$$8);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _21$$8, "__construct", &_20, 28, _22$$8);
+		ZEPHIR_CALL_METHOD(NULL, _21$$8, "__construct", &_20, 27, _22$$8);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_21$$8, "brisk/Kernel/Router/Rewrite.zep", 246 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

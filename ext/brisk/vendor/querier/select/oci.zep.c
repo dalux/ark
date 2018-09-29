@@ -94,13 +94,13 @@ PHP_METHOD(Brisk_Vendor_Querier_Select_Oci, getSQL) {
 				zephir_add_function(&_6$$9, offset$$8, limit$$3);
 				ZEPHIR_SINIT_VAR(_7$$9);
 				ZVAL_STRING(&_7$$9, "select * from (select tmptable1.*, rownum tmprn from (%s) tmptable1 where rownum<=%u) where tmprn>%u", 0);
-				ZEPHIR_CALL_FUNCTION(&_8$$9, "sprintf", &_9, 40, &_7$$9, select, &_6$$9, offset$$8);
+				ZEPHIR_CALL_FUNCTION(&_8$$9, "sprintf", &_9, 39, &_7$$9, select, &_6$$9, offset$$8);
 				zephir_check_call_status();
 				ZEPHIR_CPY_WRT(select, _8$$9);
 			} else {
 				ZEPHIR_SINIT_VAR(_10$$10);
 				ZVAL_STRING(&_10$$10, "select tmptable1.* from (%s) tmptable1 where rownum<=%u", 0);
-				ZEPHIR_CALL_FUNCTION(&_11$$10, "sprintf", &_9, 40, &_10$$10, select, limit$$3);
+				ZEPHIR_CALL_FUNCTION(&_11$$10, "sprintf", &_9, 39, &_10$$10, select, limit$$3);
 				zephir_check_call_status();
 				ZEPHIR_CPY_WRT(select, _11$$10);
 			}

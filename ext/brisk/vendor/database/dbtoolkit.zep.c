@@ -61,7 +61,7 @@ PHP_METHOD(Brisk_Vendor_Database_DbToolkit, parseConnectUrl) {
 	}
 
 
-	ZEPHIR_CALL_FUNCTION(&parsed, "parse_url", NULL, 72, url);
+	ZEPHIR_CALL_FUNCTION(&parsed, "parse_url", NULL, 71, url);
 	zephir_check_call_status();
 	if (ZEPHIR_IS_FALSE(parsed)) {
 		ZEPHIR_INIT_VAR(_0$$3);
@@ -71,10 +71,10 @@ PHP_METHOD(Brisk_Vendor_Database_DbToolkit, parseConnectUrl) {
 		zephir_array_fast_append(_3$$3, url);
 		ZEPHIR_INIT_VAR(_4$$3);
 		ZVAL_STRING(_4$$3, "db.invalid_conn_string", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 27, _4$$3, _3$$3);
+		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 26, _4$$3, _3$$3);
 		zephir_check_temp_parameter(_4$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 28, _1$$3);
+		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 27, _1$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_0$$3, "brisk/Vendor/Database/DbToolkit.zep", 20 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

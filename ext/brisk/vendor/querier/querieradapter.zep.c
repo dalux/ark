@@ -144,7 +144,7 @@ PHP_METHOD(Brisk_Vendor_Querier_QuerierAdapter, getQuerier) {
 		zephir_array_fast_append(_2$$4, db_type);
 		ZEPHIR_INIT_VAR(_3$$4);
 		ZVAL_STRING(_3$$4, "querier.type_not_supported", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_METHOD(NULL, _1$$4, "__construct", NULL, 28, _3$$4, _2$$4);
+		ZEPHIR_CALL_METHOD(NULL, _1$$4, "__construct", NULL, 27, _3$$4, _2$$4);
 		zephir_check_temp_parameter(_3$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_1$$4, "brisk/Vendor/Querier/QuerierAdapter.zep", 44 TSRMLS_CC);

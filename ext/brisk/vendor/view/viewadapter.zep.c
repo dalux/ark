@@ -67,11 +67,11 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriver) {
 	}
 
 
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_toolkit_ce, "classdeclared", &_1, 61, driver);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_toolkit_ce, "classdeclared", &_1, 60, driver);
 	zephir_check_call_status();
 	_2 = !zephir_is_true(_0);
 	if (_2) {
-		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_loader_ce, "findclass", &_4, 62, driver);
+		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_loader_ce, "findclass", &_4, 61, driver);
 		zephir_check_call_status();
 		_2 = !zephir_is_true(_3);
 	}
@@ -83,10 +83,10 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriver) {
 		zephir_array_fast_append(_8$$3, driver);
 		ZEPHIR_INIT_VAR(_9$$3);
 		ZVAL_STRING(_9$$3, "view.driver_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 27, _9$$3, _8$$3);
+		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 26, _9$$3, _8$$3);
 		zephir_check_temp_parameter(_9$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 28, _6$$3);
+		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 27, _6$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_5$$3, "brisk/Vendor/View/ViewAdapter.zep", 25 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -111,10 +111,10 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriver) {
 		zephir_array_fast_append(_14$$4, _15$$4);
 		ZEPHIR_INIT_NVAR(_15$$4);
 		ZVAL_STRING(_15$$4, "view.driver_implement_error", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_13$$4, brisk_kernel_language_ce, "get", &_7, 27, _15$$4, _14$$4);
+		ZEPHIR_CALL_CE_STATIC(&_13$$4, brisk_kernel_language_ce, "get", &_7, 26, _15$$4, _14$$4);
 		zephir_check_temp_parameter(_15$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _12$$4, "__construct", NULL, 28, _13$$4);
+		ZEPHIR_CALL_METHOD(NULL, _12$$4, "__construct", NULL, 27, _13$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_12$$4, "brisk/Vendor/View/ViewAdapter.zep", 30 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -148,7 +148,7 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 46);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_2);
 	zephir_read_property(&_2, _0, SL("config"), PH_NOISY_CC);
@@ -157,7 +157,7 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 	ZEPHIR_CALL_METHOD(&_3, _2, "haskey", NULL, 0, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_5, brisk_kernel_app_ce, "getinstance", &_1, 46);
+	ZEPHIR_CALL_CE_STATIC(&_5, brisk_kernel_app_ce, "getinstance", &_1, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_6);
 	zephir_read_property(&_6, _5, SL("config"), PH_NOISY_CC);
@@ -176,10 +176,10 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_11$$3, _12$$3);
 		ZEPHIR_INIT_NVAR(_12$$3);
 		ZVAL_STRING(_12$$3, "core.config_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_9$$3, brisk_kernel_language_ce, "get", &_10, 27, _12$$3, _11$$3);
+		ZEPHIR_CALL_CE_STATIC(&_9$$3, brisk_kernel_language_ce, "get", &_10, 26, _12$$3, _11$$3);
 		zephir_check_temp_parameter(_12$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _8$$3, "__construct", NULL, 28, _9$$3);
+		ZEPHIR_CALL_METHOD(NULL, _8$$3, "__construct", NULL, 27, _9$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_8$$3, "brisk/Vendor/View/ViewAdapter.zep", 44 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -194,16 +194,16 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_15$$4, _16$$4);
 		ZEPHIR_INIT_NVAR(_16$$4);
 		ZVAL_STRING(_16$$4, "core.config_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_14$$4, brisk_kernel_language_ce, "get", &_10, 27, _16$$4, _15$$4);
+		ZEPHIR_CALL_CE_STATIC(&_14$$4, brisk_kernel_language_ce, "get", &_10, 26, _16$$4, _15$$4);
 		zephir_check_temp_parameter(_16$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _13$$4, "__construct", NULL, 28, _14$$4);
+		ZEPHIR_CALL_METHOD(NULL, _13$$4, "__construct", NULL, 27, _14$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_13$$4, "brisk/Vendor/View/ViewAdapter.zep", 46 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_CE_STATIC(&_17, brisk_kernel_app_ce, "getinstance", &_1, 46);
+	ZEPHIR_CALL_CE_STATIC(&_17, brisk_kernel_app_ce, "getinstance", &_1, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_18);
 	zephir_read_property(&_18, _17, SL("config"), PH_NOISY_CC);
@@ -212,7 +212,7 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 	ZEPHIR_CALL_METHOD(&driver, _18, "get", NULL, 0, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_19, brisk_kernel_app_ce, "getinstance", &_1, 46);
+	ZEPHIR_CALL_CE_STATIC(&_19, brisk_kernel_app_ce, "getinstance", &_1, 45);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_20);
 	zephir_read_property(&_20, _19, SL("config"), PH_NOISY_CC);
@@ -221,11 +221,11 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 	ZEPHIR_CALL_METHOD(&options, _20, "get", NULL, 0, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_21, brisk_kernel_toolkit_ce, "classdeclared", &_22, 61, driver);
+	ZEPHIR_CALL_CE_STATIC(&_21, brisk_kernel_toolkit_ce, "classdeclared", &_22, 60, driver);
 	zephir_check_call_status();
 	_23 = !zephir_is_true(_21);
 	if (_23) {
-		ZEPHIR_CALL_CE_STATIC(&_24, brisk_kernel_loader_ce, "findclass", &_25, 62, driver);
+		ZEPHIR_CALL_CE_STATIC(&_24, brisk_kernel_loader_ce, "findclass", &_25, 61, driver);
 		zephir_check_call_status();
 		_23 = !zephir_is_true(_24);
 	}
@@ -237,10 +237,10 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_28$$5, driver);
 		ZEPHIR_INIT_VAR(_29$$5);
 		ZVAL_STRING(_29$$5, "view.driver_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_27$$5, brisk_kernel_language_ce, "get", &_10, 27, _29$$5, _28$$5);
+		ZEPHIR_CALL_CE_STATIC(&_27$$5, brisk_kernel_language_ce, "get", &_10, 26, _29$$5, _28$$5);
 		zephir_check_temp_parameter(_29$$5);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _26$$5, "__construct", NULL, 28, _27$$5);
+		ZEPHIR_CALL_METHOD(NULL, _26$$5, "__construct", NULL, 27, _27$$5);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_26$$5, "brisk/Vendor/View/ViewAdapter.zep", 52 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -265,10 +265,10 @@ PHP_METHOD(Brisk_Vendor_View_ViewAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_34$$6, _35$$6);
 		ZEPHIR_INIT_NVAR(_35$$6);
 		ZVAL_STRING(_35$$6, "view.driver_implement_error", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_33$$6, brisk_kernel_language_ce, "get", &_10, 27, _35$$6, _34$$6);
+		ZEPHIR_CALL_CE_STATIC(&_33$$6, brisk_kernel_language_ce, "get", &_10, 26, _35$$6, _34$$6);
 		zephir_check_temp_parameter(_35$$6);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _32$$6, "__construct", NULL, 28, _33$$6);
+		ZEPHIR_CALL_METHOD(NULL, _32$$6, "__construct", NULL, 27, _33$$6);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_32$$6, "brisk/Vendor/View/ViewAdapter.zep", 56 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

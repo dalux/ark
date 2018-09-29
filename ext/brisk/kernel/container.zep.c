@@ -152,7 +152,7 @@ PHP_METHOD(Brisk_Kernel_Container, hasKey) {
 	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 7, nodes);
 	ZEPHIR_UNREF(nodes);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_10, this_ptr, "haskey", NULL, 33, node);
+	ZEPHIR_CALL_METHOD(&_10, this_ptr, "haskey", NULL, 32, node);
 	zephir_check_call_status();
 	if (!zephir_is_true(_10)) {
 		RETURN_MM_BOOL(0);
@@ -209,24 +209,12 @@ PHP_METHOD(Brisk_Kernel_Container, getValue) {
 
 	HashTable *_3$$3;
 	HashPosition _2$$3;
-	zephir_fcall_cache_entry *_7 = NULL;
+	zend_bool _7, _8, _9;
+	zval *result = NULL, *_0, *_10, *k$$3 = NULL, *v$$3 = NULL, *_1$$3, **_4$$3, *_5$$5 = NULL, *_11$$8;
+	zephir_fcall_cache_entry *_6 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *in_loop_param = NULL, *result = NULL, *_0, *_11, *k$$3 = NULL, *v$$3 = NULL, *_1$$3, **_4$$3, *_5$$5 = NULL, *_6$$5 = NULL, *_13$$8;
-	zend_bool in_loop, _8, _9, _10, _12;
 
 	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 0, 1, &in_loop_param);
-
-	if (!in_loop_param) {
-		in_loop = 0;
-	} else {
-	if (UNEXPECTED(Z_TYPE_P(in_loop_param) != IS_BOOL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'in_loop' must be a bool") TSRMLS_CC);
-		RETURN_MM_NULL();
-	}
-	in_loop = Z_BVAL_P(in_loop_param);
-	}
-
 
 	ZEPHIR_INIT_VAR(result);
 	array_init(result);
@@ -241,9 +229,7 @@ PHP_METHOD(Brisk_Kernel_Container, getValue) {
 			ZEPHIR_GET_HMKEY(k$$3, _3$$3, _2$$3);
 			ZEPHIR_GET_HVALUE(v$$3, _4$$3);
 			if (zephir_instance_of_ev(v$$3, brisk_kernel_container_ce TSRMLS_CC)) {
-				ZEPHIR_INIT_NVAR(_6$$5);
-				ZVAL_BOOL(_6$$5, 1);
-				ZEPHIR_CALL_METHOD(&_5$$5, v$$3, "getvalue", &_7, 0, _6$$5);
+				ZEPHIR_CALL_METHOD(&_5$$5, v$$3, "getvalue", &_6, 0);
 				zephir_check_call_status();
 				zephir_array_update_zval(&result, k$$3, &_5$$5, PH_COPY | PH_SEPARATE);
 			} else {
@@ -254,26 +240,22 @@ PHP_METHOD(Brisk_Kernel_Container, getValue) {
 		ZEPHIR_OBS_NVAR(result);
 		zephir_read_property_this(&result, this_ptr, SL("_container"), PH_NOISY_CC);
 	}
-	_8 = Z_TYPE_P(result) == IS_ARRAY;
+	_7 = Z_TYPE_P(result) == IS_ARRAY;
+	if (_7) {
+		_7 = zephir_fast_count_int(result TSRMLS_CC) == 1;
+	}
+	_8 = _7;
 	if (_8) {
-		_8 = zephir_fast_count_int(result TSRMLS_CC) == 1;
+		_8 = zephir_array_isset_long(result, 0);
 	}
 	_9 = _8;
 	if (_9) {
-		_9 = zephir_array_isset_long(result, 0);
+		zephir_array_fetch_long(&_10, result, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 96 TSRMLS_CC);
+		_9 = !(Z_TYPE_P(_10) == IS_ARRAY);
 	}
-	_10 = _9;
-	if (_10) {
-		zephir_array_fetch_long(&_11, result, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 96 TSRMLS_CC);
-		_10 = !(Z_TYPE_P(_11) == IS_ARRAY);
-	}
-	_12 = _10;
-	if (_12) {
-		_12 = !in_loop;
-	}
-	if (_12) {
-		zephir_array_fetch_long(&_13$$8, result, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 98 TSRMLS_CC);
-		ZEPHIR_CPY_WRT(result, _13$$8);
+	if (_9) {
+		zephir_array_fetch_long(&_11$$8, result, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 97 TSRMLS_CC);
+		ZEPHIR_CPY_WRT(result, _11$$8);
 	}
 	RETURN_CCTOR(result);
 
@@ -342,7 +324,7 @@ PHP_METHOD(Brisk_Kernel_Container, get) {
 		ZEPHIR_OBS_VAR(instance);
 		zephir_read_property_zval(&instance, this_ptr, node, PH_NOISY_CC);
 		ZEPHIR_INIT_VAR(_6$$3);
-		zephir_is_iterable(nodes, &_8$$3, &_7$$3, 0, 0, "brisk/Kernel/Container.zep", 126);
+		zephir_is_iterable(nodes, &_8$$3, &_7$$3, 0, 0, "brisk/Kernel/Container.zep", 125);
 		for (
 		  ; zend_hash_get_current_data_ex(_8$$3, (void**) &_9$$3, &_7$$3) == SUCCESS
 		  ; zend_hash_move_forward_ex(_8$$3, &_7$$3)
@@ -392,7 +374,7 @@ PHP_METHOD(Brisk_Kernel_Container, __get) {
 	zephir_check_call_status();
 	if (zephir_is_true(_0)) {
 		_1$$3 = zephir_fetch_nproperty_this(this_ptr, SL("_container"), PH_NOISY_CC);
-		zephir_array_fetch(&_2$$3, _1$$3, key, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 134 TSRMLS_CC);
+		zephir_array_fetch(&_2$$3, _1$$3, key, PH_NOISY | PH_READONLY, "brisk/Kernel/Container.zep", 133 TSRMLS_CC);
 		RETURN_CTOR(_2$$3);
 	} else {
 		object_init_ex(return_value, brisk_kernel_container_ce);

@@ -120,10 +120,10 @@ PHP_METHOD(Brisk_Vendor_Cache_CacheProxy, doProxy) {
 		object_init_ex(_1$$3, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_4$$3);
 		ZVAL_STRING(_4$$3, "proxy.target_not_callable", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 27, _4$$3);
+		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 26, _4$$3);
 		zephir_check_temp_parameter(_4$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 28, _2$$3);
+		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 27, _2$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_1$$3, "brisk/Vendor/Cache/CacheProxy.zep", 37 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -131,7 +131,7 @@ PHP_METHOD(Brisk_Vendor_Cache_CacheProxy, doProxy) {
 	}
 	ZEPHIR_CPY_WRT(key, name);
 	if (ZEPHIR_IS_STRING(name, "")) {
-		ZEPHIR_CALL_METHOD(&key, this_ptr, "_name", NULL, 94, target, method, args);
+		ZEPHIR_CALL_METHOD(&key, this_ptr, "_name", NULL, 93, target, method, args);
 		zephir_check_call_status();
 	}
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_cache"), PH_NOISY_CC);
@@ -193,7 +193,7 @@ PHP_METHOD(Brisk_Vendor_Cache_CacheProxy, _name) {
 
 	ZEPHIR_INIT_VAR(_0);
 	zephir_get_class(_0, target, 0 TSRMLS_CC);
-	ZEPHIR_CALL_FUNCTION(&_1, "serialize", NULL, 95, args);
+	ZEPHIR_CALL_FUNCTION(&_1, "serialize", NULL, 94, args);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_2);
 	ZEPHIR_CONCAT_VSVSV(_2, _0, ".", func, ".", _1);
