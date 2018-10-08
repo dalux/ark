@@ -63,4 +63,28 @@ class Toolkit
      */
     public static function removeDir($dir_name) {}
 
+    /**
+     * Once include file
+     *
+     * @param string $file
+     * @return null
+     */
+    public static function includeOnce($file) {}
+
+    /**
+     * Check to see if the classname declared
+     *
+     * @param string $classname
+     * @return null
+     */
+    public static function classDeclared($classname) {}
+
+    /**
+     * Check to see if the file included
+     *
+     * @param string $file
+     * @return null
+     */
+    public static function fileIncluded($file) {}
+
 }

@@ -2,10 +2,12 @@
 
 namespace Brisk\Kernel;
 
+
 class Container
 {
 
     private $_container;
+
 
     /**
      * construct
@@ -24,7 +26,7 @@ class Container
     public function hasKey($key) {}
 
     /**
-     * Check if value exists
+     * Check whether data exists at the current node
      *
      * @return bool
      */
@@ -33,7 +35,6 @@ class Container
     /**
      * Get data from the current node
      *
-     * @param bool $in_loop
      * @return mixed
      */
     public function getValue() {}
@@ -41,7 +42,7 @@ class Container
     /**
      * Get the data corresponding to the specified key
      *
-     * @param string key
+     * @param string $key
      * @return mixed
      */
     public function get($key) {}
