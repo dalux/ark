@@ -175,7 +175,7 @@ PHP_METHOD(Brisk_Kernel_Event, fire) {
 			ZEPHIR_CALL_CE_STATIC(&_8$$5, brisk_kernel_language_ce, "get", &_9, 0, _11$$5, _10$$5);
 			zephir_check_temp_parameter(_11$$5);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(NULL, _7$$5, "__construct", &_12, 27, _8$$5);
+			ZEPHIR_CALL_METHOD(NULL, _7$$5, "__construct", &_12, 8, _8$$5);
 			zephir_check_call_status();
 			zephir_throw_exception_debug(_7$$5, "brisk/Kernel/Event.zep", 55 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
@@ -183,7 +183,7 @@ PHP_METHOD(Brisk_Kernel_Event, fire) {
 		}
 		ZEPHIR_INIT_NVAR(now_keys$$4);
 		zephir_array_keys(now_keys$$4, data TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(&diff$$4, "array_diff", &_13, 33, ori_keys$$4, now_keys$$4);
+		ZEPHIR_CALL_FUNCTION(&diff$$4, "array_diff", &_13, 68, ori_keys$$4, now_keys$$4);
 		zephir_check_call_status();
 		if (zephir_fast_count_int(diff$$4 TSRMLS_CC) > 0) {
 			ZEPHIR_INIT_NVAR(_14$$6);
@@ -193,10 +193,10 @@ PHP_METHOD(Brisk_Kernel_Event, fire) {
 			zephir_array_fast_append(_16$$6, event);
 			ZEPHIR_INIT_NVAR(_17$$6);
 			ZVAL_STRING(_17$$6, "event.data_key_must_equal", ZEPHIR_TEMP_PARAM_COPY);
-			ZEPHIR_CALL_CE_STATIC(&_15$$6, brisk_kernel_language_ce, "get", &_9, 26, _17$$6, _16$$6);
+			ZEPHIR_CALL_CE_STATIC(&_15$$6, brisk_kernel_language_ce, "get", &_9, 13, _17$$6, _16$$6);
 			zephir_check_temp_parameter(_17$$6);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(NULL, _14$$6, "__construct", &_12, 27, _15$$6);
+			ZEPHIR_CALL_METHOD(NULL, _14$$6, "__construct", &_12, 8, _15$$6);
 			zephir_check_call_status();
 			zephir_throw_exception_debug(_14$$6, "brisk/Kernel/Event.zep", 60 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();

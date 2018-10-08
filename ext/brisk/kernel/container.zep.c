@@ -67,7 +67,7 @@ PHP_METHOD(Brisk_Kernel_Container, __construct) {
 			ZEPHIR_GET_HVALUE(val$$3, _3$$3);
 			ZEPHIR_INIT_NVAR(_4$$4);
 			object_init_ex(_4$$4, brisk_kernel_container_ce);
-			ZEPHIR_CALL_METHOD(NULL, _4$$4, "__construct", &_5, 13, val$$3);
+			ZEPHIR_CALL_METHOD(NULL, _4$$4, "__construct", &_5, 52, val$$3);
 			zephir_check_call_status();
 			zephir_update_property_array(this_ptr, SL("_container"), key$$3, _4$$4 TSRMLS_CC);
 		}
@@ -149,10 +149,10 @@ PHP_METHOD(Brisk_Kernel_Container, hasKey) {
 	ZEPHIR_INIT_NVAR(nodes);
 	zephir_fast_explode_str(nodes, SL(">"), key, LONG_MAX TSRMLS_CC);
 	ZEPHIR_MAKE_REF(nodes);
-	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 7, nodes);
+	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 16, nodes);
 	ZEPHIR_UNREF(nodes);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_10, this_ptr, "haskey", NULL, 32, node);
+	ZEPHIR_CALL_METHOD(&_10, this_ptr, "haskey", NULL, 67, node);
 	zephir_check_call_status();
 	if (!zephir_is_true(_10)) {
 		RETURN_MM_BOOL(0);
@@ -315,7 +315,7 @@ PHP_METHOD(Brisk_Kernel_Container, get) {
 	ZEPHIR_INIT_VAR(nodes);
 	zephir_fast_explode_str(nodes, SL(">"), key, LONG_MAX TSRMLS_CC);
 	ZEPHIR_MAKE_REF(nodes);
-	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 7, nodes);
+	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 16, nodes);
 	ZEPHIR_UNREF(nodes);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_5, this_ptr, "haskey", NULL, 0, node);
@@ -378,7 +378,7 @@ PHP_METHOD(Brisk_Kernel_Container, __get) {
 		RETURN_CTOR(_2$$3);
 	} else {
 		object_init_ex(return_value, brisk_kernel_container_ce);
-		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 13);
+		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 52);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
@@ -414,7 +414,7 @@ PHP_METHOD(Brisk_Kernel_Container, __set) {
 	}
 	ZEPHIR_INIT_VAR(_2);
 	object_init_ex(_2, brisk_kernel_container_ce);
-	ZEPHIR_CALL_METHOD(NULL, _2, "__construct", NULL, 13, value);
+	ZEPHIR_CALL_METHOD(NULL, _2, "__construct", NULL, 52, value);
 	zephir_check_call_status();
 	zephir_update_property_array(this_ptr, SL("_container"), key, _2 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();

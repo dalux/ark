@@ -9,26 +9,44 @@ if test "$PHP_BRISK" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_BRISK, 1, [Whether you have Brisk])
-	brisk_sources="brisk.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/extended/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c brisk/vendor/querier/querierfather.zep.c
+	brisk_sources="brisk.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/extended/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c brisk/sql/sqlfather.zep.c
 	brisk/exception/runtimeexception.zep.c
-	brisk/vendor/querier/delete.zep.c
-	brisk/vendor/querier/insert.zep.c
-	brisk/vendor/querier/select.zep.c
-	brisk/vendor/querier/update.zep.c
-	brisk/vendor/cache/cachefather.zep.c
-	brisk/kernel/router/routerfather.zep.c
-	brisk/vendor/database/dbfather.zep.c
-	brisk/vendor/view/viewfather.zep.c
+	brisk/db/dbfather.zep.c
+	brisk/db/driver/pdofather.zep.c
+	brisk/sql/delete.zep.c
+	brisk/sql/insert.zep.c
+	brisk/sql/select.zep.c
+	brisk/sql/update.zep.c
+	brisk/session/sessionfather.zep.c
+	brisk/cache/cachefather.zep.c
+	brisk/router/routerfather.zep.c
+	brisk/view/viewfather.zep.c
+	brisk/cache/cacheadapter.zep.c
+	brisk/cache/cacheproxy.zep.c
+	brisk/cache/driver/file.zep.c
+	brisk/cache/driver/memcached.zep.c
+	brisk/cache/driver/redis.zep.c
+	brisk/db/dquery.zep.c
+	brisk/db/dbadapter.zep.c
+	brisk/db/driver/pdo/mysql.zep.c
+	brisk/db/driver/pdo/oci.zep.c
+	brisk/db/driver/pdo/pgsql.zep.c
+	brisk/db/driver/pdo/sqlite.zep.c
+	brisk/db/driver/pdo/sqlsrv.zep.c
 	brisk/exception/actionnotfoundexception.zep.c
 	brisk/exception/classnotfoundexception.zep.c
 	brisk/exception/configurationexception.zep.c
 	brisk/exception/controllerexception.zep.c
 	brisk/exception/controllernotfoundexception.zep.c
+	brisk/exception/dbexception.zep.c
 	brisk/exception/drivernotfoundexception.zep.c
 	brisk/exception/eventexception.zep.c
 	brisk/exception/methodnotfoundexception.zep.c
 	brisk/exception/pdoexception.zep.c
 	brisk/exception/routerexception.zep.c
+	brisk/exception/sqlcompileexception.zep.c
+	brisk/http/request.zep.c
+	brisk/http/response.zep.c
 	brisk/kernel/app.zep.c
 	brisk/kernel/config.zep.c
 	brisk/kernel/container.zep.c
@@ -36,47 +54,43 @@ if test "$PHP_BRISK" = "yes"; then
 	brisk/kernel/handler.zep.c
 	brisk/kernel/language.zep.c
 	brisk/kernel/loader.zep.c
-	brisk/kernel/request.zep.c
-	brisk/kernel/router/classic.zep.c
-	brisk/kernel/router/rewrite.zep.c
-	brisk/kernel/router/routeradapter.zep.c
 	brisk/kernel/server.zep.c
-	brisk/kernel/session.zep.c
 	brisk/kernel/timer.zep.c
 	brisk/kernel/toolkit.zep.c
 	brisk/kernel/trace.zep.c
-	brisk/vendor/cache/cacheadapter.zep.c
-	brisk/vendor/cache/cacheproxy.zep.c
-	brisk/vendor/cache/file.zep.c
-	brisk/vendor/cache/memcached.zep.c
-	brisk/vendor/cache/redis.zep.c
-	brisk/vendor/database/dbadapter.zep.c
-	brisk/vendor/database/dbquerier.zep.c
-	brisk/vendor/database/dbtoolkit.zep.c
-	brisk/vendor/database/pdo.zep.c
-	brisk/vendor/querier/delete/mysql.zep.c
-	brisk/vendor/querier/delete/oci.zep.c
-	brisk/vendor/querier/delete/pgsql.zep.c
-	brisk/vendor/querier/delete/sqlite.zep.c
-	brisk/vendor/querier/delete/sqlsrv.zep.c
-	brisk/vendor/querier/insert/mysql.zep.c
-	brisk/vendor/querier/insert/oci.zep.c
-	brisk/vendor/querier/insert/pgsql.zep.c
-	brisk/vendor/querier/insert/sqlite.zep.c
-	brisk/vendor/querier/insert/sqlsrv.zep.c
-	brisk/vendor/querier/querieradapter.zep.c
-	brisk/vendor/querier/select/mysql.zep.c
-	brisk/vendor/querier/select/oci.zep.c
-	brisk/vendor/querier/select/pgsql.zep.c
-	brisk/vendor/querier/select/sqlite.zep.c
-	brisk/vendor/querier/select/sqlsrv.zep.c
-	brisk/vendor/querier/update/mysql.zep.c
-	brisk/vendor/querier/update/oci.zep.c
-	brisk/vendor/querier/update/pgsql.zep.c
-	brisk/vendor/querier/update/sqlite.zep.c
-	brisk/vendor/querier/update/sqlsrv.zep.c
-	brisk/vendor/view/native.zep.c
-	brisk/vendor/view/viewadapter.zep.c "
+	brisk/router/driver/classic.zep.c
+	brisk/router/driver/native.zep.c
+	brisk/router/driver/rewrite.zep.c
+	brisk/router/routeradapter.zep.c
+	brisk/session/driver/filecache.zep.c
+	brisk/session/driver/files.zep.c
+	brisk/session/driver/memcached.zep.c
+	brisk/session/driver/redis.zep.c
+	brisk/session/sessionadapter.zep.c
+	brisk/session/userhandler.zep.c
+	brisk/sql/delete/mysql.zep.c
+	brisk/sql/delete/oci.zep.c
+	brisk/sql/delete/pgsql.zep.c
+	brisk/sql/delete/sqlite.zep.c
+	brisk/sql/delete/sqlsrv.zep.c
+	brisk/sql/insert/mysql.zep.c
+	brisk/sql/insert/oci.zep.c
+	brisk/sql/insert/pgsql.zep.c
+	brisk/sql/insert/sqlite.zep.c
+	brisk/sql/insert/sqlsrv.zep.c
+	brisk/sql/select/mysql.zep.c
+	brisk/sql/select/oci.zep.c
+	brisk/sql/select/pgsql.zep.c
+	brisk/sql/select/sqlite.zep.c
+	brisk/sql/select/sqlsrv.zep.c
+	brisk/sql/sqlbuilder.zep.c
+	brisk/sql/update/mysql.zep.c
+	brisk/sql/update/oci.zep.c
+	brisk/sql/update/pgsql.zep.c
+	brisk/sql/update/sqlite.zep.c
+	brisk/sql/update/sqlsrv.zep.c
+	brisk/view/driver/native.zep.c
+	brisk/view/viewadapter.zep.c "
 	PHP_NEW_EXTENSION(brisk, $brisk_sources, $ext_shared,, )
 	PHP_SUBST(BRISK_SHARED_LIBADD)
 

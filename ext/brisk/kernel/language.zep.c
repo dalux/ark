@@ -76,7 +76,7 @@ PHP_METHOD(Brisk_Kernel_Language, addPackage) {
 	}
 	ZEPHIR_INIT_VAR(_2);
 	_3 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-	zephir_array_fetch(&_4, _3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 98 TSRMLS_CC);
+	zephir_array_fetch(&_4, _3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 92 TSRMLS_CC);
 	zephir_fast_array_merge(_2, &(_4), &(package) TSRMLS_CC);
 	zephir_update_static_property_array_multi_ce(brisk_kernel_language_ce, SL("_package"), &_2 TSRMLS_CC, SL("z"), 1, language);
 	ZEPHIR_MM_RESTORE();
@@ -123,7 +123,7 @@ PHP_METHOD(Brisk_Kernel_Language, addPackageFile) {
 
 	ZEPHIR_INIT_VAR(package);
 	array_init(package);
-	ZEPHIR_CALL_FUNCTION(&_0, "is_file", NULL, 48, path);
+	ZEPHIR_CALL_FUNCTION(&_0, "is_file", NULL, 81, path);
 	zephir_check_call_status();
 	if (zephir_is_true(_0)) {
 		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_1$$3);
@@ -140,7 +140,7 @@ PHP_METHOD(Brisk_Kernel_Language, addPackageFile) {
 	if (zephir_array_isset(_2, language)) {
 		ZEPHIR_INIT_VAR(_3$$5);
 		_4$$5 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_5$$5, _4$$5, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 118 TSRMLS_CC);
+		zephir_array_fetch(&_5$$5, _4$$5, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 112 TSRMLS_CC);
 		zephir_fast_array_merge(_3$$5, &(_5$$5), &(package) TSRMLS_CC);
 		zephir_update_static_property_array_multi_ce(brisk_kernel_language_ce, SL("_package"), &_3$$5 TSRMLS_CC, SL("z"), 1, language);
 	} else {
@@ -186,7 +186,7 @@ PHP_METHOD(Brisk_Kernel_Language, getPackage) {
 		zephir_read_static_property_ce(&_0, brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
 	} else {
 		_1 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_0, _1, language, PH_NOISY, "brisk/Kernel/Language.zep", 132 TSRMLS_CC);
+		zephir_array_fetch(&_0, _1, language, PH_NOISY, "brisk/Kernel/Language.zep", 126 TSRMLS_CC);
 	}
 	RETURN_CCTOR(_0);
 
@@ -263,19 +263,19 @@ PHP_METHOD(Brisk_Kernel_Language, get) {
 	ZEPHIR_INIT_VAR(result);
 	ZVAL_BOOL(result, 0);
 	_0 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-	zephir_array_fetch(&_1, _0, language, PH_READONLY, "brisk/Kernel/Language.zep", 157 TSRMLS_CC);
+	zephir_array_fetch(&_1, _0, language, PH_READONLY, "brisk/Kernel/Language.zep", 151 TSRMLS_CC);
 	if (zephir_array_isset(_1, label)) {
 		_2$$3 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_3$$3, _2$$3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 158 TSRMLS_CC);
-		zephir_array_fetch(&_4$$3, _3$$3, label, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 158 TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(&result, "vsprintf", NULL, 49, _4$$3, params);
+		zephir_array_fetch(&_3$$3, _2$$3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 152 TSRMLS_CC);
+		zephir_array_fetch(&_4$$3, _3$$3, label, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 152 TSRMLS_CC);
+		ZEPHIR_CALL_FUNCTION(&result, "vsprintf", NULL, 82, _4$$3, params);
 		zephir_check_call_status();
 	}
 	if (!zephir_is_true(result)) {
 		_5$$4 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
-		zephir_array_fetch(&_6$$4, _5$$4, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 161 TSRMLS_CC);
+		zephir_array_fetch(&_6$$4, _5$$4, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 155 TSRMLS_CC);
 		ZEPHIR_OBS_NVAR(result);
-		zephir_array_fetch(&result, _6$$4, label, PH_NOISY, "brisk/Kernel/Language.zep", 161 TSRMLS_CC);
+		zephir_array_fetch(&result, _6$$4, label, PH_NOISY, "brisk/Kernel/Language.zep", 155 TSRMLS_CC);
 	}
 	RETURN_CCTOR(result);
 
@@ -290,7 +290,7 @@ void zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_D) {
 	ZEPHIR_INIT_VAR(_0);
 	zephir_create_array(_0, 1, 0 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(_1);
-	zephir_create_array(_1, 61, 0 TSRMLS_CC);
+	zephir_create_array(_1, 54, 0 TSRMLS_CC);
 	add_assoc_stringl_ex(_1, SS("core.framework_not_ready"), SL("Framework not initialized"), 1);
 	add_assoc_stringl_ex(_1, SS("core.invalid_controller_path"), SL("Invalid controller directory"), 1);
 	add_assoc_stringl_ex(_1, SS("core.invalid_configuration"), SL("No valid configuration information found"), 1);
@@ -306,12 +306,13 @@ void zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_D) {
 	add_assoc_stringl_ex(_1, SS("core.namespace_not_defined"), SL("Unmatched namespace definition[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("core.cannot_reinit_framework"), SL("Framework cannot be initialized repeatedly"), 1);
 	add_assoc_stringl_ex(_1, SS("core.framework_not_inited"), SL("Framework instance not initialized"), 1);
+	add_assoc_stringl_ex(_1, SS("core.class_extends_error"), SL("The class[%s] must extends the class[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("http.request_not_ready"), SL("Http request data not ready"), 1);
 	add_assoc_stringl_ex(_1, SS("http.method_not_found"), SL("The called method[%s] does not exist"), 1);
 	add_assoc_stringl_ex(_1, SS("http.property_not_found"), SL("The called attribute object[%s] does not exist"), 1);
-	add_assoc_stringl_ex(_1, SS("event.struct_check_failed"), SL("Event listener[%s] return value structure check failure[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("event.data_must_array"), SL("Event listener[%s] must return an array"), 1);
 	add_assoc_stringl_ex(_1, SS("event.data_key_must_equal"), SL("Event listener[%s] array returns incomplete key values"), 1);
+	add_assoc_stringl_ex(_1, SS("sess.driver_not_found"), SL("Session driver class[%s] does not exist"), 1);
 	add_assoc_stringl_ex(_1, SS("router.uri_parse_failed"), SL("Routing parsing result anomaly[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("router.invalid_controller_name"), SL("No valid controller name"), 1);
 	add_assoc_stringl_ex(_1, SS("router.class_not_found"), SL("The requested controller classname[%s] does not exist"), 1);
@@ -319,19 +320,12 @@ void zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_D) {
 	add_assoc_stringl_ex(_1, SS("router.controller_not_found"), SL("The requested controller[%s] does not exist"), 1);
 	add_assoc_stringl_ex(_1, SS("router.invalid_driver_name"), SL("No valid routing drive name"), 1);
 	add_assoc_stringl_ex(_1, SS("router.driver_not_found"), SL("Routing driver class[%s] does not exist"), 1);
-	add_assoc_stringl_ex(_1, SS("router.driver_implement_error"), SL("The routing driver class[%s] must implement the interface[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("router.call_func_failed"), SL("Unable to call custom Uri rewriting function[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("router.uri_must_string"), SL("The rewritten Uri must be a string"), 1);
 	add_assoc_stringl_ex(_1, SS("router.controller_is_protected"), SL("Access to a closed controller[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("router.configuration_missing"), SL("Routing configuration item [%s] missing"), 1);
-	add_assoc_stringl_ex(_1, SS("tbox.invalid_db_connstr"), SL("Invalid database connection string[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("tbox.invalid_create_path"), SL("No directory path to create specified"), 1);
-	add_assoc_stringl_ex(_1, SS("tbox.invalid_db_connection"), SL("The database connection object must implement the [\\Brisk\\Contract\\IDatabase] interface"), 1);
-	add_assoc_stringl_ex(_1, SS("tbox.invalid_cache_object"), SL("The cache object must implement the [\\Brisk\\Contract\\ICache] interface"), 1);
-	add_assoc_stringl_ex(_1, SS("tbox.parse_string_failed"), SL("Unable to parse string[%s]:[%s]"), 1);
-	add_assoc_stringl_ex(_1, SS("tbox.no_db_instance"), SL("Database connection object instance not set"), 1);
 	add_assoc_stringl_ex(_1, SS("cache.driver_not_found"), SL("Cache drive class[%s] does not exist"), 1);
-	add_assoc_stringl_ex(_1, SS("cache.driver_implement_error"), SL("Cache drive class[%s] must inherit from the class[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("cache.dir_create_failed"), SL("Unable to create cache file to save directory[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("cache.dir_permission_error"), SL("The cache directory[%s] has insufficient access to read and write"), 1);
 	add_assoc_stringl_ex(_1, SS("cache.extension_load_failed"), SL("Load extension[%s] failure"), 1);
@@ -342,14 +336,13 @@ void zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_D) {
 	add_assoc_stringl_ex(_1, SS("db.parse_sql_failed"), SL("SQL statement parsing failure"), 1);
 	add_assoc_stringl_ex(_1, SS("db.connect_failed"), SL("Database connection failure"), 1);
 	add_assoc_stringl_ex(_1, SS("db.driver_not_found"), SL("Database driver class[%s] does not exist"), 1);
-	add_assoc_stringl_ex(_1, SS("db.driver_implement_error"), SL("The database driver class[%s] must realize the interface between[%s] and [%s]."), 1);
 	add_assoc_stringl_ex(_1, SS("db.extension_load_failed"), SL("Load extension[%s] failure"), 1);
 	add_assoc_stringl_ex(_1, SS("db.querier_type_missing"), SL("Missing database type parameters"), 1);
 	add_assoc_stringl_ex(_1, SS("db.invalid_conn_string"), SL("Invalid database connection string[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("querier.type_not_supported"), SL("unsupported querier type [%s]"), 1);
+	add_assoc_stringl_ex(_1, SS("querier.sql_compile_failed"), SL("SQL Statement Compilation failed with required fields missing"), 1);
 	add_assoc_stringl_ex(_1, SS("view.invalid_driver_name"), SL("No valid view drive name"), 1);
 	add_assoc_stringl_ex(_1, SS("view.driver_not_found"), SL("The view drive class[%s] does not exist"), 1);
-	add_assoc_stringl_ex(_1, SS("view.driver_implement_error"), SL("The view driver class[%s] must implement the interface[%s]"), 1);
 	add_assoc_stringl_ex(_1, SS("view.template_not_found"), SL("The template file [%s] does not exist"), 1);
 	add_assoc_stringl_ex(_1, SS("view.include_file_not_found"), SL("The file[%s] to include does not exist"), 1);
 	zephir_array_update_string(&_0, SL("en_us"), &_1, PH_COPY | PH_SEPARATE);

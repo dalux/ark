@@ -45,7 +45,7 @@ PHP_METHOD(Brisk_Kernel_Server, isCli) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_FUNCTION(&_0, "php_sapi_name", NULL, 70);
+	ZEPHIR_CALL_FUNCTION(&_0, "php_sapi_name", NULL, 85);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "cli"));
 
@@ -108,7 +108,7 @@ PHP_METHOD(Brisk_Kernel_Server, getDomain) {
 			zephir_array_fetch_long(&_10$$4, _9$$4, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 34 TSRMLS_CC);
 			ZEPHIR_SINIT_VAR(_11$$4);
 			ZVAL_STRING(&_11$$4, "%s.%s", 0);
-			ZEPHIR_RETURN_CALL_FUNCTION("sprintf", NULL, 39, &_11$$4, _8$$4, _10$$4);
+			ZEPHIR_RETURN_CALL_FUNCTION("sprintf", NULL, 12, &_11$$4, _8$$4, _10$$4);
 			zephir_check_call_status();
 			RETURN_MM();
 		}
@@ -178,7 +178,7 @@ PHP_METHOD(Brisk_Kernel_Server, initCli) {
 	ZEPHIR_OBS_VAR(argv);
 	zephir_array_fetch_string(&argv, _0, SL("argv"), PH_NOISY, "brisk/Kernel/Server.zep", 64 TSRMLS_CC);
 	ZEPHIR_MAKE_REF(argv);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_shift", NULL, 7, argv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_shift", NULL, 16, argv);
 	ZEPHIR_UNREF(argv);
 	zephir_check_call_status();
 	zephir_is_iterable(argv, &_2, &_1, 0, 0, "brisk/Kernel/Server.zep", 85);
@@ -209,7 +209,7 @@ PHP_METHOD(Brisk_Kernel_Server, initCli) {
 		ZEPHIR_INIT_NVAR(val);
 		zephir_substr(val, arg, zephir_get_intval(&_10$$3), 0, ZEPHIR_SUBSTR_NO_LENGTH);
 		if (ZEPHIR_IS_STRING(key, "url")) {
-			ZEPHIR_CALL_FUNCTION(&info, "parse_url", &_11, 71, val);
+			ZEPHIR_CALL_FUNCTION(&info, "parse_url", &_11, 36, val);
 			zephir_check_call_status();
 			zephir_array_fetch_string(&_12$$4, info, SL("host"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 72 TSRMLS_CC);
 			zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &_12$$4 TSRMLS_CC, SL("s"), 2, SL("HTTP_HOST"));
@@ -231,7 +231,7 @@ PHP_METHOD(Brisk_Kernel_Server, initCli) {
 			zephir_array_update_zval(&data, key, &val, PH_COPY | PH_SEPARATE);
 		}
 	}
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_request_ce, "setdata", &_16, 58, data);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_http_request_ce, "setdata", &_16, 86, data);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
