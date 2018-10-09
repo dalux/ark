@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Kernel;
+namespace Brisk\Http;
 
 
 class Server

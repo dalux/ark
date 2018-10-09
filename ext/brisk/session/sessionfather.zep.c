@@ -60,7 +60,7 @@ PHP_METHOD(Brisk_Session_SessionFather, __construct) {
 		) {
 			ZEPHIR_GET_HMKEY(k$$3, _2$$3, _1$$3);
 			ZEPHIR_GET_HVALUE(v$$3, _3$$3);
-			ZEPHIR_CALL_FUNCTION(NULL, "ini_set", &_4, 17, k$$3, v$$3);
+			ZEPHIR_CALL_FUNCTION(NULL, "ini_set", &_4, 16, k$$3, v$$3);
 			zephir_check_call_status();
 		}
 	}
@@ -132,14 +132,14 @@ PHP_METHOD(Brisk_Session_SessionFather, start) {
 
 
 	if (!ZEPHIR_IS_STRING(session_id, "")) {
-		ZEPHIR_CALL_FUNCTION(NULL, "session_id", NULL, 18, session_id);
+		ZEPHIR_CALL_FUNCTION(NULL, "session_id", NULL, 17, session_id);
 		zephir_check_call_status();
 	}
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "private,must-revalidate", 0);
-	ZEPHIR_CALL_FUNCTION(NULL, "session_cache_limiter", NULL, 19, &_0);
+	ZEPHIR_CALL_FUNCTION(NULL, "session_cache_limiter", NULL, 18, &_0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(NULL, "session_start", NULL, 20);
+	ZEPHIR_CALL_FUNCTION(NULL, "session_start", NULL, 19);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -263,7 +263,7 @@ PHP_METHOD(Brisk_Session_SessionFather, clean) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_FUNCTION("session_destroy", NULL, 21);
+	ZEPHIR_RETURN_CALL_FUNCTION("session_destroy", NULL, 20);
 	zephir_check_call_status();
 	RETURN_MM();
 

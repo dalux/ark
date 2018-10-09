@@ -60,7 +60,7 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, __construct) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "redis", 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "extension_loaded", NULL, 35, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "extension_loaded", NULL, 34, &_0);
 	zephir_check_call_status();
 	if (!zephir_is_true(_1)) {
 		ZEPHIR_INIT_VAR(_2$$3);
@@ -72,10 +72,10 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, __construct) {
 		zephir_array_fast_append(_5$$3, _6$$3);
 		ZEPHIR_INIT_NVAR(_6$$3);
 		ZVAL_STRING(_6$$3, "cache.extension_load_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 13, _6$$3, _5$$3);
+		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 12, _6$$3, _5$$3);
 		zephir_check_temp_parameter(_6$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 8, _3$$3);
+		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 7, _3$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_2$$3, "brisk/Cache/Driver/Redis.zep", 22 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -110,7 +110,7 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, __construct) {
 			ZEPHIR_CALL_METHOD(NULL, _9$$6, "auth", NULL, 0, _10$$6);
 			zephir_check_call_status_or_jump(try_end_1);
 		}
-		ZEPHIR_CALL_PARENT(NULL, brisk_cache_driver_redis_ce, getThis(), "__construct", &_11, 31, setting);
+		ZEPHIR_CALL_PARENT(NULL, brisk_cache_driver_redis_ce, getThis(), "__construct", &_11, 30, setting);
 		zephir_check_call_status_or_jump(try_end_1);
 
 	try_end_1:
@@ -131,10 +131,10 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, __construct) {
 			zephir_array_fast_append(_16$$7, _17$$7);
 			ZEPHIR_INIT_NVAR(_17$$7);
 			ZVAL_STRING(_17$$7, "cache.cacher_create_failed", ZEPHIR_TEMP_PARAM_COPY);
-			ZEPHIR_CALL_CE_STATIC(&_15$$7, brisk_kernel_language_ce, "get", &_4, 13, _17$$7, _16$$7);
+			ZEPHIR_CALL_CE_STATIC(&_15$$7, brisk_kernel_language_ce, "get", &_4, 12, _17$$7, _16$$7);
 			zephir_check_temp_parameter(_17$$7);
 			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(NULL, _14$$7, "__construct", NULL, 8, _15$$7);
+			ZEPHIR_CALL_METHOD(NULL, _14$$7, "__construct", NULL, 7, _15$$7);
 			zephir_check_call_status();
 			zephir_throw_exception_debug(_14$$7, "brisk/Cache/Driver/Redis.zep", 40 TSRMLS_CC);
 			ZEPHIR_MM_RESTORE();
@@ -193,7 +193,7 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, set) {
 		ZVAL_LONG(expire_time, expire);
 	}
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_container"), PH_NOISY_CC);
-	ZEPHIR_CALL_FUNCTION(&_1, "serialize", NULL, 26, value);
+	ZEPHIR_CALL_FUNCTION(&_1, "serialize", NULL, 25, value);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(_0, "set", NULL, 0, path, _1, expire_time);
 	zephir_check_call_status();
@@ -238,7 +238,7 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, get) {
 		ZEPHIR_CALL_METHOD(&data, _1$$3, "get", NULL, 0, path);
 		zephir_check_call_status();
 		if (zephir_is_true(data)) {
-			ZEPHIR_CALL_FUNCTION(&_2$$4, "unserialize", NULL, 33, data);
+			ZEPHIR_CALL_FUNCTION(&_2$$4, "unserialize", NULL, 32, data);
 			zephir_check_call_status();
 			ZEPHIR_CPY_WRT(data, _2$$4);
 		}
@@ -343,10 +343,10 @@ PHP_METHOD(Brisk_Cache_Driver_Redis, getCachePath) {
 		object_init_ex(_8$$5, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_11$$5);
 		ZVAL_STRING(_11$$5, "cache.path_mustbe_notnull", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_9$$5, brisk_kernel_language_ce, "get", &_10, 13, _11$$5);
+		ZEPHIR_CALL_CE_STATIC(&_9$$5, brisk_kernel_language_ce, "get", &_10, 12, _11$$5);
 		zephir_check_temp_parameter(_11$$5);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _8$$5, "__construct", NULL, 8, _9$$5);
+		ZEPHIR_CALL_METHOD(NULL, _8$$5, "__construct", NULL, 7, _9$$5);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_8$$5, "brisk/Cache/Driver/Redis.zep", 117 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

@@ -52,17 +52,17 @@ PHP_METHOD(Brisk_Sql_Delete_Mysql, compile) {
 		object_init_ex(_1$$3, brisk_exception_sqlcompileexception_ce);
 		ZEPHIR_INIT_VAR(_4$$3);
 		ZVAL_STRING(_4$$3, "querier.sql_compile_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 13, _4$$3);
+		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 12, _4$$3);
 		zephir_check_temp_parameter(_4$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 8, _2$$3);
+		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 7, _2$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_1$$3, "brisk/Sql/Delete/Mysql.zep", 22 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
 	ZEPHIR_MAKE_REF(from);
-	ZEPHIR_CALL_FUNCTION(&_5, "each", NULL, 14, from);
+	ZEPHIR_CALL_FUNCTION(&_5, "each", NULL, 13, from);
 	ZEPHIR_UNREF(from);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(from, _5);
@@ -70,7 +70,7 @@ PHP_METHOD(Brisk_Sql_Delete_Mysql, compile) {
 	zephir_array_fetch_long(&alias, from, 0, PH_NOISY, "brisk/Sql/Delete/Mysql.zep", 26 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(table);
 	zephir_array_fetch_long(&table, from, 1, PH_NOISY, "brisk/Sql/Delete/Mysql.zep", 27 TSRMLS_CC);
-	ZEPHIR_CALL_FUNCTION(&_5, "is_integer", NULL, 15, alias);
+	ZEPHIR_CALL_FUNCTION(&_5, "is_integer", NULL, 14, alias);
 	zephir_check_call_status();
 	if (zephir_is_true(_5)) {
 		ZEPHIR_INIT_NVAR(alias);

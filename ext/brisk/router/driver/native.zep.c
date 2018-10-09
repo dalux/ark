@@ -66,19 +66,19 @@ PHP_METHOD(Brisk_Router_Driver_Native, dispatch) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_FUNCTION(&trace, "debug_backtrace", NULL, 53);
+	ZEPHIR_CALL_FUNCTION(&trace, "debug_backtrace", NULL, 54);
 	zephir_check_call_status();
 	ZEPHIR_MAKE_REF(trace);
-	ZEPHIR_CALL_FUNCTION(&_0, "end", NULL, 87, trace);
+	ZEPHIR_CALL_FUNCTION(&_0, "end", NULL, 86, trace);
 	ZEPHIR_UNREF(trace);
 	zephir_check_call_status();
 	ZEPHIR_MAKE_REF(_0);
 	ZEPHIR_CALL_FUNCTION(&caller, "current", NULL, 3, _0);
 	ZEPHIR_UNREF(_0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&path_now, "dirname", &_1, 34, caller);
+	ZEPHIR_CALL_FUNCTION(&path_now, "dirname", &_1, 33, caller);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_2, brisk_kernel_app_ce, "getinstance", &_3, 22);
+	ZEPHIR_CALL_CE_STATIC(&_2, brisk_kernel_app_ce, "getinstance", &_3, 21);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_4);
 	zephir_read_property(&_4, _2, SL("config"), PH_NOISY_CC);
@@ -88,7 +88,7 @@ PHP_METHOD(Brisk_Router_Driver_Native, dispatch) {
 	zephir_check_temp_parameter(_6);
 	zephir_check_call_status();
 	if (zephir_is_true(_5)) {
-		ZEPHIR_CALL_CE_STATIC(&_7$$3, brisk_kernel_app_ce, "getinstance", &_3, 22);
+		ZEPHIR_CALL_CE_STATIC(&_7$$3, brisk_kernel_app_ce, "getinstance", &_3, 21);
 		zephir_check_call_status();
 		ZEPHIR_OBS_VAR(_8$$3);
 		zephir_read_property(&_8$$3, _7$$3, SL("config"), PH_NOISY_CC);
@@ -117,7 +117,7 @@ PHP_METHOD(Brisk_Router_Driver_Native, dispatch) {
 				if (!(1)) {
 					break;
 				}
-				ZEPHIR_CALL_FUNCTION(&_14$$6, "dirname", &_1, 34, curr_path$$5);
+				ZEPHIR_CALL_FUNCTION(&_14$$6, "dirname", &_1, 33, curr_path$$5);
 				zephir_check_call_status();
 				ZEPHIR_CPY_WRT(curr_path$$5, _14$$6);
 				if (zephir_fast_strlen_ev(curr_path$$5) < zephir_fast_strlen_ev(path_root$$4)) {
@@ -140,10 +140,10 @@ PHP_METHOD(Brisk_Router_Driver_Native, dispatch) {
 			ZEPHIR_GET_HVALUE(node$$4, _18$$4);
 			ZEPHIR_INIT_NVAR(file$$4);
 			ZEPHIR_CONCAT_VSV(file$$4, node$$4, "/", auto_include);
-			ZEPHIR_CALL_FUNCTION(&_19$$8, "is_file", &_20, 81, file$$4);
+			ZEPHIR_CALL_FUNCTION(&_19$$8, "is_file", &_20, 82, file$$4);
 			zephir_check_call_status();
 			if (zephir_is_true(_19$$8)) {
-				ZEPHIR_CALL_FUNCTION(&_21$$9, "dirname", &_1, 34, file$$4);
+				ZEPHIR_CALL_FUNCTION(&_21$$9, "dirname", &_1, 33, file$$4);
 				zephir_check_call_status();
 				ZEPHIR_CALL_FUNCTION(NULL, "chdir", &_22, 113, _21$$9);
 				zephir_check_call_status();

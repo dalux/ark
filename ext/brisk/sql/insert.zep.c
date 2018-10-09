@@ -203,10 +203,10 @@ PHP_METHOD(Brisk_Sql_Insert, compile) {
 		object_init_ex(_5$$3, brisk_exception_sqlcompileexception_ce);
 		ZEPHIR_INIT_VAR(_8$$3);
 		ZVAL_STRING(_8$$3, "querier.sql_compile_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 13, _8$$3);
+		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 12, _8$$3);
 		zephir_check_temp_parameter(_8$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 8, _6$$3);
+		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 7, _6$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_5$$3, "brisk/Sql/Insert.zep", 73 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

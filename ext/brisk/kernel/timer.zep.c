@@ -119,12 +119,12 @@ PHP_METHOD(Brisk_Kernel_Timer, lastUsed) {
 
 	_0 = zephir_fetch_static_property_ce(brisk_kernel_timer_ce, SL("_marks") TSRMLS_CC);
 	ZEPHIR_MAKE_REF(_0);
-	ZEPHIR_CALL_FUNCTION(&newer, "end", NULL, 87, _0);
+	ZEPHIR_CALL_FUNCTION(&newer, "end", NULL, 86, _0);
 	ZEPHIR_UNREF(_0);
 	zephir_check_call_status();
 	_1 = zephir_fetch_static_property_ce(brisk_kernel_timer_ce, SL("_marks") TSRMLS_CC);
 	ZEPHIR_MAKE_REF(_1);
-	ZEPHIR_CALL_FUNCTION(NULL, "prev", NULL, 88, _1);
+	ZEPHIR_CALL_FUNCTION(NULL, "prev", NULL, 87, _1);
 	ZEPHIR_UNREF(_1);
 	zephir_check_call_status();
 	_2 = zephir_fetch_static_property_ce(brisk_kernel_timer_ce, SL("_marks") TSRMLS_CC);
@@ -134,7 +134,7 @@ PHP_METHOD(Brisk_Kernel_Timer, lastUsed) {
 	zephir_check_call_status();
 	_3 = zephir_fetch_static_property_ce(brisk_kernel_timer_ce, SL("_marks") TSRMLS_CC);
 	ZEPHIR_MAKE_REF(_3);
-	ZEPHIR_CALL_FUNCTION(NULL, "reset", NULL, 89, _3);
+	ZEPHIR_CALL_FUNCTION(NULL, "reset", NULL, 88, _3);
 	ZEPHIR_UNREF(_3);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(reduce);
@@ -145,7 +145,7 @@ PHP_METHOD(Brisk_Kernel_Timer, lastUsed) {
 	ZVAL_STRING(&_5, ".", 0);
 	ZEPHIR_SINIT_VAR(_6);
 	ZVAL_STRING(&_6, "", 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("number_format", NULL, 90, reduce, &_4, &_5, &_6);
+	ZEPHIR_RETURN_CALL_FUNCTION("number_format", NULL, 89, reduce, &_4, &_5, &_6);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -170,12 +170,12 @@ PHP_METHOD(Brisk_Kernel_Timer, totalUsed) {
 	zephir_check_call_status();
 	_1 = zephir_fetch_static_property_ce(brisk_kernel_timer_ce, SL("_marks") TSRMLS_CC);
 	ZEPHIR_MAKE_REF(_1);
-	ZEPHIR_CALL_FUNCTION(&newest, "end", NULL, 87, _1);
+	ZEPHIR_CALL_FUNCTION(&newest, "end", NULL, 86, _1);
 	ZEPHIR_UNREF(_1);
 	zephir_check_call_status();
 	_2 = zephir_fetch_static_property_ce(brisk_kernel_timer_ce, SL("_marks") TSRMLS_CC);
 	ZEPHIR_MAKE_REF(_2);
-	ZEPHIR_CALL_FUNCTION(NULL, "reset", NULL, 89, _2);
+	ZEPHIR_CALL_FUNCTION(NULL, "reset", NULL, 88, _2);
 	ZEPHIR_UNREF(_2);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(reduce);
@@ -186,7 +186,7 @@ PHP_METHOD(Brisk_Kernel_Timer, totalUsed) {
 	ZVAL_STRING(&_4, ".", 0);
 	ZEPHIR_SINIT_VAR(_5);
 	ZVAL_STRING(&_5, "", 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("number_format", NULL, 90, reduce, &_3, &_4, &_5);
+	ZEPHIR_RETURN_CALL_FUNCTION("number_format", NULL, 89, reduce, &_3, &_4, &_5);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -262,7 +262,7 @@ PHP_METHOD(Brisk_Kernel_Timer, pick) {
 	ZVAL_STRING(&_8, ".", 0);
 	ZEPHIR_SINIT_VAR(_9);
 	ZVAL_STRING(&_9, "", 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("number_format", NULL, 90, reduce, &_7, &_8, &_9);
+	ZEPHIR_RETURN_CALL_FUNCTION("number_format", NULL, 89, reduce, &_7, &_8, &_9);
 	zephir_check_call_status();
 	RETURN_MM();
 

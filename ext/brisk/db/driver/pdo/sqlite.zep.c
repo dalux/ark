@@ -49,7 +49,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Sqlite, __construct) {
 	zephir_array_fetch_string(&_0, config, SL("dbname"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Sqlite.zep", 11 TSRMLS_CC);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_STRING(&_1, "sqlite:%s", 0);
-	ZEPHIR_CALL_FUNCTION(&dsn, "sprintf", NULL, 12, &_1, _0);
+	ZEPHIR_CALL_FUNCTION(&dsn, "sprintf", NULL, 11, &_1, _0);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(params);
 	zephir_create_array(params, 3, 0 TSRMLS_CC);
@@ -65,7 +65,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Sqlite, __construct) {
 	ZVAL_NULL(_4);
 	ZEPHIR_INIT_VAR(_5);
 	ZVAL_NULL(_5);
-	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_sqlite_ce, getThis(), "__construct", &_3, 42, dsn, _4, _5, params);
+	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_sqlite_ce, getThis(), "__construct", &_3, 41, dsn, _4, _5, params);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

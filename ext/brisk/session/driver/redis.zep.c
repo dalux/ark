@@ -61,11 +61,11 @@ PHP_METHOD(Brisk_Session_Driver_Redis, __construct) {
 		ZVAL_STRING(_3$$3, "core.config_not_found", ZEPHIR_TEMP_PARAM_COPY);
 		ZEPHIR_INIT_VAR(_4$$3);
 		ZVAL_STRING(_4$$3, "session/option/config", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 13, _3$$3, _4$$3);
+		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 12, _3$$3, _4$$3);
 		zephir_check_temp_parameter(_3$$3);
 		zephir_check_temp_parameter(_4$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 8, _1$$3);
+		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 7, _1$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_0$$3, "brisk/Session/Driver/Redis.zep", 19 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -83,7 +83,7 @@ PHP_METHOD(Brisk_Session_Driver_Redis, __construct) {
 	ZVAL_STRING(&_8, "session.save_handler", 0);
 	ZEPHIR_SINIT_VAR(_9);
 	ZVAL_STRING(&_9, "user", 0);
-	ZEPHIR_CALL_FUNCTION(NULL, "ini_set", NULL, 17, &_8, &_9);
+	ZEPHIR_CALL_FUNCTION(NULL, "ini_set", NULL, 16, &_8, &_9);
 	zephir_check_call_status();
 	ZEPHIR_CALL_PARENT(NULL, brisk_session_driver_redis_ce, getThis(), "__construct", &_10, 116, option);
 	zephir_check_call_status();

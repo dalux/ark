@@ -71,7 +71,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Oci, __construct) {
 	}
 	ZEPHIR_SINIT_VAR(_5);
 	ZVAL_STRING(&_5, "oci:dbname=%s;", 0);
-	ZEPHIR_CALL_FUNCTION(&_6, "sprintf", &_7, 12, &_5, dsn);
+	ZEPHIR_CALL_FUNCTION(&_6, "sprintf", &_7, 11, &_5, dsn);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(dsn, _6);
 	ZEPHIR_OBS_VAR(charset);
@@ -79,7 +79,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Oci, __construct) {
 	if (!ZEPHIR_IS_STRING(charset, "")) {
 		ZEPHIR_SINIT_VAR(_8$$5);
 		ZVAL_STRING(&_8$$5, "charset=%s", 0);
-		ZEPHIR_CALL_FUNCTION(&_9$$5, "sprintf", &_7, 12, &_8$$5, charset);
+		ZEPHIR_CALL_FUNCTION(&_9$$5, "sprintf", &_7, 11, &_8$$5, charset);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(_10$$5);
 		ZEPHIR_CONCAT_VV(_10$$5, dsn, _9$$5);
@@ -98,7 +98,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Oci, __construct) {
 	}
 	zephir_array_fetch_string(&_13, config, SL("username"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Oci.zep", 34 TSRMLS_CC);
 	zephir_array_fetch_string(&_14, config, SL("password"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Oci.zep", 34 TSRMLS_CC);
-	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_oci_ce, getThis(), "__construct", &_12, 42, dsn, _13, _14, params);
+	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_oci_ce, getThis(), "__construct", &_12, 41, dsn, _13, _14, params);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

@@ -613,9 +613,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, getRealSQL) {
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&bind, this_ptr, "getbind", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(NULL, "print_r", NULL, 4, bind);
-	zephir_check_call_status();
-	zephir_is_iterable(bind, &_1, &_0, 0, 0, "brisk/Sql/SqlFather.zep", 246);
+	zephir_is_iterable(bind, &_1, &_0, 0, 0, "brisk/Sql/SqlFather.zep", 245);
 	for (
 	  ; zend_hash_get_current_data_ex(_1, (void**) &_2, &_0) == SUCCESS
 	  ; zend_hash_move_forward_ex(_1, &_0)
@@ -628,7 +626,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, getRealSQL) {
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(_6$$3);
 		ZVAL_LONG(_6$$3, 1);
-		ZEPHIR_CALL_FUNCTION(&_7$$3, "preg_replace", &_8, 5, _3$$3, _4$$3, sql, _6$$3);
+		ZEPHIR_CALL_FUNCTION(&_7$$3, "preg_replace", &_8, 4, _3$$3, _4$$3, sql, _6$$3);
 		zephir_check_call_status();
 		ZEPHIR_CPY_WRT(sql, _7$$3);
 	}
@@ -694,9 +692,9 @@ PHP_METHOD(Brisk_Sql_SqlFather, _parseExpr) {
 	ZEPHIR_INIT_VAR(is_match);
 	zephir_preg_match(is_match, &_0, expr, matches, 1, 0 , 0  TSRMLS_CC);
 	if (ZEPHIR_GT_LONG(is_match, 0)) {
-		zephir_array_fetch_long(&_1$$3, matches, 1, PH_NOISY | PH_READONLY, "brisk/Sql/SqlFather.zep", 267 TSRMLS_CC);
+		zephir_array_fetch_long(&_1$$3, matches, 1, PH_NOISY | PH_READONLY, "brisk/Sql/SqlFather.zep", 266 TSRMLS_CC);
 		ZEPHIR_CPY_WRT(matches, _1$$3);
-		zephir_is_iterable(matches, &_3$$3, &_2$$3, 0, 0, "brisk/Sql/SqlFather.zep", 299);
+		zephir_is_iterable(matches, &_3$$3, &_2$$3, 0, 0, "brisk/Sql/SqlFather.zep", 298);
 		for (
 		  ; zend_hash_get_current_data_ex(_3$$3, (void**) &_4$$3, &_2$$3) == SUCCESS
 		  ; zend_hash_move_forward_ex(_3$$3, &_2$$3)
@@ -707,7 +705,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, _parseExpr) {
 				ZEPHIR_CPY_WRT(val$$3, value);
 				if (Z_TYPE_P(value) == IS_ARRAY) {
 					ZEPHIR_OBS_NVAR(val$$3);
-					zephir_array_fetch(&val$$3, value, k$$3, PH_NOISY, "brisk/Sql/SqlFather.zep", 273 TSRMLS_CC);
+					zephir_array_fetch(&val$$3, value, k$$3, PH_NOISY, "brisk/Sql/SqlFather.zep", 272 TSRMLS_CC);
 				}
 				ZEPHIR_INIT_NVAR(_5$$5);
 				ZEPHIR_INIT_NVAR(_6$$5);
@@ -750,7 +748,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, _parseExpr) {
 				ZVAL_STRING(_20$$5, "/\\?/", ZEPHIR_TEMP_PARAM_COPY);
 				ZEPHIR_INIT_NVAR(_21$$5);
 				ZVAL_LONG(_21$$5, 1);
-				ZEPHIR_CALL_FUNCTION(&_22$$5, "preg_replace", &_23, 5, _20$$5, val$$3, expr, _21$$5);
+				ZEPHIR_CALL_FUNCTION(&_22$$5, "preg_replace", &_23, 4, _20$$5, val$$3, expr, _21$$5);
 				zephir_check_temp_parameter(_20$$5);
 				zephir_check_call_status();
 				zephir_get_strval(expr, _22$$5);
@@ -758,7 +756,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, _parseExpr) {
 				ZEPHIR_CPY_WRT(val$$3, value);
 				if (Z_TYPE_P(value) == IS_ARRAY) {
 					ZEPHIR_OBS_NVAR(val$$3);
-					zephir_array_fetch(&val$$3, value, k$$3, PH_NOISY, "brisk/Sql/SqlFather.zep", 286 TSRMLS_CC);
+					zephir_array_fetch(&val$$3, value, k$$3, PH_NOISY, "brisk/Sql/SqlFather.zep", 285 TSRMLS_CC);
 				}
 				ZEPHIR_INIT_NVAR(_24$$10);
 				ZEPHIR_INIT_NVAR(_25$$10);
@@ -782,7 +780,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, _parseExpr) {
 					ZVAL_STRING(_33$$12, "/v/", ZEPHIR_TEMP_PARAM_COPY);
 					ZEPHIR_INIT_NVAR(_34$$12);
 					ZVAL_LONG(_34$$12, 1);
-					ZEPHIR_CALL_FUNCTION(&_31$$12, "preg_replace", &_23, 5, _33$$12, val$$3, expr, _34$$12);
+					ZEPHIR_CALL_FUNCTION(&_31$$12, "preg_replace", &_23, 4, _33$$12, val$$3, expr, _34$$12);
 					zephir_check_temp_parameter(_33$$12);
 					zephir_check_call_status();
 					zephir_get_strval(expr, _31$$12);
@@ -804,7 +802,7 @@ PHP_METHOD(Brisk_Sql_SqlFather, _parseExpr) {
 					ZVAL_STRING(_35$$13, "/v/", ZEPHIR_TEMP_PARAM_COPY);
 					ZEPHIR_INIT_NVAR(_37$$13);
 					ZVAL_LONG(_37$$13, 1);
-					ZEPHIR_CALL_FUNCTION(&_39$$13, "preg_replace", &_23, 5, _35$$13, val$$3, expr, _37$$13);
+					ZEPHIR_CALL_FUNCTION(&_39$$13, "preg_replace", &_23, 4, _35$$13, val$$3, expr, _37$$13);
 					zephir_check_temp_parameter(_35$$13);
 					zephir_check_call_status();
 					zephir_get_strval(expr, _39$$13);

@@ -76,22 +76,22 @@ PHP_METHOD(Brisk_Cache_Driver_File, __construct) {
 
 	zephir_update_property_this(getThis(), SL("_dir"), path TSRMLS_CC);
 	_0 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-	ZEPHIR_CALL_FUNCTION(&_1, "is_dir", NULL, 27, _0);
+	ZEPHIR_CALL_FUNCTION(&_1, "is_dir", NULL, 26, _0);
 	zephir_check_call_status();
 	_2 = !zephir_is_true(_1);
 	if (_2) {
 		_5 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_toolkit_ce, "mkdir", &_4, 28, _5);
+		ZEPHIR_CALL_CE_STATIC(&_3, brisk_kernel_toolkit_ce, "mkdir", &_4, 27, _5);
 		zephir_check_call_status();
 		_2 = !zephir_is_true(_3);
 	}
 	_6 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-	ZEPHIR_CALL_FUNCTION(&_7, "is_readable", NULL, 29, _6);
+	ZEPHIR_CALL_FUNCTION(&_7, "is_readable", NULL, 28, _6);
 	zephir_check_call_status();
 	_8 = !zephir_is_true(_7);
 	if (!(_8)) {
 		_9 = zephir_fetch_nproperty_this(this_ptr, SL("_dir"), PH_NOISY_CC);
-		ZEPHIR_CALL_FUNCTION(&_10, "is_writable", NULL, 30, _9);
+		ZEPHIR_CALL_FUNCTION(&_10, "is_writable", NULL, 29, _9);
 		zephir_check_call_status();
 		_8 = !zephir_is_true(_10);
 	}
@@ -105,10 +105,10 @@ PHP_METHOD(Brisk_Cache_Driver_File, __construct) {
 		zephir_array_fast_append(_14$$3, _15$$3);
 		ZEPHIR_INIT_VAR(_16$$3);
 		ZVAL_STRING(_16$$3, "cache.dir_create_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_12$$3, brisk_kernel_language_ce, "get", &_13, 13, _16$$3, _14$$3);
+		ZEPHIR_CALL_CE_STATIC(&_12$$3, brisk_kernel_language_ce, "get", &_13, 12, _16$$3, _14$$3);
 		zephir_check_temp_parameter(_16$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _11$$3, "__construct", NULL, 8, _12$$3);
+		ZEPHIR_CALL_METHOD(NULL, _11$$3, "__construct", NULL, 7, _12$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_11$$3, "brisk/Cache/Driver/File.zep", 26 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -123,10 +123,10 @@ PHP_METHOD(Brisk_Cache_Driver_File, __construct) {
 		zephir_array_fast_append(_19$$4, _20$$4);
 		ZEPHIR_INIT_VAR(_21$$4);
 		ZVAL_STRING(_21$$4, "cache.dir_permission_error", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_18$$4, brisk_kernel_language_ce, "get", &_13, 13, _21$$4, _19$$4);
+		ZEPHIR_CALL_CE_STATIC(&_18$$4, brisk_kernel_language_ce, "get", &_13, 12, _21$$4, _19$$4);
 		zephir_check_temp_parameter(_21$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _17$$4, "__construct", NULL, 8, _18$$4);
+		ZEPHIR_CALL_METHOD(NULL, _17$$4, "__construct", NULL, 7, _18$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_17$$4, "brisk/Cache/Driver/File.zep", 28 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -137,7 +137,7 @@ PHP_METHOD(Brisk_Cache_Driver_File, __construct) {
 		zephir_array_fetch_string(&_23$$5, setting, SL("ext_name"), PH_NOISY | PH_READONLY, "brisk/Cache/Driver/File.zep", 31 TSRMLS_CC);
 		zephir_update_property_this(getThis(), SL("_ext_name"), _23$$5 TSRMLS_CC);
 	}
-	ZEPHIR_CALL_PARENT(NULL, brisk_cache_driver_file_ce, getThis(), "__construct", &_24, 31, setting);
+	ZEPHIR_CALL_PARENT(NULL, brisk_cache_driver_file_ce, getThis(), "__construct", &_24, 30, setting);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -196,7 +196,7 @@ PHP_METHOD(Brisk_Cache_Driver_File, set) {
 	}
 	ZEPHIR_INIT_VAR(_3);
 	ZEPHIR_INIT_VAR(_4);
-	ZEPHIR_CALL_FUNCTION(&_5, "serialize", NULL, 26, value);
+	ZEPHIR_CALL_FUNCTION(&_5, "serialize", NULL, 25, value);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_6);
 	ZEPHIR_CONCAT_VV(_6, expire_time, _5);
@@ -247,14 +247,14 @@ PHP_METHOD(Brisk_Cache_Driver_File, get) {
 		_0 = !zephir_is_true(_1);
 	}
 	if (_0) {
-		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 32, path);
+		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 31, path);
 		zephir_check_call_status();
 		RETURN_MM_NULL();
 	}
 	ZEPHIR_INIT_VAR(content);
 	zephir_file_get_contents(content, path TSRMLS_CC);
 	if (ZEPHIR_IS_FALSE_IDENTICAL(content)) {
-		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 32, path);
+		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 31, path);
 		zephir_check_call_status();
 		RETURN_MM_NULL();
 	}
@@ -269,7 +269,7 @@ PHP_METHOD(Brisk_Cache_Driver_File, get) {
 	ZEPHIR_INIT_VAR(_6);
 	zephir_time(_6);
 	if (ZEPHIR_LT(timeflag, _6)) {
-		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 32, path);
+		ZEPHIR_CALL_FUNCTION(NULL, "unlink", &_2, 31, path);
 		zephir_check_call_status();
 		RETURN_MM_NULL();
 	}
@@ -277,7 +277,7 @@ PHP_METHOD(Brisk_Cache_Driver_File, get) {
 	ZVAL_LONG(&_7, 10);
 	ZEPHIR_INIT_VAR(_8);
 	zephir_substr(_8, content, 10 , 0, ZEPHIR_SUBSTR_NO_LENGTH);
-	ZEPHIR_CALL_FUNCTION(&tmp, "unserialize", NULL, 33, _8);
+	ZEPHIR_CALL_FUNCTION(&tmp, "unserialize", NULL, 32, _8);
 	zephir_check_call_status();
 	if (!ZEPHIR_IS_FALSE_IDENTICAL(tmp)) {
 		RETURN_CCTOR(tmp);
@@ -316,7 +316,7 @@ PHP_METHOD(Brisk_Cache_Driver_File, delete) {
 	ZEPHIR_CALL_METHOD(&path, this_ptr, "getcachepath", NULL, 0, name);
 	zephir_check_call_status();
 	if ((zephir_file_exists(path TSRMLS_CC) == SUCCESS)) {
-		ZEPHIR_CALL_FUNCTION(&deleted$$3, "unlink", NULL, 32, path);
+		ZEPHIR_CALL_FUNCTION(&deleted$$3, "unlink", NULL, 31, path);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(_0$$3);
 		if (zephir_is_true(deleted$$3)) {
@@ -451,10 +451,10 @@ PHP_METHOD(Brisk_Cache_Driver_File, getCachePath) {
 		object_init_ex(_11$$5, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_14$$5);
 		ZVAL_STRING(_14$$5, "cache.path_mustbe_notnull", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_12$$5, brisk_kernel_language_ce, "get", &_13, 13, _14$$5);
+		ZEPHIR_CALL_CE_STATIC(&_12$$5, brisk_kernel_language_ce, "get", &_13, 12, _14$$5);
 		zephir_check_temp_parameter(_14$$5);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _11$$5, "__construct", NULL, 8, _12$$5);
+		ZEPHIR_CALL_METHOD(NULL, _11$$5, "__construct", NULL, 7, _12$$5);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_11$$5, "brisk/Cache/Driver/File.zep", 137 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -477,13 +477,13 @@ PHP_METHOD(Brisk_Cache_Driver_File, getCachePath) {
 	ZVAL_STRING(&_19, "/", 0);
 	zephir_fast_str_replace(&_16, _17, &_19, path TSRMLS_CC);
 	ZEPHIR_CPY_WRT(path, _16);
-	ZEPHIR_CALL_FUNCTION(&_20, "dirname", &_21, 34, path);
+	ZEPHIR_CALL_FUNCTION(&_20, "dirname", &_21, 33, path);
 	zephir_check_call_status();
 	_22 = !((zephir_file_exists(_20 TSRMLS_CC) == SUCCESS));
 	if (_22) {
-		ZEPHIR_CALL_FUNCTION(&_25, "dirname", &_21, 34, path);
+		ZEPHIR_CALL_FUNCTION(&_25, "dirname", &_21, 33, path);
 		zephir_check_call_status();
-		ZEPHIR_CALL_CE_STATIC(&_23, brisk_kernel_toolkit_ce, "mkdir", &_24, 28, _25);
+		ZEPHIR_CALL_CE_STATIC(&_23, brisk_kernel_toolkit_ce, "mkdir", &_24, 27, _25);
 		zephir_check_call_status();
 		_22 = !zephir_is_true(_23);
 	}
@@ -495,10 +495,10 @@ PHP_METHOD(Brisk_Cache_Driver_File, getCachePath) {
 		zephir_array_fast_append(_28$$6, path);
 		ZEPHIR_INIT_VAR(_29$$6);
 		ZVAL_STRING(_29$$6, "cache.dir_create_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_27$$6, brisk_kernel_language_ce, "get", &_13, 13, _29$$6, _28$$6);
+		ZEPHIR_CALL_CE_STATIC(&_27$$6, brisk_kernel_language_ce, "get", &_13, 12, _29$$6, _28$$6);
 		zephir_check_temp_parameter(_29$$6);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _26$$6, "__construct", NULL, 8, _27$$6);
+		ZEPHIR_CALL_METHOD(NULL, _26$$6, "__construct", NULL, 7, _27$$6);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_26$$6, "brisk/Cache/Driver/File.zep", 142 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

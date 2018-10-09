@@ -21,8 +21,8 @@ if (PHP_BRISK != "no") {
 	ADD_SOURCES(configure_module_dirname + "/brisk/view", "viewfather.zep.c viewadapter.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/cache/driver", "file.zep.c memcached.zep.c redis.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/db/driver/pdo", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");
-	ADD_SOURCES(configure_module_dirname + "/brisk/http", "request.zep.c response.zep.c", "brisk");
-	ADD_SOURCES(configure_module_dirname + "/brisk/kernel", "app.zep.c config.zep.c container.zep.c event.zep.c handler.zep.c language.zep.c loader.zep.c server.zep.c timer.zep.c toolkit.zep.c trace.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/http", "request.zep.c response.zep.c server.zep.c", "brisk");
+	ADD_SOURCES(configure_module_dirname + "/brisk/kernel", "app.zep.c config.zep.c container.zep.c event.zep.c handler.zep.c language.zep.c loader.zep.c timer.zep.c toolkit.zep.c trace.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/router/driver", "classic.zep.c native.zep.c rewrite.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/session/driver", "filecache.zep.c files.zep.c memcached.zep.c redis.zep.c", "brisk");
 	ADD_SOURCES(configure_module_dirname + "/brisk/sql/delete", "mysql.zep.c oci.zep.c pgsql.zep.c sqlite.zep.c sqlsrv.zep.c", "brisk");

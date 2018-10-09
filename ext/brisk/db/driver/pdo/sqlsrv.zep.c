@@ -53,14 +53,14 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Sqlsrv, __construct) {
 	zephir_array_fetch_string(&_2, config, SL("dbname"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Sqlsrv.zep", 11 TSRMLS_CC);
 	ZEPHIR_SINIT_VAR(_3);
 	ZVAL_STRING(&_3, "sqlsrv:Server=%s,%s;Database=%s;", 0);
-	ZEPHIR_CALL_FUNCTION(&dsn, "sprintf", &_4, 12, &_3, _0, _1, _2);
+	ZEPHIR_CALL_FUNCTION(&dsn, "sprintf", &_4, 11, &_3, _0, _1, _2);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(charset);
 	zephir_array_fetch_string(&charset, config, SL("charset"), PH_NOISY, "brisk/Db/Driver/Pdo/Sqlsrv.zep", 12 TSRMLS_CC);
 	if (!ZEPHIR_IS_STRING(charset, "")) {
 		ZEPHIR_SINIT_VAR(_5$$3);
 		ZVAL_STRING(&_5$$3, "charset=%s", 0);
-		ZEPHIR_CALL_FUNCTION(&_6$$3, "sprintf", &_4, 12, &_5$$3, charset);
+		ZEPHIR_CALL_FUNCTION(&_6$$3, "sprintf", &_4, 11, &_5$$3, charset);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(_7$$3);
 		ZEPHIR_CONCAT_VV(_7$$3, dsn, _6$$3);
@@ -78,7 +78,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Sqlsrv, __construct) {
 	}
 	zephir_array_fetch_string(&_10, config, SL("username"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Sqlsrv.zep", 24 TSRMLS_CC);
 	zephir_array_fetch_string(&_11, config, SL("password"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Sqlsrv.zep", 24 TSRMLS_CC);
-	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_sqlsrv_ce, getThis(), "__construct", &_9, 42, dsn, _10, _11, params);
+	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_sqlsrv_ce, getThis(), "__construct", &_9, 41, dsn, _10, _11, params);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

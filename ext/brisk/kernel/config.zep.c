@@ -191,7 +191,7 @@ PHP_METHOD(Brisk_Kernel_Config, saveToFile) {
 	ZVAL_STRING(_4, "/=>\\s\n\\s+array/", ZEPHIR_TEMP_PARAM_COPY);
 	ZEPHIR_INIT_VAR(_5);
 	ZVAL_STRING(_5, "=> array", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_FUNCTION(&_6, "preg_replace", NULL, 5, _4, _5, config);
+	ZEPHIR_CALL_FUNCTION(&_6, "preg_replace", NULL, 4, _4, _5, config);
 	zephir_check_temp_parameter(_4);
 	zephir_check_temp_parameter(_5);
 	zephir_check_call_status();

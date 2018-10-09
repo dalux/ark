@@ -66,6 +66,7 @@ zend_class_entry *brisk_exception_routerexception_ce;
 zend_class_entry *brisk_exception_sqlcompileexception_ce;
 zend_class_entry *brisk_http_request_ce;
 zend_class_entry *brisk_http_response_ce;
+zend_class_entry *brisk_http_server_ce;
 zend_class_entry *brisk_kernel_app_ce;
 zend_class_entry *brisk_kernel_config_ce;
 zend_class_entry *brisk_kernel_container_ce;
@@ -73,7 +74,6 @@ zend_class_entry *brisk_kernel_event_ce;
 zend_class_entry *brisk_kernel_handler_ce;
 zend_class_entry *brisk_kernel_language_ce;
 zend_class_entry *brisk_kernel_loader_ce;
-zend_class_entry *brisk_kernel_server_ce;
 zend_class_entry *brisk_kernel_timer_ce;
 zend_class_entry *brisk_kernel_toolkit_ce;
 zend_class_entry *brisk_kernel_trace_ce;
@@ -174,6 +174,7 @@ static PHP_MINIT_FUNCTION(brisk)
 	ZEPHIR_INIT(Brisk_Exception_SqlCompileException);
 	ZEPHIR_INIT(Brisk_Http_Request);
 	ZEPHIR_INIT(Brisk_Http_Response);
+	ZEPHIR_INIT(Brisk_Http_Server);
 	ZEPHIR_INIT(Brisk_Kernel_App);
 	ZEPHIR_INIT(Brisk_Kernel_Config);
 	ZEPHIR_INIT(Brisk_Kernel_Container);
@@ -181,7 +182,6 @@ static PHP_MINIT_FUNCTION(brisk)
 	ZEPHIR_INIT(Brisk_Kernel_Handler);
 	ZEPHIR_INIT(Brisk_Kernel_Language);
 	ZEPHIR_INIT(Brisk_Kernel_Loader);
-	ZEPHIR_INIT(Brisk_Kernel_Server);
 	ZEPHIR_INIT(Brisk_Kernel_Timer);
 	ZEPHIR_INIT(Brisk_Kernel_Toolkit);
 	ZEPHIR_INIT(Brisk_Kernel_Trace);
@@ -282,11 +282,11 @@ static PHP_RINIT_FUNCTION(brisk)
 
 		zephir_init_static_properties_Brisk_Http_Request(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Http_Response(TSRMLS_C);
+		zephir_init_static_properties_Brisk_Http_Server(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Kernel_App(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Kernel_Event(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Kernel_Language(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Kernel_Loader(TSRMLS_C);
-		zephir_init_static_properties_Brisk_Kernel_Server(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Kernel_Timer(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Kernel_Trace(TSRMLS_C);
 		zephir_init_static_properties_Brisk_Router_Driver_Classic(TSRMLS_C);

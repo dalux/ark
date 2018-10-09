@@ -147,7 +147,7 @@ PHP_METHOD(Brisk_Sql_Select, having) {
 	ZEPHIR_INIT_VAR(values);
 	zephir_get_args(values TSRMLS_CC);
 	ZEPHIR_MAKE_REF(values);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_shift", NULL, 16, values);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_shift", NULL, 15, values);
 	ZEPHIR_UNREF(values);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_0);
@@ -504,14 +504,14 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 			ZEPHIR_GET_HVALUE(val, _4$$3);
 			zephir_array_fetch_long(&_5$$4, val, 0, PH_NOISY | PH_READONLY, "brisk/Sql/Select.zep", 177 TSRMLS_CC);
 			ZEPHIR_MAKE_REF(_5$$4);
-			ZEPHIR_CALL_FUNCTION(&from_table$$3, "each", &_6, 14, _5$$4);
+			ZEPHIR_CALL_FUNCTION(&from_table$$3, "each", &_6, 13, _5$$4);
 			ZEPHIR_UNREF(_5$$4);
 			zephir_check_call_status();
 			ZEPHIR_OBS_NVAR(k);
 			zephir_array_fetch_string(&k, from_table$$3, SL("key"), PH_NOISY, "brisk/Sql/Select.zep", 178 TSRMLS_CC);
 			ZEPHIR_OBS_NVAR(v);
 			zephir_array_fetch_string(&v, from_table$$3, SL("value"), PH_NOISY, "brisk/Sql/Select.zep", 179 TSRMLS_CC);
-			ZEPHIR_CALL_FUNCTION(&_7$$4, "is_integer", &_8, 15, k);
+			ZEPHIR_CALL_FUNCTION(&_7$$4, "is_integer", &_8, 14, k);
 			zephir_check_call_status();
 			if (zephir_is_true(_7$$4)) {
 				ZEPHIR_INIT_NVAR(alias$$3);
@@ -553,7 +553,7 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 					ZVAL_STRING(&_20$$8, "", 0);
 					zephir_fast_str_replace(&_17$$8, _18$$8, &_20$$8, v TSRMLS_CC);
 					ZEPHIR_CPY_WRT(v, _17$$8);
-					ZEPHIR_CALL_FUNCTION(&_21$$8, "is_integer", &_8, 15, k);
+					ZEPHIR_CALL_FUNCTION(&_21$$8, "is_integer", &_8, 14, k);
 					zephir_check_call_status();
 					if (zephir_is_true(_21$$8)) {
 						zephir_array_update_multi(&val, &v TSRMLS_CC, SL("lz"), 2, 1, k);
@@ -563,7 +563,7 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 						zephir_array_update_multi(&val, &_22$$10 TSRMLS_CC, SL("lz"), 2, 1, k);
 					}
 				} else {
-					ZEPHIR_CALL_FUNCTION(&_23$$11, "is_integer", &_8, 15, k);
+					ZEPHIR_CALL_FUNCTION(&_23$$11, "is_integer", &_8, 14, k);
 					zephir_check_call_status();
 					if (zephir_is_true(_23$$11)) {
 						if (!ZEPHIR_IS_STRING(alias$$3, "")) {
@@ -632,7 +632,7 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 					add_assoc_stringl_ex(keys$$18, SS("joinRight"), SL("RIGHT JOIN"), 1);
 					add_assoc_stringl_ex(keys$$18, SS("joinFull"), SL("FULL JOIN"), 1);
 					ZEPHIR_MAKE_REF(join_table$$18);
-					ZEPHIR_CALL_FUNCTION(&_36$$20, "each", &_6, 14, join_table$$18);
+					ZEPHIR_CALL_FUNCTION(&_36$$20, "each", &_6, 13, join_table$$18);
 					ZEPHIR_UNREF(join_table$$18);
 					zephir_check_call_status();
 					ZEPHIR_CPY_WRT(join_table$$18, _36$$20);
@@ -640,7 +640,7 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 					zephir_array_fetch_long(&k, join_table$$18, 0, PH_NOISY, "brisk/Sql/Select.zep", 235 TSRMLS_CC);
 					ZEPHIR_OBS_NVAR(v);
 					zephir_array_fetch_long(&v, join_table$$18, 1, PH_NOISY, "brisk/Sql/Select.zep", 236 TSRMLS_CC);
-					ZEPHIR_CALL_FUNCTION(&_36$$20, "is_integer", &_8, 15, k);
+					ZEPHIR_CALL_FUNCTION(&_36$$20, "is_integer", &_8, 14, k);
 					zephir_check_call_status();
 					if (zephir_is_true(_36$$20)) {
 						ZEPHIR_INIT_NVAR(alias$$3);
@@ -685,7 +685,7 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 							ZVAL_STRING(&_50$$24, "", 0);
 							zephir_fast_str_replace(&_47$$24, _48$$24, &_50$$24, v TSRMLS_CC);
 							ZEPHIR_CPY_WRT(v, _47$$24);
-							ZEPHIR_CALL_FUNCTION(&_51$$24, "is_integer", &_8, 15, k);
+							ZEPHIR_CALL_FUNCTION(&_51$$24, "is_integer", &_8, 14, k);
 							zephir_check_call_status();
 							if (zephir_is_true(_51$$24)) {
 								zephir_array_update_zval(&join_fields$$18, k, &v, PH_COPY | PH_SEPARATE);
@@ -695,7 +695,7 @@ PHP_METHOD(Brisk_Sql_Select, pickSelectPart) {
 								zephir_array_update_zval(&join_fields$$18, k, &_52$$26, PH_COPY | PH_SEPARATE);
 							}
 						} else {
-							ZEPHIR_CALL_FUNCTION(&_53$$27, "is_integer", &_8, 15, k);
+							ZEPHIR_CALL_FUNCTION(&_53$$27, "is_integer", &_8, 14, k);
 							zephir_check_call_status();
 							if (zephir_is_true(_53$$27)) {
 								if (!ZEPHIR_IS_STRING(alias$$3, "")) {
@@ -963,10 +963,10 @@ PHP_METHOD(Brisk_Sql_Select, compile) {
 		object_init_ex(_0$$3, brisk_exception_sqlcompileexception_ce);
 		ZEPHIR_INIT_VAR(_3$$3);
 		ZVAL_STRING(_3$$3, "querier.sql_compile_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 13, _3$$3);
+		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 12, _3$$3);
 		zephir_check_temp_parameter(_3$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 8, _1$$3);
+		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 7, _1$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_0$$3, "brisk/Sql/Select.zep", 394 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

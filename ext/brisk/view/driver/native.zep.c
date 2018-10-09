@@ -208,7 +208,7 @@ PHP_METHOD(Brisk_View_Driver_Native, display) {
 	ZEPHIR_INIT_VAR(_5);
 	ZEPHIR_CONCAT_VSV(_5, _4, "/", template);
 	zephir_get_strval(template, _5);
-	ZEPHIR_CALL_FUNCTION(&_6, "is_file", NULL, 81, template);
+	ZEPHIR_CALL_FUNCTION(&_6, "is_file", NULL, 82, template);
 	zephir_check_call_status();
 	if (!zephir_is_true(_6)) {
 		ZEPHIR_INIT_VAR(_7$$4);
@@ -220,10 +220,10 @@ PHP_METHOD(Brisk_View_Driver_Native, display) {
 		zephir_array_fast_append(_10$$4, _11$$4);
 		ZEPHIR_INIT_VAR(_13$$4);
 		ZVAL_STRING(_13$$4, "view.template_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_8$$4, brisk_kernel_language_ce, "get", &_9, 13, _13$$4, _10$$4);
+		ZEPHIR_CALL_CE_STATIC(&_8$$4, brisk_kernel_language_ce, "get", &_9, 12, _13$$4, _10$$4);
 		zephir_check_temp_parameter(_13$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _7$$4, "__construct", NULL, 8, _8$$4);
+		ZEPHIR_CALL_METHOD(NULL, _7$$4, "__construct", NULL, 7, _8$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_7$$4, "brisk/View/Driver/Native.zep", 73 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -235,7 +235,7 @@ PHP_METHOD(Brisk_View_Driver_Native, display) {
 	add_assoc_stringl_ex(data, SS("driver"), SL("Native"), 1);
 	ZEPHIR_INIT_VAR(_16);
 	ZVAL_STRING(_16, "event.view.before", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&_14, brisk_kernel_event_ce, "fire", &_15, 7, _16, data);
+	ZEPHIR_CALL_CE_STATIC(&_14, brisk_kernel_event_ce, "fire", &_15, 6, _16, data);
 	zephir_check_temp_parameter(_16);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _14);
@@ -246,7 +246,7 @@ PHP_METHOD(Brisk_View_Driver_Native, display) {
 	ZEPHIR_CALL_FUNCTION(NULL, "extract", NULL, 130, _17, _16);
 	ZEPHIR_UNREF(_17);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 91);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 90);
 	zephir_check_call_status();
 	if (zephir_require_zval(template TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();
@@ -256,7 +256,7 @@ PHP_METHOD(Brisk_View_Driver_Native, display) {
 	zephir_array_update_string(&data, SL("content"), &_14, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_NVAR(_16);
 	ZVAL_STRING(_16, "event.view.finish", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&_18, brisk_kernel_event_ce, "fire", &_15, 7, _16, data);
+	ZEPHIR_CALL_CE_STATIC(&_18, brisk_kernel_event_ce, "fire", &_15, 6, _16, data);
 	zephir_check_temp_parameter(_16);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(data, _18);
@@ -330,7 +330,7 @@ PHP_METHOD(Brisk_View_Driver_Native, import) {
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_template_dir"), PH_NOISY_CC);
 	ZEPHIR_INIT_VAR(template);
 	ZEPHIR_CONCAT_VSV(template, _4, "/", path);
-	ZEPHIR_CALL_FUNCTION(&_5, "is_file", NULL, 81, template);
+	ZEPHIR_CALL_FUNCTION(&_5, "is_file", NULL, 82, template);
 	zephir_check_call_status();
 	if (!zephir_is_true(_5)) {
 		ZEPHIR_INIT_VAR(_6$$4);
@@ -342,10 +342,10 @@ PHP_METHOD(Brisk_View_Driver_Native, import) {
 		zephir_array_fast_append(_9$$4, _10$$4);
 		ZEPHIR_INIT_VAR(_12$$4);
 		ZVAL_STRING(_12$$4, "view.include_file_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 13, _12$$4, _9$$4);
+		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 12, _12$$4, _9$$4);
 		zephir_check_temp_parameter(_12$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 8, _7$$4);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 7, _7$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_6$$4, "brisk/View/Driver/Native.zep", 109 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -364,7 +364,7 @@ PHP_METHOD(Brisk_View_Driver_Native, import) {
 	ZEPHIR_CALL_FUNCTION(NULL, "extract", &_15, 130, params, _14);
 	ZEPHIR_UNREF(params);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 91);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_start", NULL, 90);
 	zephir_check_call_status();
 	if (zephir_require_zval(template TSRMLS_CC) == FAILURE) {
 		RETURN_MM_NULL();

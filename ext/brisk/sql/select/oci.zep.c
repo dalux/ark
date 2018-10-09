@@ -118,10 +118,10 @@ PHP_METHOD(Brisk_Sql_Select_Oci, compile) {
 		object_init_ex(_0$$3, brisk_exception_sqlcompileexception_ce);
 		ZEPHIR_INIT_VAR(_3$$3);
 		ZVAL_STRING(_3$$3, "querier.sql_compile_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 13, _3$$3);
+		ZEPHIR_CALL_CE_STATIC(&_1$$3, brisk_kernel_language_ce, "get", &_2, 12, _3$$3);
 		zephir_check_temp_parameter(_3$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 8, _1$$3);
+		ZEPHIR_CALL_METHOD(NULL, _0$$3, "__construct", NULL, 7, _1$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_0$$3, "brisk/Sql/Select/Oci.zep", 48 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -167,13 +167,13 @@ PHP_METHOD(Brisk_Sql_Select_Oci, compile) {
 			zephir_add_function(&_10$$9, offset$$8, limit);
 			ZEPHIR_SINIT_VAR(_11$$9);
 			ZVAL_STRING(&_11$$9, "select * from (select tmptable1.*, rownum tmprn from (%s) tmptable1 where rownum<=%u) where tmprn>%u", 0);
-			ZEPHIR_CALL_FUNCTION(&_12$$9, "sprintf", &_13, 12, &_11$$9, select, &_10$$9, offset$$8);
+			ZEPHIR_CALL_FUNCTION(&_12$$9, "sprintf", &_13, 11, &_11$$9, select, &_10$$9, offset$$8);
 			zephir_check_call_status();
 			ZEPHIR_CPY_WRT(select, _12$$9);
 		} else {
 			ZEPHIR_SINIT_VAR(_14$$10);
 			ZVAL_STRING(&_14$$10, "select tmptable1.* from (%s) tmptable1 where rownum<=%u", 0);
-			ZEPHIR_CALL_FUNCTION(&_15$$10, "sprintf", &_13, 12, &_14$$10, select, limit);
+			ZEPHIR_CALL_FUNCTION(&_15$$10, "sprintf", &_13, 11, &_14$$10, select, limit);
 			zephir_check_call_status();
 			ZEPHIR_CPY_WRT(select, _15$$10);
 		}

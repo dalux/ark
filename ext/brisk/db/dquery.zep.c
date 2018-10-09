@@ -14,10 +14,10 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
-#include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
-#include "kernel/operators.h"
 #include "kernel/fcall.h"
+#include "ext/spl/spl_exceptions.h"
+#include "kernel/operators.h"
 #include "kernel/string.h"
 #include "kernel/array.h"
 #include "kernel/concat.h"
@@ -84,7 +84,9 @@ PHP_METHOD(Brisk_Db_DQuery, getConnection) {
  */
 PHP_METHOD(Brisk_Db_DQuery, __construct) {
 
-	zval *tb_param = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_3 = NULL;
+	zval *tb_param = NULL, *_0, *_1$$3, *_2$$3 = NULL, *_4$$3;
 	zval *tb = NULL;
 
 	ZEPHIR_MM_GROW();
@@ -103,6 +105,21 @@ PHP_METHOD(Brisk_Db_DQuery, __construct) {
 
 
 	zephir_update_property_this(getThis(), SL("_tb"), tb TSRMLS_CC);
+	_0 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
+	if (Z_TYPE_P(_0) == IS_NULL) {
+		ZEPHIR_INIT_VAR(_1$$3);
+		object_init_ex(_1$$3, brisk_exception_runtimeexception_ce);
+		ZEPHIR_INIT_VAR(_4$$3);
+		ZVAL_STRING(_4$$3, "db.invalid_connection_object", ZEPHIR_TEMP_PARAM_COPY);
+		ZEPHIR_CALL_CE_STATIC(&_2$$3, brisk_kernel_language_ce, "get", &_3, 12, _4$$3);
+		zephir_check_temp_parameter(_4$$3);
+		zephir_check_call_status();
+		ZEPHIR_CALL_METHOD(NULL, _1$$3, "__construct", NULL, 7, _2$$3);
+		zephir_check_call_status();
+		zephir_throw_exception_debug(_1$$3, "brisk/Db/DQuery.zep", 70 TSRMLS_CC);
+		ZEPHIR_MM_RESTORE();
+		return;
+	}
 	ZEPHIR_MM_RESTORE();
 
 }
@@ -135,7 +152,7 @@ PHP_METHOD(Brisk_Db_DQuery, init) {
 
 
 	object_init_ex(return_value, brisk_db_dquery_ce);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 37, tb);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 36, tb);
 	zephir_check_call_status();
 	RETURN_MM();
 
@@ -231,7 +248,7 @@ PHP_METHOD(Brisk_Db_DQuery, insert) {
 	_2 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_3, _2, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_sql_sqlbuilder_ce, "getinsert", &_1, 38, _3);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_sql_sqlbuilder_ce, "getinsert", &_1, 37, _3);
 	zephir_check_call_status();
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&insert, _0, "into", NULL, 0, _4, data);
@@ -280,12 +297,12 @@ PHP_METHOD(Brisk_Db_DQuery, update) {
 	_2 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_3, _2, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_sql_sqlbuilder_ce, "getupdate", &_1, 39, _3);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_sql_sqlbuilder_ce, "getupdate", &_1, 38, _3);
 	zephir_check_call_status();
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&update, _0, "set", NULL, 0, _4, data);
 	zephir_check_call_status();
-	zephir_is_iterable(condition, &_6, &_5, 0, 0, "brisk/Db/DQuery.zep", 149);
+	zephir_is_iterable(condition, &_6, &_5, 0, 0, "brisk/Db/DQuery.zep", 153);
 	for (
 	  ; zend_hash_get_current_data_ex(_6, (void**) &_7, &_5) == SUCCESS
 	  ; zend_hash_move_forward_ex(_6, &_5)
@@ -306,7 +323,7 @@ PHP_METHOD(Brisk_Db_DQuery, update) {
 			ZEPHIR_UNREF(v);
 			zephir_check_call_status();
 			_11$$4 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-			zephir_array_fetch(&_12$$4, _11$$4, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 133 TSRMLS_CC);
+			zephir_array_fetch(&_12$$4, _11$$4, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 137 TSRMLS_CC);
 			_13$$4 = zephir_is_true(_12$$4);
 			if (_13$$4) {
 				_13$$4 = !ZEPHIR_IS_STRING(vv, "");
@@ -324,12 +341,12 @@ PHP_METHOD(Brisk_Db_DQuery, update) {
 				zephir_preg_match(_18$$5, &_19$$5, kk, _17$$5, 0, 0 , 0  TSRMLS_CC);
 				_20$$5 = zephir_is_true(_18$$5);
 				if (_20$$5) {
-					zephir_array_fetch_long(&_21$$5, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 136 TSRMLS_CC);
+					zephir_array_fetch_long(&_21$$5, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 140 TSRMLS_CC);
 					_20$$5 = !ZEPHIR_IS_STRING(_21$$5, "");
 				}
 				_22$$5 = _20$$5;
 				if (_22$$5) {
-					zephir_array_fetch_long(&_23$$5, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 136 TSRMLS_CC);
+					zephir_array_fetch_long(&_23$$5, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 140 TSRMLS_CC);
 					_22$$5 = !ZEPHIR_IS_STRING(_23$$5, "");
 				}
 				ZEPHIR_INIT_NVAR(_24$$5);
@@ -339,16 +356,16 @@ PHP_METHOD(Brisk_Db_DQuery, update) {
 				zephir_preg_match(_25$$5, &_26$$5, kk, _24$$5, 0, 0 , 0  TSRMLS_CC);
 				if (zephir_is_true(_15$$5)) {
 					_27$$6 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_28$$6, _27$$6, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 135 TSRMLS_CC);
+					zephir_array_fetch(&_28$$6, _27$$6, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 139 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_29$$6);
 					ZEPHIR_CONCAT_VVV(_29$$6, k, _28$$6, vv);
 					ZEPHIR_CALL_METHOD(NULL, update, "where", &_30, 0, _29$$6);
 					zephir_check_call_status();
 				} else if (_22$$5) {
 					_31$$7 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_32$$7, _31$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 137 TSRMLS_CC);
-					zephir_array_fetch_long(&_33$$7, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 137 TSRMLS_CC);
-					zephir_array_fetch_long(&_34$$7, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 137 TSRMLS_CC);
+					zephir_array_fetch(&_32$$7, _31$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 141 TSRMLS_CC);
+					zephir_array_fetch_long(&_33$$7, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 141 TSRMLS_CC);
+					zephir_array_fetch_long(&_34$$7, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 141 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_35$$7);
 					ZEPHIR_CONCAT_VVVSV(_35$$7, k, _32$$7, _33$$7, " AND ", _34$$7);
 					ZEPHIR_CALL_METHOD(NULL, update, "where", &_36, 0, _35$$7);
@@ -358,14 +375,14 @@ PHP_METHOD(Brisk_Db_DQuery, update) {
 					zephir_check_call_status();
 					ZEPHIR_CPY_WRT(vv, _37$$8);
 					_39$$8 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_40$$8, _39$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 140 TSRMLS_CC);
+					zephir_array_fetch(&_40$$8, _39$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 144 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_41$$8);
 					ZEPHIR_CONCAT_VVSVS(_41$$8, k, _40$$8, "(", vv, ")");
 					ZEPHIR_CALL_METHOD(NULL, update, "where", &_42, 0, _41$$8);
 					zephir_check_call_status();
 				} else {
 					_43$$9 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_44$$9, _43$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 142 TSRMLS_CC);
+					zephir_array_fetch(&_44$$9, _43$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 146 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_45$$9);
 					ZEPHIR_CONCAT_VVS(_45$$9, k, _44$$9, " ?");
 					ZEPHIR_CALL_METHOD(NULL, update, "where", &_46, 0, _45$$9, vv);
@@ -411,12 +428,12 @@ PHP_METHOD(Brisk_Db_DQuery, delete) {
 	_2 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_3, _2, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_sql_sqlbuilder_ce, "getdelete", &_1, 40, _3);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_sql_sqlbuilder_ce, "getdelete", &_1, 39, _3);
 	zephir_check_call_status();
 	_4 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&delete, _0, "from", NULL, 0, _4);
 	zephir_check_call_status();
-	zephir_is_iterable(condition, &_6, &_5, 0, 0, "brisk/Db/DQuery.zep", 182);
+	zephir_is_iterable(condition, &_6, &_5, 0, 0, "brisk/Db/DQuery.zep", 186);
 	for (
 	  ; zend_hash_get_current_data_ex(_6, (void**) &_7, &_5) == SUCCESS
 	  ; zend_hash_move_forward_ex(_6, &_5)
@@ -437,7 +454,7 @@ PHP_METHOD(Brisk_Db_DQuery, delete) {
 			ZEPHIR_UNREF(v);
 			zephir_check_call_status();
 			_11$$4 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-			zephir_array_fetch(&_12$$4, _11$$4, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 166 TSRMLS_CC);
+			zephir_array_fetch(&_12$$4, _11$$4, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 170 TSRMLS_CC);
 			_13$$4 = zephir_is_true(_12$$4);
 			if (_13$$4) {
 				_13$$4 = !ZEPHIR_IS_STRING(vv, "");
@@ -455,12 +472,12 @@ PHP_METHOD(Brisk_Db_DQuery, delete) {
 				zephir_preg_match(_18$$5, &_19$$5, kk, _17$$5, 0, 0 , 0  TSRMLS_CC);
 				_20$$5 = zephir_is_true(_18$$5);
 				if (_20$$5) {
-					zephir_array_fetch_long(&_21$$5, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 169 TSRMLS_CC);
+					zephir_array_fetch_long(&_21$$5, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 173 TSRMLS_CC);
 					_20$$5 = !ZEPHIR_IS_STRING(_21$$5, "");
 				}
 				_22$$5 = _20$$5;
 				if (_22$$5) {
-					zephir_array_fetch_long(&_23$$5, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 169 TSRMLS_CC);
+					zephir_array_fetch_long(&_23$$5, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 173 TSRMLS_CC);
 					_22$$5 = !ZEPHIR_IS_STRING(_23$$5, "");
 				}
 				ZEPHIR_INIT_NVAR(_24$$5);
@@ -470,16 +487,16 @@ PHP_METHOD(Brisk_Db_DQuery, delete) {
 				zephir_preg_match(_25$$5, &_26$$5, kk, _24$$5, 0, 0 , 0  TSRMLS_CC);
 				if (zephir_is_true(_15$$5)) {
 					_27$$6 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_28$$6, _27$$6, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 168 TSRMLS_CC);
+					zephir_array_fetch(&_28$$6, _27$$6, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 172 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_29$$6);
 					ZEPHIR_CONCAT_VVV(_29$$6, k, _28$$6, vv);
 					ZEPHIR_CALL_METHOD(NULL, delete, "where", &_30, 0, _29$$6);
 					zephir_check_call_status();
 				} else if (_22$$5) {
 					_31$$7 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_32$$7, _31$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 170 TSRMLS_CC);
-					zephir_array_fetch_long(&_33$$7, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 170 TSRMLS_CC);
-					zephir_array_fetch_long(&_34$$7, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 170 TSRMLS_CC);
+					zephir_array_fetch(&_32$$7, _31$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 174 TSRMLS_CC);
+					zephir_array_fetch_long(&_33$$7, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 174 TSRMLS_CC);
+					zephir_array_fetch_long(&_34$$7, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 174 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_35$$7);
 					ZEPHIR_CONCAT_VVVSV(_35$$7, k, _32$$7, _33$$7, " AND ", _34$$7);
 					ZEPHIR_CALL_METHOD(NULL, delete, "where", &_36, 0, _35$$7);
@@ -489,14 +506,14 @@ PHP_METHOD(Brisk_Db_DQuery, delete) {
 					zephir_check_call_status();
 					ZEPHIR_CPY_WRT(vv, _37$$8);
 					_39$$8 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_40$$8, _39$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 173 TSRMLS_CC);
+					zephir_array_fetch(&_40$$8, _39$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 177 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_41$$8);
 					ZEPHIR_CONCAT_VVSVS(_41$$8, k, _40$$8, "(", vv, ")");
 					ZEPHIR_CALL_METHOD(NULL, delete, "where", &_42, 0, _41$$8);
 					zephir_check_call_status();
 				} else {
 					_43$$9 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_44$$9, _43$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 175 TSRMLS_CC);
+					zephir_array_fetch(&_44$$9, _43$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 179 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_45$$9);
 					ZEPHIR_CONCAT_VVS(_45$$9, k, _44$$9, " ?");
 					ZEPHIR_CALL_METHOD(NULL, delete, "where", &_46, 0, _45$$9, vv);
@@ -556,12 +573,12 @@ PHP_METHOD(Brisk_Db_DQuery, fetchRow) {
 	_3 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_4, _3, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_sql_sqlbuilder_ce, "getselect", &_2, 41, _4);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_sql_sqlbuilder_ce, "getselect", &_2, 40, _4);
 	zephir_check_call_status();
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&select, _1, "from", NULL, 0, _5, fields);
 	zephir_check_call_status();
-	zephir_is_iterable(condition, &_7, &_6, 0, 0, "brisk/Db/DQuery.zep", 219);
+	zephir_is_iterable(condition, &_7, &_6, 0, 0, "brisk/Db/DQuery.zep", 223);
 	for (
 	  ; zend_hash_get_current_data_ex(_7, (void**) &_8, &_6) == SUCCESS
 	  ; zend_hash_move_forward_ex(_7, &_6)
@@ -582,7 +599,7 @@ PHP_METHOD(Brisk_Db_DQuery, fetchRow) {
 			ZEPHIR_UNREF(v);
 			zephir_check_call_status();
 			_12$$5 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-			zephir_array_fetch(&_13$$5, _12$$5, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 203 TSRMLS_CC);
+			zephir_array_fetch(&_13$$5, _12$$5, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 207 TSRMLS_CC);
 			_14$$5 = zephir_is_true(_13$$5);
 			if (_14$$5) {
 				_14$$5 = !ZEPHIR_IS_STRING(vv, "");
@@ -600,12 +617,12 @@ PHP_METHOD(Brisk_Db_DQuery, fetchRow) {
 				zephir_preg_match(_19$$6, &_20$$6, kk, _18$$6, 0, 0 , 0  TSRMLS_CC);
 				_21$$6 = zephir_is_true(_19$$6);
 				if (_21$$6) {
-					zephir_array_fetch_long(&_22$$6, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 206 TSRMLS_CC);
+					zephir_array_fetch_long(&_22$$6, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 210 TSRMLS_CC);
 					_21$$6 = !ZEPHIR_IS_STRING(_22$$6, "");
 				}
 				_23$$6 = _21$$6;
 				if (_23$$6) {
-					zephir_array_fetch_long(&_24$$6, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 206 TSRMLS_CC);
+					zephir_array_fetch_long(&_24$$6, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 210 TSRMLS_CC);
 					_23$$6 = !ZEPHIR_IS_STRING(_24$$6, "");
 				}
 				ZEPHIR_INIT_NVAR(_25$$6);
@@ -615,16 +632,16 @@ PHP_METHOD(Brisk_Db_DQuery, fetchRow) {
 				zephir_preg_match(_26$$6, &_27$$6, kk, _25$$6, 0, 0 , 0  TSRMLS_CC);
 				if (zephir_is_true(_16$$6)) {
 					_28$$7 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_29$$7, _28$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 205 TSRMLS_CC);
+					zephir_array_fetch(&_29$$7, _28$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 209 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_30$$7);
 					ZEPHIR_CONCAT_VVV(_30$$7, k, _29$$7, vv);
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_31, 0, _30$$7);
 					zephir_check_call_status();
 				} else if (_23$$6) {
 					_32$$8 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_33$$8, _32$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 207 TSRMLS_CC);
-					zephir_array_fetch_long(&_34$$8, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 207 TSRMLS_CC);
-					zephir_array_fetch_long(&_35$$8, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 207 TSRMLS_CC);
+					zephir_array_fetch(&_33$$8, _32$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 211 TSRMLS_CC);
+					zephir_array_fetch_long(&_34$$8, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 211 TSRMLS_CC);
+					zephir_array_fetch_long(&_35$$8, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 211 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_36$$8);
 					ZEPHIR_CONCAT_VVVSV(_36$$8, k, _33$$8, _34$$8, " AND ", _35$$8);
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_37, 0, _36$$8);
@@ -634,14 +651,14 @@ PHP_METHOD(Brisk_Db_DQuery, fetchRow) {
 					zephir_check_call_status();
 					ZEPHIR_CPY_WRT(vv, _38$$9);
 					_40$$9 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_41$$9, _40$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 210 TSRMLS_CC);
+					zephir_array_fetch(&_41$$9, _40$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 214 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_42$$9);
 					ZEPHIR_CONCAT_VVSVS(_42$$9, k, _41$$9, "(", vv, ")");
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_43, 0, _42$$9);
 					zephir_check_call_status();
 				} else {
 					_44$$10 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_45$$10, _44$$10, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 212 TSRMLS_CC);
+					zephir_array_fetch(&_45$$10, _44$$10, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 216 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_46$$10);
 					ZEPHIR_CONCAT_VVS(_46$$10, k, _45$$10, " ?");
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_47, 0, _46$$10, vv);
@@ -724,12 +741,12 @@ PHP_METHOD(Brisk_Db_DQuery, fetchOne) {
 	_3 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_4, _3, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_sql_sqlbuilder_ce, "getselect", &_2, 41, _4);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_sql_sqlbuilder_ce, "getselect", &_2, 40, _4);
 	zephir_check_call_status();
 	_5 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&select, _1, "from", NULL, 0, _5, fields);
 	zephir_check_call_status();
-	zephir_is_iterable(condition, &_7, &_6, 0, 0, "brisk/Db/DQuery.zep", 259);
+	zephir_is_iterable(condition, &_7, &_6, 0, 0, "brisk/Db/DQuery.zep", 263);
 	for (
 	  ; zend_hash_get_current_data_ex(_7, (void**) &_8, &_6) == SUCCESS
 	  ; zend_hash_move_forward_ex(_7, &_6)
@@ -750,7 +767,7 @@ PHP_METHOD(Brisk_Db_DQuery, fetchOne) {
 			ZEPHIR_UNREF(v);
 			zephir_check_call_status();
 			_12$$5 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-			zephir_array_fetch(&_13$$5, _12$$5, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 243 TSRMLS_CC);
+			zephir_array_fetch(&_13$$5, _12$$5, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 247 TSRMLS_CC);
 			_14$$5 = zephir_is_true(_13$$5);
 			if (_14$$5) {
 				_14$$5 = !ZEPHIR_IS_STRING(vv, "");
@@ -768,12 +785,12 @@ PHP_METHOD(Brisk_Db_DQuery, fetchOne) {
 				zephir_preg_match(_19$$6, &_20$$6, kk, _18$$6, 0, 0 , 0  TSRMLS_CC);
 				_21$$6 = zephir_is_true(_19$$6);
 				if (_21$$6) {
-					zephir_array_fetch_long(&_22$$6, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 246 TSRMLS_CC);
+					zephir_array_fetch_long(&_22$$6, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 250 TSRMLS_CC);
 					_21$$6 = !ZEPHIR_IS_STRING(_22$$6, "");
 				}
 				_23$$6 = _21$$6;
 				if (_23$$6) {
-					zephir_array_fetch_long(&_24$$6, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 246 TSRMLS_CC);
+					zephir_array_fetch_long(&_24$$6, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 250 TSRMLS_CC);
 					_23$$6 = !ZEPHIR_IS_STRING(_24$$6, "");
 				}
 				ZEPHIR_INIT_NVAR(_25$$6);
@@ -783,16 +800,16 @@ PHP_METHOD(Brisk_Db_DQuery, fetchOne) {
 				zephir_preg_match(_26$$6, &_27$$6, kk, _25$$6, 0, 0 , 0  TSRMLS_CC);
 				if (zephir_is_true(_16$$6)) {
 					_28$$7 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_29$$7, _28$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 245 TSRMLS_CC);
+					zephir_array_fetch(&_29$$7, _28$$7, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 249 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_30$$7);
 					ZEPHIR_CONCAT_VVV(_30$$7, k, _29$$7, vv);
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_31, 0, _30$$7);
 					zephir_check_call_status();
 				} else if (_23$$6) {
 					_32$$8 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_33$$8, _32$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 247 TSRMLS_CC);
-					zephir_array_fetch_long(&_34$$8, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 247 TSRMLS_CC);
-					zephir_array_fetch_long(&_35$$8, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 247 TSRMLS_CC);
+					zephir_array_fetch(&_33$$8, _32$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 251 TSRMLS_CC);
+					zephir_array_fetch_long(&_34$$8, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 251 TSRMLS_CC);
+					zephir_array_fetch_long(&_35$$8, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 251 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_36$$8);
 					ZEPHIR_CONCAT_VVVSV(_36$$8, k, _33$$8, _34$$8, " AND ", _35$$8);
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_37, 0, _36$$8);
@@ -802,14 +819,14 @@ PHP_METHOD(Brisk_Db_DQuery, fetchOne) {
 					zephir_check_call_status();
 					ZEPHIR_CPY_WRT(vv, _38$$9);
 					_40$$9 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_41$$9, _40$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 250 TSRMLS_CC);
+					zephir_array_fetch(&_41$$9, _40$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 254 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_42$$9);
 					ZEPHIR_CONCAT_VVSVS(_42$$9, k, _41$$9, "(", vv, ")");
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_43, 0, _42$$9);
 					zephir_check_call_status();
 				} else {
 					_44$$10 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_45$$10, _44$$10, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 252 TSRMLS_CC);
+					zephir_array_fetch(&_45$$10, _44$$10, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 256 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_46$$10);
 					ZEPHIR_CONCAT_VVS(_46$$10, k, _45$$10, " ?");
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_47, 0, _46$$10, vv);
@@ -919,7 +936,7 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 	_3 = zephir_fetch_static_property_ce(brisk_db_dquery_ce, SL("_conn") TSRMLS_CC);
 	ZEPHIR_CALL_METHOD(&_4, _3, "getdrivername", NULL, 0);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_sql_sqlbuilder_ce, "getselect", &_2, 41, _4);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_sql_sqlbuilder_ce, "getselect", &_2, 40, _4);
 	zephir_check_call_status();
 	_6 = zephir_fetch_nproperty_this(this_ptr, SL("_tb"), PH_NOISY_CC);
 	ZEPHIR_CALL_METHOD(&_5, _1, "from", NULL, 0, _6, fields);
@@ -930,7 +947,7 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 	ZVAL_LONG(_8, offset);
 	ZEPHIR_CALL_METHOD(&select, _5, "limit", NULL, 0, _7, _8);
 	zephir_check_call_status();
-	zephir_is_iterable(order, &_10, &_9, 0, 0, "brisk/Db/DQuery.zep", 285);
+	zephir_is_iterable(order, &_10, &_9, 0, 0, "brisk/Db/DQuery.zep", 289);
 	for (
 	  ; zend_hash_get_current_data_ex(_10, (void**) &_11, &_9) == SUCCESS
 	  ; zend_hash_move_forward_ex(_10, &_9)
@@ -940,7 +957,7 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 		ZEPHIR_CALL_METHOD(NULL, select, "order", &_12, 0, k, v);
 		zephir_check_call_status();
 	}
-	zephir_is_iterable(condition, &_14, &_13, 0, 0, "brisk/Db/DQuery.zep", 305);
+	zephir_is_iterable(condition, &_14, &_13, 0, 0, "brisk/Db/DQuery.zep", 309);
 	for (
 	  ; zend_hash_get_current_data_ex(_14, (void**) &_15, &_13) == SUCCESS
 	  ; zend_hash_move_forward_ex(_14, &_13)
@@ -961,7 +978,7 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 			ZEPHIR_UNREF(v);
 			zephir_check_call_status();
 			_19$$6 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-			zephir_array_fetch(&_20$$6, _19$$6, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 289 TSRMLS_CC);
+			zephir_array_fetch(&_20$$6, _19$$6, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 293 TSRMLS_CC);
 			_21$$6 = zephir_is_true(_20$$6);
 			if (_21$$6) {
 				_21$$6 = !ZEPHIR_IS_STRING(vv, "");
@@ -979,12 +996,12 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 				zephir_preg_match(_26$$7, &_27$$7, kk, _25$$7, 0, 0 , 0  TSRMLS_CC);
 				_28$$7 = zephir_is_true(_26$$7);
 				if (_28$$7) {
-					zephir_array_fetch_long(&_29$$7, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 292 TSRMLS_CC);
+					zephir_array_fetch_long(&_29$$7, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 296 TSRMLS_CC);
 					_28$$7 = !ZEPHIR_IS_STRING(_29$$7, "");
 				}
 				_30$$7 = _28$$7;
 				if (_30$$7) {
-					zephir_array_fetch_long(&_31$$7, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 292 TSRMLS_CC);
+					zephir_array_fetch_long(&_31$$7, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 296 TSRMLS_CC);
 					_30$$7 = !ZEPHIR_IS_STRING(_31$$7, "");
 				}
 				ZEPHIR_INIT_NVAR(_32$$7);
@@ -994,16 +1011,16 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 				zephir_preg_match(_33$$7, &_34$$7, kk, _32$$7, 0, 0 , 0  TSRMLS_CC);
 				if (zephir_is_true(_23$$7)) {
 					_35$$8 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_36$$8, _35$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 291 TSRMLS_CC);
+					zephir_array_fetch(&_36$$8, _35$$8, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 295 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_37$$8);
 					ZEPHIR_CONCAT_VVV(_37$$8, k, _36$$8, vv);
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_38, 0, _37$$8);
 					zephir_check_call_status();
 				} else if (_30$$7) {
 					_39$$9 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_40$$9, _39$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 293 TSRMLS_CC);
-					zephir_array_fetch_long(&_41$$9, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 293 TSRMLS_CC);
-					zephir_array_fetch_long(&_42$$9, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 293 TSRMLS_CC);
+					zephir_array_fetch(&_40$$9, _39$$9, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 297 TSRMLS_CC);
+					zephir_array_fetch_long(&_41$$9, vv, 0, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 297 TSRMLS_CC);
+					zephir_array_fetch_long(&_42$$9, vv, 1, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 297 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_43$$9);
 					ZEPHIR_CONCAT_VVVSV(_43$$9, k, _40$$9, _41$$9, " AND ", _42$$9);
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_44, 0, _43$$9);
@@ -1013,14 +1030,14 @@ PHP_METHOD(Brisk_Db_DQuery, fetchAll) {
 					zephir_check_call_status();
 					ZEPHIR_CPY_WRT(vv, _45$$10);
 					_47$$10 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_48$$10, _47$$10, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 296 TSRMLS_CC);
+					zephir_array_fetch(&_48$$10, _47$$10, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 300 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_49$$10);
 					ZEPHIR_CONCAT_VVSVS(_49$$10, k, _48$$10, "(", vv, ")");
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_50, 0, _49$$10);
 					zephir_check_call_status();
 				} else {
 					_51$$11 = zephir_fetch_nproperty_this(this_ptr, SL("_where_mark"), PH_NOISY_CC);
-					zephir_array_fetch(&_52$$11, _51$$11, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 298 TSRMLS_CC);
+					zephir_array_fetch(&_52$$11, _51$$11, kk, PH_NOISY | PH_READONLY, "brisk/Db/DQuery.zep", 302 TSRMLS_CC);
 					ZEPHIR_INIT_LNVAR(_53$$11);
 					ZEPHIR_CONCAT_VVS(_53$$11, k, _52$$11, " ?");
 					ZEPHIR_CALL_METHOD(NULL, select, "where", &_54, 0, _53$$11, vv);

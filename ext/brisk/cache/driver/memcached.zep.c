@@ -74,7 +74,7 @@ PHP_METHOD(Brisk_Cache_Driver_Memcached, __construct) {
 
 	ZEPHIR_SINIT_VAR(_0);
 	ZVAL_STRING(&_0, "memcached", 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "extension_loaded", NULL, 35, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "extension_loaded", NULL, 34, &_0);
 	zephir_check_call_status();
 	if (!zephir_is_true(_1)) {
 		ZEPHIR_INIT_VAR(_2$$3);
@@ -86,10 +86,10 @@ PHP_METHOD(Brisk_Cache_Driver_Memcached, __construct) {
 		zephir_array_fast_append(_5$$3, _6$$3);
 		ZEPHIR_INIT_NVAR(_6$$3);
 		ZVAL_STRING(_6$$3, "cache.extension_load_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 13, _6$$3, _5$$3);
+		ZEPHIR_CALL_CE_STATIC(&_3$$3, brisk_kernel_language_ce, "get", &_4, 12, _6$$3, _5$$3);
 		zephir_check_temp_parameter(_6$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 8, _3$$3);
+		ZEPHIR_CALL_METHOD(NULL, _2$$3, "__construct", NULL, 7, _3$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_2$$3, "brisk/Cache/Driver/Memcached.zep", 22 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -115,7 +115,7 @@ PHP_METHOD(Brisk_Cache_Driver_Memcached, __construct) {
 	) {
 		ZEPHIR_GET_HMKEY(_8, _10, _9);
 		ZEPHIR_GET_HVALUE(v, _11);
-		ZEPHIR_CALL_FUNCTION(&url, "parse_url", &_12, 36, v);
+		ZEPHIR_CALL_FUNCTION(&url, "parse_url", &_12, 35, v);
 		zephir_check_call_status();
 		zephir_array_fetch_string(&_13$$6, url, SL("host"), PH_NOISY | PH_READONLY, "brisk/Cache/Driver/Memcached.zep", 34 TSRMLS_CC);
 		_14$$6 = !ZEPHIR_IS_STRING(_13$$6, "");
@@ -189,16 +189,16 @@ PHP_METHOD(Brisk_Cache_Driver_Memcached, __construct) {
 		zephir_array_fast_append(_36$$12, _37$$12);
 		ZEPHIR_INIT_NVAR(_37$$12);
 		ZVAL_STRING(_37$$12, "cache.cacher_create_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_35$$12, brisk_kernel_language_ce, "get", &_4, 13, _37$$12, _36$$12);
+		ZEPHIR_CALL_CE_STATIC(&_35$$12, brisk_kernel_language_ce, "get", &_4, 12, _37$$12, _36$$12);
 		zephir_check_temp_parameter(_37$$12);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _34$$12, "__construct", NULL, 8, _35$$12);
+		ZEPHIR_CALL_METHOD(NULL, _34$$12, "__construct", NULL, 7, _35$$12);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_34$$12, "brisk/Cache/Driver/Memcached.zep", 63 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_PARENT(NULL, brisk_cache_driver_memcached_ce, getThis(), "__construct", &_38, 31, setting);
+	ZEPHIR_CALL_PARENT(NULL, brisk_cache_driver_memcached_ce, getThis(), "__construct", &_38, 30, setting);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -460,10 +460,10 @@ PHP_METHOD(Brisk_Cache_Driver_Memcached, getCachePath) {
 		object_init_ex(_8$$5, brisk_exception_runtimeexception_ce);
 		ZEPHIR_INIT_VAR(_11$$5);
 		ZVAL_STRING(_11$$5, "cache.path_mustbe_notnull", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_9$$5, brisk_kernel_language_ce, "get", &_10, 13, _11$$5);
+		ZEPHIR_CALL_CE_STATIC(&_9$$5, brisk_kernel_language_ce, "get", &_10, 12, _11$$5);
 		zephir_check_temp_parameter(_11$$5);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _8$$5, "__construct", NULL, 8, _9$$5);
+		ZEPHIR_CALL_METHOD(NULL, _8$$5, "__construct", NULL, 7, _9$$5);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_8$$5, "brisk/Cache/Driver/Memcached.zep", 154 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

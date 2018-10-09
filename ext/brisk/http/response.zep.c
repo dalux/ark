@@ -94,7 +94,7 @@ PHP_METHOD(Brisk_Http_Response, status) {
 	ZVAL_LONG(&_2, status_code);
 	ZEPHIR_INIT_VAR(_3);
 	ZEPHIR_CONCAT_VSVSV(_3, protocol, " ", &_2, " ", status_text);
-	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 46, _3);
+	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 45, _3);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -209,7 +209,7 @@ PHP_METHOD(Brisk_Http_Response, cookie) {
 	ZVAL_BOOL(&_2, (secure ? 1 : 0));
 	ZEPHIR_SINIT_VAR(_3);
 	ZVAL_BOOL(&_3, (httponly ? 1 : 0));
-	ZEPHIR_CALL_FUNCTION(NULL, "setcookie", NULL, 47, name, value, &_1, path, domain, &_2, &_3);
+	ZEPHIR_CALL_FUNCTION(NULL, "setcookie", NULL, 46, name, value, &_1, path, domain, &_2, &_3);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -350,7 +350,7 @@ PHP_METHOD(Brisk_Http_Response, noCache) {
 	zephir_check_call_status();
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_STRING(&_2, "D, d M Y H:i:s", 0);
-	ZEPHIR_CALL_FUNCTION(&_3, "gmdate", NULL, 48, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "gmdate", NULL, 47, &_2);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_4);
 	ZEPHIR_CONCAT_VS(_4, _3, " GMT");
@@ -420,7 +420,7 @@ PHP_METHOD(Brisk_Http_Response, expires) {
 	ZVAL_STRING(&_1, "D, d M Y H:i:s", 0);
 	ZEPHIR_SINIT_VAR(_2);
 	ZVAL_LONG(&_2, (zephir_get_numberval(_0) + sec));
-	ZEPHIR_CALL_FUNCTION(&_3, "date", NULL, 49, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "date", NULL, 48, &_1, &_2);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_4);
 	ZEPHIR_CONCAT_VS(_4, _3, " GMT");
@@ -486,7 +486,7 @@ PHP_METHOD(Brisk_Http_Response, header) {
 	ZEPHIR_CONCAT_VSV(_0, name, ": ", value);
 	ZEPHIR_SINIT_VAR(_1);
 	ZVAL_BOOL(&_1, (is_replace ? 1 : 0));
-	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 46, _0, &_1);
+	ZEPHIR_CALL_FUNCTION(NULL, "header", NULL, 45, _0, &_1);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

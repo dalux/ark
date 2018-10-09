@@ -44,7 +44,7 @@ PHP_METHOD(Brisk_Router_RouterAdapter, getDriverFromConfig) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 22);
+	ZEPHIR_CALL_CE_STATIC(&_0, brisk_kernel_app_ce, "getinstance", &_1, 21);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_2);
 	zephir_read_property(&_2, _0, SL("config"), PH_NOISY_CC);
@@ -63,16 +63,16 @@ PHP_METHOD(Brisk_Router_RouterAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_8$$3, _9$$3);
 		ZEPHIR_INIT_NVAR(_9$$3);
 		ZVAL_STRING(_9$$3, "core.config_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 13, _9$$3, _8$$3);
+		ZEPHIR_CALL_CE_STATIC(&_6$$3, brisk_kernel_language_ce, "get", &_7, 12, _9$$3, _8$$3);
 		zephir_check_temp_parameter(_9$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 8, _6$$3);
+		ZEPHIR_CALL_METHOD(NULL, _5$$3, "__construct", NULL, 7, _6$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_5$$3, "brisk/Router/RouterAdapter.zep", 23 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
 		return;
 	}
-	ZEPHIR_CALL_CE_STATIC(&_10, brisk_kernel_app_ce, "getinstance", &_1, 22);
+	ZEPHIR_CALL_CE_STATIC(&_10, brisk_kernel_app_ce, "getinstance", &_1, 21);
 	zephir_check_call_status();
 	ZEPHIR_OBS_VAR(_11);
 	zephir_read_property(&_11, _10, SL("config"), PH_NOISY_CC);
@@ -81,11 +81,11 @@ PHP_METHOD(Brisk_Router_RouterAdapter, getDriverFromConfig) {
 	ZEPHIR_CALL_METHOD(&driver, _11, "get", NULL, 0, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
-	ZEPHIR_CALL_CE_STATIC(&_12, brisk_kernel_toolkit_ce, "classdeclared", &_13, 23, driver);
+	ZEPHIR_CALL_CE_STATIC(&_12, brisk_kernel_toolkit_ce, "classdeclared", &_13, 22, driver);
 	zephir_check_call_status();
 	_14 = !zephir_is_true(_12);
 	if (_14) {
-		ZEPHIR_CALL_CE_STATIC(&_15, brisk_kernel_loader_ce, "findclass", &_16, 24, driver);
+		ZEPHIR_CALL_CE_STATIC(&_15, brisk_kernel_loader_ce, "findclass", &_16, 23, driver);
 		zephir_check_call_status();
 		_14 = !zephir_is_true(_15);
 	}
@@ -97,10 +97,10 @@ PHP_METHOD(Brisk_Router_RouterAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_19$$4, driver);
 		ZEPHIR_INIT_VAR(_20$$4);
 		ZVAL_STRING(_20$$4, "router.driver_not_found", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_18$$4, brisk_kernel_language_ce, "get", &_7, 13, _20$$4, _19$$4);
+		ZEPHIR_CALL_CE_STATIC(&_18$$4, brisk_kernel_language_ce, "get", &_7, 12, _20$$4, _19$$4);
 		zephir_check_temp_parameter(_20$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _17$$4, "__construct", NULL, 8, _18$$4);
+		ZEPHIR_CALL_METHOD(NULL, _17$$4, "__construct", NULL, 7, _18$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_17$$4, "brisk/Router/RouterAdapter.zep", 28 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -125,10 +125,10 @@ PHP_METHOD(Brisk_Router_RouterAdapter, getDriverFromConfig) {
 		zephir_array_fast_append(_25$$5, _26$$5);
 		ZEPHIR_INIT_NVAR(_26$$5);
 		ZVAL_STRING(_26$$5, "core.class_extends_error", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_24$$5, brisk_kernel_language_ce, "get", &_7, 13, _26$$5, _25$$5);
+		ZEPHIR_CALL_CE_STATIC(&_24$$5, brisk_kernel_language_ce, "get", &_7, 12, _26$$5, _25$$5);
 		zephir_check_temp_parameter(_26$$5);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _23$$5, "__construct", NULL, 8, _24$$5);
+		ZEPHIR_CALL_METHOD(NULL, _23$$5, "__construct", NULL, 7, _24$$5);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_23$$5, "brisk/Router/RouterAdapter.zep", 32 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -139,7 +139,7 @@ PHP_METHOD(Brisk_Router_RouterAdapter, getDriverFromConfig) {
 	zephir_array_update_string(&_28, SL("router"), &driver, PH_COPY | PH_SEPARATE);
 	ZEPHIR_INIT_NVAR(_4);
 	ZVAL_STRING(_4, "driver", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_trace_ce, "set", &_27, 10, _4, _28);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_kernel_trace_ce, "set", &_27, 9, _4, _28);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
 	RETURN_CCTOR(instance);

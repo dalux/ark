@@ -124,11 +124,11 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getSelect) {
 	zephir_ucfirst(_0, _dbtype);
 	ZEPHIR_INIT_VAR(classname);
 	ZEPHIR_CONCAT_SV(classname, "\\Brisk\\Sql\\Select\\", _0);
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 23, classname);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 22, classname);
 	zephir_check_call_status();
 	_3 = !zephir_is_true(_1);
 	if (_3) {
-		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 24, classname);
+		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 23, classname);
 		zephir_check_call_status();
 		_3 = !zephir_is_true(_4);
 	}
@@ -140,10 +140,10 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getSelect) {
 		zephir_array_fast_append(_9$$4, classname);
 		ZEPHIR_INIT_VAR(_10$$4);
 		ZVAL_STRING(_10$$4, "core.class_path_notfound", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 13, _10$$4, _9$$4);
+		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 12, _10$$4, _9$$4);
 		zephir_check_temp_parameter(_10$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 8, _7$$4);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 7, _7$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_6$$4, "brisk/Sql/SqlBuilder.zep", 53 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -206,11 +206,11 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getDelete) {
 	zephir_ucfirst(_0, _dbtype);
 	ZEPHIR_INIT_VAR(classname);
 	ZEPHIR_CONCAT_SV(classname, "\\Brisk\\Sql\\Delete\\", _0);
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 23, classname);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 22, classname);
 	zephir_check_call_status();
 	_3 = !zephir_is_true(_1);
 	if (_3) {
-		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 24, classname);
+		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 23, classname);
 		zephir_check_call_status();
 		_3 = !zephir_is_true(_4);
 	}
@@ -222,10 +222,10 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getDelete) {
 		zephir_array_fast_append(_9$$4, classname);
 		ZEPHIR_INIT_VAR(_10$$4);
 		ZVAL_STRING(_10$$4, "core.class_path_notfound", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 13, _10$$4, _9$$4);
+		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 12, _10$$4, _9$$4);
 		zephir_check_temp_parameter(_10$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 8, _7$$4);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 7, _7$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_6$$4, "brisk/Sql/SqlBuilder.zep", 74 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -288,11 +288,11 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getInsert) {
 	zephir_ucfirst(_0, _dbtype);
 	ZEPHIR_INIT_VAR(classname);
 	ZEPHIR_CONCAT_SV(classname, "\\Brisk\\Sql\\Insert\\", _0);
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 23, classname);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 22, classname);
 	zephir_check_call_status();
 	_3 = !zephir_is_true(_1);
 	if (_3) {
-		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 24, classname);
+		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 23, classname);
 		zephir_check_call_status();
 		_3 = !zephir_is_true(_4);
 	}
@@ -304,10 +304,10 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getInsert) {
 		zephir_array_fast_append(_9$$4, classname);
 		ZEPHIR_INIT_VAR(_10$$4);
 		ZVAL_STRING(_10$$4, "core.class_path_notfound", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 13, _10$$4, _9$$4);
+		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 12, _10$$4, _9$$4);
 		zephir_check_temp_parameter(_10$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 8, _7$$4);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 7, _7$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_6$$4, "brisk/Sql/SqlBuilder.zep", 95 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -370,11 +370,11 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getUpdate) {
 	zephir_ucfirst(_0, _dbtype);
 	ZEPHIR_INIT_VAR(classname);
 	ZEPHIR_CONCAT_SV(classname, "\\Brisk\\Sql\\Update\\", _0);
-	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 23, classname);
+	ZEPHIR_CALL_CE_STATIC(&_1, brisk_kernel_toolkit_ce, "classdeclared", &_2, 22, classname);
 	zephir_check_call_status();
 	_3 = !zephir_is_true(_1);
 	if (_3) {
-		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 24, classname);
+		ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_loader_ce, "findclass", &_5, 23, classname);
 		zephir_check_call_status();
 		_3 = !zephir_is_true(_4);
 	}
@@ -386,10 +386,10 @@ PHP_METHOD(Brisk_Sql_SqlBuilder, getUpdate) {
 		zephir_array_fast_append(_9$$4, classname);
 		ZEPHIR_INIT_VAR(_10$$4);
 		ZVAL_STRING(_10$$4, "core.class_path_notfound", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 13, _10$$4, _9$$4);
+		ZEPHIR_CALL_CE_STATIC(&_7$$4, brisk_kernel_language_ce, "get", &_8, 12, _10$$4, _9$$4);
 		zephir_check_temp_parameter(_10$$4);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 8, _7$$4);
+		ZEPHIR_CALL_METHOD(NULL, _6$$4, "__construct", NULL, 7, _7$$4);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_6$$4, "brisk/Sql/SqlBuilder.zep", 116 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();

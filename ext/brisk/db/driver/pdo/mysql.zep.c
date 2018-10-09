@@ -52,13 +52,13 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Mysql, __construct) {
 	zephir_array_fetch_string(&_2, config, SL("dbname"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Mysql.zep", 11 TSRMLS_CC);
 	ZEPHIR_SINIT_VAR(_3);
 	ZVAL_STRING(&_3, "mysql:host=%s;port=%s;dbname=%s;", 0);
-	ZEPHIR_CALL_FUNCTION(&dsn, "sprintf", &_4, 12, &_3, _0, _1, _2);
+	ZEPHIR_CALL_FUNCTION(&dsn, "sprintf", &_4, 11, &_3, _0, _1, _2);
 	zephir_check_call_status();
 	if (zephir_array_isset_string(config, SS("charset"))) {
 		zephir_array_fetch_string(&_5$$3, config, SL("charset"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Mysql.zep", 13 TSRMLS_CC);
 		ZEPHIR_SINIT_VAR(_6$$3);
 		ZVAL_STRING(&_6$$3, "charset=%s", 0);
-		ZEPHIR_CALL_FUNCTION(&_7$$3, "sprintf", &_4, 12, &_6$$3, _5$$3);
+		ZEPHIR_CALL_FUNCTION(&_7$$3, "sprintf", &_4, 11, &_6$$3, _5$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(_8$$3);
 		ZEPHIR_CONCAT_VV(_8$$3, dsn, _7$$3);
@@ -76,7 +76,7 @@ PHP_METHOD(Brisk_Db_Driver_Pdo_Mysql, __construct) {
 	}
 	zephir_array_fetch_string(&_11, config, SL("username"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Mysql.zep", 23 TSRMLS_CC);
 	zephir_array_fetch_string(&_12, config, SL("password"), PH_NOISY | PH_READONLY, "brisk/Db/Driver/Pdo/Mysql.zep", 23 TSRMLS_CC);
-	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_mysql_ce, getThis(), "__construct", &_10, 42, dsn, _11, _12, params);
+	ZEPHIR_CALL_PARENT(NULL, brisk_db_driver_pdo_mysql_ce, getThis(), "__construct", &_10, 41, dsn, _11, _12, params);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 

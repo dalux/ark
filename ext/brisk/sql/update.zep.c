@@ -103,10 +103,10 @@ PHP_METHOD(Brisk_Sql_Update, compile) {
 		object_init_ex(_3$$3, brisk_exception_sqlcompileexception_ce);
 		ZEPHIR_INIT_VAR(_6$$3);
 		ZVAL_STRING(_6$$3, "querier.sql_compile_failed", ZEPHIR_TEMP_PARAM_COPY);
-		ZEPHIR_CALL_CE_STATIC(&_4$$3, brisk_kernel_language_ce, "get", &_5, 13, _6$$3);
+		ZEPHIR_CALL_CE_STATIC(&_4$$3, brisk_kernel_language_ce, "get", &_5, 12, _6$$3);
 		zephir_check_temp_parameter(_6$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 8, _4$$3);
+		ZEPHIR_CALL_METHOD(NULL, _3$$3, "__construct", NULL, 7, _4$$3);
 		zephir_check_call_status();
 		zephir_throw_exception_debug(_3$$3, "brisk/Sql/Update.zep", 40 TSRMLS_CC);
 		ZEPHIR_MM_RESTORE();
@@ -117,7 +117,7 @@ PHP_METHOD(Brisk_Sql_Update, compile) {
 	ZEPHIR_INIT_VAR(set);
 	array_init(set);
 	ZEPHIR_MAKE_REF(update_part);
-	ZEPHIR_CALL_FUNCTION(&_7, "each", NULL, 14, update_part);
+	ZEPHIR_CALL_FUNCTION(&_7, "each", NULL, 13, update_part);
 	ZEPHIR_UNREF(update_part);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(update_part, _7);
@@ -125,7 +125,7 @@ PHP_METHOD(Brisk_Sql_Update, compile) {
 	zephir_array_fetch_string(&k, update_part, SL("key"), PH_NOISY, "brisk/Sql/Update.zep", 46 TSRMLS_CC);
 	ZEPHIR_OBS_VAR(v);
 	zephir_array_fetch_string(&v, update_part, SL("value"), PH_NOISY, "brisk/Sql/Update.zep", 47 TSRMLS_CC);
-	ZEPHIR_CALL_FUNCTION(&_7, "is_integer", NULL, 15, k);
+	ZEPHIR_CALL_FUNCTION(&_7, "is_integer", NULL, 14, k);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(sql);
 	if (zephir_is_true(_7)) {
