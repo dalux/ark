@@ -47,7 +47,6 @@ if test "$PHP_BRISK" = "yes"; then
 	brisk/exception/sqlcompileexception.zep.c
 	brisk/http/request.zep.c
 	brisk/http/response.zep.c
-	brisk/http/server.zep.c
 	brisk/kernel/app.zep.c
 	brisk/kernel/config.zep.c
 	brisk/kernel/container.zep.c
@@ -55,6 +54,7 @@ if test "$PHP_BRISK" = "yes"; then
 	brisk/kernel/handler.zep.c
 	brisk/kernel/language.zep.c
 	brisk/kernel/loader.zep.c
+	brisk/kernel/server.zep.c
 	brisk/kernel/timer.zep.c
 	brisk/kernel/toolkit.zep.c
 	brisk/kernel/trace.zep.c

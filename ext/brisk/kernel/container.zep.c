@@ -67,7 +67,7 @@ PHP_METHOD(Brisk_Kernel_Container, __construct) {
 			ZEPHIR_GET_HVALUE(val$$3, _3$$3);
 			ZEPHIR_INIT_NVAR(_4$$4);
 			object_init_ex(_4$$4, brisk_kernel_container_ce);
-			ZEPHIR_CALL_METHOD(NULL, _4$$4, "__construct", &_5, 53, val$$3);
+			ZEPHIR_CALL_METHOD(NULL, _4$$4, "__construct", &_5, 51, val$$3);
 			zephir_check_call_status();
 			zephir_update_property_array(this_ptr, SL("_container"), key$$3, _4$$4 TSRMLS_CC);
 		}
@@ -152,7 +152,7 @@ PHP_METHOD(Brisk_Kernel_Container, hasKey) {
 	ZEPHIR_CALL_FUNCTION(&node, "array_shift", NULL, 15, nodes);
 	ZEPHIR_UNREF(nodes);
 	zephir_check_call_status();
-	ZEPHIR_CALL_METHOD(&_10, this_ptr, "haskey", NULL, 68, node);
+	ZEPHIR_CALL_METHOD(&_10, this_ptr, "haskey", NULL, 66, node);
 	zephir_check_call_status();
 	if (!zephir_is_true(_10)) {
 		RETURN_MM_BOOL(0);
@@ -378,7 +378,7 @@ PHP_METHOD(Brisk_Kernel_Container, __get) {
 		RETURN_CTOR(_2$$3);
 	} else {
 		object_init_ex(return_value, brisk_kernel_container_ce);
-		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 53);
+		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 51);
 		zephir_check_call_status();
 		RETURN_MM();
 	}
@@ -414,7 +414,7 @@ PHP_METHOD(Brisk_Kernel_Container, __set) {
 	}
 	ZEPHIR_INIT_VAR(_2);
 	object_init_ex(_2, brisk_kernel_container_ce);
-	ZEPHIR_CALL_METHOD(NULL, _2, "__construct", NULL, 53, value);
+	ZEPHIR_CALL_METHOD(NULL, _2, "__construct", NULL, 51, value);
 	zephir_check_call_status();
 	zephir_update_property_array(this_ptr, SL("_container"), key, _2 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();

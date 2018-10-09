@@ -123,7 +123,7 @@ PHP_METHOD(Brisk_Kernel_Language, addPackageFile) {
 
 	ZEPHIR_INIT_VAR(package);
 	array_init(package);
-	ZEPHIR_CALL_FUNCTION(&_0, "is_file", NULL, 82, path);
+	ZEPHIR_CALL_FUNCTION(&_0, "is_file", NULL, 80, path);
 	zephir_check_call_status();
 	if (zephir_is_true(_0)) {
 		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_1$$3);
@@ -268,7 +268,7 @@ PHP_METHOD(Brisk_Kernel_Language, get) {
 		_2$$3 = zephir_fetch_static_property_ce(brisk_kernel_language_ce, SL("_package") TSRMLS_CC);
 		zephir_array_fetch(&_3$$3, _2$$3, language, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 153 TSRMLS_CC);
 		zephir_array_fetch(&_4$$3, _3$$3, label, PH_NOISY | PH_READONLY, "brisk/Kernel/Language.zep", 153 TSRMLS_CC);
-		ZEPHIR_CALL_FUNCTION(&result, "vsprintf", NULL, 83, _4$$3, params);
+		ZEPHIR_CALL_FUNCTION(&result, "vsprintf", NULL, 81, _4$$3, params);
 		zephir_check_call_status();
 	}
 	if (!zephir_is_true(result)) {

@@ -66,7 +66,7 @@ PHP_METHOD(Brisk_Router_Driver_Native, dispatch) {
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_FUNCTION(&trace, "debug_backtrace", NULL, 54);
+	ZEPHIR_CALL_FUNCTION(&trace, "debug_backtrace", NULL, 52);
 	zephir_check_call_status();
 	ZEPHIR_MAKE_REF(trace);
 	ZEPHIR_CALL_FUNCTION(&_0, "end", NULL, 86, trace);
@@ -140,7 +140,7 @@ PHP_METHOD(Brisk_Router_Driver_Native, dispatch) {
 			ZEPHIR_GET_HVALUE(node$$4, _18$$4);
 			ZEPHIR_INIT_NVAR(file$$4);
 			ZEPHIR_CONCAT_VSV(file$$4, node$$4, "/", auto_include);
-			ZEPHIR_CALL_FUNCTION(&_19$$8, "is_file", &_20, 82, file$$4);
+			ZEPHIR_CALL_FUNCTION(&_19$$8, "is_file", &_20, 80, file$$4);
 			zephir_check_call_status();
 			if (zephir_is_true(_19$$8)) {
 				ZEPHIR_CALL_FUNCTION(&_21$$9, "dirname", &_1, 33, file$$4);

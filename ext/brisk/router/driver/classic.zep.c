@@ -299,7 +299,7 @@ PHP_METHOD(Brisk_Router_Driver_Classic, ready) {
 	zephir_fast_trim(base_namespace, _12, &_13, ZEPHIR_TRIM_BOTH TSRMLS_CC);
 	ZEPHIR_INIT_NVAR(_4);
 	ZVAL_STRING(_4, "REQUEST_URI", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&uri, brisk_http_server_ce, "getitem", &_14, 103, _4);
+	ZEPHIR_CALL_CE_STATIC(&uri, brisk_kernel_server_ce, "getitem", &_14, 103, _4);
 	zephir_check_temp_parameter(_4);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&result, this_ptr, "_parseuri", NULL, 104, uri);
@@ -329,7 +329,7 @@ PHP_METHOD(Brisk_Router_Driver_Classic, ready) {
 	ZEPHIR_CONCAT_VSV(_23, ns_space, "\\", _4);
 	ZEPHIR_CPY_WRT(ns_space, _23);
 	zephir_update_property_this(getThis(), SL("_namespace"), ns_space TSRMLS_CC);
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_http_request_ce, "setdata", &_24, 50, params);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_http_request_ce, "setdata", &_24, 85, params);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(_26);
 	ZVAL_BOOL(_26, 1);
@@ -586,7 +586,7 @@ PHP_METHOD(Brisk_Router_Driver_Classic, _parseUri) {
 	zephir_check_call_status();
 	ZEPHIR_INIT_NVAR(_3);
 	ZVAL_STRING(_3, "SCRIPT_FILENAME", ZEPHIR_TEMP_PARAM_COPY);
-	ZEPHIR_CALL_CE_STATIC(&_4, brisk_http_server_ce, "getitem", &_5, 103, _3);
+	ZEPHIR_CALL_CE_STATIC(&_4, brisk_kernel_server_ce, "getitem", &_5, 103, _3);
 	zephir_check_temp_parameter(_3);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(script_name);

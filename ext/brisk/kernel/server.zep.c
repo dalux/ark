@@ -23,11 +23,11 @@
 #include "kernel/concat.h"
 
 
-ZEPHIR_INIT_CLASS(Brisk_Http_Server) {
+ZEPHIR_INIT_CLASS(Brisk_Kernel_Server) {
 
-	ZEPHIR_REGISTER_CLASS(Brisk\\Http, Server, brisk, http_server, brisk_http_server_method_entry, 0);
+	ZEPHIR_REGISTER_CLASS(Brisk\\Kernel, Server, brisk, kernel_server, brisk_kernel_server_method_entry, 0);
 
-	zend_declare_property_null(brisk_http_server_ce, SL("_data"), ZEND_ACC_PRIVATE|ZEND_ACC_STATIC TSRMLS_CC);
+	zend_declare_property_null(brisk_kernel_server_ce, SL("_data"), ZEND_ACC_PRIVATE|ZEND_ACC_STATIC TSRMLS_CC);
 
 	return SUCCESS;
 
@@ -38,14 +38,14 @@ ZEPHIR_INIT_CLASS(Brisk_Http_Server) {
  *
  * @return bool
  */
-PHP_METHOD(Brisk_Http_Server, isCli) {
+PHP_METHOD(Brisk_Kernel_Server, isCli) {
 
 	zval *_0 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_FUNCTION(&_0, "php_sapi_name", NULL, 49);
+	ZEPHIR_CALL_FUNCTION(&_0, "php_sapi_name", NULL, 84);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(ZEPHIR_IS_STRING(_0, "cli"));
 
@@ -57,7 +57,7 @@ PHP_METHOD(Brisk_Http_Server, isCli) {
  * @param bool reduce
  * @return string
  */
-PHP_METHOD(Brisk_Http_Server, getDomain) {
+PHP_METHOD(Brisk_Kernel_Server, getDomain) {
 
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *reduce_param = NULL, *domain = NULL, *_0, *_1, *_3, *_4, _5, *pattern$$3 = NULL, *matches$$3 = NULL, *matched$$3 = NULL, *_7$$4, *_8$$4, *_9$$4, *_10$$4, _11$$4;
@@ -77,8 +77,8 @@ PHP_METHOD(Brisk_Http_Server, getDomain) {
 	}
 
 
-	_0 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
-	zephir_array_fetch_string(&_1, _0, SL("HTTP_HOST"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 26 TSRMLS_CC);
+	_0 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
+	zephir_array_fetch_string(&_1, _0, SL("HTTP_HOST"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 28 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(domain);
 	zephir_fast_strtolower(domain, _1);
 	_2 = !ZEPHIR_IS_STRING(domain, "localhost");
@@ -102,10 +102,10 @@ PHP_METHOD(Brisk_Http_Server, getDomain) {
 			_6$$3 = ZEPHIR_GT_LONG(matched$$3, 0);
 		}
 		if (_6$$3) {
-			zephir_array_fetch_long(&_7$$4, matches$$3, 2, PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 32 TSRMLS_CC);
-			zephir_array_fetch_long(&_8$$4, _7$$4, 0, PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 32 TSRMLS_CC);
-			zephir_array_fetch_long(&_9$$4, matches$$3, 3, PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 32 TSRMLS_CC);
-			zephir_array_fetch_long(&_10$$4, _9$$4, 0, PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 32 TSRMLS_CC);
+			zephir_array_fetch_long(&_7$$4, matches$$3, 2, PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 34 TSRMLS_CC);
+			zephir_array_fetch_long(&_8$$4, _7$$4, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 34 TSRMLS_CC);
+			zephir_array_fetch_long(&_9$$4, matches$$3, 3, PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 34 TSRMLS_CC);
+			zephir_array_fetch_long(&_10$$4, _9$$4, 0, PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 34 TSRMLS_CC);
 			ZEPHIR_SINIT_VAR(_11$$4);
 			ZVAL_STRING(&_11$$4, "%s.%s", 0);
 			ZEPHIR_RETURN_CALL_FUNCTION("sprintf", NULL, 11, &_11$$4, _8$$4, _10$$4);
@@ -122,15 +122,15 @@ PHP_METHOD(Brisk_Http_Server, getDomain) {
  *
  * @return string
  */
-PHP_METHOD(Brisk_Http_Server, getSubDomain) {
+PHP_METHOD(Brisk_Kernel_Server, getSubDomain) {
 
 	zval *domain = NULL, *_0, *_1, *host = NULL, *_2 = NULL, *prefix = NULL, _3, _4, *_5 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZEPHIR_MM_GROW();
 
-	_0 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
-	zephir_array_fetch_string(&_1, _0, SL("HTTP_HOST"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 45 TSRMLS_CC);
+	_0 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
+	zephir_array_fetch_string(&_1, _0, SL("HTTP_HOST"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 47 TSRMLS_CC);
 	ZEPHIR_INIT_VAR(domain);
 	zephir_fast_strtolower(domain, _1);
 	ZEPHIR_INIT_VAR(_2);
@@ -160,7 +160,7 @@ PHP_METHOD(Brisk_Http_Server, getSubDomain) {
  *
  * @return null
  */
-PHP_METHOD(Brisk_Http_Server, initCli) {
+PHP_METHOD(Brisk_Kernel_Server, initCli) {
 
 	HashTable *_2;
 	HashPosition _1;
@@ -172,16 +172,16 @@ PHP_METHOD(Brisk_Http_Server, initCli) {
 	zephir_get_global(&_GET, SS("_GET") TSRMLS_CC);
 	zephir_get_global(&_SERVER, SS("_SERVER") TSRMLS_CC);
 
-	zephir_update_static_property_ce(brisk_http_server_ce, SL("_data"), &_SERVER TSRMLS_CC);
+	zephir_update_static_property_ce(brisk_kernel_server_ce, SL("_data"), &_SERVER TSRMLS_CC);
 	ZEPHIR_CPY_WRT(data, _GET);
-	_0 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
+	_0 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
 	ZEPHIR_OBS_VAR(argv);
-	zephir_array_fetch_string(&argv, _0, SL("argv"), PH_NOISY, "brisk/Http/Server.zep", 62 TSRMLS_CC);
+	zephir_array_fetch_string(&argv, _0, SL("argv"), PH_NOISY, "brisk/Kernel/Server.zep", 64 TSRMLS_CC);
 	ZEPHIR_MAKE_REF(argv);
 	ZEPHIR_CALL_FUNCTION(NULL, "array_shift", NULL, 15, argv);
 	ZEPHIR_UNREF(argv);
 	zephir_check_call_status();
-	zephir_is_iterable(argv, &_2, &_1, 0, 0, "brisk/Http/Server.zep", 83);
+	zephir_is_iterable(argv, &_2, &_1, 0, 0, "brisk/Kernel/Server.zep", 85);
 	for (
 	  ; zend_hash_get_current_data_ex(_2, (void**) &_3, &_1) == SUCCESS
 	  ; zend_hash_move_forward_ex(_2, &_1)
@@ -211,27 +211,27 @@ PHP_METHOD(Brisk_Http_Server, initCli) {
 		if (ZEPHIR_IS_STRING(key, "url")) {
 			ZEPHIR_CALL_FUNCTION(&info, "parse_url", &_11, 35, val);
 			zephir_check_call_status();
-			zephir_array_fetch_string(&_12$$4, info, SL("host"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 70 TSRMLS_CC);
-			zephir_update_static_property_array_multi_ce(brisk_http_server_ce, SL("_data"), &_12$$4 TSRMLS_CC, SL("s"), 2, SL("HTTP_HOST"));
-			zephir_array_fetch_string(&_12$$4, info, SL("path"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 71 TSRMLS_CC);
-			zephir_update_static_property_array_multi_ce(brisk_http_server_ce, SL("_data"), &_12$$4 TSRMLS_CC, SL("s"), 2, SL("REQUEST_URI"));
-			zephir_array_fetch_string(&_12$$4, info, SL("query"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 72 TSRMLS_CC);
+			zephir_array_fetch_string(&_12$$4, info, SL("host"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 72 TSRMLS_CC);
+			zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &_12$$4 TSRMLS_CC, SL("s"), 2, SL("HTTP_HOST"));
+			zephir_array_fetch_string(&_12$$4, info, SL("path"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 73 TSRMLS_CC);
+			zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &_12$$4 TSRMLS_CC, SL("s"), 2, SL("REQUEST_URI"));
+			zephir_array_fetch_string(&_12$$4, info, SL("query"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 74 TSRMLS_CC);
 			if (!ZEPHIR_IS_STRING(_12$$4, "")) {
-				zephir_array_fetch_string(&_13$$5, info, SL("path"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 73 TSRMLS_CC);
-				zephir_array_fetch_string(&_14$$5, info, SL("query"), PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 73 TSRMLS_CC);
+				zephir_array_fetch_string(&_13$$5, info, SL("path"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 75 TSRMLS_CC);
+				zephir_array_fetch_string(&_14$$5, info, SL("query"), PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 75 TSRMLS_CC);
 				ZEPHIR_INIT_LNVAR(_15$$5);
 				ZEPHIR_CONCAT_VSV(_15$$5, _13$$5, "?", _14$$5);
-				zephir_update_static_property_array_multi_ce(brisk_http_server_ce, SL("_data"), &_15$$5 TSRMLS_CC, SL("s"), 2, SL("REQUEST_URI"));
+				zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &_15$$5 TSRMLS_CC, SL("s"), 2, SL("REQUEST_URI"));
 			}
 		} else if (ZEPHIR_IS_STRING(key, "uri")) {
-			zephir_update_static_property_array_multi_ce(brisk_http_server_ce, SL("_data"), &val TSRMLS_CC, SL("s"), 2, SL("REQUEST_URI"));
+			zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &val TSRMLS_CC, SL("s"), 2, SL("REQUEST_URI"));
 		} else if (ZEPHIR_IS_STRING(key, "domain")) {
-			zephir_update_static_property_array_multi_ce(brisk_http_server_ce, SL("_data"), &val TSRMLS_CC, SL("s"), 2, SL("HTTP_HOST"));
+			zephir_update_static_property_array_multi_ce(brisk_kernel_server_ce, SL("_data"), &val TSRMLS_CC, SL("s"), 2, SL("HTTP_HOST"));
 		} else {
 			zephir_array_update_zval(&data, key, &val, PH_COPY | PH_SEPARATE);
 		}
 	}
-	ZEPHIR_CALL_CE_STATIC(NULL, brisk_http_request_ce, "setdata", &_16, 50, data);
+	ZEPHIR_CALL_CE_STATIC(NULL, brisk_http_request_ce, "setdata", &_16, 85, data);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 
@@ -243,7 +243,7 @@ PHP_METHOD(Brisk_Http_Server, initCli) {
  * @param string item
  * @return mixed
  */
-PHP_METHOD(Brisk_Http_Server, getItem) {
+PHP_METHOD(Brisk_Kernel_Server, getItem) {
 
 	zval *item_param = NULL, *_SERVER, *_0, *_2, *_3, *_1$$4, *_4$$5, *_5$$5;
 	zval *item = NULL;
@@ -269,21 +269,21 @@ PHP_METHOD(Brisk_Http_Server, getItem) {
 	}
 
 
-	_0 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
+	_0 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
 	if (zephir_fast_count_int(_0 TSRMLS_CC) < 1) {
-		zephir_update_static_property_ce(brisk_http_server_ce, SL("_data"), &_SERVER TSRMLS_CC);
+		zephir_update_static_property_ce(brisk_kernel_server_ce, SL("_data"), &_SERVER TSRMLS_CC);
 	}
 	if (ZEPHIR_IS_STRING(item, "")) {
-		_1$$4 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
+		_1$$4 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
 		RETURN_CTOR(_1$$4);
 	}
 	ZEPHIR_INIT_VAR(_2);
 	zephir_fast_strtoupper(_2, item);
 	zephir_get_strval(item, _2);
-	_3 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
+	_3 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
 	if (zephir_array_isset(_3, item)) {
-		_4$$5 = zephir_fetch_static_property_ce(brisk_http_server_ce, SL("_data") TSRMLS_CC);
-		zephir_array_fetch(&_5$$5, _4$$5, item, PH_NOISY | PH_READONLY, "brisk/Http/Server.zep", 102 TSRMLS_CC);
+		_4$$5 = zephir_fetch_static_property_ce(brisk_kernel_server_ce, SL("_data") TSRMLS_CC);
+		zephir_array_fetch(&_5$$5, _4$$5, item, PH_NOISY | PH_READONLY, "brisk/Kernel/Server.zep", 104 TSRMLS_CC);
 		RETURN_CTOR(_5$$5);
 	} else {
 		RETURN_MM_BOOL(0);
@@ -291,7 +291,7 @@ PHP_METHOD(Brisk_Http_Server, getItem) {
 
 }
 
-void zephir_init_static_properties_Brisk_Http_Server(TSRMLS_D) {
+void zephir_init_static_properties_Brisk_Kernel_Server(TSRMLS_D) {
 
 	zval *_0;
 
@@ -299,7 +299,7 @@ void zephir_init_static_properties_Brisk_Http_Server(TSRMLS_D) {
 
 	ZEPHIR_INIT_VAR(_0);
 	array_init(_0);
-	zephir_update_static_property_ce(brisk_http_server_ce, SL("_data"), &_0 TSRMLS_CC);
+	zephir_update_static_property_ce(brisk_kernel_server_ce, SL("_data"), &_0 TSRMLS_CC);
 	ZEPHIR_MM_RESTORE();
 
 }

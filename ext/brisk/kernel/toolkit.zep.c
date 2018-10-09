@@ -101,7 +101,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, printr) {
 	ZEPHIR_INIT_VAR(result);
 	ZEPHIR_CALL_USER_FUNC_ARRAY(result, _0, _2);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&_3, "htmlspecialchars", NULL, 75, result);
+	ZEPHIR_CALL_FUNCTION(&_3, "htmlspecialchars", NULL, 73, result);
 	zephir_check_call_status();
 	ZEPHIR_SINIT_VAR(_4);
 	ZVAL_STRING(&_4, "<pre>%s</pre>", 0);
@@ -181,7 +181,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, vardump) {
 	ZEPHIR_INIT_VAR(result);
 	ZEPHIR_CALL_USER_FUNC_ARRAY(result, _0, _2);
 	zephir_check_call_status();
-	ZEPHIR_CALL_FUNCTION(&_3, "htmlspecialchars", NULL, 75, result);
+	ZEPHIR_CALL_FUNCTION(&_3, "htmlspecialchars", NULL, 73, result);
 	zephir_check_call_status();
 	ZEPHIR_SINIT_VAR(_4);
 	ZVAL_STRING(&_4, "<pre>%s</pre>", 0);
@@ -550,7 +550,7 @@ PHP_METHOD(Brisk_Kernel_Toolkit, fileIncluded) {
 	}
 
 
-	ZEPHIR_CALL_FUNCTION(&included, "get_included_files", NULL, 76);
+	ZEPHIR_CALL_FUNCTION(&included, "get_included_files", NULL, 74);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(zephir_fast_in_array(file, included TSRMLS_CC));
 
