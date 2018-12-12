@@ -24,10 +24,12 @@ class Toolkit
      * @param mixed $params
      * @return void
      */
-    public static function printr($params)
+    public static function printr(...$params)
     {
-        $result = self::sprintr($params);
-        echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
+        foreach ($params as $val) {
+            $result = self::sprintr($val);
+            echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
+        }
     }
 
     /**
@@ -49,10 +51,12 @@ class Toolkit
      * @param mixed $params
      * @return void
      */
-    public static function vardump($params)
+    public static function vardump(...$params)
     {
-        $result = self::svardump($params);
-        echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
+        foreach ($params as $val) {
+            $result = self::svardump($val);
+            echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
+        }
     }
 
     /**

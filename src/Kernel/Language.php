@@ -21,7 +21,7 @@ class Language
 
             'core.invalid_webroot_path'         => '未设置应用根目录地址，请使用App::init(true)初始化',
             'core.invalid_configuration'        => '未找到有效的配置信息:必须返回一个数组',
-            'core.object_not_found'             => '目标对象未找到',
+            'core.object_not_found'             => '目标对象[%s]未找到',
             'core.format_path_failed'           => '无法格式化指定路径[%s]',
             'core.invlid_custom_member'         => '无效的自定义成员对象[%s]',
             'core.config_not_found'				=> '无法找到配置项[%s]',

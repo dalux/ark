@@ -4,6 +4,7 @@ namespace Brisk\Sql;
 
 use Brisk\Kernel\Language;
 use Brisk\Exception\SqlCompileException;
+use Brisk\Kernel\Toolkit;
 
 abstract class Select extends SqlFather
 {
@@ -18,6 +19,7 @@ abstract class Select extends SqlFather
 	public function from($table, array $columns = ['*'])
     {
         is_array($table) || $table = [$table];
+        $columns || $columns = ['*'];
         $this->_parts['from'][] = [$table, $columns];
         return $this;
     }
@@ -85,7 +87,7 @@ abstract class Select extends SqlFather
      * @param array fields
      * @return Select
      */
-    public function joinLeft($table, $cond, array $fields = ['*'])
+    public function joinLeft($table, $cond, array $fields = [])
     {
         return $this->_join($table, $cond, $fields, 'joinLeft');
     }
@@ -98,7 +100,7 @@ abstract class Select extends SqlFather
      * @param array fields
      * @return Select
      */
-    public function joinInner($table, $cond, array $fields = ['*'])
+    public function joinInner($table, $cond, array $fields = [])
     {
         return $this->_join($table, $cond, $fields, 'joinInner');
     }
@@ -111,7 +113,7 @@ abstract class Select extends SqlFather
      * @param array fields
      * @return Select
      */
-    public function joinRight($table, $cond, array $fields = ['*'])
+    public function joinRight($table, $cond, array $fields = [])
     {
         return $this->_join($table, $cond, $fields, 'joinRight');
     }
@@ -211,7 +213,7 @@ abstract class Select extends SqlFather
                             $join[] = $keys[$join_flag]. ' '. $v. ' '. $alias. ' ON '. $join_cond. ' ';
                         }
                         //字段别名检测
-                        foreach ($fields as $k=> $v) {
+                        foreach ($join_fields as $k=> $v) {
                             $v = trim($v);
                             //系统函数或对象调用
                             if (preg_match('/^\\{\\{.*?\\}\\}/', $v)) {

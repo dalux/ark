@@ -2,6 +2,11 @@
 
 namespace Brisk\Db;
 
+use Brisk\Sql\Delete;
+use Brisk\Sql\Insert;
+use Brisk\Sql\Select;
+use Brisk\Sql\Update;
+
 abstract class DbFather
 {
 
@@ -90,6 +95,66 @@ abstract class DbFather
      * @return string
      */
     public abstract function getDriverName();
+
+    /**
+     * select语句sql对象
+     *
+     * @return Select
+     */
+    public function select()
+    {
+        $dbtype = ucfirst($this->getDriverName());
+        $classname = '\\Brisk\\Sql\\Select\\'. $dbtype;
+        if (!class_exists($classname)) {
+            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
+        }
+        return new $classname();;
+    }
+
+    /**
+     * update语句sql对象
+     *
+     * @return Update
+     */
+    public function update()
+    {
+        $dbtype = ucfirst($this->getDriverName());
+        $classname = '\\Brisk\\Sql\\Update\\'. $dbtype;
+        if (!class_exists($classname)) {
+            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
+        }
+        return new $classname();
+    }
+
+    /**
+     * delete语句sql对象
+     *
+     * @return Delete
+     */
+    public function delete()
+    {
+        $dbtype = ucfirst($this->getDriverName());
+        $classname = '\\Brisk\\Sql\\Delete\\'. $dbtype;
+        if (!class_exists($classname)) {
+            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
+        }
+        return new $classname();
+    }
+
+    /**
+     * insert语句sql对象
+     *
+     * @return Insert
+     */
+    public function insert()
+    {
+        $dbtype = ucfirst($this->getDriverName());
+        $classname = '\\Brisk\\Sql\\Insert\\'. $dbtype;
+        if (!class_exists($classname)) {
+            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
+        }
+        return new $classname();
+    }
 
 
 }
