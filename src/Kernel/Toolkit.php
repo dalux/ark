@@ -8,10 +8,10 @@ class Toolkit
     /**
      * Get array variable string
      *
-     * @param array $params
+     * @param mixed $params
      * @return string
      */
-    public static function sprintr(array $params)
+    public static function sprintr($params)
     {
         ob_start();
         print_r($params);
@@ -19,14 +19,39 @@ class Toolkit
     }
 
     /**
-     * Formatted print array variable
+     * Formatted print variable
      *
      * @param mixed $params
      * @return void
      */
-    public static function printr(array $params)
+    public static function printr($params)
     {
-        $result = call_user_func_array([__CLASS__, 'sprintr'], $params);
+        $result = self::sprintr($params);
+        echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
+    }
+
+    /**
+     * Get array variable string
+     *
+     * @param mixed $params
+     * @return string
+     */
+    public static function svardump($params)
+    {
+        ob_start();
+        var_dump($params);
+        return preg_replace('/\\]\\=\\>\\n(\\s+)/m', '] => ', ob_get_clean());
+    }
+
+    /**
+     * Formatted print variable
+     *
+     * @param mixed $params
+     * @return void
+     */
+    public static function vardump($params)
+    {
+        $result = self::svardump($params);
         echo sprintf('<pre>%s</pre>', htmlspecialchars($result));
     }
 
