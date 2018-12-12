@@ -17,7 +17,7 @@ class Native extends RouterFather
      */
     public function ready()
     {
-        Request::setReady(true);
+        Request::ready($_GET);
     }
 
     /**

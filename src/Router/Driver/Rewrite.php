@@ -169,8 +169,7 @@ class Rewrite extends RouterFather
         self::$_current_namespace = $ns_space;
         
         //请求数据初始化完成
-		Request::setData($_GET);
-        Request::setReady(true);
+        Request::ready($_GET);
         
     }
 

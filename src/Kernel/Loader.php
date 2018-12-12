@@ -57,9 +57,11 @@ class Loader
      * @param string $alias
      * @return array
      */
-    public static function getAlias($alias)
+    public static function getAlias($alias = null)
     {
-        return self::$_alias[$alias];
+        return is_null($alias)
+            ? self::$_alias
+            : self::$_alias[$alias];
     }
 
     /**
@@ -68,29 +70,11 @@ class Loader
      * @param string $nspace
      * @return array
      */
-    public static function getNameSpace($nspace)
+    public static function getNameSpace($nspace = null)
     {
-        return self::$_namespaces[$nspace];
-    }
-
-    /**
-     * 获取所有已注册的别名
-     *
-     * @return array
-     */
-    public static function getAliases()
-    {
-        return self::$_alias;
-    }
-
-    /**
-     * 获取所有已注册的命名空间
-     *
-     * @return array
-     */
-    public static function getNameSpaces()
-    {
-        return self::$_namespaces;
+        return is_null($nspace)
+            ? self::$_namespaces
+            : self::$_namespaces[$nspace];
     }
 
     /**

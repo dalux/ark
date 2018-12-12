@@ -47,7 +47,7 @@ class Handler
         }
         $footerinfo = $footerinfo. ' Provider by '. App::NAME. ' '. App::VERSION;
         $exception_name = get_class($e);
-        $namespaces = array_keys(Loader::getNameSpaces());
+        $namespaces = array_keys(Loader::getNameSpace());
         usort($namespaces, function($a, $b) {
             return strlen($a) > strlen($b) ? $a : $b;
         });

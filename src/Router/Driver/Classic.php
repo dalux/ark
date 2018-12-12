@@ -168,8 +168,7 @@ class Classic extends RouterFather
 		$ns_space = $ns_space. '\\'. ucfirst($this->_controller);
 		$this->_namespace = $ns_space;
 		//请求数据初始化完成
-		Request::setData($params);
-		Request::setReady(true);	
+        Request::ready($params);
 	}
 
     /**

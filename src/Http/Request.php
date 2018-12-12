@@ -9,26 +9,12 @@ use Brisk\Exception\RuntimeException;
 class Request
 {
 
-    private static $_instance;
-	private static $_ready  = false;
-	private static $_data   = [];
-
-	private $_request       = [];
-	private $_get           = [];
-	private $_post          = [];
-	private $_files         = [];
-    private $_cookie        = [];
-
-    /**
-     * Set Request data
-     *
-     * @param array data
-     * @return null
-     */
-	public static function setData(array $data)
-	{
-		self::$_data = array_merge(self::$_data, $data);
-	}
+	private static $_ready      = false;
+	private static $_data       = [];
+	private static $_request    = [];
+	private static $_get        = [];
+	private static $_post       = [];
+    private static $_cookie     = [];
 
     /**
      * Set the request readiness State
@@ -36,41 +22,17 @@ class Request
      * @param bool state
      * @return void
      */
-    public static function setReady($state)
+    public static function ready(array $data)
     {
-		self::$_ready = $state;
+        self::$_data = array_merge(self::$_data, $data);
+        $data = ['get'=> self::$_data, 'post'=> $_POST, 'cookie'=> $_COOKIE];
+        $data = Event::trigger('event.request.ready', $data);
+        $_GET = self::$_get = $data['get'];
+        $_POST = self::$_post = $data['post'];
+        $_COOKIE = self::$_cookie = $data['cookie'];
+        $_REQUEST = self::$_request = array_merge(self::$_get, self::$_post, self::$_cookie);
+		self::$_ready = true;
 	}
-
-    /**
-     * Get the Request component instance
-     *
-     * @return Request
-     */
-    public static function getInstance()
-    {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::get('http.request_not_ready'));
-        } elseif (is_null(self::$_instance)) {
-			self::$_instance = new self();
-		}
-        return self::$_instance;
-    }
-
-    /**
-     * construct
-     *
-     * @return null
-     */
-    private function __construct()
-    {
-		$data = ['get'=> self::$_data, 'post'=> $_POST, 'cookie'=> $_COOKIE, 'files'=> $_FILES];
-		$data = Event::trigger('event.request.ready', $data);
-        $this->_get = $data['get'];
-        $this->_post = $data['post'];
-        $this->_cookie = $data['cookie'];
-        $this->_files = $data['files'];
-        $this->_request = array_merge($this->_get, $this->_post);
-    }
 
     /**
      * Check if request is post
@@ -143,10 +105,16 @@ class Request
      * @param string $default
      * @return mixed
      */
-    public function get($name, $default = null)
+    public static function get($name = null, $default = null)
     {
-        return isset($this->_get[$name])
-            ? $this->_get[$name]
+        if (!self::$_ready) {
+            throw new RuntimeException(Language::get('http.request_not_ready'));
+        }
+        if (is_null($name)) {
+            return self::$_get;
+        }
+        return isset(self::$_get[$name])
+            ? self::$_get[$name]
             : $default;
     }
 
@@ -157,38 +125,36 @@ class Request
      * @param string $default
      * @return mixed
      */
-    public function post($name, $default = null)
+    public static function post($name = null, $default = null)
     {
-        return isset($this->_post[$name])
-            ? $this->_post[$name]
+        if (!self::$_ready) {
+            throw new RuntimeException(Language::get('http.request_not_ready'));
+        }
+        if (is_null($name)) {
+            return self::$_post;
+        }
+        return isset(self::$_post[$name])
+            ? self::$_post[$name]
             : $default;
     }
 
     /**
-     * Get the request data for the COOKIE method
+     * Get the request data for the POST method
      *
      * @param string name
      * @param string $default
-     * @return string
+     * @return mixed
      */
-    public function cookie($name, $default = null)
+    public static function cookie($name = null, $default = null)
     {
-        return isset($this->_cookie[$name])
-            ? $this->_cookie[$name]
-            : $default;
-    }
-
-    /**
-     * Get the request data for the FILES method
-     *
-     * @param string name
-     * @param array $default
-     * @return array
-     */
-    public function files($name, $default = array())
-    {
-        return isset($this->_files[$name])
-            ? $this->_files[$name]
+        if (!self::$_ready) {
+            throw new RuntimeException(Language::get('http.request_not_ready'));
+        }
+        if (is_null($name)) {
+            return self::$_cookie;
+        }
+        return isset(self::$_cookie[$name])
+            ? self::$_cookie[$name]
             : $default;
     }
 
@@ -199,26 +165,17 @@ class Request
      * @param string alternative
      * @return mixed
      */
-    public function data($name, $default = null)
+    public static function data($name = null, $default = null)
     {
-		return isset($this->_request[$name])
-            ? $this->_request[$name]
+        if (!self::$_ready) {
+            throw new RuntimeException(Language::get('http.request_not_ready'));
+        }
+        if (is_null($name)) {
+            return self::$_request;
+        }
+		return isset(self::$_request[$name])
+            ? self::$_request[$name]
             : $default;
-    }
-
-    /**
-     * 获取所有请求数据
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return [
-            'get'   => $this->_get,
-            'post'  => $this->_post,
-            'cookie'=> $this->_cookie,
-            'files' => $this->_files
-        ];
     }
 
 }
