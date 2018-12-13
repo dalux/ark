@@ -8,11 +8,6 @@ abstract class CacheFather
     /**
      * @var string
      */
-    protected $_ext_name;
-
-    /**
-     * @var string
-     */
     protected $_flag;
 
     /**
@@ -39,9 +34,6 @@ abstract class CacheFather
     {
         foreach ($setting as $key=> $val) {
             switch ($key) {
-                case 'ext_name':
-                    $this->_ext_name = $val;
-                    break;
                 case 'flag':
                     $this->_flag = $val;
                     break;
