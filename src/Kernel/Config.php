@@ -136,6 +136,13 @@ class Config
                 'path'=> ['127.0.0.1:11211'],
                 'setting'=> []
             ]
+        ],
+        'redis'=> [
+            'driver'=> 'Brisk\\Cache\\Driver\\Redis',
+            'option'=> [
+                'path'=> '127.0.0.1:6379',
+                'setting'=> []
+            ]
         ]
     ];
 
