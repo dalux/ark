@@ -28,7 +28,7 @@ abstract class Update extends SqlFather
      *
      * @return Update
      */
-    public function compile()
+    protected function compile()
     {
         $update_part = $this->_parts['update'];
         $set_part = $this->_parts['set'];

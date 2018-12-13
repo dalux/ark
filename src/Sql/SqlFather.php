@@ -186,7 +186,7 @@ abstract class SqlFather
      *
      * @return string
      */
-    public function pickWherePart()
+    protected function pickWherePart()
     {
         $where = [];
 		$where_part = $this->_parts['where'];

@@ -26,7 +26,7 @@ abstract class Delete extends SqlFather
      *
      * @return Delete
      */
-    public function compile()
+    protected function compile()
     {
 		$from = $this->_parts['from'];
         if (count($from) == 0) {

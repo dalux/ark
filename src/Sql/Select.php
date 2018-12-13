@@ -138,7 +138,7 @@ abstract class Select extends SqlFather
      *
      * @return string
      */
-    public function pickSelectPart()
+    protected function pickSelectPart()
     {
 		$fields = [];
 		$table = [];
@@ -255,7 +255,7 @@ abstract class Select extends SqlFather
      *
      * @return string
      */
-    public function pickGroupPart()
+    protected function pickGroupPart()
     {
         $group = [];
 		$group_part = $this->_parts['group'];
@@ -272,7 +272,7 @@ abstract class Select extends SqlFather
      *
      * @return string
      */
-    public function pickHavingPart()
+    protected function pickHavingPart()
     {
         $having = [];
 		$having_part = $this->_parts['having'];
@@ -303,7 +303,7 @@ abstract class Select extends SqlFather
      *
      * @return string
      */
-    public function pickOrderPart()
+    protected function pickOrderPart()
     {
         $order = [];
 		$order_part = $this->_parts['order'];
@@ -325,7 +325,7 @@ abstract class Select extends SqlFather
      *
      * @return string
      */
-    public function pickLimitPart()
+    protected function pickLimitPart()
     {
         $limit = '';
 		$limit_part = $this->_parts['limit'];
@@ -345,7 +345,7 @@ abstract class Select extends SqlFather
      *
      * @return Select
      */
-    public function compile()
+    protected function compile()
     {
         if (!$select = $this->pickSelectPart()) {
             throw new SqlCompileException(Language::get('sql.query_compile_failed'));

@@ -27,7 +27,7 @@ abstract class Insert extends SqlFather
      *
      * @return string
      */
-    public function pickInsertPart()
+    protected function pickInsertPart()
     {
 		$table = $this->_parts['table'];
         $data = $this->_parts['data'];
@@ -44,7 +44,7 @@ abstract class Insert extends SqlFather
      *
      * @return string
      */
-    public function pickValuesPart()
+    protected function pickValuesPart()
     {
         $data = $this->_parts['data'];
         $result = 'VALUES';
@@ -66,7 +66,7 @@ abstract class Insert extends SqlFather
      *
      * @return Insert
      */
-    public function compile()
+    protected function compile()
     {
         if (count($this->_parts['table']) == 0
                 || count($this->_parts['data']) == 0) {
