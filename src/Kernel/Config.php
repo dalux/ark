@@ -23,9 +23,9 @@ class Config
      */
     private static $_router = [
         'classic'=> [
-            'driver'=> 'Brisk\\Router\\Driver\\Classic',
+            'driver'=> 'Brisk\Router\Driver\Classic',
             'option'=> [
-				'base_namespace'=> 'App\\Controller',
+				'base_namespace'=> 'App\Controller',
                 'auto_method'=> '__init',
                 'default_controller'=> 'Index',
                 'default_action'=> 'index',
@@ -33,15 +33,15 @@ class Config
             ]
         ],
         'native'=> [
-            'driver'=> 'Brisk\\Router\\Driver\\Native',
+            'driver'=> 'Brisk\Router\Driver\Native',
             'option'=> [
                 'auto_include'=> 'init.php'
             ]
         ],
         'rewrite'=> [
-            'driver'=> 'Brisk\\Router\\Driver\\Rewrite',
+            'driver'=> 'Brisk\Router\Driver\Rewrite',
             'option'=> [
-                'base_namespace'=> 'App\\Controller',
+                'base_namespace'=> 'App\Controller',
                 'auto_method'=> '__init',
                 'default_controller'=> 'Index',
                 'default_action'=> 'index',
@@ -57,7 +57,7 @@ class Config
      */
     private static $_session = [
         'memcache'=> [
-            'driver'=> 'Brisk\\Session\\Driver\\Memcached',
+            'driver'=> 'Brisk\Session\Driver\Memcached',
             'option'=> [
                 'config'=> [
                     'host'=> '127.0.0.1',
@@ -67,7 +67,7 @@ class Config
             ]
         ],
         'redis'=> [
-            'driver'=> 'Brisk\\Session\\Driver\\Redis',
+            'driver'=> 'Brisk\Session\Driver\Redis',
             'option'=> [
                 'config'=> [
                     'host'=> '127.0.0.1',
@@ -78,7 +78,7 @@ class Config
             ]
         ],
         'filecache'=> [
-            'driver'=> 'Brisk\\Session\\Driver\\FileCache',
+            'driver'=> 'Brisk\Session\Driver\FileCache',
             'option'=> [
                 'config'=> [
                     'path'=> '/path/to/session_path'
@@ -87,7 +87,7 @@ class Config
             ]
         ],
         'files'=> [
-            'driver'=> 'Brisk\\Session\\Driver\\Files',
+            'driver'=> 'Brisk\Session\Driver\Files',
             'option'=> [
                 'config'=> [],
                 'setting'=> []
@@ -102,7 +102,7 @@ class Config
      */
     private static $_database = [
         'default'=> [
-            'driver'=> 'Brisk\\Db\\Driver\\Pdo\\Mysql',
+            'driver'=> 'Brisk\Db\Driver\Pdo\Mysql',
             'option'=> [
                 'config'=> [
                     'host'		=> '127.0.0.1',
@@ -124,21 +124,21 @@ class Config
      */
     private static $_cache = [
         'file'=> [
-            'driver'=> 'Brisk\\Cache\\Driver\\File',
+            'driver'=> 'Brisk\Cache\Driver\File',
             'option'=> [
                 'path'=> '/path/to/cachedir',
                 'setting'=> ['ext_name'=> '.cache']
             ]
         ],
         'memcache'=> [
-            'driver'=> 'Brisk\\Cache\\Driver\\Memcached',
+            'driver'=> 'Brisk\Cache\Driver\Memcached',
             'option'=> [
                 'path'=> ['127.0.0.1:11211'],
                 'setting'=> []
             ]
         ],
         'redis'=> [
-            'driver'=> 'Brisk\\Cache\\Driver\\Redis',
+            'driver'=> 'Brisk\Cache\Driver\Redis',
             'option'=> [
                 'path'=> '127.0.0.1:6379',
                 'setting'=> []
@@ -153,7 +153,7 @@ class Config
      */
     private static $_view = [
         'native'=> [
-            'driver'=> 'Brisk\\View\\Driver\\Native',
+            'driver'=> 'Brisk\View\Driver\Native',
             'option'=> [
                 'template_ext'=> '.phtml',
                 'template_dir'=> '/path/to/tpldir'
