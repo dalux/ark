@@ -119,7 +119,7 @@ class Rewrite extends RouterFather
 		$base_namespace = trim($option['base_namespace'], '\\');
         
         $uri = $_SERVER['REQUEST_URI'];
-
+        
         $controller = self::$_default_controller;
         if (isset($option['default_controller'])) {
             $controller = $option['default_controller'];

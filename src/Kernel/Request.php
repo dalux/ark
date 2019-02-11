@@ -64,29 +64,19 @@ class Request
     public static function getIpAddress($convert = false)
     {
 		$ips = [];
-		if (isset($_SERVER['HTTP_CLIENT_IP'])) {
-			$ips[] = $_SERVER['HTTP_CLIENT_IP'];
-		}
+		isset($_SERVER['HTTP_CLIENT_IP'])       && $ips[] = $_SERVER['HTTP_CLIENT_IP'];
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 			$forwarded = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
 			foreach ($forwarded as $ip) {
 				$ips[] = $ip;
 			}
 		}
-		if (isset($_SERVER['HTTP_X_FORWARDED'])) {
-			$ips[] = $_SERVER['HTTP_X_FORWARDED'];
-		}
-		if (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
-			$ips[] = $_SERVER['HTTP_FORWARDED_FOR'];
-		}
-		if (isset($_SERVER['HTTP_FORWARDED'])) {
-			$ips[] = $_SERVER['HTTP_FORWARDED'];
-		}
-		if (isset($_SERVER['REMOTE_ADDR'])) {
-			$ips[] = $_SERVER['REMOTE_ADDR'];
-		}
-		$ips = array_filter($ips);
+		isset($_SERVER['HTTP_X_FORWARDED'])     && $ips[] = $_SERVER['HTTP_X_FORWARDED'];
+		isset($_SERVER['HTTP_FORWARDED_FOR'])   && $ips[] = $_SERVER['HTTP_FORWARDED_FOR'];
+		isset($_SERVER['HTTP_FORWARDED'])       && $ips[] = $_SERVER['HTTP_FORWARDED'];
+		isset($_SERVER['REMOTE_ADDR'])          && $ips[] = $_SERVER['REMOTE_ADDR'];
 		$ip = '';
+		$ips = array_filter($ips);
 		while (true) {
 			$ip = array_shift($ips);
 			if (false !== ip2long($ip)) {
@@ -106,7 +96,7 @@ class Request
     public static function get($name = null, $default = null)
     {
         if (!self::$_ready) {
-            throw new RuntimeException(Language::get('http.request_not_ready'));
+            throw new RuntimeException(Language::get('core.request_not_ready'));
         }
         if (is_null($name)) {
             return self::$_get;
@@ -126,7 +116,7 @@ class Request
     public static function post($name = null, $default = null)
     {
         if (!self::$_ready) {
-            throw new RuntimeException(Language::get('http.request_not_ready'));
+            throw new RuntimeException(Language::get('core.request_not_ready'));
         }
         if (is_null($name)) {
             return self::$_post;
@@ -146,7 +136,7 @@ class Request
     public static function cookie($name = null, $default = null)
     {
         if (!self::$_ready) {
-            throw new RuntimeException(Language::get('http.request_not_ready'));
+            throw new RuntimeException(Language::get('core.request_not_ready'));
         }
         if (is_null($name)) {
             return self::$_cookie;
@@ -166,7 +156,7 @@ class Request
     public static function data($name = null, $default = null)
     {
         if (!self::$_ready) {
-            throw new RuntimeException(Language::get('http.request_not_ready'));
+            throw new RuntimeException(Language::get('core.request_not_ready'));
         }
         if (is_null($name)) {
             return self::$_request;

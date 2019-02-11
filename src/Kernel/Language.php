@@ -29,8 +29,7 @@ class Language
             'core.class_extends_error'          => '当前类[%s]必须继承自[%s]类',
             'core.cli_parameter_missing'        => '缺少cli模式下的必要参数[%s]',
             'core.class_not_found'              => '无法加载指定类[%s]',
-
-            'http.request_not_ready'            => 'HTTP请求数据未就绪',
+            'core.request_not_ready'            => 'HTTP请求数据未就绪',
 
             'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
             'event.data_key_must_equal'         => '事件监听器[%s]返回前后数组项不一致',

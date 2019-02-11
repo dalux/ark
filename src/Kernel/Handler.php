@@ -34,12 +34,6 @@ class Handler
 		$message = $e->getMessage();
 		$is_cli = Server::isCli();
 		$eol = $is_cli ? PHP_EOL : '<br/>';
-        //包含文件
-        $includes = '';
-		$included = get_included_files();
-        foreach ($included as $k=> $v) {
-            $includes = $includes. sprintf('#%02d: %s%s', ($k+1), str_replace('\t', '    ', Loader::reducePath($v)), $eol);
-        }
         //底部信息
         $footerinfo = strftime('%Y-%m-%d %H:%M:%S', time());
         if (isset($_SERVER['SERVER_SOFTWARE'])) {
@@ -91,7 +85,6 @@ class Handler
             $content = str_replace('{e}', $exception_name, $content);
             $content = str_replace('{description}', $message, $content);
             $content = str_replace('{stacktrace}', $stack_trace, $content);
-            $content = str_replace('{includefiles}', $includes, $content);
             $content = str_replace('{footerinfo}', $footerinfo, $content);
         } else {
             $trace_array = $e->getTrace();
@@ -119,7 +112,6 @@ class Handler
             $content = str_replace('{e}', $exception_name, $content);
             $content = str_replace('{description}', $message, $content);
             $content = str_replace('{stacktrace}', $stack_trace, $content);
-            $content = str_replace('{includefiles}', $includes, $content);
             $content = str_replace('{footerinfo}', $footerinfo, $content);
         }
 
@@ -154,11 +146,39 @@ class Handler
         return $source;
     }
 
+    private function _getWebTpl()
+    {
+        $str = '<!DOCTYPE html><html><head>';
+        $str.= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
+        $str.= '<title>Brisk debugger</title>';
+        $str.= '<style>';
+        $str.= 'h1, h2 { font-family: "Ubuntu", "Lucida Grande", "Lucida Sans Unicode", "Geneva", "Verdana", sans-serif; }';
+        $str.= 'h1 { font-size: 36px; margin: 0 0 0.3em 0; display: block; font-size: 2em; font-weight: bold; }';
+        $str.= 'h2 { font-size: 16px; font-weight: normal; margin: 1.3em 0 0.0 0; padding: 9px; background-color: #11557C; color: white; }';
+        $str.= 'div.detail p { margin: 0 0 8px 0px; font-size: 14px; white-space: pre-wrap; font-family: monospace; color: red; }';
+        $str.= 'div.debugger { text-align: left; padding: 12px; margin: auto; background-color: white; }';
+        $str.= 'div.traceback { border: 1px solid #ddd; margin: 0 0 1em 0; padding: 10px; }';
+        $str.= 'div.footer { font-size: 13px; text-align: left; margin: 20px 0; }';
+        $str.= '</style>';
+        $str.= '</head>';
+        $str.= '<body>';
+        $str.= '<div class="debugger">';
+        $str.= '<h1>{e}</h1>';
+        $str.= '<div class="detail"><p class="errormsg">{description}</p></div>';
+        $str.= '<h2 class="traceback">Traceback</h2>';
+        $str.= '<div class="traceback">{stacktrace}</div>';
+        $str.= '<div class="footer">{footerinfo}</div>';
+        $str.= '</div>';
+        $str.= '</body>';
+        $str.= '</html>';
+        return $str;
+    }
+
     /**
      *
      * @return string
      */
-    private function _getWebTpl()
+    private function _getWebTpl2()
     {
         $str = '<!Doctype html><html><head><title>Debugger</title>';
         $str.= '<style type="text/css">';
@@ -181,8 +201,6 @@ class Handler
         $str.= '{detail}';
         $str.= '<h3>Backtrace: </h3>';
         $str.= '<div class=source><code><pre>{stacktrace}</pre></code></div>';
-        $str.= '<h3>Include files: </h3>';
-        $str.= '<div class=source><code><pre>{includefiles}</pre></code></div>';
         $str.= '{/detail}';
         $str.= '<div class=version>';
         $str.= '{footerinfo}';
@@ -201,8 +219,6 @@ class Handler
 		$str.= '{description}'. PHP_EOL. PHP_EOL;
 		$str.= 'Backtrace: '. PHP_EOL;
 		$str.= '{stacktrace}'. PHP_EOL. PHP_EOL;
-		$str.= 'Include files: '. PHP_EOL;
-		$str.= '{includefiles}'. PHP_EOL;
 		$str.= '{footerinfo}'. PHP_EOL. PHP_EOL;
         return $str;
     }
