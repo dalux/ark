@@ -293,18 +293,10 @@ class Classic extends RouterFather
 				$result[$val[0]] = $val[1];
 			}
 		}
-		if (isset($result['_m'])) {
-			$module = $result['_m'];
-			unset($result['_m']);
-		}
-		if (isset($result['_c'])) {
-			$controller = $result['_c'];
-			unset($result['_c']);
-		}
-		if (isset($result['_a'])) {
-			$action = $result['_a'];
-			unset($result['_a']);
-		}
+		isset($result['_m']) && $module = $result['_m'];
+		isset($result['_c']) && $controller = $result['_c'];
+		isset($result['_a']) && $action = $result['_a'];
+		unset($result['_m'], $result['_c'], $result['_a']);
 		return [
 			'module'=> $module,
 			'controller'=> $controller,
