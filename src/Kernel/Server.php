@@ -2,7 +2,6 @@
 
 namespace Brisk\Kernel;
 
-use Brisk\Http\Request;
 use Brisk\Exception\RuntimeException;
 
 class Server

@@ -1,6 +1,6 @@
 <?php
 
-namespace Brisk\Http;
+namespace Brisk\Kernel;
 
 class Response
 {

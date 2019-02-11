@@ -4,7 +4,7 @@ namespace Brisk\Router\Driver;
 
 use Brisk\Kernel\App;
 use Brisk\Kernel\Language;
-use Brisk\Http\Request;
+use Brisk\Kernel\Request;
 use Brisk\Router\RouterFather;
 use Brisk\Exception\ControllerException;
 use Brisk\Exception\RouterException;

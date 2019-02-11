@@ -1,9 +1,7 @@
 <?php
 
-namespace Brisk\Http;
+namespace Brisk\Kernel;
 
-use Brisk\Kernel\Event;
-use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
 
 class Request

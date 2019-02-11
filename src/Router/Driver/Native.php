@@ -4,7 +4,7 @@ namespace Brisk\Router\Driver;
 
 use Brisk\Kernel\App;
 use Brisk\Kernel\Loader;
-use Brisk\Http\Request;
+use Brisk\Kernel\Request;
 use Brisk\Router\RouterFather;
 
 class Native extends RouterFather
