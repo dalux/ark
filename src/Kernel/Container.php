@@ -23,7 +23,7 @@ class Container
             foreach ($data as $key=> $val) {
                 $this->_container[$key] = new self($val);
             }
-        } elseif ($data) {
+        } elseif (!is_null($data)) {
             $this->_container = $data;
         }
     }
@@ -42,7 +42,7 @@ class Container
             return is_array($this->_container)
                 ? isset($this->_container[$key])
                 : false;
-        }     
+        }
         $nodes = explode('>', $key);
         $node = array_shift($nodes);
         if (!$this->hasKey($node)) {
