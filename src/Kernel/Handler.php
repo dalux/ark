@@ -50,8 +50,12 @@ class Handler
         //跟踪信息
         if (!$is_cli) {
 			$trace_array = $e->getTrace();
-			$trace_string = explode(PHP_EOL, $e->getTraceAsString());
+            $trace_string = explode(PHP_EOL, $e->getTraceAsString());
             $trace = [];
+            $trace[] = [
+                'description'=> $e->getFile(). '('. $e->getLine(). '):',
+                'source'=> $this->_getSource(['file'=> $e->getFile(), 'line'=> $e->getLine()])
+            ];
             foreach ($trace_array as $k=> $v) {
                 $trace[] = [
                     'description'=> $trace_string[$k],
