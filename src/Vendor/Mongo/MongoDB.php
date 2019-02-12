@@ -12,9 +12,10 @@ class MongoDB extends MongoFather
     /**
      * 构造器
      * 
-     * @param string $dsn
+     * @param array $config
+     * @param array $setting
      */
-    public function __construct($dsn, array $option = array())
+    public function __construct(array $config, array $setting = array())
     {
         try {
             //注册MongoDB-PHP-Lib类文件自动加载，该库需要mongodb-1.4.x版本扩展库支持
@@ -30,7 +31,11 @@ class MongoDB extends MongoFather
                     }
                 });
             }
-            $this->_mongo = new \MongoDB\Client($dsn, $option);
+            $dsn = sprintf('mongodb://%s:%s@%s:%s/%s', $config['username'], $config['password'], $config['host'], $config['port'], $config['dbname']);
+            $this->_mongo = new \MongoDB\Client($dsn, $setting);
+            if ($config['dbname']) {
+                $this->_mongo->selectDB($config['dbname']);
+            }
         } catch (Exception $e) {
             throw new DbException($e->getMessage());
         }

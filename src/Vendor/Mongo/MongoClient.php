@@ -11,12 +11,17 @@ class MongoClient extends MongoFather
     /**
      * 构造器
      * 
-     * @param string $dsn
+     * @param array $config
+     * @param array $setting
      */
-    public function __construct($dsn, array $option = array())
+    public function __construct(array $config, array $setting = array())
     {
         try {
-            $this->_mongo = new \MongoClient($dsn, $option);
+            $dsn = sprintf('mongodb://%s:%s@%s:%s/%s', $config['username'], $config['password'], $config['host'], $config['port'], $config['dbname']);
+            $this->_mongo = new \MongoClient($dsn, $setting);
+            if ($config['dbname']) {
+                $this->_mongo->selectDB($config['dbname']);
+            }
         } catch (Exception $e) {
             throw new DbException($e->getMessage());
         }
