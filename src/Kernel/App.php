@@ -55,10 +55,10 @@ class App
     /**
      * Get current object instance
      *
-     * @param bool $init
+     * @param string $dirname
      * @return App
      */
-    public static function init($init = false)
+    public static function init($dirname = null)
     {
         if (is_null(self::$_instance)) {
             //框架变量实例
@@ -79,19 +79,10 @@ class App
                 Server::initCli();
             }
         }
-        if ($init && !Loader::getAlias('.')) {
-            $backtrace = debug_backtrace();
-            $file = '';
-            foreach ($backtrace as $item) {
-                if ($item['class'] == __CLASS__
-                    && $item['type'] == '::'
-                    && $item['function'] == 'init'
-                    && $item['args'][0] == 1) {
-                    $file = $item['file'];
-                    break;
-                }
-            }
-            Loader::setAlias('.', dirname($file));
+        if (!is_null($dirname) 
+                && !Loader::getAlias('.')
+                && is_dir($dirname)) {
+            Loader::setAlias('.', $dirname);
         }
         return self::$_instance;
     }
