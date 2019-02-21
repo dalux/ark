@@ -75,9 +75,9 @@ class Handler
                 $v['description'] = sprintf('%02d: %s', $max, trim(preg_replace('~^#\d+~', '', $v['description'])));
                 $stack_trace = $stack_trace. '<div id="trace_title_'. ($k+1). '" class="trace_title" title="点击可显示或折叠具体代码" onclick="codeview(\'trace_source_'. $k. '\')">'. $v['description']. '</div>';
                 $stack_trace.= '<div id="trace_source_'. $k. '" class="trace_source"';
-                if ($k == 0) {
+                //if ($k == 0) {
                 //    $stack_trace.= ' style="display:block"';
-                }
+                //}
                 $stack_trace.= '>'. $v['source']. '</div>';
                 $max = $max - 1;
             }
