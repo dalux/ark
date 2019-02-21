@@ -52,10 +52,12 @@ class Handler
 			$trace_array = $e->getTrace();
             $trace_string = explode(PHP_EOL, $e->getTraceAsString());
             $trace = [];
+            /*
             $trace[] = [
                 'description'=> $e->getFile(). '('. $e->getLine(). '):',
                 'source'=> $this->_getSource(['file'=> $e->getFile(), 'line'=> $e->getLine()])
             ];
+            */
             foreach ($trace_array as $k=> $v) {
                 $trace[] = [
                     'description'=> $trace_string[$k],
@@ -74,7 +76,7 @@ class Handler
                 $stack_trace = $stack_trace. '<div id="trace_title_'. ($k+1). '" class="trace_title" title="点击可显示或折叠具体代码" onclick="codeview(\'trace_source_'. $k. '\')">'. $v['description']. '</div>';
                 $stack_trace.= '<div id="trace_source_'. $k. '" class="trace_source"';
                 if ($k == 0) {
-                    $stack_trace.= ' style="display:block"';
+                //    $stack_trace.= ' style="display:block"';
                 }
                 $stack_trace.= '>'. $v['source']. '</div>';
                 $max = $max - 1;
