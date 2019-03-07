@@ -3,7 +3,6 @@
 namespace Brisk\Db;
 
 use Brisk\Kernel\Language;
-use Brisk\Sql\SqlBuilder;
 use Brisk\Cache\CacheProxy;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
@@ -153,7 +152,7 @@ class DQuery
      */
     public function insert(array $data)
     {
-        $insert = SqlBuilder::getInsert(self::$_conn->getDriverName())->into($this->_tb, $data);
+        $insert = self::$_conn->insert()->into($this->_tb, $data);
 		return self::$_conn->query($insert->getRealSQL());
     }
 
@@ -166,7 +165,7 @@ class DQuery
      */
     public function update(array $data, array $condition)
     {
-        $update = SqlBuilder::getUpdate(self::$_conn->getDriverName())->set($this->_tb, $data);
+        $update = self::$_conn->update()->set($this->_tb, $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -198,7 +197,7 @@ class DQuery
      */
     public function delete(array $condition)
     {
-        $delete = SqlBuilder::getDelete(self::$_conn->getDriverName())->from($this->_tb);
+        $delete = self::$_conn->delete()->from($this->_tb);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -231,7 +230,7 @@ class DQuery
      */
     public function fetchRow(array $condition, array $fields = ['*'])
     {
-        $select = SqlBuilder::getSelect(self::$_conn->getDriverName())->from($this->_tb, $fields);
+        $select = self::$_conn->select()->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -267,7 +266,7 @@ class DQuery
      */
     public function fetchOne(array $condition = [], array $fields = ['*'])
     {
-        $select = SqlBuilder::getSelect(self::$_conn->getDriverName())->from($this->_tb, $fields);
+        $select = self::$_conn->select()->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -306,7 +305,7 @@ class DQuery
      */
     public function fetchAll(array $condition = [], array $order = [], $count = 0, $offset = 0, array $fields = ['*'])
     {
-        $select = SqlBuilder::getSelect(self::$_conn->getDriverName())->from($this->_tb, $fields)->limit($count, $offset);
+        $select = self::$_conn->select()->from($this->_tb, $fields)->limit($count, $offset);
         foreach ($order as $k=> $v) {
             $select->order($k, $v);
         }
