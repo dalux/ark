@@ -23,44 +23,46 @@ class App
     /**
      * @var array
      */
-	private static $_storage = array();
+	private static $_storage = [];
+
+	private static $_methods = [];
+
+    /**
+     * 插件目录
+     *
+     * @var array
+     */
+	private $_plugin_dir = [];
 
     /**
      * Construct
      *
      * @return null
      */
-    private function __construct()
+    private function __construct() {}
+
+    /**
+     * Get current object instance
+     *
+     * @return App
+     */
+    public static function init()
     {
-        require __DIR__. '/Handler.php';
-        require __DIR__. '/Loader.php';
-        require __DIR__. '/Trace.php';
-        require __DIR__. '/Timer.php';
-        require __DIR__. '/Event.php';
-        require __DIR__. '/Language.php';
-        require __DIR__. '/Container.php';
         //版本检查
         if (version_compare(phpversion(), '5.6.0') < 0) {
             echo 'php version is too low, please use php5.6 and above version'. PHP_EOL;
             exit;
         }
-        //启动时间
-        Timer::mark('sys_startup');
-        //初始内存占用数
-        Trace::set('memory', memory_get_usage());
-        //默认错误提示
-        ini_set('display_errors', '1');
-    }
-
-    /**
-     * Get current object instance
-     *
-     * @param string $dirname
-     * @return App
-     */
-    public static function init($dirname = null)
-    {
         if (is_null(self::$_instance)) {
+            require __DIR__. '/Loader.php';
+            require __DIR__. '/Trace.php';
+            require __DIR__. '/Timer.php';
+            require __DIR__. '/Event.php';
+            require __DIR__. '/Language.php';
+            require __DIR__. '/Container.php';
+            require __DIR__. '/ExceptionHandler.php';
+            //默认错误提示
+            ini_set('display_errors', '1');
             //框架变量实例
             self::$_instance = new self();
             //配置项默认为空对象
@@ -69,20 +71,9 @@ class App
                 'system'=> 1
             ];
             Loader::setAlias('*', dirname(__DIR__));
-            Loader::setNameSpace('Brisk', dirname(__DIR__));
-            //异常报告
-            Handler::setHandler();
-            //后续类文件自动加载
-            spl_autoload_register(['\\Brisk\\Kernel\\Loader', 'autoLoad']);
-            //初始化CLI模式
-            if (Server::isCli()) {
-                Server::initCli();
-            }
-        }
-        if (!is_null($dirname) 
-                && !Loader::getAlias('.')
-                && is_dir($dirname)) {
-            Loader::setAlias('.', $dirname);
+            Loader::addNameSpace('Brisk', dirname(__DIR__));
+            $handler = new ExceptionHandler();
+            self::$_instance->setExceptionHandler([$handler, 'display']);
         }
         return self::$_instance;
     }
@@ -101,15 +92,31 @@ class App
     }
 
     /**
+     * 设置异常处理句柄
+     * 
+     * @param callable $handler
+     * @return App
+     */
+    public function setExceptionHandler(callable $handler)
+    {
+        restore_exception_handler();
+        set_exception_handler(function($e) use ($handler) {
+            $result = call_user_func_array($handler, array($e));
+            echo $result;
+        });
+        return $this;
+    }
+
+    /**
      * Set namespace path
      *
      * @param string nspace
      * @param string path
      * @return App
      */
-    public function setNameSpace($name, $path)
+    public function addNameSpace($name, $path)
     {
-        Loader::setNameSpace($name, $path);
+        Loader::addNameSpace($name, $path);
         return $this;
     }
 
@@ -123,6 +130,18 @@ class App
     public function addLanguageFile($language, $path)
     {
         Language::addPackageFile($language, $path);
+        return $this;
+    }
+
+    /**
+     * 添加插件文件目录
+     *
+     * @param $path
+     * @return $this
+     */
+    public function addPluginDir($path)
+    {
+        $this->_plugin_dir[] = $path;
         return $this;
     }
 
@@ -155,20 +174,20 @@ class App
      * Start the application
      *
      * @param callable $config
-     * @return null
+     * @return string
      */
     public function runAs(callable $config)
     {
+        //后续类文件自动加载
+        spl_autoload_register(['\\Brisk\\Kernel\\Loader', 'autoLoad']);
+        //初始化CLI模式
+        if (Server::isCli()) Server::initCli();
         //配置文件
         $config = call_user_func_array($config, []);
         if (!is_array($config)) {
             throw new ConfigurationException(Language::get('core.invalid_configuration'));
         }
         $instance = new Container($config);
-        //应用根目录检测
-        if (!Loader::getAlias('.')) {
-            throw new RuntimeException(Language::get('core.invalid_webroot_path'));
-        }
         //时区设置
         $timezone = 'Asia/Shanghai';
         if ($instance->hasKey('global/timezone')) {
@@ -180,13 +199,27 @@ class App
             error_reporting($instance->get('global/error_reporting'));
         }
         self::$_storage['config']['instance'] = $instance;
+        //默认插件目录
+        $this->_plugin_dir[] = Loader::realPath('*/Plugin');
+        //加载插件
+        foreach ($this->_plugin_dir as $plugin_dir) {
+            $register = $plugin_dir. '/Register.php';
+            if (is_file($register)) {
+                include_once($register);
+            } else {
+                $files = glob($plugin_dir. '/*/Register.php');
+                foreach ($files as $file) {
+                    include_once($file);
+                }
+            }
+        }
+        //监听系统启动就绪事件
+        Event::trigger('event.framework.ready');
         //路由
         self::$_storage['router'] = [
             'instance'=> RouterAdapter::getDriverFromConfig(),
             'system'=> 1
         ];
-        //监听系统启动就绪事件
-        Event::trigger('event.framework.ready');
         if (!$this->getObject('router') instanceof RouterFather) {
             $lang = Language::get('core.class_extends_error', get_class($this->getObject('router')), '\\Brisk\\Router\\RouterFather');
             throw new RouterException($lang);
@@ -196,7 +229,7 @@ class App
         //路由准备就绪
         Event::trigger('event.router.ready');
         //路由并呈现控制器内容
-        $this->getObject('router')->dispatch();
+        return $this->getObject('router')->dispatch();
     }
 
     /**
@@ -211,6 +244,22 @@ class App
         if (!isset(self::$_storage[$name])
                 || !self::$_storage[$name]['system']) {
             self::$_storage[$name] = ['instance'=> $value, 'system'=> 0];
+        }
+        return $this;
+    }
+
+    /**
+     * 设置自定义方法
+     *
+     * @param $name
+     * @param callable $method
+     * @return App
+     */
+    public function setMethod($name, callable $method)
+    {
+        if (!isset(self::$_methods[$name])
+                || !isset(self::$_methods[$name]['system'])) {
+            self::$_methods[$name] = ['method'=> $method, 'system'=> 0];
         }
         return $this;
     }
@@ -236,6 +285,34 @@ class App
     }
 
     /**
+     * 调用自定义方法
+     *
+     * @param $name
+     * @param array $args
+     * @return mixed
+     */
+    public function callMethod($name, array $args)
+    {
+        $method = self::$_methods[$name]['method'];
+        if (is_null($method)) {
+            throw new RuntimeException(Language::get('core.method_not_found', $name));
+        }
+        if (!isset(self::$_methods[$name]['result'])) {
+            self::$_methods[$name]['result'] = [];
+        }
+        $args_key = md5(serialize($args));
+        $result = self::$_methods[$name]['result'][$args_key];
+        if (is_object($result) || is_resource($result)) {
+            return $result;
+        }
+        $result = call_user_func_array($method, $args);
+        if (is_object($result) || is_resource($result)) {
+            self::$_methods[$name]['result'][$args_key] = $result;
+        }
+        return $result;
+    }
+
+    /**
      * Get custom singleton components
      *
      * @param string name
@@ -247,14 +324,24 @@ class App
     }
 
     /**
+     * 魔术方法调用自定义方法
+     *
+     * @param $name
+     * @param $args
+     * @return mixed
+     */
+    public function __call($name, $args)
+    {
+        return $this->callMethod($name, $args);
+    }
+
+    /**
      * destruct
      *
      * @return null
      */
     public function __destruct()
     {
-        Timer::mark('sys_shutdown');
-        Trace::set('memory', memory_get_usage());
         Event::trigger('event.framework.shutdown');
     }
 

@@ -30,14 +30,10 @@ class CacheAdapter
         }
         $driver = App::init()->config->get($path. '/driver');
         $option = App::init()->config->get($path. '/option');
-        if (!class_exists($driver)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $driver));
-        }
         $instance = new $driver($option['path'], $option['setting']);
         if (!$instance instanceof CacheFather) {
             throw new RuntimeException(Language::get('core.class_extends_error', $driver, '\\Brisk\\Cache\\CacheFather'));
         }
-        Trace::set('driver', ['cache'=> sprintf('%s[%s]', $name, $driver)]);
         return $instance;
     }
 

@@ -73,7 +73,7 @@ class Native extends ViewFather
      * @param bool output
      * @return string
      */
-    public function display($template, $output = true)
+    public function display($template)
     {
         if (strpos($template, $this->_template_ext) === false) {
             $template = $template. $this->_template_ext;
@@ -92,10 +92,6 @@ class Native extends ViewFather
         include($template);
         $data['content'] = ob_get_clean();
         $data = Event::trigger('event.view.finish', $data);
-        if ($output) {
-			echo $data['content'];
-            exit;
-        }
         return $data['content'];
     }
 
@@ -107,7 +103,7 @@ class Native extends ViewFather
      * @param bool output
      * @return string
      */
-    public function import($path, array $params = [], $output = true)
+    public function import($path, array $params = [])
     {
         if (strpos($path, $this->_template_ext) === false) {
             $path = $path. $this->_template_ext;
@@ -120,11 +116,7 @@ class Native extends ViewFather
         extract($params, EXTR_SKIP);
         ob_start();
         include($template);
-		$content = ob_get_clean();
-        if ($output) {
-            echo $content;
-        }
-        return $content;
+        return ob_get_clean();
     }
 
 }

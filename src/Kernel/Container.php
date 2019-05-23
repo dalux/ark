@@ -126,7 +126,23 @@ class Container
     }
 
     /**
+     * 设值
      *
+     * @param string $key
+     * @param mixed $value
+     * @return $this
+     */
+    public function set($key, $value)
+    {
+        if (is_null($this->_container)) {
+            $this->_container = [];
+        }
+        $this->_container[$key] = new self($value);
+        return $this;
+    }
+
+    /**
+     * 取值
      *
      * @param string $key
      * @return mixed
@@ -141,17 +157,15 @@ class Container
     }
 
     /**
-     *
+     * 设值
      *
      * @param string $key
-     * @param $value
+     * @param mixed $value
+     * @return $this
      */
     public function __set($key, $value)
     {
-        if (is_null($this->_container)) {
-            $this->_container = [];
-        }
-        $this->_container[$key] = new self($value);
+        return $this->set($key, $value);
     }
 
 }

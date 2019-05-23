@@ -22,6 +22,7 @@ class Language
             'core.invalid_webroot_path'         => '未设置应用根目录地址，请使用App::init(true)初始化',
             'core.invalid_configuration'        => '未找到有效的配置信息:必须返回一个数组',
             'core.object_not_found'             => '目标对象[%s]未找到',
+            'core.method_not_found'             => '目标方法[%s]未找到',
             'core.format_path_failed'           => '无法格式化指定路径[%s]',
             'core.invlid_custom_member'         => '无效的自定义成员对象[%s]',
             'core.config_not_found'				=> '无法找到配置项[%s]',
@@ -30,6 +31,7 @@ class Language
             'core.cli_parameter_missing'        => '缺少cli模式下的必要参数[%s]',
             'core.class_not_found'              => '无法加载指定类[%s]',
             'core.request_not_ready'            => 'HTTP请求数据未就绪',
+            'core.request_type_nosupport'       => 'HTTP请求类型不支持[%s]',
 
             'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
             'event.data_key_must_equal'         => '事件监听器[%s]返回前后数组项不一致',
@@ -49,11 +51,24 @@ class Language
 
             'db.extension_load_failed'          => '无法载入指定扩展[%s]',
             'db.invalid_connection_object'      => '未设置数据库连接对象实例',
+            'db.invalid_table_name'             => '无有效的数据库表名称',
 
             'sql.query_compile_failed'          => 'SQL语句编译失败，缺少必要字段',
 
             'view.template_not_found'           => '未找到模板文件[%s]',
-            'view.include_file_not_found'       => '未找到要引入的文件路径[%s]'
+            'view.include_file_not_found'       => '未找到要引入的文件路径[%s]',
+
+            'tool.validator_field_missing'      => '字段[%s]值不能为空',
+            'tool.validator_field_errtype'      => '字段[%s]值类型不匹配,需要[%s],目前为[%s]',
+            'tool.validator_field_outrange'     => '字段[%s]值不在允许的范围内',
+            'tool.validator_filed_lessthan'     => '字段[%s]值不能小于[%s]',
+            'tool.validator_filed_morethan'     => '字段[%s]值不能大于[%s]',
+            'tool.validator_filed_minlength'    => '字段[%s]值长度低于最小值,需要[%s],目前为[%s]',
+            'tool.validator_filed_maxlength'    => '字段[%s]值长度超过最大值,需要[%s],目前为[%s]',
+            'tool.validator_field_noequal'      => '字段[%s]值内容不匹配,需要[%s],目前为[%s]',
+            'tool.validator_field_errobject'    => '字段[%s]值内容不匹配,需要继承或实现[%s]',
+            'tool.validator_filed_nomatch'      => '字段[%s]值不匹配规则[%s]',
+
 
         ],
 

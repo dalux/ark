@@ -26,9 +26,8 @@ abstract class ViewFather
      * Rendering template data
      *
      * @param string template
-     * @param bool output
      * @return string
      */
-    public abstract function display($template, $output = true);
+    public abstract function display($template);
 
 }

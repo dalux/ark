@@ -94,40 +94,6 @@ class Response
     }
 
     /**
-     * redirect page
-     *
-     * @param string $url
-     * @param bool $script
-     * @param string $msg
-     * @return void
-     */
-    public static function redirect($url, $script = false, $msg = '')
-    {
-        if (!$script) {
-            self::header('Location', $url);
-            exit;
-        }
-        $str = '<script>';
-        if ($msg != '') {
-            $str = $str. 'alert("'. $msg. '");';
-        }
-        $str = $str. 'location.href="'. $url. '";</script>';
-        echo $str;
-        exit;
-    }
-
-    /**
-     * alert message
-     *
-     * @param string $msg
-     * @return void
-     */
-    public static function alert($msg)
-    {
-        echo '<script>alert("' . $msg . '");</script>';
-    }
-
-    /**
      * sets no cache
      *
      * @return void

@@ -26,14 +26,10 @@ class ViewAdapter
         }
         $driver = App::init()->config->get('view/driver');
         $option = App::init()->config->get('view/option');
-        if (!class_exists($driver)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $driver));
-        }
         $instance = new $driver($option);
         if (!$instance instanceof ViewFather) {
             throw new RuntimeException(Language::get('core.class_extends_error', $driver, '\\Brisk\\View\\ViewFather'));
         }
-        Trace::set('driver', ['view'=> $driver]);
         return $instance;
     }
 

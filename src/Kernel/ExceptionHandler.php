@@ -2,40 +2,23 @@
 
 namespace Brisk\Kernel;
 
-use Exception;
-
-class Handler
+class ExceptionHandler
 {
-
-    /**
-     * Set system exception handling handle
-     *
-     * @param mixed $handler
-     * @return null
-     */
-    public static function setHandler(callable $handler = null)
-    {
-        if (is_null($handler)) {
-            $handler = [new Handler(), 'display'];
-        }
-        restore_exception_handler();
-        set_exception_handler($handler);
-    }
 
     /**
      * Rendering system Exception Trace information
      *
-     * @param Exception $e
-     * @return null
+     * @param \Exception|\Throwable $e
+     * @return string
      */
-    public function display(Exception $e)
+    public function display($e)
     {
         //错误信息
 		$message = $e->getMessage();
 		$is_cli = Server::isCli();
 		$eol = $is_cli ? PHP_EOL : '<br/>';
         //底部信息
-        $footerinfo = ' Provider by '. App::NAME. ' '. App::VERSION;
+        $footerinfo = 'Provider by '. App::NAME. ' '. App::VERSION;
         $exception_name = get_class($e);
         $namespaces = array_keys(Loader::getNameSpace());
         usort($namespaces, function($a, $b) {
@@ -52,12 +35,10 @@ class Handler
 			$trace_array = $e->getTrace();
             $trace_string = explode(PHP_EOL, $e->getTraceAsString());
             $trace = [];
-            /*
             $trace[] = [
                 'description'=> $e->getFile(). '('. $e->getLine(). '):',
                 'source'=> $this->_getSource(['file'=> $e->getFile(), 'line'=> $e->getLine()])
             ];
-            */
             foreach ($trace_array as $k=> $v) {
                 $trace[] = [
                     'description'=> $trace_string[$k],
@@ -83,7 +64,7 @@ class Handler
             }
             //模板文件
             $debug = App::init()->config->get('global/debug');
-            $tplcontent = $this->_getWebTpl2();
+            $tplcontent = $this->_getWebTpl();
             if ($debug || is_null($debug)) {
                 $content = str_replace(['{detail}', '{/detail}'], '', $tplcontent);
             } else {
@@ -122,8 +103,7 @@ class Handler
             $content = str_replace('{footerinfo}', $footerinfo, $content);
         }
 
-        echo $content;
-        exit;
+        return $content;
 
     }
 
@@ -153,7 +133,7 @@ class Handler
         return $source;
     }
 
-    private function _getWebTpl2()
+    private function _getWebTpl()
     {
         $str = '<!DOCTYPE html><html><head>';
         $str.= '<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />';
@@ -189,46 +169,6 @@ class Handler
         $str.= '</div>';
         $str.= '</body>';
         $str.= '</html>';
-        return $str;
-    }
-
-    /**
-     *
-     * @return string
-     */
-    private function _getWebTpl1()
-    {
-        $str = '<!Doctype html><html><head><title>Debugger</title>';
-        $str.= '<style type="text/css">';
-		$str.= 'body {font-family:Courier New,Tahoma;font-weight:normal;color:black;background-color:white;}';
-		$str.= 'h1 {font-size:18pt;color:red;font-family:Tahoma,Courier New,sans-serif; padding-bottom: 12px; }';
-        $str.= 'h2 {font-size:14pt;color:maroon }';
-        $str.= 'h3 {font-weight:bold;font-size:10pt;margin:20px 0;font-family:Tahoma,sans-serif; }';
-        $str.= 'p {color:black;font-size:9pt;margin-top:-5px; }';
-        $str.= 'code,pre {font-family:Courier New;font-size:9pt;}';
-        $str.= 'td,.version {color:gray;font-size:8pt;border-top:1px solid #aaaaaa;padding-top:3px;}';
-        $str.= '.source {background-color:#ffffee;}';
-        $str.= '.error {background-color: #ffeeee;}';
-        $str.= '.trace_title { cursor: pointer; }';
-        $str.= '.trace_source { background-color:#fff; padding: 8px; display:none; }';
-        $str.= '</style>';
-        $str.= '<script>';
-        $str.= 'function codeview(id) {';
-        $str.= 'var target = document.getElementById(id);';
-        $str.= 'var isopen = target.style.display == "block";';
-        $str.= 'target.style.display = isopen ? "none" : "block";';
-        $str.= '}';
-        $str.= '</script>';        
-		$str.= '</head>';
-		$str.= '<body>';
-		$str.= '<h1>{e}</h1>';
-		$str.= '<h3>Description: </h3>';
-        $str.= '<p style=color:maroon>{description}</p>';
-        $str.= '<h3>Backtrace: </h3>';
-        $str.= '<div class=source><code><pre>{detail}{stacktrace}{/detail}</pre></code></div>';
-        $str.= '<div class=version>';
-        $str.= '{footerinfo}';
-        $str.= '</div></body></html>';
         return $str;
     }
 

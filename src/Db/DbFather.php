@@ -105,10 +105,7 @@ abstract class DbFather
     {
         $dbtype = ucfirst($this->getDriverName());
         $classname = '\\Brisk\\Sql\\Select\\'. $dbtype;
-        if (!class_exists($classname)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
-        }
-        return new $classname();;
+        return new $classname();
     }
 
     /**
@@ -120,9 +117,6 @@ abstract class DbFather
     {
         $dbtype = ucfirst($this->getDriverName());
         $classname = '\\Brisk\\Sql\\Update\\'. $dbtype;
-        if (!class_exists($classname)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
-        }
         return new $classname();
     }
 
@@ -135,9 +129,6 @@ abstract class DbFather
     {
         $dbtype = ucfirst($this->getDriverName());
         $classname = '\\Brisk\\Sql\\Delete\\'. $dbtype;
-        if (!class_exists($classname)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
-        }
         return new $classname();
     }
 
@@ -150,9 +141,6 @@ abstract class DbFather
     {
         $dbtype = ucfirst($this->getDriverName());
         $classname = '\\Brisk\\Sql\\Insert\\'. $dbtype;
-        if (!class_exists($classname)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
-        }
         return new $classname();
     }
 

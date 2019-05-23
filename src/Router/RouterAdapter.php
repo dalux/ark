@@ -23,14 +23,10 @@ class RouterAdapter
             throw new ConfigurationException(Language::get('core.config_not_found', 'router/driver'));
         }
         $driver = App::init()->config->get('router/driver');
-        if (!class_exists($driver)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $driver));
-        }
         $instance = new $driver();
         if (!$instance instanceof RouterFather) {
             throw new RouterException(Language::get('core.class_extends_error', $driver, '\\Brisk\\Router\\RouterFather'));
         }
-        Trace::set('driver', ['router'=> $driver]);
         return $instance;
     }
 	

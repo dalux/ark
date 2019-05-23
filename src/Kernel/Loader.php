@@ -2,6 +2,7 @@
 
 namespace Brisk\Kernel;
 
+use Brisk\Exception\ClassNotFoundException;
 use Brisk\Exception\RuntimeException;
 
 class Loader
@@ -38,7 +39,7 @@ class Loader
      * @param string $path
      * @return void
      */
-	public static function setNameSpace($nspace, $path)
+	public static function addNameSpace($nspace, $path)
 	{
         $nspace = rtrim($nspace, '\\');
 		$nspath = [];
@@ -86,7 +87,7 @@ class Loader
     public static function autoLoad($classname)
     {
 	    if (!$path = self::findClass($classname)) {
-			throw new RuntimeException(Language::get('core.class_path_notfound', $classname));
+			throw new ClassNotFoundException(Language::get('core.class_not_found', $classname));
         }
 		include($path);
     }

@@ -14,7 +14,8 @@ class Server
      */
 	public static function isCli()
 	{
-		return php_sapi_name() == "cli";
+		// return php_sapi_name() == 'cli';
+		return isset($_SERVER['argv']) && isset($_SERVER['argc']);
 	}
 
     /**
@@ -27,9 +28,9 @@ class Server
     {
         $domain = strtolower($_SERVER['HTTP_HOST']);
 		if ($domain != 'localhost' && !preg_match('/\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}/i', $domain)) {
-			$pattern = '/^(.*?)\\.([^\\.]+?)\\.(dev|com|cn|net|com\\.cn|org|org\\.cn|cc|de|net\\.cn|co|tv|hk|me|info|name|biz|so|mobi|gov\\.cn|wang)?$/i';
+			$pattern = '/^(.*?)\\.([^\\.]+?)\\.((dev|com|cn|net|com|org|org|cc|de|net|co|tv|hk|me|info|name|biz|so|mobi|gov|wang)(\\.[a-zA-Z]+)?)$/i';
 			$matches = [];
-			$matched = preg_match_all($pattern, $domain, $matches);
+            $matched = preg_match_all($pattern, $domain, $matches);
 			if ($reduce && $matched > 0) {
 				return sprintf('%s.%s', $matches[2][0], $matches[3][0]);
 			}
@@ -60,7 +61,6 @@ class Server
 		$data = $_GET;
 		$argv = $_SERVER['argv'];
 		array_shift($argv);
-		$url_defined = false;
         foreach ($argv as $arg) {
 			if (substr($arg, 0, 2) != '--') {
 				continue;
@@ -69,21 +69,24 @@ class Server
 			$key = substr($arg, 0, strpos($arg, '='));
 			$val = substr($arg, (strpos($arg, '=') + 1));
 			if ($key == 'url') {
-				$info = parse_url($val);
-				$_SERVER['HTTP_HOST'] = $info['host'];
-				$_SERVER['REQUEST_URI'] = $info['path'];
-				if ($info['query'] != '') {
-					$_SERVER['REQUEST_URI'] = $info['path']. '?'. $info['query'];
-				}
-				$url_defined = true;
+                $info = parse_url($val);
+                $_SERVER['HTTP_HOST'] = $info['host'];
+                $_SERVER['REQUEST_URI'] = $info['path'];
+                if ($info['query'] != '') {
+                    $_SERVER['REQUEST_URI'] = $info['path'] . '?' . $info['query'];
+                }
+            } elseif ($key == 'domain') {
+                $_SERVER['HTTP_HOST'] = $val;
+            } elseif ($key == 'uri') {
+			    $_SERVER['REQUEST_URI'] = $val;
 			} else {
 				$data[$key] = $val;
 			}
 		}
-		if (!$url_defined) {
-			throw new RuntimeException(Language::get('core.cli_parameter_missing', 'url'));
-		}
-		Request::setData($data);
+        if (!isset($_SERVER['HTTP_HOST']) || !isset($_SERVER['REQUEST_URI'])) {
+            throw new RuntimeException(Language::get('core.cli_parameter_missing', 'url|domain|uri'));
+        }
+		Request::ready($data);
 	}
 
 }

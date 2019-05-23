@@ -6,40 +6,41 @@ use Brisk\Kernel\Language;
 use Brisk\Cache\CacheProxy;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Toolkit;
 
 class DQuery
 {
 
     /**
+     * @var DbFather
+     */
+    private $_conn = null;
+
+    /**
      * @var string
      */
-    protected $_tb;
+    private $_tb;
 
     /**
      * @var int
      */
-    protected $_expire;
+    private $_expire;
 
     /**
      * @var string
      */
-    protected $_cache_name;
+    private $_cache_name;
 
     /**
      * @var CacheProxy
      */
-    protected $_proxy;
-
-    /**
-     * @var DbFather
-     */
-    private static $_conn = null;
+    private $_proxy;
 
     /**
      * @var array
      */
-    protected $_where_mark = [
-		'='         => ' = ',
+    private $_where_mark = [
+        '='         => ' = ',
         'EQ'        => ' = ',
         '!='        => ' != ',
         'NEQ'       => ' != ',
@@ -58,17 +59,18 @@ class DQuery
         'NOTIN'     => ' NOT IN ',
         'IS'        => ' IS ',
         'ISNOT'     => ' IS NOT '
-	];
+    ];
 
     /**
      * Setting database connection objects
      *
      * @param DbFather $conn
-     * @return void
+     * @param null $table
+     * @return $this
      */
-	public static function setConnection(DbFather $conn)
+    public static function open(DbFather $conn, $table = null)
     {
-        self::$_conn = $conn;
+        return new self($conn, $table);
     }
 
     /**
@@ -76,20 +78,22 @@ class DQuery
      *
      * @return DbFather
      */
-    public static function getConnection()
+    public function getConn()
     {
-        return self::$_conn;
+        return $this->_conn;
     }
 
     /**
      * Construct
      *
-     * @param string $tb
+     * @param DbFather $conn
+     * @param null $table
      */
-    private function __construct($tb)
+    private function __construct(DbFather $conn, $table = null)
     {
-        $this->_tb = $tb;
-        if (is_null(self::$_conn)) {
+        $this->_conn = $conn;
+        $this->_tb = $table;
+        if (is_null($this->_conn)) {
             throw new RuntimeException(Language::get('db.invalid_connection_object'));
         }
     }
@@ -100,9 +104,10 @@ class DQuery
      * @param string tb
      * @return DQuery
      */
-    public static function init($tb)
+    public function table($tb)
     {
-        return new DQuery($tb);
+        $this->_tb = $tb;
+        return $this;
     }
 
     /**
@@ -130,7 +135,7 @@ class DQuery
      */
     public function getLastInsertId($seq = null)
     {
-        return self::$_conn->lastInsertId($seq);
+        return $this->_conn->lastInsertId($seq);
     }
 
     /**
@@ -140,7 +145,7 @@ class DQuery
      */
     public function getLastRowCount()
     {
-        return self::$_conn->lastRowCount();
+        return $this->_conn->lastRowCount();
     }
 
     /**
@@ -152,8 +157,11 @@ class DQuery
      */
     public function insert(array $data)
     {
-        $insert = self::$_conn->insert()->into($this->_tb, $data);
-		return self::$_conn->query($insert->getRealSQL());
+        if (!$this->_tb) {
+            throw new RuntimeException(Language::get('db.invalid_table_name'));
+        }
+        $insert = $this->_conn->insert()->into($this->_tb, $data);
+        return $this->_conn->query($insert->getRealSQL());
     }
 
     /**
@@ -165,7 +173,10 @@ class DQuery
      */
     public function update(array $data, array $condition)
     {
-        $update = self::$_conn->update()->set($this->_tb, $data);
+        if (!$this->_tb) {
+            throw new RuntimeException(Language::get('db.invalid_table_name'));
+        }
+        $update = $this->_conn->update()->set($this->_tb, $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -186,7 +197,7 @@ class DQuery
             }
             $update->whereIn($k, $v);
         }
-        return self::$_conn->query($update->getRealSQL());
+        return $this->_conn->query($update->getRealSQL());
     }
 
     /**
@@ -197,7 +208,10 @@ class DQuery
      */
     public function delete(array $condition)
     {
-        $delete = self::$_conn->delete()->from($this->_tb);
+        if (!$this->_tb) {
+            throw new RuntimeException(Language::get('db.invalid_table_name'));
+        }
+        $delete = $this->_conn->delete()->from($this->_tb);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -218,7 +232,7 @@ class DQuery
             }
             $delete->whereIn($k, $v);
         }
-        return self::$_conn->query($delete->getRealSQL());
+        return $this->_conn->query($delete->getRealSQL());
     }
 
     /**
@@ -230,7 +244,10 @@ class DQuery
      */
     public function fetchRow(array $condition, array $fields = ['*'])
     {
-        $select = self::$_conn->select()->from($this->_tb, $fields);
+        if (!$this->_tb) {
+            throw new RuntimeException(Language::get('db.invalid_table_name'));
+        }
+        $select = $this->_conn->select()->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -252,9 +269,9 @@ class DQuery
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy(self::$_conn, 'fetchRow', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
+            return $this->_proxy->doProxy($this->_conn, 'fetchRow', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
-        return self::$_conn->fetchRow($select->getRealSQL());
+        return $this->_conn->fetchRow($select->getRealSQL());
     }
 
     /**
@@ -266,7 +283,10 @@ class DQuery
      */
     public function fetchOne(array $condition = [], array $fields = ['*'])
     {
-        $select = self::$_conn->select()->from($this->_tb, $fields);
+        if (!$this->_tb) {
+            throw new RuntimeException(Language::get('db.invalid_table_name'));
+        }
+        $select = $this->_conn->select()->from($this->_tb, $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -288,9 +308,9 @@ class DQuery
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy(self::$_conn, 'fetchOne', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
+            return $this->_proxy->doProxy($this->_conn, 'fetchOne', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
-        return self::$_conn->fetchOne($select->getRealSQL());
+        return $this->_conn->fetchOne($select->getRealSQL());
     }
 
     /**
@@ -305,9 +325,14 @@ class DQuery
      */
     public function fetchAll(array $condition = [], array $order = [], $count = 0, $offset = 0, array $fields = ['*'])
     {
-        $select = self::$_conn->select()->from($this->_tb, $fields)->limit($count, $offset);
-        foreach ($order as $k=> $v) {
-            $select->order($k, $v);
+        if (!$this->_tb) {
+            throw new RuntimeException(Language::get('db.invalid_table_name'));
+        }
+        $select = $this->_conn->select()->from($this->_tb, $fields)->limit($count, $offset);
+        if(!is_null($order) && !empty($order)){
+            foreach ($order as $k=> $v) {
+                $select->order($k, $v);
+            }
         }
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
@@ -330,9 +355,9 @@ class DQuery
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy(self::$_conn, 'fetchAll', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
+            return $this->_proxy->doProxy($this->_conn, 'fetchAll', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
-        return self::$_conn->fetchAll($select->getRealSQL());
+        return $this->_conn->fetchAll($select->getRealSQL());
     }
 
 }

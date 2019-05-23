@@ -30,14 +30,10 @@ class MongoAdapter
         }
         $driver = App::init()->config->get($path. '/driver');
         $option = App::init()->config->get($path. '/option');
-        if (!class_exists($driver)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $driver));
-        }
 		$instance = new $driver($option['config'], $option['setting']);
         if (!$instance instanceof MongoFather) {
             throw new RuntimeException(Language::get('core.class_extends_error', $driver, '\\Brisk\\Vendor\\Mongo\\MongoFather'));
         }
-        Trace::set('driver', ['database'=> sprintf('%s[%s]', $name, $driver)]);
         return $instance;
     }
 

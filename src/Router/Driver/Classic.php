@@ -10,7 +10,6 @@ use Brisk\Exception\ControllerException;
 use Brisk\Exception\RouterException;
 use Brisk\Exception\ConfigurationException;
 use Brisk\Exception\ActionNotFoundException;
-use Brisk\Exception\ControllerNotFoundException;
 
 class Classic extends RouterFather
 {
@@ -18,42 +17,47 @@ class Classic extends RouterFather
     /**
      * @var bool
      */
-	private static $_module_support = false;
+	private $_module_support = false;
 
     /**
      * @var array
      */
-	private static $_rules = [];
+	private $_rules = [];
 
     /**
      * @var string
      */
-	private static $_auto_method = '__init';
+	private $_auto_method = '__init';
 
     /**
      * @var string
      */
-	private static $_default_module = 'Index';
+	private $_default_module = 'Index';
 
     /**
      * @var string
      */
-	private static $_default_controller = 'Index';
+	private $_default_controller = 'Index';
 
     /**
      * @var string
      */
-	private static $_default_action = 'index';
+	private $_default_action = 'index';
 
     /**
      * @var string
      */
-	private static $_url_suffix = '.html';
+	private $_url_suffix = '.html';
 
     /**
      * @var array
      */
-	private static $_interceptors = [];
+	private $_interceptors = [];
+
+    /**
+     * @var string
+     */
+	private $_request;
 
     /**
      * @var string
@@ -79,68 +83,60 @@ class Classic extends RouterFather
      * Turn on routing module support
      *
      * @param string $default_module
-     * @return void
+     * @return Classic
      */
-	public static function openModuleSupport($default_module = null)
+	public function openModuleSupport($default_module = null)
 	{
-		self::$_module_support = true;
+		$this->_module_support = true;
 		if ($default_module) {
-			self::$_default_module = $default_module;
+			$this->_default_module = $default_module;
 		}
+		return $this;
 	}
+
+    /**
+     * 获取当前请求URI
+     *
+     * @return string
+     */
+	public function getRequest()
+    {
+        return $this->_request;
+    }
+
+    /**
+     * 设置当前请求URI
+     *
+     * @param $request
+     * @return $this
+     */
+    public function setRequest($request)
+    {
+        $this->_request = $request;
+        return $this;
+    }
+
+    /**
+     * 获取当前请求对应的类命名空间
+     *
+     * @return string
+     */
+    public function getNameSpace()
+    {
+        return $this->_namespace;
+    }
 
     /**
      * Adding routing rewriting rules
      *
      * @param string $rule
      * @param mixed $redirect
-     * @return void
+     * @return Classic
      */
-	public static function addRule($rule, callable $redirect)
+	public function addRule($rule, callable $redirect)
 	{
-		self::$_rules[$rule] = $redirect;
-	}
-
-    /**
-     * Add routing interceptors
-     *
-     * @param string $ns_space
-     * @param callable $operator
-     * @return void
-     */
-	public static function addInterceptor($ns_space, callable $operator)
-	{
-		$ns_space = ltrim($ns_space, '\\');
-		self::$_interceptors[$ns_space] = $operator;
-	}
-
-    /**
-     * Get routing interceptors
-     *
-     * @param string ns_space
-     * @return array
-     */
-	public static function getInterceptors($ns_space)
-	{
-		$ns_space = ltrim($ns_space, '\\');
-		$result = [];
-		foreach (self::$_interceptors as $key=> $val) {
-			if (strpos($ns_space, $key) !== false) {
-				$result[$key] = $val;
-			}
-		}
-		//按subspace长短来重新排序
-		if (count($result)>0) {
-			uksort($result, function($a, $b) {
-                $len_a = strlen($a);
-                $len_b = strlen($b);
-                if ($len_a == $len_b) {
-                    return 0;
-                }
-                return $len_a > $len_b ? 1 : -1;
-            });
-		}
-		return $result;
+		$this->_rules[$rule] = $redirect;
+		return $this;
 	}
 
     /**
@@ -160,13 +156,16 @@ class Classic extends RouterFather
 		$this->_module = $result['module'];
 		$this->_controller = $result['controller'];
 		$this->_action = $result['action'];
+        $request = '/'. $this->_controller. '/'. $this->_action;
 		$params = $result['params'];
-		$ns_space = $base_namespace;
+        $namespace = $base_namespace;
 		if ($this->_module) {
-		    $ns_space = $ns_space. '\\'. ucfirst($this->_module);
+            $namespace = $namespace. '\\'. ucfirst($this->_module);
+		    $request = '/'. $this->_module. $request;
 		}
-		$ns_space = $ns_space. '\\'. ucfirst($this->_controller);
-		$this->_namespace = $ns_space;
+        $this->setRequest($request);
+        $namespace = $namespace. '\\'. ucfirst($this->_controller);
+		$this->_namespace = $namespace;
 		//请求数据初始化完成
         Request::ready($params);
 	}
@@ -174,52 +173,38 @@ class Classic extends RouterFather
     /**
      * Routing path distribution
      *
-     * @return void
+     * @return string
      * @throws \ReflectionException
      */
 	public function dispatch()
 	{
-		$ns_space = $this->_namespace;
-		if (!class_exists($ns_space)) {
-			throw new ControllerNotFoundException(Language::get('router.controller_not_found', $ns_space));
-		}
+		$namespace = $this->_namespace;
         //是否被保护对象
-        $ref = new \ReflectionClass($ns_space);
+        $ref = new \ReflectionClass($namespace);
         if ($ref->isAbstract()) {
-            throw new ControllerException(Language::get('router.controller_is_protected', $ns_space));
+            throw new ControllerException(Language::get('router.controller_is_protected', $namespace));
         }
-		//实现拦截器功能
-		$interceptors = self::getInterceptors($ns_space);
-		if (count($interceptors) > 0) {
-			foreach ($interceptors as $op) {
-				$result = call_user_func_array($op, []);
-				if (is_string($result)) {
-					echo $result;
-					exit;
-				}
-			}
-		}
         //实例化最终控制器对象
-		$instance = new $ns_space();
+		$instance = new $namespace();
 		$action = $this->_action;
-		$option = App::init()->config->get('router/option');
-		$auto_method = self::$_auto_method;
-        if (isset($option['auto_method'])) {
-            $auto_method = $option['auto_method'];
-        }
         if (!method_exists($instance, $action)) {
             throw new ActionNotFoundException(Language::get('router.action_not_found', $action));
         }
         $output = null;
-        //自动化类
+		//自动化类
+		$option = App::init()->config->get('router/option');
+		$auto_method = $this->_auto_method;
+        if (isset($option['auto_method'])) {
+            $auto_method = $option['auto_method'];
+        }
         if (method_exists($instance, $auto_method)) {
-            $output = $instance->$auto_method();
-        }
+			$output = $instance->$auto_method();
+			if (!is_null($output)) {
+				return $output;
+			}
+		}
         //目标控制器行为
-        if (is_null($output)) {
-            $output = $instance->$action();
-        }
-        echo $output;
+        return $instance->$action();
 	}
 
     /**
@@ -235,11 +220,11 @@ class Classic extends RouterFather
 		//如果为空url串，则返回默认值
 		if ($uri == '' || $uri == '/') {
 			$module = '';
-			if (self::$_module_support) {
-				$module = self::$_default_module;
+			if ($this->_module_support) {
+				$module = $this->_default_module;
 			}
-			$controller = self::$_default_controller;
-			$action = self::$_default_action;
+			$controller = $this->_default_controller;
+			$action = $this->_default_action;
 			if (isset($config['default_controller'])) {
 				$controller = $config['default_controller'];
 			}
@@ -253,7 +238,7 @@ class Classic extends RouterFather
 				'params'=> []
 			];
 		}
-		$url_suffix = self::$_url_suffix;
+		$url_suffix = $this->_url_suffix;
 		if (isset($config['url_suffix'])) {
 			$url_suffix = $config['url_suffix'];
 		}
@@ -268,16 +253,16 @@ class Classic extends RouterFather
 		$uri = preg_replace('~'. $url_suffix. '$~i', '', $uri);
 		$uri_items = explode('/', $uri);
 		$module = '';
-		if (self::$_module_support) {
+		if ($this->_module_support) {
 			$module = array_shift($uri_items);
 		}
 		$controller = array_shift($uri_items);
 		if ($controller == '') {
-			$controller = self::$_default_controller;
+			$controller = $this->_default_controller;
 		}
 		$action = array_shift($uri_items);
 		if ($action == '') {
-			$action = self::$_default_action;
+			$action = $this->_default_action;
 		}
 		$result = [];
 		if (count($uri_items) > 0) {
@@ -312,7 +297,7 @@ class Classic extends RouterFather
      */
     private function _rewrite($uri)
     {
-        foreach (self::$_rules as $key=> $val) {
+        foreach ($this->_rules as $key=> $val) {
             $key = '~'. $key. '~i';
             if (preg_match($key, $uri)) {
                 $uri = preg_replace_callback($key, $val, $uri);

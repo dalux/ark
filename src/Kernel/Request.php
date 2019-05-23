@@ -8,7 +8,6 @@ class Request
 {
 
 	private static $_ready      = false;
-	private static $_data       = [];
 	private static $_request    = [];
 	private static $_get        = [];
 	private static $_post       = [];
@@ -22,8 +21,7 @@ class Request
      */
     public static function ready(array $data)
     {
-        self::$_data = array_merge(self::$_data, $data);
-        $data = ['get'=> self::$_data, 'post'=> $_POST, 'cookie'=> $_COOKIE];
+        $data = ['get'=> $data, 'post'=> $_POST, 'cookie'=> $_COOKIE];
         $data = Event::trigger('event.request.ready', $data);
         $_GET = self::$_get = $data['get'];
         $_POST = self::$_post = $data['post'];
@@ -76,13 +74,14 @@ class Request
 		isset($_SERVER['HTTP_FORWARDED'])       && $ips[] = $_SERVER['HTTP_FORWARDED'];
 		isset($_SERVER['REMOTE_ADDR'])          && $ips[] = $_SERVER['REMOTE_ADDR'];
 		$ip = '';
-		$ips = array_filter($ips);
-		while (true) {
-			$ip = array_shift($ips);
-			if (false !== ip2long($ip)) {
-				break;
-			}
-		}
+        if ($ips = array_filter($ips)) {
+            while (true) {
+                $ip = array_shift($ips);
+                if (false !== ip2long($ip)) {
+                    break;
+                }
+            }
+        }
         return $convert ? sprintf('%u', ip2long($ip)) : $ip;
     }
 
@@ -164,6 +163,35 @@ class Request
 		return isset(self::$_request[$name])
             ? self::$_request[$name]
             : $default;
+    }
+
+    /**
+     * 设置request请求数据
+     *
+     * @param array $data
+     * @param string $type
+     */
+    public static function setData($data, $type = 'get')
+    {
+        if (!self::$_ready) {
+            throw new RuntimeException(Language::get('core.request_not_ready'));
+        }
+        $type = strtolower($type);
+        if (!in_array($type, ['get', 'post', 'cookie'])) {
+            throw new RuntimeException(Language::get('core.request_type_nosupport', $type));
+        }
+        switch ($type) {
+            case 'get':
+                $_GET = self::$_get = $data;
+                break;
+            case 'post':
+                $_POST = self::$_post = $data;
+                break;
+            case 'cookie':
+                $_COOKIE = self::$_cookie = $data;
+                break;
+        }
+        $_REQUEST = self::$_request = array_merge(self::$_get, self::$_post, self::$_cookie);
     }
 
 }

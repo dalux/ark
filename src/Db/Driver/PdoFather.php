@@ -33,13 +33,26 @@ abstract class PdoFather extends DbFather
 	public function __construct($dsn, $username, $password, array $option = [])
 	{
 		try {
+		    $data = [
+		        'object'    => $this,
+                'dsn'       => $dsn,
+                'username'  => $username,
+                'password'  => $password,
+                'option'    => $option,
+            ];
+		    $data = Event::trigger('event.dbconnect.before', $data);
             Timer::mark('db_connect_begin');
-            $instance = new \PDO($dsn, $username, $password, $option);
+            $instance = new \PDO($data['dsn'], $data['username'], $data['password'], $data['option']);
             Timer::mark('db_connect_end');
             $data = [
-                'container'=> $this,
-                'instance'=> $instance,
-                'driver'=> $instance->getAttribute(\PDO::ATTR_DRIVER_NAME)
+                'object'    => $this,
+                'dsn'       => $dsn,
+                'username'  => $username,
+                'password'  => $password,
+                'option'    => $option,
+                'instance'  => $instance,
+                'driver'    => $instance->getAttribute(\PDO::ATTR_DRIVER_NAME),
+                'timeused'  => Timer::lastUsed()
             ];
             $data = Event::trigger('event.dbconnect.finish', $data);
             $this->_instance = $data['instance'];
@@ -58,15 +71,20 @@ abstract class PdoFather extends DbFather
     public function query($sql, array $bind = [])
     {
 		$data = [
-            'method'=> __METHOD__,
-            'sql'=> $sql,
-            'bind'=> $bind,
-            'driver'=> $this->getDriverName()
+            'object'    => $this,
+            'method'    => __METHOD__,
+            'sql'       => $sql,
+            'bind'      => $bind,
+            'driver'    => $this->getDriverName()
         ];
-        $data = Event::trigger('event.query.before', $data);
+        $data = Event::trigger('event.dbquery.before', $data);
+        Timer::mark('db_query_before');
 		$smt = $this->_query($data['sql'], $data['bind']);
+		Timer::mark('db_query_finish');
         $data['result'] = true;
-        $data = Event::trigger('event.query.finish', $data);
+        $data['query'] = $smt->queryString;
+        $data['timeused'] = Timer::lastUsed();
+        $data = Event::trigger('event.dbquery.finish', $data);
         return $data['result'];
     }
 
@@ -80,16 +98,21 @@ abstract class PdoFather extends DbFather
     public function fetchAll($sql, array $bind = [])
     {
 		$data = [
-            'method'=> __METHOD__,
-            'sql'=> $sql,
-            'bind'=> $bind,
-            'driver'=> $this->getDriverName()
+            'object'    => $this,
+            'method'    => __METHOD__,
+            'sql'       => $sql,
+            'bind'      => $bind,
+            'driver'    => $this->getDriverName()
         ];
-        $data = Event::trigger('event.query.before', $data);
+        $data = Event::trigger('event.dbquery.before', $data);
+        Timer::mark('db_query_before');
         $smt = $this->_query($data['sql'], $data['bind']);
         $result = $smt->fetchAll();
+        Timer::mark('db_query_finish');
         $data['result'] = $result;
-        $data = Event::trigger('event.query.finish', $data);
+        $data['query'] = $smt->queryString;
+        $data['timeused'] = Timer::lastUsed();
+        $data = Event::trigger('event.dbquery.finish', $data);
         return $data['result'];
     }
 
@@ -103,15 +126,20 @@ abstract class PdoFather extends DbFather
     public function fetchOne($sql, array $bind = [])
     {
         $data = [
-            'method'=> __METHOD__,
-            'sql'=> $sql,
-            'bind'=> $bind,
-            'driver'=> $this->getDriverName()
+            'object'    => $this,
+            'method'    => __METHOD__,
+            'sql'       => $sql,
+            'bind'      => $bind,
+            'driver'    => $this->getDriverName()
         ];
-        $data = Event::trigger('event.query.before', $data);
+        $data = Event::trigger('event.dbquery.before', $data);
+        Timer::mark('db_query_before');
         $smt = $this->_query($data['sql'], $data['bind']);
         $data['result'] = $smt->fetchColumn(0);
-        $data = Event::trigger('event.query.finish', $data);
+        Timer::mark('db_query_finish');
+        $data['query'] = $smt->queryString;
+        $data['timeused'] = Timer::lastUsed();
+        $data = Event::trigger('event.dbquery.finish', $data);
         return $data['result'];
     }
 
@@ -125,15 +153,20 @@ abstract class PdoFather extends DbFather
     public function fetchRow($sql, array $bind = [])
     {
 		$data = [
-            'method'=> __METHOD__,
-            'sql'=> $sql,
-            'bind'=> $bind,
-            'driver'=> $this->getDriverName()
+            'object'    => $this,
+            'method'    => __METHOD__,
+            'sql'       => $sql,
+            'bind'      => $bind,
+            'driver'    => $this->getDriverName()
         ];
-        $data = Event::trigger('event.query.before', $data);
+        $data = Event::trigger('event.dbquery.before', $data);
+        Timer::mark('db_query_before');
         $smt = $this->_query($data['sql'], $data['bind']);
         $data['result'] = $smt->fetch();
-        $data = Event::trigger('event.query.finish', $data);
+        Timer::mark('db_query_finish');
+        $data['query'] = $smt->queryString;
+        $data['timeused'] = Timer::lastUsed();
+        $data = Event::trigger('event.dbquery.finish', $data);
         return $data['result'];
     }
 
@@ -228,7 +261,6 @@ abstract class PdoFather extends DbFather
     private function _query($sql, array $bind = [])
     {
         try {
-            Timer::mark('db_query_begin');
 			$smt = $this->_instance->prepare($sql);
             if (count($bind) > 0) {
                 foreach ($bind as $key=> $val) {
@@ -244,16 +276,16 @@ abstract class PdoFather extends DbFather
             }
             $smt->setFetchMode(\PDO::FETCH_ASSOC);
             $this->_row_count = $smt->rowCount();
-            Timer::mark('db_query_end');
-            Trace::set('database', [$smt->queryString, sprintf('%.4f', Timer::lastUsed())]);
             return $smt;
         } catch (\PDOException $e) {
             $data = [
-                'sql'=> $smt->queryString,
-                'error'=> $e->getMessage(),
-                'driver'=> $this->getDriverName()
+                'object'    => $this,
+                'method'    => __METHOD__,
+                'sql'       => $smt->queryString,
+                'error'     => $e->getMessage(),
+                'driver'    => $this->getDriverName()
             ];
-            $data = Event::trigger('event.query.failed', $data);
+            $data = Event::trigger('event.dbquery.failed', $data);
             throw new PdoException($data['error']);
         }
     }

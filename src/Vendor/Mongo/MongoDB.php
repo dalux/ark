@@ -22,7 +22,7 @@ class MongoDB extends MongoFather
             if (!class_exists('\MongoDB\Client', false)) {
                 include_once Loader::realPath('*/Vendor/Mongo/MongoDB/Client.php');
                 include_once Loader::realPath('*/Vendor/Mongo/MongoDB/functions.php');
-                DLoader::addAutoLoader(function($classname) {
+                spl_autoload_register(function($classname) {
                     $classname = ltrim($classname, '\\');
                     if (preg_match('/^MongoDB\\\\/', $classname)) {
                         $classname = preg_replace('/^MongoDB\\\\/', '', $classname);
@@ -53,7 +53,7 @@ class MongoDB extends MongoFather
             $result = $this->_mongo
                 ->selectCollection($this->_db, $this->_collection)
                 ->findOne($condition);
-            return $result instanceof ArrayObject 
+            return $result instanceof \ArrayObject
                 ? $result->getArrayCopy()
                 : array();
         } catch (Exception $e) {
@@ -82,7 +82,7 @@ class MongoDB extends MongoFather
                 ->find($condition, $option);
             $result = array();
             foreach ($cursor as $val) {
-                if ($val instanceof ArrayObject) {
+                if ($val instanceof \ArrayObject) {
                     $result[] = $val->getArrayCopy();
                 }
             }

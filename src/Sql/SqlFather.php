@@ -39,15 +39,18 @@ abstract class SqlFather
      */
     public function quote($value)
     {
-        if (is_array($value)) {
+        if (is_int($value) || is_float($value)
+                || preg_match('/^\\{\\{.*?\\}\\}$/', $value)
+                || preg_match('/^[a-zA-Z0-9\-\_]*?\(.*?\)$/', $value)) {
+            return $value;
+        } elseif (is_array($value)) {
             foreach ($value as $key=> $val) {
 				$value[$key] = $this->quote($val);
 			}
             return implode(',', $value);
-        } elseif (is_int($value) || is_float($value)) {
-            return $value;
+        } else {
+            return '\'' . addslashes($value) . '\'';
         }
-        return '\'' . addslashes($value) . '\'';
     }
 
     /**
@@ -260,7 +263,7 @@ abstract class SqlFather
      *
      * @return SqlFather
      */
-    public abstract function compile();
+    protected abstract function compile();
 
     /**
      *
@@ -271,6 +274,15 @@ abstract class SqlFather
      */
     protected function _parseExpr($expr, $value = null)
     {
+        //特殊处理
+        if (is_null($value)
+                || is_array($value) && count($value) == 0) {
+            if (preg_match('/^\\{\\{.*?\\}\\}/', $expr)
+                    || preg_match('/.*?\(.*?\)/', $expr)) {
+                return str_replace(['{{', '}}'], '', $expr);
+            }
+            return $expr;
+        }
 		$matches = [];
 		$is_match = preg_match_all('/(\\?|\\:[\\w\\d]+)/i', $expr, $matches);
         if ($is_match > 0) {

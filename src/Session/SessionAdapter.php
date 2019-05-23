@@ -27,14 +27,10 @@ class SessionAdapter
         if (App::init()->config->hasKey('session/option')) {
             $option = App::init()->config->get('session/option');
         }
-        if (!class_exists($driver)) {
-            throw new ClassNotFoundException(Language::get('core.class_not_found', $driver));
-        }
         $instance = new $driver($option);
         if (!$instance instanceof SessionFather) {
             throw new RuntimeException(Language::get('core.class_extends_error', $driver, '\\Brisk\\Session\\SessionFather'));
         }
-        Trace::set('driver', ['session'=> $driver]);
         return $instance;
     }
 
