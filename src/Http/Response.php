@@ -5,8 +5,6 @@ namespace Brisk\Http;
 class Response
 {
 
-    private static $_header     = [];
-    private static $_cookie     = [];
     private static $_end        = false;
     private static $_status     = [
         100 => 'Continue',
@@ -79,7 +77,7 @@ class Response
     */
     public static function setHeader(string $header, bool $replace = true)
     {
-        self::$_header[] = ['header'=> $header, 'replace'=> $replace];
+        header($header, $replace);
     }
 
     /**
@@ -96,15 +94,7 @@ class Response
      */
     public static function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
     {
-        self::$_cookie[] = [
-            'name'      => $name,
-            'value'     => $value,
-            'expire'    => $expire,
-            'path'      => $path,
-            'domain'    => $domain,
-            'httponly'  => $httponly,
-            'secure'    => $secure
-        ];
+        setcookie($name, $value, time() + $expire, $path, $domain, $secure, $httponly);
     }
 
     /**
@@ -174,37 +164,11 @@ class Response
     }
 
     /**
-     * send header and content
-     * 
-     * @return void
-     */
-    public static function send()
-    {
-        self::sendHeader();
-        self::sendContent();
-    }
-
-    /**
-     * send header and cookie to client
-     * 
-     * @return void
-     */
-    public static function sendHeader()
-    {
-        foreach (self::$_header as $v) {
-            header($v['header'], $v['replace']);
-        }
-        foreach (self::$_cookie as $v) {
-            setcookie($v['name'], $v['value'], time() + $v['expire'], $v['path'], $v['domain'], $v['secure'], $v['httponly']);
-        }
-    }
-
-    /**
      * send content to client
      * 
      * @return void
      */
-    public static function sendContent()
+    public static function send()
     {
         if (self::$_content) {
             echo self::$_content;

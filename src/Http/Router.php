@@ -17,16 +17,16 @@ class Router
     /**
      * @var string
      */
-    private $_route;
+    private static $_route;
 
     /**
      * get current route
      *
      * @return string
      */
-    public function getRoute()
+    public static function getRoute()
     {
-        return $this->_route;
+        return self::$_route;
     }
 
     /**
@@ -52,11 +52,11 @@ class Router
     }
 
     /**
-     * router ready
+     * Routing dispatch
      *
      * @return void
      */
-    public function ready()
+    public static function dispatch()
     {
         if (!$uri = $_SERVER['REQUEST_URI']) {
             throw new RuntimeException(Language::format('router.invalid_require_uri'));
@@ -81,16 +81,8 @@ class Router
         $data = ['uri'=> $uri];
         $data = Event::fire('event.router.ready', $data);
         $uri = $data['uri'];
-        $this->_route = $uri;
-    }
-
-    /**
-     * Routing dispatch
-     *
-     * @return Response
-     */
-    public function dispatch()
-    {
+        self::$_route = $uri;
+        //遍历规则
         foreach (self::$_rules as $key=> $val) {
             if (strpos($key, '{{') !== false && strpos($key, '}}') !== false) {
                 $pattern = preg_replace_callback('~/\\{\\{(.*?)\\}\\}~', function($matches) {
@@ -109,7 +101,7 @@ class Router
                         return sprintf('/(?P<%s>[^\\/]+?)', $result);
                     }
                 }, $key);
-                if (preg_match(sprintf('~^%s$~i', $pattern), $this->_route, $matches)) {
+                if (preg_match(sprintf('~^%s$~i', $pattern), self::$_route, $matches)) {
                     //如有别名，则加入_GET全局数组中
                     foreach ($matches as $k=> $v) {
                         if (is_string($k)) {
@@ -120,18 +112,18 @@ class Router
                     $callback = $val;
                     break;
                 }
-            } elseif (preg_match(sprintf('~^%s$~', $key), $this->_route, $matches)) {
+            } elseif (preg_match(sprintf('~^%s$~', $key), self::$_route, $matches)) {
                 $route = $key;
                 $callback = $val;
                 break;
             }
         }
         if (is_null($route)) {
-            throw new RuntimeException(Language::format('router.route_not_defined', $this->_route));
+            throw new RuntimeException(Language::format('router.route_not_defined', self::$_route));
         }
         Request::ready($_GET);
         //前置中间件
-        $before_middlewares = Middleware::get($this->_route, 'before');
+        $before_middlewares = Middleware::get(self::$_route, 'before');
         foreach ($before_middlewares as $middleware) {
             if (!is_callable($middleware)) {
                 continue;
@@ -147,7 +139,7 @@ class Router
             return;
         }
         //后置中间件
-        $after_middlewares = Middleware::get($this->_route, 'after');
+        $after_middlewares = Middleware::get(self::$_route, 'after');
         foreach ($after_middlewares as $middleware) {
             if (!is_callable($middleware)) {
                 continue;

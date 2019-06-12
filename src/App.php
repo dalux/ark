@@ -120,17 +120,11 @@ class App
         //监听系统启动就绪事件
         Event::fire('event.framework.ready');
         //路由
-        self::$_storage['router'] = [
-            'instance'  => new Router(),
-            'system'    => true
-        ];
-        $router = self::$_storage['router']['instance'];
-        //路由调度准备
-        $router->ready();
-        $router->dispatch();
-        if (!$retval) {
-            Response::send();
+        Router::dispatch();
+        if ($retval) {
+            return Response::getContent();
         }
+        Response::send();
     }
 
     /**
