@@ -2,7 +2,6 @@
 
 namespace Brisk\Sql;
 
-use Brisk\Toolkit;
 use Brisk\Language;
 use Brisk\Exception\SqlCompileException;
 
