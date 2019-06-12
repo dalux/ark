@@ -5,79 +5,68 @@ namespace Brisk\Http;
 class Response
 {
 
-    const FLAG_NEXT     = 1;
-    const FLAG_STOP     = 2;
-
-    private $_content   = '';
-    private $_flag;
-    private $_header    = [];
-    private $_cookie    = [];
-    private $_status    = [
-        100=> 'Continue',
-        101=> 'Switching Protocols',
-        200=> 'OK',
-        201=> 'Created',
-        202=> 'Accepted',
-        203=> 'Non-Authoritative Information',
-        204=> 'No Content',
-        205=> 'Reset Content',
-        206=> 'Partial Content',
-        300=> 'Multiple Choices',
-        301=> 'Moved Permanently',
-        302=> 'Found',
-        303=> 'See Other',
-        304=> 'Not Modified',
-        305=> 'Use Proxy',
-        306=> 'Unused',
-        307=> 'Temporary Redirect',
-        400=> 'Bad Request',
-        401=> 'Unauthorized',
-        402=> 'Payment Required',
-        403=> 'Forbidden',
-        404=> 'Not Found',
-        405=> 'Method Not Allowed',
-        406=> 'Not Acceptable',
-        407=> 'Proxy Authentication Required',
-        408=> 'Request Timeout',
-        409=> 'Conflict',
-        410=> 'Gone',
-        411=> 'Length Required',
-        412=> 'Precondition Failed',
-        413=> 'Request Entity Too Large',
-        414=> 'Request-URI Too Long',
-        415=> 'Unsupported Media Type',
-        416=> 'Requested Range Not Satisfiable',
-        417=> 'Expectation Failed',
-        500=> 'Internal Server Error',
-        501=> 'Not Implemented',
-        502=> 'Bad Gateway',
-        503=> 'Service Unavailable',
-        504=> 'Gateway Timeout',
-        505=> 'HTTP Version Not Supported'
+    private static $_header     = [];
+    private static $_cookie     = [];
+    private static $_end        = false;
+    private static $_status     = [
+        100 => 'Continue',
+        101 => 'Switching Protocols',
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        306 => 'Unused',
+        307 => 'Temporary Redirect',
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Request Entity Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported'
     ];
+    private static $_content;
 
     /**
     * set header parameter
     *
     * @param int code
     * @param string text
-    * @return Response
+    * @return void
     */
-    public function status(int $code, string $text = null)
+    public static function status(int $code, string $text = null)
     {
-        $status_code = 200;
-        if (isset($this->_status[$code])) {
-            $status_code = $code;
-        }
-        $status_text = $text;
-        if (is_null($text)) {
-            $status_text = $this->_status[$status_code];
-        }
+        $status_code = self::$_status[$code] ?? 200;
+        $status_text = is_null($text) ? self::$_status[$status_code] : $text;
         $protocol = $_SERVER['SERVER_PROTOCOL'];
-        if (is_null($protocol)) {
-            $protocol = 'HTTP/1.1';
-        }
-        return $this->addHeader($protocol. ' '. $status_code. ' '. $status_text);
+        is_null($protocol) && $protocol = 'HTTP/1.1';
+        self::setHeader($protocol. ' '. $status_code. ' '. $status_text);
     }
 
     /**
@@ -86,12 +75,11 @@ class Response
     * @param string var
     * @param mixed val
     * @param bool replace
-    * @return Response
+    * @return void
     */
-    public function addHeader(string $header, bool $replace = true)
+    public static function setHeader(string $header, bool $replace = true)
     {
-        $this->_header[] = ['header'=> $header, 'replace'=> $replace];
-        return $this;
+        self::$_header[] = ['header'=> $header, 'replace'=> $replace];
     }
 
     /**
@@ -104,11 +92,11 @@ class Response
      * @param string domain
      * @param bool httponly
      * @param bool secure
-     * @return Response
+     * @return void
      */
-    public function addCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
+    public static function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
     {
-        $this->_cookie[] = [
+        self::$_cookie[] = [
             'name'      => $name,
             'value'     => $value,
             'expire'    => $expire,
@@ -117,7 +105,6 @@ class Response
             'httponly'  => $httponly,
             'secure'    => $secure
         ];
-        return $this;
     }
 
     /**
@@ -125,15 +112,14 @@ class Response
      *
      * @return void
      */
-    public function setNoCache()
+    public static function noCache()
     {
-        $this->addHeader('Expires: Mon, 26 Jul 1999 01:00:00 GMT');
-        $this->addHeader('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
-        $this->addHeader('Cache-Control: no-store, no-cache, must-revalidate');
-        $this->addHeader('Cache-Control: post-check=0, pre-check=0', false);
-        $this->addHeader('Pragma: no-cache');
-        return $this;
-    }    
+        self::setHeader('Expires: Mon, 26 Jul 1999 01:00:00 GMT');
+        self::setHeader('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
+        self::setHeader('Cache-Control: no-store, no-cache, must-revalidate');
+        self::setHeader('Cache-Control: post-check=0, pre-check=0', false);
+        self::setHeader('Pragma: no-cache');
+    }
 
     /**
      * set expire time
@@ -141,72 +127,50 @@ class Response
      * @param int sec
      * @return void
      */
-    public function setExpires(int $sec = 3600)
+    public static function setExpires(int $sec = 3600)
     {
-        $this->addHeader('Expires: '. date('D, d M Y H:i:s', time() + $sec). ' GMT');
-        return $this;
+        self::setHeader('Expires: '. date('D, d M Y H:i:s', time() + $sec). ' GMT');
     }
     
     /**
-     * send end flag to top controller
+     * 设置响应结束标记
      * 
-     * @param string content
-     * @return Response
+     * @return void
      */
-    public function next(string $content = null)
+    public static function end()
     {
-        if (!is_null($content)) {
-            $this->_content = $content;
-        }
-        $this->_flag = self::FLAG_NEXT;
-        return $this;
+        self::$_end = true;
     }
 
     /**
-     * send break flag to top controller
+     * 响应是否已结束
      * 
-     * @param string content
-     * @return Response
+     * @return bool
      */
-    public function stop(string $content = null)
+    public static function isTerminated()
     {
-        if (!is_null($content)) {
-            $this->_content = $content;
-        }
-        $this->_flag = self::FLAG_STOP;
-        return $this;
+        return self::$_end;
     }
 
     /**
      * set output content
      * 
      * @param string content
-     * @return Response
+     * @return mixed
      */
-    public function setContent(string $content)
+    public static function setContent(string $content)
     {
-        $this->_content = $content;
-        return $this;
+        self::$_content = $content;
     }
 
     /**
-     * get flag
-     * 
-     * @return int
-     */
-    public function getFlag()
-    {
-        return $this->_flag;
-    }
-
-    /**
-     * get flag
+     * get output content
      * 
      * @return string
      */
-    public function getContent()
+    public static function getContent()
     {
-        return $this->_content;
+        return self::$_content;
     }
 
     /**
@@ -214,10 +178,10 @@ class Response
      * 
      * @return void
      */
-    public function send()
+    public static function send()
     {
-        $this->sendHeader();
-        $this->sendContent();
+        self::sendHeader();
+        self::sendContent();
     }
 
     /**
@@ -225,15 +189,13 @@ class Response
      * 
      * @return void
      */
-    public function sendHeader()
+    public static function sendHeader()
     {
-        if (!is_null($this->_flag)) {
-            foreach ($this->_header as $v) {
-                header($v['header'], $v['replace']);
-            }
-            foreach ($this->_cookie as $v) {
-                setcookie($v['name'], $v['value'], time() + $v['expire'], $v['path'], $v['domain'], $v['secure'], $v['httponly']);
-            }
+        foreach (self::$_header as $v) {
+            header($v['header'], $v['replace']);
+        }
+        foreach (self::$_cookie as $v) {
+            setcookie($v['name'], $v['value'], time() + $v['expire'], $v['path'], $v['domain'], $v['secure'], $v['httponly']);
         }
     }
 
@@ -242,10 +204,10 @@ class Response
      * 
      * @return void
      */
-    public function sendContent()
+    public static function sendContent()
     {
-        if ($this->_content) {
-            echo $this->_content;
+        if (self::$_content) {
+            echo self::$_content;
         }
     }
 

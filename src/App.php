@@ -6,7 +6,6 @@ use Brisk\Http\Env;
 use Brisk\Http\Router;
 use Brisk\Http\Response;
 use Brisk\Exception\RuntimeException;
-use Brisk\Exception\ConfigurationException;
 
 class App
 {
@@ -104,7 +103,7 @@ class App
         //配置文件
         $config = call_user_func_array($config, []);
         if (!is_array($config)) {
-            throw new ConfigurationException(Language::format('core.invalid_configuration'));
+            throw new RuntimeException(Language::format('core.invalid_configuration'));
         }
         $instance = new Container($config);
         //时区设置
@@ -125,18 +124,13 @@ class App
             'instance'  => new Router(),
             'system'    => true
         ];
-        self::$_storage['response'] = [
-            'instance'  => new Response(),
-            'system'    => true
-        ];
         $router = self::$_storage['router']['instance'];
         //路由调度准备
         $router->ready();
-        $response = $router->dispatch();
-        if ($retval) {
-            return $response;
+        $router->dispatch();
+        if (!$retval) {
+            Response::send();
         }
-        $response->send();
     }
 
     /**

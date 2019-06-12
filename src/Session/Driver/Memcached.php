@@ -6,7 +6,7 @@ use Brisk\Language;
 use Brisk\Session\SessionFather;
 use Brisk\Session\UserHandler;
 use Brisk\Cache\Driver\Memcached as MemcachedCache;
-use Brisk\Exception\ConfigurationException;
+use Brisk\Exception\RuntimeException;
 
 class Memcached extends SessionFather
 {
@@ -29,7 +29,7 @@ class Memcached extends SessionFather
     public function __construct(array $option = [])
     {
         if (!isset($option['config'])) {
-            throw new ConfigurationException(Language::format('core.config_not_found', 'session/option/config'));
+            throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
         }
         $server = $option['config'];
         $this->_host = $server['host'];

@@ -25,6 +25,7 @@ class Language
             'core.invlid_custom_member'         => '无效的自定义成员对象[%s]',
             'core.config_not_found'				=> '无法找到配置项[%s]',
             'core.class_extends_error'          => '当前类[%s]必须继承自[%s]类',
+            'core.class_implement_error'        => '当前类[%s]必须实现接口[%s]',
             'core.class_not_found'              => '无法加载指定类[%s]',
             'core.request_not_ready'            => 'HTTP请求数据未就绪',
             'core.request_type_nosupport'       => 'HTTP请求类型不支持[%s]',

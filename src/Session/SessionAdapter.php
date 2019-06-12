@@ -6,7 +6,6 @@ use Brisk\App;
 use Brisk\Language;
 use Brisk\Loader;
 use Brisk\Exception\RuntimeException;
-use Brisk\Exception\ConfigurationException;
 use Brisk\Exception\ClassNotFoundException;
 
 class SessionAdapter
@@ -20,7 +19,7 @@ class SessionAdapter
     public static function getDriverFromConfig()
     {
         if (!App::get('config')->hasKey('session/driver')) {
-            throw new ConfigurationException(Language::format('core.config_not_found', 'session/driver'));
+            throw new RuntimeException(Language::format('core.config_not_found', 'session/driver'));
         }
         $driver = App::get('config')->session->driver->value();
         if (!Loader::findClass($driver)) {

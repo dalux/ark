@@ -6,7 +6,7 @@ use Brisk\Language;
 use Brisk\Session\UserHandler;
 use Brisk\Session\SessionFather;
 use Brisk\Cache\Driver\Redis as RedisCache;
-use Brisk\Exception\ConfigurationException;
+use Brisk\Exception\RuntimeException;
 
 class Redis extends SessionFather
 {
@@ -34,7 +34,7 @@ class Redis extends SessionFather
     public function __construct(array $option = [])
     {
         if (!isset($option['config'])) {
-            throw new ConfigurationException(Language::format('core.config_not_found', 'session/option/config'));
+            throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
         }
         $server = $option['config'];
         $this->_host = $server['host'];

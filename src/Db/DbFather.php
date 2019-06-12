@@ -7,7 +7,7 @@ use Brisk\Sql\Insert;
 use Brisk\Sql\Select;
 use Brisk\Sql\Update;
 
-abstract class DbFather
+abstract class DbFather implements IDbDriver
 {
 
     /**
@@ -35,16 +35,16 @@ abstract class DbFather
      * @param array bind
      * @return array
      */
-    public abstract function fetchRow(string $sql, array $bind = []);
+    public abstract function fetchOne(string $sql, array $bind = []);
 
     /**
      * Execute fetchOne method with bind options
      *
      * @param string sql
      * @param array bind
-     * @return int
+     * @return mixed
      */
-    public abstract function fetchOne(string $sql, array $bind = []);
+    public abstract function fetchScalar(string $sql, array $bind = []);
 
     /**
      * Start a new Transaction

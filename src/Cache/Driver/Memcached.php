@@ -38,7 +38,8 @@ class Memcached extends CacheFather
             \Memcached::OPT_COMPRESSION=> true,
             \Memcached::OPT_REMOVE_FAILED_SERVERS=> true
         ];
-        if (!is_null($setting['memcached_options']) && is_array($setting['memcached_options'])) {
+        if (!is_null($setting['memcached_options']) 
+                && is_array($setting['memcached_options'])) {
             $params = array_merge($params, $setting['memcached_options']);
         }
         foreach ($params as $key=> $val) {
@@ -69,12 +70,9 @@ class Memcached extends CacheFather
     public function set(string $name, $value, int $expire = 0)
     {
         $path = $this->getCachePath($name);
-        if ($expire <= 0) {
-            $expire_time = $this->_expire_time;
-        } else {
-            $expire_time = $expire;
-        }
-        $this->_container->set($path, $value, $expire_time);
+        $expire || $expire = $this->_expire_time;
+        if ($expire > 86400 * 30 && $expire < time()) $expire = time() + $expire;
+        $this->_container->set($path, $value, $expire);
         return $this->_container->getResultCode() == \Memcached::RES_SUCCESS;
     }
 
@@ -89,8 +87,7 @@ class Memcached extends CacheFather
     	$path = $this->getCachePath($name);
     	if ($this->_caching) {
             $data = $this->_container->get($path);
-            $code = $this->_container->getResultCode();
-            if ($code != \Memcached::RES_SUCCESS) {
+            if ($this->_container->getResultCode() != \Memcached::RES_SUCCESS) {
                 $data = null;
             }
         }
@@ -107,8 +104,7 @@ class Memcached extends CacheFather
     {
         $path = $this->getCachePath($name);
         $this->_container->delete($path);
-        $code = $this->_container->getResultCode();
-        return $code == \Memcached::RES_SUCCESS;
+        return $this->_container->getResultCode() == \Memcached::RES_SUCCESS;
     }
 
     /**

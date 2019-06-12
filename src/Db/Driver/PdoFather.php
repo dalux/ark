@@ -116,40 +116,13 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Execute fetchOne method with bind options
-     *
-     * @param string sql
-     * @param array bind
-     * @return int
-     */
-    public function fetchOne(string $sql, array $bind = [])
-    {
-        $data = [
-            'object'    => $this,
-            'method'    => __METHOD__,
-            'sql'       => $sql,
-            'bind'      => $bind,
-            'driver'    => $this->getDriverName()
-        ];
-        $data = Event::fire('event.dbquery.before', $data);
-        Timer::mark('db_query_before');
-        $smt = $this->_query($data['sql'], $data['bind']);
-        $data['result'] = $smt->fetchColumn(0);
-        Timer::mark('db_query_finish');
-        $data['query'] = $smt->queryString;
-        $data['timeused'] = Timer::lastUsed();
-        $data = Event::fire('event.dbquery.finish', $data);
-        return $data['result'];
-    }
-
-    /**
      * Execute fetchRow method with bind options
      *
      * @param string sql
      * @param array bind
      * @return array
      */
-    public function fetchRow(string $sql, array $bind = [])
+    public function fetchOne(string $sql, array $bind = [])
     {
 		$data = [
             'object'    => $this,
@@ -162,6 +135,33 @@ abstract class PdoFather extends DbFather
         Timer::mark('db_query_before');
         $smt = $this->_query($data['sql'], $data['bind']);
         $data['result'] = $smt->fetch();
+        Timer::mark('db_query_finish');
+        $data['query'] = $smt->queryString;
+        $data['timeused'] = Timer::lastUsed();
+        $data = Event::fire('event.dbquery.finish', $data);
+        return $data['result'];
+    }
+
+    /**
+     * Execute fetchOne method with bind options
+     *
+     * @param string sql
+     * @param array bind
+     * @return int
+     */
+    public function fetchScalar(string $sql, array $bind = [])
+    {
+        $data = [
+            'object'    => $this,
+            'method'    => __METHOD__,
+            'sql'       => $sql,
+            'bind'      => $bind,
+            'driver'    => $this->getDriverName()
+        ];
+        $data = Event::fire('event.dbquery.before', $data);
+        Timer::mark('db_query_before');
+        $smt = $this->_query($data['sql'], $data['bind']);
+        $data['result'] = $smt->fetchColumn(0);
         Timer::mark('db_query_finish');
         $data['query'] = $smt->queryString;
         $data['timeused'] = Timer::lastUsed();
@@ -266,7 +266,6 @@ abstract class PdoFather extends DbFather
 					if (!is_string($key)) {
 						$key = $key + 1;
 					}
-                    //binParam按引用传递第二个参数,如果此处写val,则execute执行时,值会全变为最后一次的val值
                     $smt->bindParam($key, $bind[$key]);
                 }
             }

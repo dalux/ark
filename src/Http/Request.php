@@ -78,13 +78,10 @@ class Request
      */
     public static function get(string $name = null, $sub = null)
     {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::format('core.request_not_ready'));
-        }
-        if (is_null($name)) {
-            return self::$_get;
-        }
-        return isset(self::$_get[$name]) ? self::$_get[$name] : $sub;
+        self::check();
+        return is_null($name) 
+            ? self::$_get
+            : self::$_get[$name] ?? $sub;
     }
 
     /**
@@ -96,13 +93,10 @@ class Request
      */
     public static function post(string $name = null, $sub = null)
     {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::format('core.request_not_ready'));
-        }
-        if (is_null($name)) {
-            return self::$_post;
-        }
-        return isset(self::$_post[$name]) ? self::$_post[$name] : $sub;
+        self::check();
+        return is_null($name)
+            ? self::$_post
+            : self::$_post[$name] ?? $sub;
     }
 
     /**
@@ -114,13 +108,10 @@ class Request
      */
     public static function cookie(string $name = null, $sub = null)
     {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::format('core.request_not_ready'));
-        }
-        if (is_null($name)) {
-            return self::$_cookie;
-        }
-        return isset(self::$_cookie[$name]) ? self::$_cookie[$name] : $sub;
+        self::check();
+        return is_null($name)
+            ? self::$_cookie
+            : self::$_cookie[$name] ?? $sub;
     }
 
     /**
@@ -131,13 +122,10 @@ class Request
      */
     public static function files(string $name = null)
     {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::format('core.request_not_ready'));
-        }
-        if (is_null($name)) {
-            return self::$_files;
-        }
-        return self::$_files[$name];
+        self::check();
+        return is_null($name) 
+            ? self::$_files 
+            : self::$_files[$name];
     }
 
     /**
@@ -149,13 +137,10 @@ class Request
      */
     public static function data(string $name = null, $sub = null)
     {
-        if (!self::$_ready) {
-            throw new Exception(Language::format('core.request_not_ready'));
-        }
-        if (is_null($name)) {
-            return self::$_request;
-        }
-		return isset(self::$_request[$name]) ? self::$_request[$name] : $sub;
+        self::check();
+        return is_null($name)
+            ? self::$_request
+            : self::$_request[$name] ?? $sub;
     }
 
     /**
@@ -168,14 +153,7 @@ class Request
      */
     public static function add(string $type, string $name, $data)
     {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::format('core.request_not_ready'));
-        }
-        $type = strtolower($type);
-        $types = [self::TYPE_GET, self::TYPE_POST, self::TYPE_COOKIE];
-        if (!in_array(type, types)) {
-            throw new RuntimeException(Language::format('core.request_type_nosupport', $type));
-        }
+        self::check();
         switch ($type) {
             case self::TYPE_GET:
                 self::$_get[$name] = $data;
@@ -190,8 +168,8 @@ class Request
                 $_COOKIE = self::$_cookie;
                 break;
         }
-        self::$_request = array_merge(self::$_get, self::$_post, self::$_cookie);
-        $_REQUEST = self::$_request;
+        $_REQUEST = self::$_request 
+            = array_merge(self::$_get, self::$_post, self::$_cookie);
     }
 
     /**
@@ -204,14 +182,7 @@ class Request
      */
     public static function delete(string $type, string $name)
     {
-        if (!self::$_ready) {
-            throw new RuntimeException(Language::format('core.request_not_ready'));
-        }
-        $type = strtolower($type);
-        $types = [self::TYPE_GET, self::TYPE_POST, self::TYPE_COOKIE];
-        if (!in_array($type, $types)) {
-            throw new RuntimeException(Language::format('core.request_type_nosupport', $type));
-        }
+        self::check();
         switch ($type) {
             case self::TYPE_GET:
                 unset(self::$_get[$name]);
@@ -226,8 +197,53 @@ class Request
                 $_COOKIE = self::$_cookie;
                 break;
         }
-        self::$_request = array_merge(self::$_get, self::$_post, self::$_cookie);
-        $_REQUEST = self::$_request;
+        $_REQUEST = self::$_request 
+            = array_merge(self::$_get, self::$_post, self::$_cookie);
+    }
+
+    /**
+     * 请求是否准备就绪
+     * 
+     * @return void
+     */
+    public static function check()
+    {
+        if (!self::$_ready) {
+            $error = Language::format('core.request_not_ready');
+            throw new RuntimeException($error);
+        }
+    }
+
+    /**
+     * Get client IP Address
+     *
+     * @param bool $convert
+     * @return string
+     */
+    public static function getIpAddress($convert = false)
+    {
+		$ips = [];
+		isset($_SERVER['HTTP_CLIENT_IP'])       && $ips[] = $_SERVER['HTTP_CLIENT_IP'];
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+			$forwarded = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+			foreach ($forwarded as $ip) {
+				$ips[] = $ip;
+			}
+		}
+		isset($_SERVER['HTTP_X_FORWARDED'])     && $ips[] = $_SERVER['HTTP_X_FORWARDED'];
+		isset($_SERVER['HTTP_FORWARDED_FOR'])   && $ips[] = $_SERVER['HTTP_FORWARDED_FOR'];
+		isset($_SERVER['HTTP_FORWARDED'])       && $ips[] = $_SERVER['HTTP_FORWARDED'];
+		isset($_SERVER['REMOTE_ADDR'])          && $ips[] = $_SERVER['REMOTE_ADDR'];
+		$ip = '';
+        if ($ips = array_filter($ips)) {
+            while (true) {
+                $ip = array_shift($ips);
+                if (false !== ip2long($ip)) {
+                    break;
+                }
+            }
+        }
+        return $convert ? sprintf('%u', ip2long($ip)) : $ip;
     }
 
 }

@@ -2,7 +2,7 @@
 
 namespace Brisk\Cache;
 
-abstract class CacheFather
+abstract class CacheFather implements ICacheDriver
 {
 
     /**
@@ -26,7 +26,7 @@ abstract class CacheFather
     protected $_expire_time = 86400;
 
     /**
-     * CacheFather constructor.
+     * constructor.
      *
      * @param array $setting
      */

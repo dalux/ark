@@ -5,7 +5,7 @@ namespace Brisk\Cache;
 use Brisk\Language;
 use Brisk\Exception\RuntimeException;
 
-class CacheProxy
+class Proxy
 {
 
     /**

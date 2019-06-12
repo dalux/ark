@@ -49,15 +49,13 @@ class File extends CacheFather
      * @param int expire
      * @return bool
      */
-    public function set(string $name, $value, int $expire = 0)
+    public function set(string $name, $value, int $expire = null)
     {
-    	$path = $this->getCachePath($name);
-        if ($expire <= 0) {
-            $expire_time = time() + $this->_expire_time;
-        } else {
-            $expire_time = time() + $expire;
-        }
-    	return file_put_contents($path, $expire_time. serialize($value)) ? true : false;
+        $path = $this->getCachePath($name);
+        $expire || $expire = $this->_expire_time;
+        $expire += time();
+        $writed = file_put_contents($path, $expire. serialize($value));
+    	return $writed ? true : false;
     }
 
     /**
@@ -70,7 +68,7 @@ class File extends CacheFather
     {
         $path = $this->getCachePath($name);
 		if (!file_exists($path) || !$this->_caching) {
-			unlink($path);
+			@unlink($path);
 			return null;
 		}
 		$content = file_get_contents($path);

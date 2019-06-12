@@ -11,15 +11,11 @@ class Oci extends PdoFather
     {
         $dsn = $config['host'];
         if ($config['host'] && $config['dbname']) {
-            $port = $config['port'];
-            if ($port) {
-				$port = 1521;
-            }
+            $port = $config['port'] ?? 1521;
             $dsn = '//'. $config['host']. ':'. $port. '/'. $config['dbname'];
         }
         $dsn = sprintf('oci:dbname=%s;', $dsn);
-		$charset = $config['charset'];
-        if ($charset) {
+        if ($charset = $config['charset']) {
             $dsn = $dsn. sprintf('charset=%s', $charset);
         }
         $params = [
@@ -41,7 +37,7 @@ class Oci extends PdoFather
      * @param string|null $seq
      * @return int
      */
-    public function nextInsertId($seq = null)
+    public function nextInsertId($seq)
     {
         return parent::fetchOne("select $seq.nextval from dual");
     }

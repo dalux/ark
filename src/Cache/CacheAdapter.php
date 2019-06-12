@@ -3,10 +3,9 @@
 namespace Brisk\Cache;
 
 use Brisk\App;
-use Brisk\Loader;
 use Brisk\Language;
+use Brisk\Loader;
 use Brisk\Exception\RuntimeException;
-use Brisk\Exception\ConfigurationException;
 use Brisk\Exception\ClassNotFoundException;
 
 class CacheAdapter
@@ -22,11 +21,11 @@ class CacheAdapter
     {
         $path = 'cache/'. $name;
         if (!App::get('config')->hasKey($path)) {
-            throw new ConfigurationException(Language::format('core.config_not_found', $path));
+            throw new RuntimeException(Language::format('core.config_not_found', $path));
         } elseif (!App::get('config')->hasKey($path. '/driver')) {
-            throw new ConfigurationException(Language::format('core.config_not_found', $path. '/driver'));
+            throw new RuntimeException(Language::format('core.config_not_found', $path. '/driver'));
         } elseif (!App::get('config')->hasKey($path. '/option/path')) {
-            throw new ConfigurationException(Language::format('core.config_not_found', $path. '/option/path'));
+            throw new RuntimeException(Language::format('core.config_not_found', $path. '/option/path'));
         }
         $driver = App::get('config')->cache->$name->driver->value();
         $option = App::get('config')->cache->$name->option->value();
@@ -34,8 +33,8 @@ class CacheAdapter
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
         $instance = new $driver($option['path'], $option['setting']);
-        if (!$instance instanceof CacheFather) {
-            throw new RuntimeException(Language::format('core.class_extends_error', $driver, '\\Brisk\\Cache\\CacheFather'));
+        if (!$instance instanceof ICacheDriver) {
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\\Brisk\\Cache\\ICacheDriver'));
         }
         return $instance;
     }

@@ -53,15 +53,11 @@ class Redis extends CacheFather
      * @param null expire
      * @return bool
      */
-    public function set(string $name, $value, int $expire = 0)
+    public function set(string $name, $value, int $expire = null)
     {
         $path = $this->getCachePath($name);
-        if ($expire <= 0) {
-            $expire_time = $this->_expire_time;
-        } else {
-            $expire_time = $expire;
-        }
-        return $this->_container->set($path, serialize($value), $expire_time);
+        $expire || $expire = $this->_expire_time;
+        return $this->_container->set($path, serialize($value), $expire);
     }
  
     /**
@@ -72,11 +68,10 @@ class Redis extends CacheFather
      */
     public function get(string $name)
     {
-        $data = null;
         $path = $this->getCachePath($name);
+        $data = null;
         if ($this->_caching) {
-            $data = $this->_container->get($path);
-            if ($data) {
+            if ($data = $this->_container->get($path)) {
                 $data = unserialize($data);
             }
         }
