@@ -9,17 +9,17 @@ class Proxy
 {
 
     /**
-     * @var CacheFather
+     * @var ICacheDriver
      */
     private $_cache;
 
     /**
      * Set cache instance
      *
-     * @param CacheFather cache
-     * @return CacheProxy
+     * @param ICacheDriver cache
+     * @return Proxy
      */
-    public function setCacheDriver(CacheFather $cache)
+    public function setCacher(ICacheDriver $cache)
     {
         $this->_cache = $cache;
         return $this;
@@ -35,7 +35,7 @@ class Proxy
      * @param string name
      * @return mixed
      */
-    public function doProxy(object $target, string $method, array $args, int $expire = 86400, string $name = null)
+    public function do(object $target, string $method, array $args, int $expire = 86400, string $name = null)
     {
         if (!is_callable([$target, $method])) {
             throw new RuntimeException(Language::format('proxy.target_not_callable'));

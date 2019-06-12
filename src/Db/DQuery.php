@@ -3,8 +3,8 @@
 namespace Brisk\Db;
 
 use Brisk\Language;
-use Brisk\Cache\CacheProxy;
-use Brisk\Cache\CacheFather;
+use Brisk\Cache\Proxy;
+use Brisk\Cache\ICacheDriver;
 use Brisk\Exception\RuntimeException;
 
 class DQuery
@@ -31,7 +31,7 @@ class DQuery
     private $_cache_name;
 
     /**
-     * @var CacheProxy
+     * @var Proxy
      */
     private $_proxy;
 
@@ -113,16 +113,16 @@ class DQuery
      * Set Cache proxy
      *
      * @param int $expire
-     * @param CacheFather $cache
+     * @param ICacheDriver $cache
      * @param string $name
      * @return DQuery
      */
-    public function cache(int $expire, CacheFather $cache, string $name = null)
+    public function cache(int $expire, ICacheDriver $cache, string $name = null)
     {
         $this->_expire = $expire;
         $this->_cache_name = $name;
-        $this->_proxy = new CacheProxy();
-        $this->_proxy->setCacheDriver($cache);
+        $this->_proxy = new Proxy();
+        $this->_proxy->setCacher($cache);
         return $this;
     }
 
@@ -241,7 +241,7 @@ class DQuery
      * @param array fields
      * @return array
      */
-    public function fetchRow(array $condition, array $fields = ['*'])
+    public function fetchOne(array $condition, array $fields = ['*'])
     {
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
@@ -268,7 +268,7 @@ class DQuery
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy($this->_conn, 'fetchRow', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
+            return $this->_proxy->do($this->_conn, 'fetchOne', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
         return $this->_conn->fetchRow($select->getRealSQL());
     }
@@ -280,7 +280,7 @@ class DQuery
      * @param array fields
      * @return int
      */
-    public function fetchOne(array $condition = [], array $fields = ['*'])
+    public function fetchScalar(array $condition = [], array $fields = ['count(*)'])
     {
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
@@ -307,9 +307,9 @@ class DQuery
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy($this->_conn, 'fetchOne', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
+            return $this->_proxy->do($this->_conn, 'fetchScalar', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
-        return $this->_conn->fetchOne($select->getRealSQL());
+        return $this->_conn->fetchScalar($select->getRealSQL());
     }
 
     /**
@@ -354,7 +354,7 @@ class DQuery
             $select->whereIn($k, $v);
         }
         if (!is_null($this->_expire)) {
-            return $this->_proxy->doProxy($this->_conn, 'fetchAll', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
+            return $this->_proxy->do($this->_conn, 'fetchAll', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
         return $this->_conn->fetchAll($select->getRealSQL());
     }

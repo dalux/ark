@@ -2,14 +2,14 @@
 
 namespace Brisk\Session;
 
-use Brisk\Cache\CacheFather;
+use Brisk\Cache\ICacheDriver;
 use SessionHandlerInterface;
 
 class UserHandler implements SessionHandlerInterface
 {
 
     /**
-     * @var CacheFather
+     * @var ICacheDriver
      */
     private $_cache;
 
@@ -18,7 +18,7 @@ class UserHandler implements SessionHandlerInterface
      *
      * @param CacheFather $cache
      */
-    public function __construct(CacheFather $cache)
+    public function __construct(ICacheDriver $cache)
     {
         $this->_cache = $cache;
     }

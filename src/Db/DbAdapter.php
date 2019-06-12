@@ -15,7 +15,7 @@ class DbAdapter
      * Get Database driver from config
      *
      * @param string name
-     * @return DbFather
+     * @return IDbDriver
      */
     public static function getDriverFromConfig(string $name)
     {

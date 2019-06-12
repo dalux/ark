@@ -97,6 +97,13 @@ abstract class DbFather implements IDbDriver
     public abstract function getDriverName();
 
     /**
+     * Get db connection instance
+     * 
+     * @return resource
+     */
+    public abstract function getInstance();
+
+    /**
      * select语句sql对象
      *
      * @return Select

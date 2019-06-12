@@ -2,7 +2,7 @@
 
 namespace Brisk\View;
 
-abstract class ViewFather implements IViewDriver
+interface IViewDriver
 {
 
     /**
@@ -12,7 +12,7 @@ abstract class ViewFather implements IViewDriver
      * @param mixed val
      * @return IViewDriver
      */
-    public abstract function set(string $name, $val = null);
+    public function set(string $name, $val = null);
 
     /**
      * Get template data
@@ -20,7 +20,7 @@ abstract class ViewFather implements IViewDriver
      * @param string name
      * @return mixed
      */
-    public abstract function get(string $name = null);
+    public function get(string $name = null);
 
     /**
      * Rendering template data
@@ -28,6 +28,6 @@ abstract class ViewFather implements IViewDriver
      * @param string template
      * @return string
      */
-    public abstract function display(string $template);
+    public function display(string $template);
 
 }

@@ -25,12 +25,12 @@ class ViewAdapter
         }
         $driver = App::get('config')->view->driver->value();
         $option = App::get('config')->view->option->value();
-        if (!Loader::findClass($driver)) {
+        if (Loader::findClass($driver) == '') {
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
         $instance = new $driver($option);
-        if (!$instance instanceof ViewFather) {
-            throw new RuntimeException(Language::format('core.class_extends_error', $driver, '\\Brisk\\View\\ViewFather'));
+        if (!$instance instanceof IViewDriver) {
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\\Brisk\\View\\IViewDriver'));
         }
         return $instance;
     }

@@ -14,7 +14,7 @@ class SessionAdapter
     /**
      * 通过配置文件获取session控制器
      *
-     * @return SessionFather
+     * @return ISessionDriver
      */
     public static function getDriverFromConfig()
     {
@@ -22,7 +22,7 @@ class SessionAdapter
             throw new RuntimeException(Language::format('core.config_not_found', 'session/driver'));
         }
         $driver = App::get('config')->session->driver->value();
-        if (!Loader::findClass($driver)) {
+        if (Loader::findClass($driver) == '') {
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
         $option = [];
@@ -30,8 +30,8 @@ class SessionAdapter
             $option = App::get('config')->session->option->value();
         }
         $instance = new $driver($option);
-        if (!$instance instanceof SessionFather) {
-            throw new RuntimeException(Language::format('core.class_extends_error', $driver, '\\Brisk\\Session\\SessionFather'));
+        if (!$instance instanceof ISessionDriver) {
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\\Brisk\\Session\\ISessionDriver'));
         }
         return $instance;
     }

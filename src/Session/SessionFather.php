@@ -2,7 +2,7 @@
 
 namespace Brisk\Session;
 
-abstract class SessionFather
+abstract class SessionFather implements ISessionDriver
 {
 
     /**
