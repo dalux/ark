@@ -7,14 +7,14 @@ use Brisk\Event;
 class Request
 {
 
-    private static $_data       = [];
-    private $_instid;
-
     const TYPE_GET              = 1;
     const TYPE_POST             = 2;
     const TYPE_COOKIE           = 3;
     const TYPE_FILES            = 4;
 
+    private $_instid;
+    private static $_data       = [];
+    
     /**
      * 构造函数
      * 
