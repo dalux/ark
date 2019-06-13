@@ -18,9 +18,9 @@ class ViewAdapter
      */
     public static function getDriverFromConfig()
     {
-        if (!App::get('config')->hasKey('view/driver')) {
+        if (!App::get('config')->exist('view/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', 'view/driver'));
-        } elseif (!App::get('config')->hasKey('view/option/template_dir')) {
+        } elseif (!App::get('config')->exist('view/option/template_dir')) {
             throw new RuntimeException(Language::format('core.config_not_found', 'view/option/template_dir'));
         }
         $driver = App::get('config')->view->driver->value();

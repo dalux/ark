@@ -20,11 +20,11 @@ class CacheAdapter
     public static function getDriverFromConfig(string $name)
     {
         $path = 'cache/'. $name;
-        if (!App::get('config')->hasKey($path)) {
+        if (!App::get('config')->exist($path)) {
             throw new RuntimeException(Language::format('core.config_not_found', $path));
-        } elseif (!App::get('config')->hasKey($path. '/driver')) {
+        } elseif (!App::get('config')->exist($path. '/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', $path. '/driver'));
-        } elseif (!App::get('config')->hasKey($path. '/option/path')) {
+        } elseif (!App::get('config')->exist($path. '/option/path')) {
             throw new RuntimeException(Language::format('core.config_not_found', $path. '/option/path'));
         }
         $driver = App::get('config')->cache->$name->driver->value();

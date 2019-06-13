@@ -34,7 +34,7 @@ class Container
      * @param string key
      * @return bool
      */
-    public function hasKey(string $key)
+    public function exist(string $key)
     {
         $key = trim($key, '/');
         if (strpos($key, '/') === false) {
@@ -44,12 +44,12 @@ class Container
         }
         $nodes = explode('/', $key);
         $node = array_shift($nodes);
-        if (!$this->hasKey($node)) {
+        if (!$this->exist($node)) {
             return false;
         }
         $instance = $this->$node;
         foreach ($nodes as $k=> $v) {
-            if (!$instance->hasKey($v)) {
+            if (!$instance->exist($v)) {
                 return false;
             }
             $instance = $instance->$v;
@@ -57,19 +57,6 @@ class Container
         return true;
     }
 
-    /**
-     * Check whether data exists at the current node
-     *
-     * @return bool
-     */
-    public function hasValue()
-    {
-        if (is_array($this->_container)) {
-            return count($this->_container) > 0;
-        }
-        return $this->_container != null;
-    }
-    
     /**
      * Get data from the current node
      *
@@ -106,7 +93,7 @@ class Container
      */
     public function __get(string $key)
     {
-        if ($this->hasKey($key)) {
+        if ($this->exist($key)) {
             return $this->_container[$key];
         } else {
             return new self();

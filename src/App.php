@@ -110,12 +110,12 @@ class App
         $instance = new Container($config);
         //时区设置
         $timezone = 'Asia/Shanghai';
-        if ($instance->hasKey('global/timezone')) {
+        if ($instance->exist('global/timezone')) {
             $timezone = $instance->global->timezone->value();
         }
         date_default_timezone_set($timezone);
         //错误报告
-        if ($instance->haskey('global/error_reporting')) {
+        if ($instance->exist('global/error_reporting')) {
             error_reporting($instance->global->error_reporting->value());
         }
         self::$_storage['config']['instance'] = $instance;
