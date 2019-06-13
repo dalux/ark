@@ -47,21 +47,21 @@ class Middleware
         if (isset(self::$_data[$type])) {
             $setting = self::$_data[$type];
             foreach ($setting as $key=> $val) {
-                if (strpos($key, '{{') !== false && strpos($key, '}}') !== false) {
-                    $key = preg_replace_callback('~/\\{\\{(.*?)\\}\\}~', function($matches) {
+                if (strpos($key, ':') !== false) {
+                    $key = preg_replace_callback('~/\\:([^\\/]+)~', function($matches) {
                         $result = $matches[1];
-                        if (strpos($result, ':') !== false) {
-                            $result = explode(':', $result);
+                        if (strpos($result, '@') !== false) {
+                            $result = explode('@', $result);
                             $name = $result[0];
                             $type = $result[1];
                             if ($type == 'int') {  //支持int限定
-                                $p = sprintf('/(?P<%s>\d+?)', $name);
+                                $p = sprintf('/(?P<%s>\d+)', $name);
                             } else {
                                 $p = sprintf('/(?P<%s>%s)', $name, $type);
                             }
                             return $p;
                         } else {
-                            return sprintf('/(?P<%s>[^\\/]+?)', $result);
+                            return sprintf('/(?P<%s>[^\\/]+)', $result);
                         }
                     }, $key);
                 }

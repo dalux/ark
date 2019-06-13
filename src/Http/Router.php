@@ -84,21 +84,21 @@ class Router
         self::$_route = $uri;
         //遍历规则
         foreach (self::$_rules as $key=> $val) {
-            if (strpos($key, '{{') !== false && strpos($key, '}}') !== false) {
-                $pattern = preg_replace_callback('~/\\{\\{(.*?)\\}\\}~', function($matches) {
+            if (strpos($key, ':') !== false) {
+                $pattern = preg_replace_callback('~/\\:([^\\/]+)~', function($matches) {
                     $result = $matches[1];
-                    if (strpos($result, ':') !== false) {
-                        $result = explode(':', $result);
+                    if (strpos($result, '@') !== false) {
+                        $result = explode('@', $result);
                         $name = $result[0];
                         $type = $result[1];
                         if ($type == 'int') {  //支持int限定
-                            $p = sprintf('/(?P<%s>\d+?)', $name);
+                            $p = sprintf('/(?P<%s>\d+)', $name);
                         } else {
                             $p = sprintf('/(?P<%s>%s)', $name, $type);
                         }
                         return $p;
                     } else {
-                        return sprintf('/(?P<%s>[^\\/]+?)', $result);
+                        return sprintf('/(?P<%s>[^\\/]+)', $result);
                     }
                 }, $key);
                 if (preg_match(sprintf('~^%s$~i', $pattern), self::$_route, $matches)) {
@@ -121,22 +121,25 @@ class Router
         if (is_null($route)) {
             throw new RuntimeException(Language::format('router.route_not_defined', self::$_route));
         }
-        Request::ready($_GET);
+        //路由生命周期请求对象实例
+        $request  = new Request($_GET);
+        //路由生命周期响应对象实例
+        $response = new Response();
         //前置中间件
         $before_middlewares = Middleware::get(self::$_route, 'before');
         foreach ($before_middlewares as $middleware) {
             if (!is_callable($middleware)) {
                 continue;
             }
-            call_user_func_array($middleware, []);
-            if (Response::isTerminated()) {
-                return;
+            call_user_func_array($middleware, [$request, $response]);
+            if ($response->isTerminated()) {
+                return $response;
             }
         }
         //控制器
-        call_user_func_array($callback, []);
-        if (Response::isTerminated()) {
-            return;
+        call_user_func_array($callback, [$request, $response]);
+        if ($response->isTerminated()) {
+            return $response;
         }
         //后置中间件
         $after_middlewares = Middleware::get(self::$_route, 'after');
@@ -144,11 +147,12 @@ class Router
             if (!is_callable($middleware)) {
                 continue;
             }
-            call_user_func_array($middleware, []);
-            if (Response::isTerminated()) {
-                return;
+            call_user_func_array($middleware, [$request, $response]);
+            if ($response->isTerminated()) {
+                return $response;
             }
         }
+        return $response;
     }
 
 }

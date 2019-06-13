@@ -5,7 +5,7 @@ namespace Brisk\Http;
 class Response
 {
 
-    private static $_end        = false;
+    private static $_data       = [];
     private static $_status     = [
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -49,7 +49,30 @@ class Response
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported'
     ];
-    private static $_content;
+    private $_instid;
+
+    /**
+     * 私有构造器
+     * 
+     */
+    public function __construct()
+    {
+        $id = (string)time();
+        self::$_data[$id] = [
+            'content'   => '', 
+            'end'       => false
+        ];
+        $this->_instid = $id;
+    }
+
+    /**
+     * 获取当前数据ID
+     * 
+     */
+    public function getId()
+    {
+        return $this->_instid;
+    }
 
     /**
     * set header parameter
@@ -58,13 +81,13 @@ class Response
     * @param string text
     * @return void
     */
-    public static function status(int $code, string $text = null)
+    public function status(int $code, string $text = null)
     {
         $status_code = self::$_status[$code] ?? 200;
         $status_text = is_null($text) ? self::$_status[$status_code] : $text;
         $protocol = $_SERVER['SERVER_PROTOCOL'];
         is_null($protocol) && $protocol = 'HTTP/1.1';
-        self::setHeader($protocol. ' '. $status_code. ' '. $status_text);
+        $this->setHeader($protocol. ' '. $status_code. ' '. $status_text);
     }
 
     /**
@@ -75,7 +98,7 @@ class Response
     * @param bool replace
     * @return void
     */
-    public static function setHeader(string $header, bool $replace = true)
+    public function setHeader(string $header, bool $replace = true)
     {
         header($header, $replace);
     }
@@ -92,7 +115,7 @@ class Response
      * @param bool secure
      * @return void
      */
-    public static function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
+    public function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
     {
         setcookie($name, $value, time() + $expire, $path, $domain, $secure, $httponly);
     }
@@ -102,13 +125,13 @@ class Response
      *
      * @return void
      */
-    public static function noCache()
+    public function noCache()
     {
-        self::setHeader('Expires: Mon, 26 Jul 1999 01:00:00 GMT');
-        self::setHeader('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
-        self::setHeader('Cache-Control: no-store, no-cache, must-revalidate');
-        self::setHeader('Cache-Control: post-check=0, pre-check=0', false);
-        self::setHeader('Pragma: no-cache');
+        $this->setHeader('Expires: Mon, 26 Jul 1999 01:00:00 GMT');
+        $this->setHeader('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
+        $this->setHeader('Cache-Control: no-store, no-cache, must-revalidate');
+        $this->setHeader('Cache-Control: post-check=0, pre-check=0', false);
+        $this->setHeader('Pragma: no-cache');
     }
 
     /**
@@ -117,9 +140,9 @@ class Response
      * @param int sec
      * @return void
      */
-    public static function setExpires(int $sec = 3600)
+    public function setExpires(int $sec = 3600)
     {
-        self::setHeader('Expires: '. date('D, d M Y H:i:s', time() + $sec). ' GMT');
+        $this->setHeader('Expires: '. date('D, d M Y H:i:s', time() + $sec). ' GMT');
     }
     
     /**
@@ -127,9 +150,9 @@ class Response
      * 
      * @return void
      */
-    public static function end()
+    public function end()
     {
-        self::$_end = true;
+        self::$_data[$this->_instid]['end'] = true;
     }
 
     /**
@@ -137,9 +160,9 @@ class Response
      * 
      * @return bool
      */
-    public static function isTerminated()
+    public function isTerminated()
     {
-        return self::$_end;
+        return self::$_data[$this->_instid]['end'];
     }
 
     /**
@@ -148,9 +171,9 @@ class Response
      * @param string content
      * @return mixed
      */
-    public static function setContent(string $content)
+    public function setContent(string $content)
     {
-        self::$_content = $content;
+        self::$_data[$this->_instid]['content'] = $content;
     }
 
     /**
@@ -158,9 +181,9 @@ class Response
      * 
      * @return string
      */
-    public static function getContent()
+    public function getContent()
     {
-        return self::$_content;
+        return self::$_data[$this->_instid]['content'];
     }
 
     /**
@@ -168,10 +191,11 @@ class Response
      * 
      * @return void
      */
-    public static function send()
+    public function send()
     {
-        if (self::$_content) {
-            echo self::$_content;
+        $content = self::$_data[$this->_instid]['content'];
+        if ($content) {
+            echo $content;
         }
     }
 

@@ -120,11 +120,11 @@ class App
         //监听系统启动就绪事件
         Event::fire('event.framework.ready');
         //路由
-        Router::dispatch();
+        $response = Router::dispatch();
         if ($retval) {
-            return Response::getContent();
+            return $response->getContent();
         }
-        Response::send();
+        $response->send();
     }
 
     /**
