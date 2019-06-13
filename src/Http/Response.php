@@ -57,7 +57,8 @@ class Response
      */
     public function __construct()
     {
-        $id = (string)time();
+        self::$_data = [];
+        $id = uniqid();
         self::$_data[$id] = [
             'content'   => '', 
             'end'       => false
@@ -175,19 +176,6 @@ class Response
     public function getContent()
     {
         return self::$_data[$this->_instid]['content'];
-    }
-
-    /**
-     * send content to client
-     * 
-     * @return void
-     */
-    public function send()
-    {
-        $content = self::$_data[$this->_instid]['content'];
-        if ($content) {
-            echo $content;
-        }
     }
 
 }

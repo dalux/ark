@@ -4,7 +4,6 @@ namespace Brisk;
 
 use Brisk\Http\Env;
 use Brisk\Http\Router;
-use Brisk\Http\Response;
 use Brisk\Exception\RuntimeException;
 
 class App
@@ -22,7 +21,14 @@ class App
     /**
      * @var array
      */
-    private static $_storage = [];
+    private static $_storage    = [];
+
+    /**
+     * 响应数据是否直接输出
+     * 
+     * @var bool
+     */
+    private static $_output     = true;
     
     /**
      * Construct
@@ -35,8 +41,11 @@ class App
 
     /**
      * 初始化
+     * 
+     * @param bool $output
+     * @return App
      */
-    public static function init()
+    public static function init(bool $output = true)
     {
         if (is_null(self::$_instance)) {
             require __DIR__. '/Exception/RuntimeException.php';
@@ -44,11 +53,14 @@ class App
             require __DIR__. '/Loader.php';
             require __DIR__. '/Container.php';
             require __DIR__. '/Exception.php';
+            //响应结果输出方式
+            self::$_output = $output;
             //初始化环境数据
             Env::init();
             //配置项默认为空对象
             self::$_storage['config'] = ['instance'=> new Container(), 'system'=> true];
             //异常处理
+            Exception::setOutput($output);
             self::setExceptionHandler([new Exception(), 'handler']);
             //版本检查
             if (version_compare(phpversion(), '7.2.0') < 0) {
@@ -98,7 +110,7 @@ class App
      * @param bool return
      * @return mixed
      */
-    public static function runAs(callable $config, bool $retval = false)
+    public static function runAs(callable $config)
     {
         //配置文件
         $config = call_user_func_array($config, []);
@@ -121,10 +133,9 @@ class App
         Event::fire('event.framework.ready');
         //路由
         $response = Router::dispatch();
-        if ($retval) {
-            return $response->getContent();
-        }
-        $response->send();
+        $content = $response->getContent();
+        if (!self::$_output) return $content;
+        echo $content;
     }
 
     /**

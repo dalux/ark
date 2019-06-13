@@ -74,4 +74,14 @@ class Middleware
         return $callbacks;
     }
 
+    /**
+     * 清理中间件
+     * 
+     * @return void
+     */
+    public static function clean()
+    {
+        self::$_data = [];
+    }
+
 }

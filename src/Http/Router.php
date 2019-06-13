@@ -152,6 +152,8 @@ class Router
                 return $response;
             }
         }
+        //清理
+        Middleware::clean();
         return $response;
     }
 

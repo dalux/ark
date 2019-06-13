@@ -23,7 +23,8 @@ class Request
      */
     public function __construct(array $getdata = [])
     {
-        $id = (string)time();
+        self::$_data = [];
+        $id = uniqid();
         $data = [
             self::TYPE_GET      => $getdata, 
             self::TYPE_POST     => $_POST, 
