@@ -22,13 +22,6 @@ class App
      * @var array
      */
     private static $_storage    = [];
-
-    /**
-     * 响应数据是否直接输出
-     * 
-     * @var bool
-     */
-    private static $_output     = true;
     
     /**
      * Construct
@@ -45,7 +38,7 @@ class App
      * @param bool $output
      * @return App
      */
-    public static function init(bool $output = true)
+    public static function init()
     {
         if (is_null(self::$_instance)) {
             require __DIR__. '/Exception/RuntimeException.php';
@@ -53,14 +46,11 @@ class App
             require __DIR__. '/Loader.php';
             require __DIR__. '/Container.php';
             require __DIR__. '/Exception.php';
-            //响应结果输出方式
-            self::$_output = $output;
             //初始化环境数据
             Env::init();
             //配置项默认为空对象
             self::$_storage['config'] = ['instance'=> new Container(), 'system'=> true];
             //异常处理
-            Exception::setOutput($output);
             self::setExceptionHandler([new Exception(), 'handler']);
             //版本检查
             if (version_compare(phpversion(), '7.2.0') < 0) {
@@ -132,9 +122,7 @@ class App
         //监听系统启动就绪事件
         Event::fire('event.framework.ready');
         //路由
-        $content = Router::dispatch();
-        if (!self::$_output) return $content;
-        echo $content;
+        echo Router::dispatch();
     }
 
     /**

@@ -9,24 +9,6 @@ class Exception
 {
 
     /**
-     * 是否直接打印异常信息
-     * 
-     * @var bool
-     */
-    private static $_output = true;
-
-    /**
-     * 设置异常结果显示方式
-     * 
-     * @param bool $output
-     * @return void
-     */
-    public static function setOutput(bool $output)
-    {
-        self::$_output = $output;
-    }
-
-    /**
      * Rendering system Exception Trace information
      *
      * @param Throwable $e
@@ -124,7 +106,6 @@ class Exception
             $content = str_replace('{footerinfo}', $footerinfo, $content);
         }
 
-        if (!self::$_output) return $content;
         echo $content;
 
     }
