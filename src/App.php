@@ -132,8 +132,7 @@ class App
         //监听系统启动就绪事件
         Event::fire('event.framework.ready');
         //路由
-        $response = Router::dispatch();
-        $content = $response->getContent();
+        $content = Router::dispatch();
         if (!self::$_output) return $content;
         echo $content;
     }

@@ -2,7 +2,6 @@
 
 namespace Brisk\Http;
 
-use Brisk\Event;
 use Brisk\Language;
 use Brisk\Exception\RuntimeException;
 
@@ -54,7 +53,7 @@ class Router
     /**
      * Routing dispatch
      *
-     * @return void
+     * @return string
      */
     public static function dispatch()
     {
@@ -78,9 +77,6 @@ class Router
                 }
 			}
         }
-        $data = ['uri'=> $uri];
-        $data = Event::fire('event.router.ready', $data);
-        $uri = $data['uri'];
         self::$_route = $uri;
         //遍历规则
         foreach (self::$_rules as $key=> $val) {
@@ -125,6 +121,12 @@ class Router
         $request  = new Request($_GET);
         //路由生命周期响应对象实例
         $response = new Response();
+        //清理函数
+        $clean = function() use ($request, $response) {
+            $response->clean();
+            $request->clean();
+            Middleware::clean();
+        };
         //前置中间件
         $before_middlewares = Middleware::get(self::$_route, 'before');
         foreach ($before_middlewares as $middleware) {
@@ -133,13 +135,17 @@ class Router
             }
             call_user_func_array($middleware, [$request, $response]);
             if ($response->isTerminated()) {
-                return $response;
+                $content = $response->getContent();
+                $clean();
+                return $content;
             }
         }
         //控制器
         call_user_func_array($callback, [$request, $response]);
         if ($response->isTerminated()) {
-            return $response;
+            $content = $response->getContent();
+            $clean();
+            return $content;
         }
         //后置中间件
         $after_middlewares = Middleware::get(self::$_route, 'after');
@@ -149,12 +155,14 @@ class Router
             }
             call_user_func_array($middleware, [$request, $response]);
             if ($response->isTerminated()) {
-                return $response;
+                $content = $response->getContent();
+                $clean();
+                return $content;
             }
         }
-        //清理
-        Middleware::clean();
-        return $response;
+        $content = $response->getContent();
+        $clean();
+        return $content;
     }
 
 }

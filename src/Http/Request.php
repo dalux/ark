@@ -23,7 +23,6 @@ class Request
      */
     public function __construct(array $getdata = [])
     {
-        self::$_data = [];
         $id = uniqid();
         $data = [
             self::TYPE_GET      => $getdata, 
@@ -224,6 +223,16 @@ class Request
             }
         }
         return $convert ? sprintf('%u', ip2long($ip)) : $ip;
+    }
+
+    /**
+     * clean
+     * 
+     * @return void
+     */
+    public function clean()
+    {
+        unset(self::$_data[$this->_instid]);
     }
 
 }

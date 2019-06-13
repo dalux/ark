@@ -57,7 +57,6 @@ class Response
      */
     public function __construct()
     {
-        self::$_data = [];
         $id = uniqid();
         self::$_data[$id] = [
             'content'   => '', 
@@ -176,6 +175,16 @@ class Response
     public function getContent()
     {
         return self::$_data[$this->_instid]['content'];
+    }
+
+    /**
+     * clean
+     * 
+     * @return void
+     */
+    public function clean()
+    {
+        unset(self::$_data[$this->_instid]);
     }
 
 }
