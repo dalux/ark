@@ -66,15 +66,6 @@ class Response
     }
 
     /**
-     * 获取当前数据ID
-     * 
-     */
-    public function getId()
-    {
-        return $this->_instid;
-    }
-
-    /**
     * set header parameter
     *
     * @param int code
