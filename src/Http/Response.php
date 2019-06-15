@@ -141,8 +141,11 @@ class Response
      * 
      * @return void
      */
-    public function end()
+    public function end(string $content = null)
     {
+        if (!is_null($content)) {
+            $this->setContent($content);
+        }
         self::$_data[$this->_instid]['end'] = true;
     }
 
