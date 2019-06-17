@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Brisk\Toolkit;
 
@@ -14,25 +14,24 @@ class File
      */
     public static function mkDir(string $dir, int $mode = 0755)
     {
-		$dir = trim($dir);
-        if (!$dir = trim($dir)) {
-            return false;
-        }
-        $dirs = [$dir];
-        while (!file_exists($dir)) {
-            $dir = dirname($dir);
-            $dirs[] = $dir;
-        }
-        if (count($dirs)>1) {
-            $dirs = array_reverse($dirs);
-            foreach ($dirs as $k=> $v) {
-                $v = rtrim($v, DIRECTORY_SEPARATOR);
-                if (!file_exists($v) && !mkdir($v, $mode)) {
-                    return false;
+        if ($dir = trim($dir)) {
+            $dirs = [$dir];
+            while (!file_exists($dir)) {
+                $dir = dirname($dir);
+                $dirs[] = $dir;
+            }
+            if (count($dirs)>1) {
+                $dirs = array_reverse($dirs);
+                foreach ($dirs as $k=> $v) {
+                    $v = rtrim($v, DIRECTORY_SEPARATOR);
+                    if (!file_exists($v) && !mkdir($v, $mode)) {
+                        return false;
+                    }
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
