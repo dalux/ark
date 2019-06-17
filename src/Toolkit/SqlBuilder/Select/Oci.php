@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Select;
+namespace Brisk\Toolkit\SqlBuilder\Select;
 
 use Brisk\Language;
 use Brisk\Exception\SqlCompileException;
-use Brisk\Sql\Select;
+use Brisk\Toolkit\SqlBuilder\Select;
 
 class Oci extends Select
 {

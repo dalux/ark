@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Insert;
+namespace Brisk\Toolkit\SqlBuilder\Insert;
 
-use Brisk\Sql\Insert;
+use Brisk\Toolkit\SqlBuilder\Insert;
 
 class Sqlite extends Insert
 {

@@ -2,10 +2,10 @@
 
 namespace Brisk\Db;
 
-use Brisk\Sql\Delete;
-use Brisk\Sql\Insert;
-use Brisk\Sql\Select;
-use Brisk\Sql\Update;
+use Brisk\Toolkit\SqlBuilder\Delete;
+use Brisk\Toolkit\SqlBuilder\Insert;
+use Brisk\Toolkit\SqlBuilder\Select;
+use Brisk\Toolkit\SqlBuilder\Update;
 
 abstract class DbFather implements IDbDriver
 {
@@ -111,7 +111,7 @@ abstract class DbFather implements IDbDriver
     public function select()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Sql\\Select\\'. $dbtype;
+        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Select\\'. $dbtype;
         return new $classname();
     }
 
@@ -123,7 +123,7 @@ abstract class DbFather implements IDbDriver
     public function update()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Sql\\Update\\'. $dbtype;
+        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Update\\'. $dbtype;
         return new $classname();
     }
 
@@ -135,7 +135,7 @@ abstract class DbFather implements IDbDriver
     public function delete()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Sql\\Delete\\'. $dbtype;
+        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Delete\\'. $dbtype;
         return new $classname();
     }
 
@@ -147,7 +147,7 @@ abstract class DbFather implements IDbDriver
     public function insert()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Sql\\Insert\\'. $dbtype;
+        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Insert\\'. $dbtype;
         return new $classname();
     }
 

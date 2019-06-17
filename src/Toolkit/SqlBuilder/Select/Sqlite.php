@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Delete;
+namespace Brisk\Toolkit\SqlBuilder\Select;
 
-use Brisk\Sql\Delete;
+use Brisk\Toolkit\SqlBuilder\Select;
 
-class Sqlite extends Delete
+class Sqlite extends Select
 {
 
     /**

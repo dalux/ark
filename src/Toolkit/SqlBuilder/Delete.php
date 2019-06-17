@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql;
+namespace Brisk\Toolkit\SqlBuilder;
 
 use Brisk\Language;
 use Brisk\Exception\SqlCompileException;

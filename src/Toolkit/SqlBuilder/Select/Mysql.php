@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Select;
+namespace Brisk\Toolkit\SqlBuilder\Select;
 
-use Brisk\Sql\Select;
+use Brisk\Toolkit\SqlBuilder\Select;
 
 class Mysql extends Select
 {

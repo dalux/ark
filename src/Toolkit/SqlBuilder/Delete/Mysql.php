@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Delete;
+namespace Brisk\Toolkit\SqlBuilder\Delete;
 
-use Brisk\Sql\Delete;
+use Brisk\Toolkit\SqlBuilder\Delete;
 use Brisk\Language;
 use Brisk\Exception\SqlCompileException;
 

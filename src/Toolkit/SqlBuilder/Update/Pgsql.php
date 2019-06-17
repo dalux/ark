@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Update;
+namespace Brisk\Toolkit\SqlBuilder\Update;
 
-use Brisk\Sql\Update;
+use Brisk\Toolkit\SqlBuilder\Update;
 
 class Pgsql extends Update
 {

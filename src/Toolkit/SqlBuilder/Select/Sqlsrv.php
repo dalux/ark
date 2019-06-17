@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Brisk\Sql\Update;
+namespace Brisk\Toolkit\SqlBuilder\Select;
 
-use Brisk\Sql\Update;
+use Brisk\Toolkit\SqlBuilder\Select;
 
-class Sqlsrv extends Update
+class Sqlsrv extends Select
 {
 
     /**
