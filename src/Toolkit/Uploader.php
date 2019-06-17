@@ -83,7 +83,7 @@ class Uploader
      */
     function setAllowTypes(array $types)
     {
-        $this->_types = (array)$types;
+        $this->_types = $types;
         return $this;
     }
 
@@ -161,7 +161,7 @@ class Uploader
             throw new RuntimeException(sprintf('不支持的上传类型："%s".', $file['type']));
         } elseif ($file['size'] > $this->_size) {
             throw new RuntimeException(sprintf('仅允许上传不大于"%s"字节大小的文件.', $this->_size));
-        } elseif (!$this->_path) {
+        } elseif (!$this->_path || !is_callable($this->_path)) {
             throw new RuntimeException('上传文件保存路径未设置.');
         }
         $path = call_user_func_array($this->_path, [$file]);
