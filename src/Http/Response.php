@@ -181,6 +181,27 @@ class Response
     }
 
     /**
+     * 跳转
+     * 
+     * @param string $url
+     * @param bool $script
+     * @param string $msg
+     * @return void
+     */
+    public function redirect(string $url, bool $script = false, string $msg = null)
+    {
+        if (!$script) {
+            $this->setHeader('Location: '. $url);
+            return $this->end();
+        }
+        $content = '<script>';
+        is_null($msg) || $content.= 'alert("'. $msg. '");';
+        $content.= 'location.href="'. $url. '";';
+        $content.= '</script>';
+        return $this->end($content);
+    }
+
+    /**
      * clean
      * 
      * @return void
