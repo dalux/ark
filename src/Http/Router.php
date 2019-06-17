@@ -4,6 +4,7 @@ namespace Brisk\Http;
 
 use Brisk\Language;
 use Brisk\Exception\RuntimeException;
+use Brisk\Event;
 
 class Router
 {
@@ -58,7 +59,7 @@ class Router
     public static function dispatch()
     {
         if (!$uri = $_SERVER['REQUEST_URI']) {
-            throw new RuntimeException(Language::format('router.invalid_require_uri'));
+            throw new RuntimeException(Language::format('http.invalid_require_uri'));
         }
         //解析URI
         if (strpos($uri, '?') !== false) {
@@ -115,7 +116,7 @@ class Router
             }
         }
         if (is_null($route)) {
-            throw new RuntimeException(Language::format('router.route_not_defined', self::$_route));
+            throw new RuntimeException(Language::format('http.router_not_defined', self::$_route));
         }
         //路由生命周期请求对象实例
         $request  = new Request($_GET);
@@ -139,6 +140,28 @@ class Router
                 $clean();
                 return $content;
             }
+        }
+        //路由执行前事件
+        $data = [
+            'callback'=> $callback,
+            'request'=> $request,
+            'response'=> $response,
+        ];
+        $data = Event::fire('event.router.action', $data);
+        $callback = $data['callback'];
+        $request = $data['request'];
+        $response = $data['response'];
+        if (!is_callable($callback)) {
+            throw new RuntimeException(Language::format('http.router_not_callable', self::$_route));
+        } elseif (!$request instanceof Request) {
+            throw new RuntimeException(Language::format('http.invalid_request_object'));
+        } elseif (!$response instanceof Response) {
+            throw new RuntimeException(Language::format('http.invalid_response_object'));
+        }
+        if ($response->isTerminated()) {
+            $content = $response->getContent();
+            $clean();
+            return $content;
         }
         //控制器
         call_user_func_array($callback, [$request, $response]);

@@ -27,15 +27,15 @@ class Language
             'core.class_extends_error'          => '当前类[%s]必须继承自[%s]类',
             'core.class_implement_error'        => '当前类[%s]必须实现接口[%s]',
             'core.class_not_found'              => '无法加载指定类[%s]',
-            'core.request_not_ready'            => 'HTTP请求数据未就绪',
-            'core.request_type_nosupport'       => 'HTTP请求类型不支持[%s]',
-
+            
             'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
             'event.data_key_must_equal'         => '事件监听器[%s]返回前后数组项不一致',
 
-            'router.invalid_require_uri'        => '无有效的请求URI地址',
-            'router.route_not_defined'          => '未定义请求地址[%s]的路由解析器',
-            'router.controller_return_error'    => '响应数据必须返回[Response]对象实例',
+            'http.invalid_require_uri'          => '无有效的请求URI地址',
+            'http.router_not_defined'           => '未定义请求地址[%s]的路由解析器',
+            'http.router_not_callable'          => '路由[%s]解析器无法调用',
+            'http.invalid_request_object'       => '无效的[Request]对象实例',
+            'http.invalid_response_object'      => '无效的[Response]对象实例',
 
             'cache.dir_create_failed'           => '无法创建目录[%s]',
             'cache.dir_permission_error'        => '无权限读写指定目录[%s]',
