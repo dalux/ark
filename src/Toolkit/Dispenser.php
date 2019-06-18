@@ -2,6 +2,7 @@
 
 namespace Brisk\Toolkit;
 
+use Closure;
 use swoole_process;
 use Brisk\Exception\RuntimeException;
 
@@ -70,20 +71,20 @@ class Dispenser
     /**
      * 数据生产者
      *
-     * @var \Closure
+     * @var Closure
      */
     private $_producer;
 
     /**
      * 构造器
      *
-     * @param $proc_num
-     * @param $interval
+     * @param int $proc_num
+     * @param int $interval
      * @param bool $wait
      * @param int $proc_timeout
      * @param string $proc_dir
      */
-    public function __construct($proc_num, $interval, $wait = false, $proc_timeout = 60, $proc_dir = '/tmp')
+    public function __construct(int $proc_num, int $interval, bool $wait = false, int $proc_timeout = 60, string $proc_dir = '/tmp')
     {
         if (!extension_loaded('swoole')) {
             throw new RuntimeException('无法加载[swoole]扩展');
@@ -101,10 +102,10 @@ class Dispenser
     /**
      * 设置任务生产者方法
      *
-     * @param \Closure $producer
+     * @param Closure $producer
      * @return $this
      */
-    public function setProducer(\Closure $producer)
+    public function setProducer(Closure $producer)
     {
         $this->_producer = $producer;
         return $this;
@@ -113,10 +114,10 @@ class Dispenser
     /**
      * 设置任务消费者方法
      *
-     * @param \Closure $consumer
+     * @param Closure $consumer
      * @return $this
      */
-    public function setConsumer(\Closure $consumer)
+    public function setConsumer(Closure $consumer)
     {
         $this->_consumer = $consumer;
         return $this;
@@ -240,7 +241,7 @@ class Dispenser
      * @param int $used
      * @return null
      */
-    private function _setState($pid, $used = 1)
+    private function _setState(int $pid, int $used = 1)
     {
         file_put_contents($this->_proc_dir . '/proc_' . $pid, (int)$used);
         return $this;
@@ -252,7 +253,7 @@ class Dispenser
      * @param int $pid
      * @return int
      */
-    private function _getState($pid)
+    private function _getState(int $pid)
     {
         return file_get_contents($this->_proc_dir . '/proc_' . $pid);
     }
@@ -263,7 +264,7 @@ class Dispenser
      * @param int $pid
      * @return bool
      */
-    private function _delState($pid)
+    private function _delState(int $pid)
     {
         $file = $this->_proc_dir. '/proc_'. $pid;
         if (is_file($file)) {
@@ -278,7 +279,7 @@ class Dispenser
      * @param string $log
      * @param string $level
      */
-    private function _log($log, $level = self::LOG_NOTICE)
+    private function _log(string $log, string $level = self::LOG_NOTICE)
     {
         echo date('Y-m-d H:i:s'). ' / '. $level. ' / '. $log. PHP_EOL;
     }

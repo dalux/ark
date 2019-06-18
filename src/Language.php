@@ -65,6 +65,13 @@ class Language
             'tool.validator_field_errobject'    => '字段[%s]值内容不匹配,需要继承或实现[%s]',
             'tool.validator_filed_nomatch'      => '字段[%s]值不匹配规则[%s]',
 
+            'tool.dir_create_failed'            => '目录[%s]创建失败',
+
+            'tool.upload_error_occurred'        => '上传处理异常，错误代码[%s]',
+            'tool.upload_types_unsupport'       => '不支持的上传类型[%s]',
+            'tool.upload_bytes_oversize'        => '上传文件字节数不能大于[%s]',
+            'tool.upload_filepath_error'        => '上传文件保存路径未设置',
+
         ],
 
     ];

@@ -3,6 +3,7 @@
 namespace Brisk\Toolkit;
 
 use BriskRuntimeException\RuntimeException;
+use Brisk\Language;
 
 class Uploader
 {
@@ -81,7 +82,7 @@ class Uploader
      * @param array $types
      * @return Uploader
      */
-    function setAllowTypes(array $types)
+    function setLimitTypes(array $types)
     {
         $this->_types = $types;
         return $this;
@@ -92,7 +93,7 @@ class Uploader
      *
      * @return array
      */
-    function getAllowTypes()
+    function getLimitTypes()
     {
         return $this->_types;
     }
@@ -104,7 +105,7 @@ class Uploader
      * @param int $size
      * @return Uploader
      */
-    function setAllowMaxSize(int $size)
+    function setMaxBytes(int $size)
     {
         $this->_size = $size;
         return $this;
@@ -116,7 +117,7 @@ class Uploader
      * @access public
      * @return int
      */
-    function getAllowMaxSize()
+    function getMaxBytes()
     {
         return $this->_size;
     }
@@ -128,7 +129,7 @@ class Uploader
      * @param callable $callback
      * @return Uploader
      */
-    public function setSavePath(callable $callback)
+    public function setFilePath(callable $callback)
     {
         $this->_path = $callback;
         return $this;
@@ -139,14 +140,14 @@ class Uploader
      *
      * @access public
      * @param array $file
-     * @return array
+     * @return string
      * @throws RuntimeException
      */
-    function uploading(array $file)
+    function upload(array $file)
     {
         //检测上传错误
         if ($file['error'] > 0) {
-            throw new RuntimeException(sprintf('上传处理异常，错误代码："%s".', $file['error']));
+            throw new RuntimeException(Language::format('tool.upload_error_occurred', $file['error']));
         }
         //检测类型
         if ($file['tmp_name'] && $file['type'] == 'application/octet-stream') {
@@ -158,21 +159,21 @@ class Uploader
         }
         $type = $this->_mime[$file['type']];
         if (!in_array($type, $this->_types)) {
-            throw new RuntimeException(sprintf('不支持的上传类型："%s".', $file['type']));
+            throw new RuntimeException(Language::format('tool.upload_types_unsupport', $file['type']));
         } elseif ($file['size'] > $this->_size) {
-            throw new RuntimeException(sprintf('仅允许上传不大于"%s"字节大小的文件.', $this->_size));
+            throw new RuntimeException(Language::format('tool.upload_bytes_oversize', $this->_size));
         } elseif (!$this->_path || !is_callable($this->_path)) {
-            throw new RuntimeException('上传文件保存路径未设置.');
+            throw new RuntimeException(Language::format('tool.upload_filepath_error'));
         }
         $path = call_user_func_array($this->_path, [$file]);
-        if (!file_exists($this->_path) && !File::mkDir($this->_path)) {
-            throw new RuntimeException(sprintf('无法创建目标目录："%s".', dirname($path)));
+        if (!file_exists($this->_path) && !File::mkDir(dirname($this->_path))) {
+            throw new RuntimeException(Language::format('tool.dir_create_failed', dirname($path)));
         }
         //格式化文件名
         if (move_uploaded_file($file['tmp_name'], $path)) {
             return $path;
         }
-    	return false;
+    	return '';
     }
 
 }
