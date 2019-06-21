@@ -30,7 +30,7 @@ class Executor
      * @param string $proc_dir
      * @return void
      */
-    public static function set(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp')
+    public static function init(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp')
     {
         if (!extension_loaded('swoole')) {
             throw new RuntimeException('无法加载[swoole]扩展');
