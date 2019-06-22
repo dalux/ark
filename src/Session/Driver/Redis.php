@@ -2,7 +2,7 @@
 
 namespace Brisk\Session\Driver;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Session\UserHandler;
 use Brisk\Session\SessionFather;
 use Brisk\Cache\Driver\Redis as RedisCache;

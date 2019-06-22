@@ -2,9 +2,9 @@
 
 namespace Brisk\Http;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
-use Brisk\Event;
+use Brisk\Kernel\Event;
 
 class Router
 {

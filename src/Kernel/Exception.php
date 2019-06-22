@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Brisk;
+namespace Brisk\Kernel;
 
 use Throwable;
 use Brisk\Http\Env;

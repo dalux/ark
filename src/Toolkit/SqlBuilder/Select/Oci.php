@@ -2,7 +2,7 @@
 
 namespace Brisk\Toolkit\SqlBuilder\Select;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Exception\SqlCompileException;
 use Brisk\Toolkit\SqlBuilder\Select;
 

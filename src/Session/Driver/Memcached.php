@@ -2,7 +2,7 @@
 
 namespace Brisk\Session\Driver;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Session\SessionFather;
 use Brisk\Session\UserHandler;
 use Brisk\Cache\Driver\Memcached as MemcachedCache;

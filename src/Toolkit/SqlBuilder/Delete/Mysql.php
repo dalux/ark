@@ -3,7 +3,7 @@
 namespace Brisk\Toolkit\SqlBuilder\Delete;
 
 use Brisk\Toolkit\SqlBuilder\Delete;
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Exception\SqlCompileException;
 
 class Mysql extends Delete

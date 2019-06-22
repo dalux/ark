@@ -2,7 +2,7 @@
 
 namespace Brisk\Cache\Driver;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
 

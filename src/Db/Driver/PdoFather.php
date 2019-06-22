@@ -2,8 +2,8 @@
 
 namespace Brisk\Db\Driver;
 
-use Brisk\Event;
-use Brisk\Timer;
+use Brisk\Kernel\Event;
+use Brisk\Kernel\Timer;
 use Brisk\Db\DbFather;
 use Brisk\Exception\PdoException;
 

@@ -2,7 +2,7 @@
 
 namespace Brisk\Cache;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
 
 class Proxy

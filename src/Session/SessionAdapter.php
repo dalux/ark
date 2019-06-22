@@ -2,9 +2,9 @@
 
 namespace Brisk\Session;
 
-use Brisk\App;
-use Brisk\Language;
-use Brisk\Loader;
+use Brisk\Kernel\App;
+use Brisk\Kernel\Language;
+use Brisk\Kernel\Loader;
 use Brisk\Exception\RuntimeException;
 use Brisk\Exception\ClassNotFoundException;
 

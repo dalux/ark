@@ -2,8 +2,8 @@
 
 namespace Brisk\Toolkit;
 
+use Brisk\Kernel\Language;
 use BriskRuntimeException\RuntimeException;
-use Brisk\Language;
 
 class Uploader
 {

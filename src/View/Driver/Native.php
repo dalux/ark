@@ -2,9 +2,9 @@
 
 namespace Brisk\View\Driver;
 
-use Brisk\Event;
-use Brisk\Language;
-use Brisk\Loader;
+use Brisk\Kernel\Event;
+use Brisk\Kernel\Language;
+use Brisk\Kernel\Loader;
 use Brisk\View\ViewFather;
 use Brisk\Exception\RuntimeException;
 

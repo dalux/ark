@@ -2,7 +2,7 @@
 
 namespace Brisk\Toolkit\SqlBuilder;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Exception\SqlCompileException;
 
 abstract class Insert extends SqlFather

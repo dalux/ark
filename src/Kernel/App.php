@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Brisk;
+namespace Brisk\Kernel;
 
 use Brisk\Http\Env;
 use Brisk\Http\Router;
@@ -41,11 +41,11 @@ class App
     public static function init()
     {
         if (is_null(self::$_instance)) {
-            require __DIR__. '/Exception/RuntimeException.php';
-            require __DIR__. '/Http/Env.php';
+            require __DIR__. '/../Http/Env.php';
             require __DIR__. '/Loader.php';
             require __DIR__. '/Container.php';
             require __DIR__. '/Exception.php';
+            require __DIR__. '/../Exception/RuntimeException.php';
             //初始化环境数据
             Env::init();
             //配置项默认为空对象
@@ -59,12 +59,12 @@ class App
             //默认错误提示
             ini_set('display_errors', '1');
             //后续类文件自动加载
-            spl_autoload_register(['\\Brisk\\Loader', 'autoLoad']);
+            spl_autoload_register(['\\Brisk\\Kernel\\Loader', 'autoLoad']);
             //框架变量实例
             self::$_instance = new self();
             //框架路径别名
-            Loader::setAlias('*', __DIR__);
-            Loader::addNameSpace('Brisk', __DIR__);
+            Loader::setAlias('*', dirname(__DIR__));
+            Loader::addNameSpace('Brisk', dirname(__DIR__));
         }
         return self::$_instance;
     }

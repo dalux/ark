@@ -2,7 +2,7 @@
 
 namespace Brisk\Http;
 
-use Brisk\Event;
+use Brisk\Kernel\Event;
 
 class Request
 {

@@ -2,7 +2,7 @@
 
 namespace Brisk\Db;
 
-use Brisk\Language;
+use Brisk\Kernel\Language;
 use Brisk\Cache\Proxy;
 use Brisk\Cache\ICacheDriver;
 use Brisk\Exception\RuntimeException;
