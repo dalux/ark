@@ -277,8 +277,7 @@ abstract class SqlFather
         //特殊处理
         if (is_null($value)
                 || is_array($value) && count($value) == 0) {
-            if (preg_match('/^\\{\\{.*?\\}\\}/', $expr)
-                    || preg_match('/.*?\(.*?\)/', $expr)) {
+            if (preg_match('/^\\{\\{.*?\\}\\}/', $expr) || preg_match('/.*?\(.*?\)/', $expr)) {
                 return str_replace(['{{', '}}'], '', $expr);
             }
             return $expr;
@@ -310,7 +309,8 @@ abstract class SqlFather
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
                         $expr = preg_replace('/v/', $val, $expr, 1);
-                    } elseif (preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\\(.*?\\)/', $val)) {
+                    } elseif (is_string($val) 
+                            && preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\\(.*?\\)/', $val)) {
                         $val = str_replace(['{{', '}}'], '', $val);
                         $expr = preg_replace('/v/', $val, $expr, 1);
                     } else {

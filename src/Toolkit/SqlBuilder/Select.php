@@ -161,7 +161,7 @@ abstract class Select extends SqlFather
                 foreach ($val[1] as $k=> $v) {
                     $v = trim($v);
                     //系统函数或对象调用
-                    if (preg_match('/^\\{\\{.*?\\}\\}/', $v)) {
+                    if (is_string($v) && preg_match('/^\\{\\{.*?\\}\\}/', $v)) {
                         $v = str_replace(['{{', '}}'], '', $v);
 						if (is_integer($k)) {
 							$val[1][$k] = $v;
@@ -215,7 +215,7 @@ abstract class Select extends SqlFather
                         foreach ($join_fields as $k=> $v) {
                             $v = trim($v);
                             //系统函数或对象调用
-                            if (preg_match('/^\\{\\{.*?\\}\\}/', $v)) {
+                            if (is_string($v) && preg_match('/^\\{\\{.*?\\}\\}/', $v)) {
                                 $v = str_replace(['{{', '}}'], '', $v);
 								if (is_integer($k)) {
 									$join_fields[$k] = $v;

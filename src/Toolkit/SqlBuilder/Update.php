@@ -48,7 +48,7 @@ abstract class Update extends SqlFather
             $sql = $update. ' '. $v. ' '. $alias;
         }
         foreach ($set_part as $key=> $val) {
-            if (preg_match('/^\\{\\{.*?\\}\\}$/', $val)) {
+            if (is_string($val) && preg_match('/^\\{\\{.*?\\}\\}$/', $val)) {
                 $val = str_replace(['{{', '}}'], '', $val);
                 $set[] = $alias
                     ? $alias. '.'. $key. '='. $val
