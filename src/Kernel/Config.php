@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Brisk\Kernel;
 
@@ -158,7 +158,7 @@ class Config
         $config = preg_replace('/\'\s+\=\>\s+?array\s+?\(/', '\'=> array(', $config);
         $config = preg_replace('/\'\s+=>/', '\'=>', $config);
         $config = preg_replace('/\=\> array\(\s*?\)/', '=> array()', $config);
-        $config = '<?php'. PHP_EOL. PHP_EOL. 'return '. $config. ';';
+        $config = '<?php declare(strict_types=1);'. PHP_EOL. PHP_EOL. 'return '. $config. ';';
         file_put_contents($file, $config);
     }
 

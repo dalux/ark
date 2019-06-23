@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Brisk\Toolkit\SqlBuilder;
 
@@ -295,7 +295,8 @@ abstract class SqlFather
                     }
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
-                    } elseif (preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\(.*?\)/', $val)) {
+                    } elseif (is_string($val) 
+                            && (preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\(.*?\)/', $val))) {
                         $val = str_replace(['{{', '}}'], '', $val);
                     } else {
                         $val = $this->quote($val);
