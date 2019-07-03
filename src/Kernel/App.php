@@ -136,7 +136,7 @@ class App
     {
         if (!isset(self::$_storage[$name]) 
                 || !self::$_storage[$name]['system']) {
-            self::$_storage[$name] = ['instance'=> value, 'system'=> false];
+            self::$_storage[$name] = ['instance'=> $value, 'system'=> false];
         }
     }
 
