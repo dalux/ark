@@ -111,7 +111,7 @@ abstract class DbFather implements IDbDriver
     public function select()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Select\\'. $dbtype;
+        $classname = '\Brisk\Toolkit\SqlBuilder\Select\\'. $dbtype;
         return new $classname();
     }
 
@@ -123,7 +123,7 @@ abstract class DbFather implements IDbDriver
     public function update()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Update\\'. $dbtype;
+        $classname = '\Brisk\Toolkit\SqlBuilder\Update\\'. $dbtype;
         return new $classname();
     }
 
@@ -135,7 +135,7 @@ abstract class DbFather implements IDbDriver
     public function delete()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Delete\\'. $dbtype;
+        $classname = '\Brisk\Toolkit\SqlBuilder\Delete\\'. $dbtype;
         return new $classname();
     }
 
@@ -147,7 +147,7 @@ abstract class DbFather implements IDbDriver
     public function insert()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\\Brisk\\Toolkit\\SqlBuilder\\Insert\\'. $dbtype;
+        $classname = '\Brisk\Toolkit\SqlBuilder\Insert\\'. $dbtype;
         return new $classname();
     }
 

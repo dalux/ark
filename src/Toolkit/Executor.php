@@ -47,7 +47,7 @@ class Executor
         }
         self::_log('启动完成, 开始接受任务');
         //每50毫秒从队列中取一次任务
-        $timer = swoole_timer_tick(50, function() {
+        $timer = swoole_timer_tick(10, function() {
             if (self::$_locked || !self::$_queue) return;
             self::$_locked = 1;
             $task = array_shift(self::$_queue);
@@ -102,30 +102,21 @@ class Executor
     }
     
     /**
-     * 终止执行器
+     * 等待终止执行器
      * 
-     * @param bool $wait
+     * @param Closure $endfunc
      * @return void
      */
-    public static function end(bool $now = false)
+    public static function shutdown(Closure $endfunc = null)
     {
-        $clean = function() {
-            swoole_timer_clear(self::$_action_timer);
-            swoole_timer_clear(self::$_wait_timer);
-            $v = [];
-            foreach (self::$_process as $v) {
-                swoole_process::kill($v['pid']);
-            }
-        };
-        if (!$now) {
-            swoole_timer_tick(50, function($timer) use ($clean) {
-                if (!self::$_queue) {
-                    $clean();
-                    swoole_timer_clear($timer);
-                }
-            });
-        } else {
-            $clean();
+        while (self::getQueueLength() > 0) {}
+        swoole_timer_clear(self::$_action_timer);
+        swoole_timer_clear(self::$_wait_timer);
+        foreach (self::$_process as $v) {
+            swoole_process::kill($v['pid']);
+        }
+        if (is_callable($endfunc)) {
+            call_user_func_array($endfunc, []);
         }
     }
 

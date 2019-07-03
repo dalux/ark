@@ -30,7 +30,7 @@ class ViewAdapter
         }
         $instance = new $driver($option);
         if (!$instance instanceof IViewDriver) {
-            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\\Brisk\\View\\IViewDriver'));
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\Brisk\View\IViewDriver'));
         }
         return $instance;
     }

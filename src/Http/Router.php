@@ -136,7 +136,7 @@ class Router
             }
             call_user_func_array($middleware, [$request, $response]);
             if ($response->isTerminated()) {
-                $content = $response->getContent();
+                $content = $response->getWrited();
                 $clean();
                 return $content;
             }
@@ -159,14 +159,14 @@ class Router
             throw new RuntimeException(Language::format('http.invalid_response_object'));
         }
         if ($response->isTerminated()) {
-            $content = $response->getContent();
+            $content = $response->getWrited();
             $clean();
             return $content;
         }
         //控制器
         call_user_func_array($callback, [$request, $response]);
         if ($response->isTerminated()) {
-            $content = $response->getContent();
+            $content = $response->getWrited();
             $clean();
             return $content;
         }
@@ -178,12 +178,12 @@ class Router
             }
             call_user_func_array($middleware, [$request, $response]);
             if ($response->isTerminated()) {
-                $content = $response->getContent();
+                $content = $response->getWrited();
                 $clean();
                 return $content;
             }
         }
-        $content = $response->getContent();
+        $content = $response->getWrited();
         $clean();
         return $content;
     }

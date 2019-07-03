@@ -34,7 +34,7 @@ class CacheAdapter
         }
         $instance = new $driver($option['path'], $option['setting']);
         if (!$instance instanceof ICacheDriver) {
-            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\\Brisk\\Cache\\ICacheDriver'));
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\Brisk\Cache\ICacheDriver'));
         }
         return $instance;
     }

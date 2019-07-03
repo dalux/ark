@@ -59,7 +59,7 @@ class App
             //默认错误提示
             ini_set('display_errors', '1');
             //后续类文件自动加载
-            spl_autoload_register(['\\Brisk\\Kernel\\Loader', 'autoLoad']);
+            spl_autoload_register(['Brisk\Kernel\Loader', 'autoLoad']);
             //框架变量实例
             self::$_instance = new self();
             //框架路径别名

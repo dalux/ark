@@ -144,7 +144,7 @@ class Response
     public function end(string $content = null)
     {
         if (!is_null($content)) {
-            $this->setContent($content);
+            $this->write($content);
         }
         self::$_data[$this->_instid]['end'] = true;
     }
@@ -165,7 +165,7 @@ class Response
      * @param string content
      * @return mixed
      */
-    public function setContent(string $content)
+    public function write(string $content)
     {
         self::$_data[$this->_instid]['content'] = $content;
     }
@@ -175,7 +175,7 @@ class Response
      * 
      * @return string
      */
-    public function getContent()
+    public function getWrited()
     {
         return self::$_data[$this->_instid]['content'];
     }
