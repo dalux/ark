@@ -73,7 +73,7 @@ class Native extends ViewFather
      * @param bool output
      * @return string
      */
-    public function display(string $template)
+    public function render(string $template)
     {
         if (strpos($template, $this->_template_ext) === false) {
             $template = $template. $this->_template_ext;

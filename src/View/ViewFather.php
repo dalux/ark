@@ -28,6 +28,6 @@ abstract class ViewFather implements IViewDriver
      * @param string template
      * @return string
      */
-    public abstract function display(string $template);
+    public abstract function render(string $template);
 
 }

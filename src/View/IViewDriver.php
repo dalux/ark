@@ -28,6 +28,6 @@ interface IViewDriver
      * @param string template
      * @return string
      */
-    public function display(string $template);
+    public function render(string $template);
 
 }
