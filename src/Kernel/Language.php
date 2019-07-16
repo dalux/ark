@@ -31,11 +31,11 @@ class Language
             'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
             'event.data_key_must_equal'         => '事件监听器[%s]返回前后数组项不一致',
 
+            'http.request_not_ready'            => '请求数据未准备就绪',
             'http.invalid_require_uri'          => '无有效的请求URI地址',
             'http.router_not_defined'           => '未定义请求地址[%s]的路由解析器',
-            'http.router_not_callable'          => '路由[%s]解析器无法调用',
-            'http.invalid_request_object'       => '无效的[Request]对象实例',
-            'http.invalid_response_object'      => '无效的[Response]对象实例',
+            'http.router_not_callable'          => '路由[%s]解析器不可用',
+            'http.interceptor_not_callable'     => '路由[%s]拦截器不可用',
 
             'cache.dir_create_failed'           => '无法创建目录[%s]',
             'cache.dir_permission_error'        => '无权限读写指定目录[%s]',

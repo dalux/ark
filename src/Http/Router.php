@@ -4,7 +4,6 @@ namespace Brisk\Http;
 
 use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
-use Brisk\Kernel\Event;
 
 class Router
 {
@@ -32,13 +31,14 @@ class Router
     /**
      * add route operator
      *
-     * @param string pattern
-     * @param callable callback
+     * @param string $pattern
+     * @param string|array $callback
+     * @param string|array $interceptor
      * @return void
      */
-    public static function addRule(string $pattern, callable $callback)
+    public static function addRule(string $pattern, $callback, $interceptor = null)
     {
-        self::$_rules[$pattern] = $callback;
+        self::$_rules[$pattern] = [$callback, $interceptor];
     }
 
     /**
@@ -80,6 +80,7 @@ class Router
         }
         self::$_route = $uri;
         //遍历规则
+        $route = $callback = $interceptor = null;
         foreach (self::$_rules as $key=> $val) {
             if (strpos($key, ':') !== false) {
                 $pattern = preg_replace_callback('~/\\:([^\\/]+)~', function($matches) {
@@ -98,7 +99,7 @@ class Router
                         return sprintf('/(?P<%s>[^\\/]+)', $result);
                     }
                 }, $key);
-                if (preg_match(sprintf('~^%s$~i', $pattern), self::$_route, $matches)) {
+                if (preg_match(sprintf('~^%s$~i', $pattern), $uri, $matches)) {
                     //如有别名，则加入_GET全局数组中
                     foreach ($matches as $k=> $v) {
                         if (is_string($k)) {
@@ -106,86 +107,63 @@ class Router
                         }
                     }
                     $route = $key;
-                    $callback = $val;
+                    $callback = $val[0];
+                    $interceptor = $val[1];
                     break;
                 }
-            } elseif (preg_match(sprintf('~^%s$~', $key), self::$_route, $matches)) {
+            } elseif (preg_match(sprintf('~^%s$~', $key), $uri, $matches)) {
                 $route = $key;
-                $callback = $val;
+                $callback = $val[0];
+                $interceptor = $val[1];
                 break;
             }
         }
         if (is_null($route)) {
-            throw new RuntimeException(Language::format('http.router_not_defined', self::$_route));
+            throw new RuntimeException(Language::format('http.router_not_defined', $uri));
         }
-        //路由生命周期请求对象实例
-        $request  = new Request($_GET);
-        //路由生命周期响应对象实例
-        $response = new Response();
-        //清理函数
-        $clean = function() use ($request, $response) {
-            $response->clean();
-            $request->clean();
-            Middleware::clean();
-        };
-        //前置中间件
-        $before_middlewares = Middleware::get(self::$_route, 'before');
-        foreach ($before_middlewares as $middleware) {
-            if (!is_callable($middleware)) {
-                continue;
-            }
-            call_user_func_array($middleware, [$request, $response]);
-            if ($response->isTerminated()) {
-                $content = $response->getWrited();
-                $clean();
-                return $content;
+        //请求初始化
+        Request::init($_GET);
+        //路由解析器是否可用
+        if (is_string($callback)) {
+            if (strpos($callback, '@') !== false) {
+                $callback = explode('@', $callback);
             }
         }
-        //路由执行前事件
-        $data = [
-            'callback'=> $callback,
-            'request'=> $request,
-            'response'=> $response,
-        ];
-        $data = Event::fire('event.router.action', $data);
-        $callback = $data['callback'];
-        $request = $data['request'];
-        $response = $data['response'];
         if (!is_callable($callback)) {
-            throw new RuntimeException(Language::format('http.router_not_callable', self::$_route));
-        } elseif (!$request instanceof Request) {
-            throw new RuntimeException(Language::format('http.invalid_request_object'));
-        } elseif (!$response instanceof Response) {
-            throw new RuntimeException(Language::format('http.invalid_response_object'));
+            throw new RuntimeException(Language::format('http.router_not_callable', $uri));
         }
-        if ($response->isTerminated()) {
-            $content = $response->getWrited();
-            $clean();
-            return $content;
+        //拦截器是否定义
+        if ($interceptor) {
+            if (is_string($interceptor)) {
+                if (strpos($interceptor, '@') !== false) {
+                    $interceptor = explode('@', $interceptor);
+                }
+                if (!is_callable($interceptor)) {
+                    throw new RuntimeException(Language::format('http.interceptor_not_callable', $uri));
+                }
+                $interceptor = [$interceptor];
+            } elseif (is_array($interceptor)) {
+                foreach ($interceptor as $key=> $val) {
+                    if (is_string($val)) {
+                        if (strpos($val, '@') !== false) {
+                            $val = explode('@', $val);
+                            $interceptor[$key] = $val;
+                        }
+                    }
+                    if (!is_callable($val)) {
+                        throw new RuntimeException(Language::format('http.interceptor_not_callable', $uri));
+                    }
+                }
+            }
+            foreach ($interceptor as $val) {
+                $result = call_user_func_array($val, []);
+                if (!is_null($result)) {
+                    return $result;
+                }
+            }
         }
         //控制器
-        call_user_func_array($callback, [$request, $response]);
-        if ($response->isTerminated()) {
-            $content = $response->getWrited();
-            $clean();
-            return $content;
-        }
-        //后置中间件
-        $after_middlewares = Middleware::get(self::$_route, 'after');
-        foreach ($after_middlewares as $middleware) {
-            if (!is_callable($middleware)) {
-                continue;
-            }
-            call_user_func_array($middleware, [$request, $response]);
-            if ($response->isTerminated()) {
-                $content = $response->getWrited();
-                $clean();
-                return $content;
-            }
-        }
-        $content = $response->getWrited();
-        $clean();
-        return $content;
+        return call_user_func_array($callback, []);
     }
 
 }

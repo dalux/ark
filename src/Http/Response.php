@@ -5,7 +5,6 @@ namespace Brisk\Http;
 class Response
 {
 
-    private static $_data       = [];
     private static $_status     = [
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -49,21 +48,6 @@ class Response
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported'
     ];
-    private $_instid;
-
-    /**
-     * 私有构造器
-     * 
-     */
-    public function __construct()
-    {
-        $id = uniqid();
-        self::$_data[$id] = [
-            'content'   => '', 
-            'end'       => false
-        ];
-        $this->_instid = $id;
-    }
 
     /**
     * set header parameter
@@ -72,13 +56,13 @@ class Response
     * @param string text
     * @return void
     */
-    public function status(int $code, string $text = null)
+    public static function status(int $code, string $text = null)
     {
         $status_code = self::$_status[$code] ?? 200;
         $status_text = is_null($text) ? self::$_status[$status_code] : $text;
         $protocol = $_SERVER['SERVER_PROTOCOL'];
         is_null($protocol) && $protocol = 'HTTP/1.1';
-        $this->setHeader($protocol. ' '. $status_code. ' '. $status_text);
+        self::setHeader($protocol. ' '. $status_code. ' '. $status_text);
     }
 
     /**
@@ -89,7 +73,7 @@ class Response
     * @param bool replace
     * @return void
     */
-    public function setHeader(string $header, bool $replace = true)
+    public static function setHeader(string $header, bool $replace = true)
     {
         header($header, $replace);
     }
@@ -106,7 +90,7 @@ class Response
      * @param bool secure
      * @return void
      */
-    public function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
+    public static function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
     {
         setcookie($name, $value, time() + $expire, $path, $domain, $secure, $httponly);
     }
@@ -116,13 +100,13 @@ class Response
      *
      * @return void
      */
-    public function noCache()
+    public static function noCache()
     {
-        $this->setHeader('Expires: Mon, 26 Jul 1999 01:00:00 GMT');
-        $this->setHeader('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
-        $this->setHeader('Cache-Control: no-store, no-cache, must-revalidate');
-        $this->setHeader('Cache-Control: post-check=0, pre-check=0', false);
-        $this->setHeader('Pragma: no-cache');
+        self::setHeader('Expires: Mon, 26 Jul 1999 01:00:00 GMT');
+        self::setHeader('Last-Modified: '. gmdate('D, d M Y H:i:s'). ' GMT');
+        self::setHeader('Cache-Control: no-store, no-cache, must-revalidate');
+        self::setHeader('Cache-Control: post-check=0, pre-check=0', false);
+        self::setHeader('Pragma: no-cache');
     }
 
     /**
@@ -131,53 +115,9 @@ class Response
      * @param int sec
      * @return void
      */
-    public function setExpires(int $sec = 3600)
+    public static function setExpires(int $sec = 3600)
     {
-        $this->setHeader('Expires: '. date('D, d M Y H:i:s', time() + $sec). ' GMT');
-    }
-    
-    /**
-     * 设置响应结束标记
-     * 
-     * @return void
-     */
-    public function end(string $content = null)
-    {
-        if (!is_null($content)) {
-            $this->write($content);
-        }
-        self::$_data[$this->_instid]['end'] = true;
-    }
-
-    /**
-     * 响应是否已结束
-     * 
-     * @return bool
-     */
-    public function isTerminated()
-    {
-        return self::$_data[$this->_instid]['end'];
-    }
-
-    /**
-     * set output content
-     * 
-     * @param string content
-     * @return mixed
-     */
-    public function write(string $content)
-    {
-        self::$_data[$this->_instid]['content'] = $content;
-    }
-
-    /**
-     * get output content
-     * 
-     * @return string
-     */
-    public function getWrited()
-    {
-        return self::$_data[$this->_instid]['content'];
+        self::setHeader('Expires: '. date('D, d M Y H:i:s', time() + $sec). ' GMT');
     }
 
     /**
@@ -188,27 +128,18 @@ class Response
      * @param string $msg
      * @return void
      */
-    public function redirect(string $url, bool $script = false, string $msg = null)
+    public static function redirect(string $url, bool $script = false, string $msg = null)
     {
         if (!$script) {
-            $this->setHeader('Location: '. $url);
-            return $this->end();
+            self::setHeader('Location: '. $url);
+            exit();
         }
         $content = '<script>';
         is_null($msg) || $content.= 'alert("'. $msg. '");';
         $content.= 'location.href="'. $url. '";';
         $content.= '</script>';
-        return $this->end($content);
-    }
-
-    /**
-     * clean
-     * 
-     * @return void
-     */
-    public function clean()
-    {
-        unset(self::$_data[$this->_instid]);
+        echo $content;
+        exit();
     }
 
 }

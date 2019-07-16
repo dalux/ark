@@ -2,7 +2,9 @@
 
 namespace Brisk\Http;
 
+use Brisk\Exception\RuntimeException;
 use Brisk\Kernel\Event;
+use Brisk\Kernel\Language;
 
 class Request
 {
@@ -12,8 +14,8 @@ class Request
     const TYPE_COOKIE           = 3;
     const TYPE_FILES            = 4;
 
-    private $_instid;
     private static $_data       = [];
+    private static $_ready      = false;
     
     /**
      * 构造函数
@@ -21,32 +23,33 @@ class Request
      * @param array $getdata
      * @return void
      */
-    public function __construct(array $getdata = [])
+    public static function init(array $getdata = [])
     {
-        $id = uniqid();
-        $data = [
-            self::TYPE_GET      => $getdata, 
-            self::TYPE_POST     => $_POST, 
-            self::TYPE_COOKIE   => $_COOKIE, 
-            self::TYPE_FILES    => $_FILES
-        ];
-        $data = Event::fire('event.request.ready', $data);
-        $get        = $data[self::TYPE_GET];
-        $post       = $data[self::TYPE_POST];
-        $cookie     = $data[self::TYPE_COOKIE];
-        $files      = $data[self::TYPE_FILES];
-        $request    = array_merge($get, $post, $cookie);
-        $_GET       = [];
-        $_POST      = [];
-        $_COOKIE    = [];
-        $_REQUEST   = [];
-        $_FILES     = [];
-        self::$_data[$id]['get']        = $get;
-        self::$_data[$id]['post']       = $post;
-        self::$_data[$id]['cookie']     = $cookie;
-        self::$_data[$id]['files']      = $files;
-        self::$_data[$id]['request']    = $request;
-        $this->_instid = $id;
+        if (!self::$_ready) {
+            $data = [
+                self::TYPE_GET => $getdata,
+                self::TYPE_POST => $_POST,
+                self::TYPE_COOKIE => $_COOKIE,
+                self::TYPE_FILES => $_FILES
+            ];
+            $data = Event::fire('event.request.ready', $data);
+            $get = $data[self::TYPE_GET];
+            $post = $data[self::TYPE_POST];
+            $cookie = $data[self::TYPE_COOKIE];
+            $files = $data[self::TYPE_FILES];
+            $request = array_merge($get, $post, $cookie);
+            $_GET = [];
+            $_POST = [];
+            $_COOKIE = [];
+            $_REQUEST = [];
+            $_FILES = [];
+            self::$_data['get'] = $get;
+            self::$_data['post'] = $post;
+            self::$_data['cookie'] = $cookie;
+            self::$_data['files'] = $files;
+            self::$_data['request'] = $request;
+            self::$_ready = true;
+        }
     }
 
     /**
@@ -54,7 +57,7 @@ class Request
      *
      * @return bool
      */
-	public function isPost()
+	public static function isPost()
 	{
         return 'POST' == strtoupper($_SERVER['REQUEST_METHOD']);
 	}
@@ -64,9 +67,20 @@ class Request
      *
      * @return bool
      */
-    public function isAjax()
+    public static function isAjax()
     {
         return 'XMLHttpRequest' == $_SERVER['HTTP_X_REQUESTED_WITH'];
+    }
+
+    /**
+     * 检查请求是否就绪
+     *
+     */
+    public static function checkReady()
+    {
+        if (!self::$_ready) {
+            throw new RuntimeException(Language::get('http.request_not_ready'));
+        }
     }
 
     /**
@@ -76,9 +90,10 @@ class Request
      * @param string sub
      * @return mixed
      */
-    public function get(string $name = null, $sub = null)
+    public static function get(string $name = null, $sub = null)
     {
-        $get = self::$_data[$this->_instid]['get'];
+        self::checkReady();
+        $get = self::$_data['get'];
         return is_null($name) ? $get : ($get[$name] ?? $sub);
     }
 
@@ -87,11 +102,12 @@ class Request
      *
      * @param string name
      * @param string sub
-     * @return var
+     * @return mixed
      */
     public function post(string $name = null, $sub = null)
     {
-        $post = self::$_data[$this->_instid]['post'];
+        self::checkReady();
+        $post = self::$_data['post'];
         return is_null($name) ? $post : ($post[$name] ?? $sub);
     }
 
@@ -104,7 +120,8 @@ class Request
      */
     public function cookie(string $name = null, $sub = null)
     {
-        $cookie = self::$_data[$this->_instid]['cookie'];
+        self::checkReady();
+        $cookie = self::$_data['cookie'];
         return is_null($name) ? $cookie : ($cookie[$name] ?? $sub);
     }
 
@@ -116,7 +133,8 @@ class Request
      */
     public function files(string $name = null)
     {
-        $files = self::$_data[$this->_instid]['files'];
+        self::checkReady();
+        $files = self::$_data['files'];
         return is_null($name) ? $files : $files[$name];
     }
 
@@ -129,7 +147,8 @@ class Request
      */
     public function data(string $name = null, $sub = null)
     {
-        $request = self::$_data[$this->_instid]['request'];
+        self::checkReady();
+        $request = self::$_data['request'];
         return is_null($name) ? $request : ($request[$name] ?? $sub);
     }
 
@@ -143,7 +162,7 @@ class Request
      */
     public function add(string $type, string $name, $data)
     {
-        $id = $this->_instid;
+        self::checkReady();
         $map = [
             self::TYPE_GET      => 'get',
             self::TYPE_POST     => 'post',
@@ -154,11 +173,11 @@ class Request
             return false;
         }
         $flag = $map[$type];
-        self::$_data[$id][$flag][$name] = $data;
-        self::$_data[$id]['request'] = array_merge(
-            self::$_data[$id]['get'], 
-            self::$_data[$id]['post'],
-            self::$_data[$id]['cookie']
+        self::$_data[$flag][$name] = $data;
+        self::$_data['request'] = array_merge(
+            self::$_data['get'],
+            self::$_data['post'],
+            self::$_data['cookie']
         );
         return true;
     }
@@ -168,12 +187,12 @@ class Request
      *
      * @param string type
      * @param string name
-     * @param var data
-     * @return void
+     * @param mixed data
+     * @return bool
      */
     public function delete(string $type, string $name)
     {
-        $id = $this->_instid;
+        self::checkReady();
         $map = [
             self::TYPE_GET      => 'get',
             self::TYPE_POST     => 'post',
@@ -184,11 +203,11 @@ class Request
             return false;
         }
         $flag = $map[$type];
-        unset(self::$_data[$id][$flag][$name]);
-        self::$_request = array_merge(
-            self::$_data[$id]['get'], 
-            self::$_data[$id]['post'],
-            self::$_data[$id]['cookie']
+        unset(self::$_data[$flag][$name]);
+        self::$_data['request'] = array_merge(
+            self::$_data['get'],
+            self::$_data['post'],
+            self::$_data['cookie']
         );
         return true;
     }
@@ -223,16 +242,6 @@ class Request
             }
         }
         return $convert ? sprintf('%u', ip2long($ip)) : $ip;
-    }
-
-    /**
-     * clean
-     * 
-     * @return void
-     */
-    public function clean()
-    {
-        unset(self::$_data[$this->_instid]);
     }
 
 }
