@@ -14,7 +14,7 @@ class Timer
      * Mark Time Label
      *
      * @param string $flag
-     * @return void
+     * @return null
      */
     public static function mark(string $flag)
     {

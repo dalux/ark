@@ -95,7 +95,7 @@ class Language
     /**
      * Gets the language pack for the specified language
      *
-     * @param string $language
+     * @param string $lang
      * @return array
      */
     public static function get(string $lang)
@@ -106,8 +106,8 @@ class Language
     /**
      * Setting the current system language
      *
-     * @param string $language
-     * @return void
+     * @param string $lang
+     * @return null
      */
     public static function apply(string $lang)
     {

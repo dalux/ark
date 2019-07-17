@@ -130,6 +130,17 @@ class Loader
     }
 
     /**
+     * 加载文件
+     *
+     * @param string $spacename
+     * @return string
+     */
+    public static function import(string $spacename)
+    {
+        return include_once(self::realPath($spacename));
+    }
+
+    /**
      * Find the corresponding file
      *
      * @param string spacename
@@ -143,7 +154,8 @@ class Loader
 			$space = $parsed[1];
 			return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, self::$_alias[$alias]. $space);
         }
-		throw new RuntimeException(Language::format('core.format_path_failed', $spacename));
+		$err = Language::format('core.format_path_failed', $spacename);
+		throw new RuntimeException($err);
     }
 
     /**

@@ -13,7 +13,7 @@ class Container
     /**
      * construct
      *
-     * @param mixed data
+     * @param mixed $data
      * @return null
      */
     public function __construct($data = null)
@@ -31,7 +31,7 @@ class Container
     /**
      * Check if key exists
      *
-     * @param string key
+     * @param string $key
      * @return bool
      */
     public function exist(string $key)

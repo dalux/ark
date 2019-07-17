@@ -34,18 +34,21 @@ class App
 
     /**
      * 初始化
-     * 
-     * @param bool $output
+     *
      * @return App
      */
     public static function init()
     {
         if (is_null(self::$_instance)) {
-            require __DIR__. '/../Http/Env.php';
-            require __DIR__. '/Loader.php';
-            require __DIR__. '/Container.php';
-            require __DIR__. '/Exception.php';
-            require __DIR__. '/../Exception/RuntimeException.php';
+            $libdir = dirname(__DIR__);
+            require $libdir. '/Kernel/Loader.php';
+            require $libdir. '/Kernel/Container.php';
+            require $libdir. '/Kernel/Exception.php';
+            require $libdir. '/Http/Env.php';
+            require $libdir. '/Exception/RuntimeException.php';
+            //框架路径别名
+            Loader::setAlias('*', $libdir);
+            Loader::addNameSpace('Brisk', $libdir);
             //初始化环境数据
             Env::init();
             //配置项默认为空对象
@@ -62,9 +65,6 @@ class App
             spl_autoload_register(['Brisk\Kernel\Loader', 'autoLoad']);
             //框架变量实例
             self::$_instance = new self();
-            //框架路径别名
-            Loader::setAlias('*', dirname(__DIR__));
-            Loader::addNameSpace('Brisk', dirname(__DIR__));
         }
         return self::$_instance;
     }
@@ -72,7 +72,7 @@ class App
     /**
      * 设置异常处理句柄
      * 
-     * @param callable handler
+     * @param callable $handler
      * @return void
      */
     public static function setExceptionHandler(callable $handler)
@@ -83,8 +83,9 @@ class App
 
     /**
      * 设置错误处理句柄
-     * 
-     * @param callable handler
+     *
+     * @param callable $handler
+     * @param int $type
      * @return void
      */
     public static function setErrorHandler(callable $handler, int $type)
@@ -96,8 +97,7 @@ class App
     /**
      * Start the application
      *
-     * @param callable config
-     * @param bool return
+     * @param callable $config
      * @return mixed
      */
     public static function runAs(callable $config)
@@ -128,8 +128,8 @@ class App
     /**
      * Set up custom singleton components
      *
-     * @param string name
-     * @param callable value
+     * @param string $name
+     * @param callable $value
      * @return void
      */
     public static function set(string $name, callable $value)
@@ -143,8 +143,8 @@ class App
     /**
      * get custom singleton components
      *
-     * @param string name
-     * @return var
+     * @param string $name
+     * @return mixed
      */
     public static function get(string $name = null)
     {

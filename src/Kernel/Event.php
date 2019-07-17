@@ -15,8 +15,8 @@ class Event
     /**
      * Adding event listeners
      *
-     * @param string event
-     * @param callable listener
+     * @param string $event
+     * @param callable $listener
      * @return null
      */
     public static function add(string $event, callable $listener)
@@ -40,7 +40,7 @@ class Event
     /**
      * Gets all listeners for the specified event
      *
-     * @param string event
+     * @param string $event
      * @return array
      */
     public static function get(string $event)

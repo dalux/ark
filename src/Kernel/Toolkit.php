@@ -2,8 +2,6 @@
 
 namespace Brisk\Kernel;
 
-use Brisk\Exception\RuntimeException;
-
 class Toolkit
 {
 
