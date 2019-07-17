@@ -134,7 +134,9 @@ class Router
         }
         //拦截器是否定义
         if ($interceptor) {
-            if (is_string($interceptor)) {
+            if (is_callable($interceptor)) {
+                $interceptor = [$interceptor];
+            } elseif (is_string($interceptor)) {
                 if (strpos($interceptor, '@') !== false) {
                     $interceptor = explode('@', $interceptor);
                 }
@@ -143,7 +145,7 @@ class Router
                 }
                 $interceptor = [$interceptor];
             } elseif (is_array($interceptor)) {
-                foreach ($interceptor as $key=> $val) {
+                foreach ($interceptor as $key => $val) {
                     if (is_string($val)) {
                         if (strpos($val, '@') !== false) {
                             $val = explode('@', $val);
