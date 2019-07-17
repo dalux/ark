@@ -104,7 +104,7 @@ class Request
      * @param string sub
      * @return mixed
      */
-    public function post(string $name = null, $sub = null)
+    public static function post(string $name = null, $sub = null)
     {
         self::checkReady();
         $post = self::$_data['post'];
@@ -118,7 +118,7 @@ class Request
      * @param string sub
      * @return mixed
      */
-    public function cookie(string $name = null, $sub = null)
+    public static function cookie(string $name = null, $sub = null)
     {
         self::checkReady();
         $cookie = self::$_data['cookie'];
@@ -131,7 +131,7 @@ class Request
      * @param string name
      * @return mixed
      */
-    public function files(string $name = null)
+    public static function files(string $name = null)
     {
         self::checkReady();
         $files = self::$_data['files'];
@@ -145,7 +145,7 @@ class Request
      * @param string sub
      * @return mixed
      */
-    public function data(string $name = null, $sub = null)
+    public static function data(string $name = null, $sub = null)
     {
         self::checkReady();
         $request = self::$_data['request'];
@@ -160,7 +160,7 @@ class Request
      * @param mixed data
      * @return bool
      */
-    public function add(string $type, string $name, $data)
+    public static function add(string $type, string $name, $data)
     {
         self::checkReady();
         $map = [
@@ -190,7 +190,7 @@ class Request
      * @param mixed data
      * @return bool
      */
-    public function delete(string $type, string $name)
+    public static function delete(string $type, string $name)
     {
         self::checkReady();
         $map = [
@@ -218,7 +218,7 @@ class Request
      * @param bool $convert
      * @return string
      */
-    public function getIpAddress($convert = false)
+    public static function getIpAddress($convert = false)
     {
 		$ips = [];
 		isset($_SERVER['HTTP_CLIENT_IP'])       && $ips[] = $_SERVER['HTTP_CLIENT_IP'];

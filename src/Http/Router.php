@@ -2,6 +2,7 @@
 
 namespace Brisk\Http;
 
+use Brisk\Kernel\Event;
 use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
 
@@ -124,40 +125,49 @@ class Router
         //请求初始化
         Request::init($_GET);
         //路由解析器是否可用
-        if (is_string($callback)) {
-            if (strpos($callback, '@') !== false) {
-                $callback = explode('@', $callback);
+        if (is_string($callback)
+                && strpos($callback, '@') !== false) {
+            $callback = explode('@', $callback);
+        }
+        //拦截器是否定义
+        $list_interceptor = [];
+        if (is_callable($interceptor)) {
+            $list_interceptor = [$interceptor];
+        } elseif (is_string($interceptor)) {
+            if (strpos($interceptor, '@') !== false) {
+                $interceptor = explode('@', $interceptor);
+            }
+            $list_interceptor = [$interceptor];
+        } elseif (is_array($interceptor)) {
+            foreach ($interceptor as $key => $val) {
+                $list_interceptor[$key] = $val;
+                if (is_string($val)) {
+                    if (strpos($val, '@') !== false) {
+                        $val = explode('@', $val);
+                        $list_interceptor[$key] = $val;
+                    }
+                }
             }
         }
+        //路由就绪事件
+        $data = [
+            'route'         => self::$_route,
+            'callback'      => $callback,
+            'interceptor'   => $list_interceptor,
+        ];
+        $data = Event::fire('event.router.ready', $data);
+        $callback = $data['callback'];
+        $list_interceptor = $data['interceptor'];
         if (!is_callable($callback)) {
             throw new RuntimeException(Language::format('http.router_not_callable', $uri));
         }
-        //拦截器是否定义
-        if ($interceptor) {
-            if (is_callable($interceptor)) {
-                $interceptor = [$interceptor];
-            } elseif (is_string($interceptor)) {
-                if (strpos($interceptor, '@') !== false) {
-                    $interceptor = explode('@', $interceptor);
-                }
-                if (!is_callable($interceptor)) {
+        if ($list_interceptor) {
+            foreach ($list_interceptor as $val) {
+                if (!is_callable($val)) {
                     throw new RuntimeException(Language::format('http.interceptor_not_callable', $uri));
                 }
-                $interceptor = [$interceptor];
-            } elseif (is_array($interceptor)) {
-                foreach ($interceptor as $key => $val) {
-                    if (is_string($val)) {
-                        if (strpos($val, '@') !== false) {
-                            $val = explode('@', $val);
-                            $interceptor[$key] = $val;
-                        }
-                    }
-                    if (!is_callable($val)) {
-                        throw new RuntimeException(Language::format('http.interceptor_not_callable', $uri));
-                    }
-                }
             }
-            foreach ($interceptor as $val) {
+            foreach ($list_interceptor as $val) {
                 $result = call_user_func_array($val, []);
                 if (!is_null($result)) {
                     return $result;
