@@ -17,8 +17,8 @@ class Redis extends CacheFather
     /**
      * 构造器
      *
-     * @param string save_path
-     * @param array setting
+     * @param string $save_path
+     * @param array $setting
      * @return null
      */
     public function __construct(string $save_path, array $setting = [])
@@ -48,12 +48,12 @@ class Redis extends CacheFather
     /**
      * 缓存器设值
      *
-     * @param string name
-     * @param mixed value
-     * @param null expire
+     * @param string $name
+     * @param mixed $value
+     * @param int $expire
      * @return bool
      */
-    public function set(string $name, $value, int $expire = null)
+    public function set(string $name, $value, int $expire = 0)
     {
         $path = $this->getCachePath($name);
         $expire || $expire = $this->_expire_time;
@@ -63,7 +63,7 @@ class Redis extends CacheFather
     /**
      * 缓存器取值
      *
-     * @param string name
+     * @param string $name
      * @return bool
      */
     public function get(string $name)
@@ -81,7 +81,7 @@ class Redis extends CacheFather
     /**
      * 删除缓存数据
      *
-     * @param string name
+     * @param string $name
      * @return mixed
      */
     public function delete(string $name)
@@ -94,7 +94,7 @@ class Redis extends CacheFather
     /**
      * 格式化变量名
      *
-     * @param string name
+     * @param string $name
      * @return string
      */
     public function getCachePath(string $name)

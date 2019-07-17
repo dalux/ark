@@ -9,7 +9,7 @@ class File
      * Recursively create a directory
      *
      * @param string $dir
-     * @pram bool $mode
+     * @param int $mode
      * @return bool
      */
     public static function mkDir(string $dir, int $mode = 0755)

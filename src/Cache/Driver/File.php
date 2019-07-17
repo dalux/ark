@@ -3,7 +3,7 @@
 namespace Brisk\Cache\Driver;
 
 use Brisk\Kernel\Language;
-use Brisk\Kernel\Toolkit;
+use Brisk\Toolkit\File as FileToolkit;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
 
@@ -30,7 +30,7 @@ class File extends CacheFather
     public function __construct(string $path, array $setting = [])
     {
         $this->_dir = $path;
-        if (!is_dir($this->_dir) && !Toolkit::mkDir($this->_dir)) {
+        if (!is_dir($this->_dir) && !FileToolkit::mkDir($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_create_failed', $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_permission_error', $this->_dir));
@@ -126,7 +126,7 @@ class File extends CacheFather
         }
         $path = $path. $part. $this->_ext_name;
         $path = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path);
-        if (!file_exists(dirname($path)) && !Toolkit::mkDir(dirname($path))) {
+        if (!file_exists(dirname($path)) && !FileToolkit::mkDir(dirname($path))) {
             throw new RuntimeException(Language::format('cache.dir_create_failed', $path));
         }
         return $path;

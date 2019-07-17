@@ -76,13 +76,14 @@ class Dispenser
     private $_producer;
 
     /**
-     * 构造器
+     * Dispenser constructor.
      *
      * @param int $proc_num
      * @param int $interval
      * @param bool $wait
      * @param int $proc_timeout
      * @param string $proc_dir
+     *
      */
     public function __construct(int $proc_num, int $interval, bool $wait = false, int $proc_timeout = 60, string $proc_dir = '/tmp')
     {

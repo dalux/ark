@@ -3,7 +3,7 @@
 namespace Brisk\Toolkit;
 
 use Brisk\Kernel\Language;
-use BriskRuntimeException\RuntimeException;
+use Brisk\Exception\RuntimeException;
 
 class Uploader
 {

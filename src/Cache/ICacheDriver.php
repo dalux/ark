@@ -8,7 +8,7 @@ interface ICacheDriver
     /**
      * Set cache flag
      *
-     * @param string flag
+     * @param string $flag
      * @return ICacheDriver
      */
     public function setFlag(string $flag);
@@ -16,7 +16,7 @@ interface ICacheDriver
     /**
      * Setting whether data is cached
      *
-     * @param bool caching
+     * @param bool $caching
      * @return ICacheDriver
      */
     public function setCaching(bool $caching = true);
@@ -24,7 +24,7 @@ interface ICacheDriver
     /**
      * Set cache expire time
      *
-     * @param int expire_time
+     * @param int $expire_time
      * @return ICacheDriver
      */
     public function setExpireTime(int $expire_time = 86400);
@@ -32,9 +32,9 @@ interface ICacheDriver
     /**
      * Set Cache data
      *
-     * @param string name
-     * @param mixed value
-     * @param int expire
+     * @param string $name
+     * @param mixed $value
+     * @param int $expire
      * @return bool
      */
     public function set(string $name, $value, int $expire = 0);
@@ -42,7 +42,7 @@ interface ICacheDriver
     /**
      * Get Cache data
      *
-     * @param string name
+     * @param string $name
      * @return mixed
      */
     public function get(string $name);
@@ -50,7 +50,7 @@ interface ICacheDriver
     /**
      * Delete Cache data
      *
-     * @param string name
+     * @param string $name
      * @return bool
      */
     public function delete(string $name);

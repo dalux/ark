@@ -50,7 +50,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Set cache flag
      *
-     * @param string flag
+     * @param string $flag
      * @return CacheFather
      */
     public function setFlag(string $flag)
@@ -62,7 +62,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Setting path formatting method
      *
-     * @param callable format
+     * @param callable $format
      * @return CacheFather
      */
     public function setFormat(callable $format)
@@ -74,7 +74,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Setting whether data is cached
      *
-     * @param bool caching
+     * @param bool $caching
      * @return CacheFather
      */
     public function setCaching(bool $caching = true)
@@ -86,7 +86,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Set cache expire time
      *
-     * @param int expire_time
+     * @param int $expire_time
      * @return CacheFather
      */
     public function setExpireTime(int $expire_time = 86400)
@@ -98,9 +98,9 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Set Cache data
      *
-     * @param string name
-     * @param mixed value
-     * @param int expire
+     * @param string $name
+     * @param mixed $value
+     * @param int $expire
      * @return bool
      */
     public abstract function set(string $name, $value, int $expire = 0);
@@ -108,7 +108,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Get Cache data
      *
-     * @param string name
+     * @param string $name
      * @return mixed
      */
     public abstract function get(string $name);
@@ -116,7 +116,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Delete Cache data
      *
-     * @param string name
+     * @param string $name
      * @return bool
      */
     public abstract function delete(string $name);
@@ -124,7 +124,7 @@ abstract class CacheFather implements ICacheDriver
     /**
      * Get cache data save location
      *
-     * @param string name
+     * @param string $name
      * @return string
      */
     public abstract function getCachePath(string $name);
