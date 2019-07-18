@@ -19,15 +19,15 @@ class SessionAdapter
      */
     public static function getDriverFromConfig()
     {
-        if (!App::get('config')->exist('session/driver')) {
+        if (!App::init()->config->exist('session/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', 'session/driver'));
         }
-        $driver = App::get('config')->session->driver->value();
+        $driver = App::init()->config->session->driver->value();
         if (Loader::findClass($driver) == '') {
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
         $option = [];
-        if (App::get('config')->exist('session/option')) {
+        if (App::init()->config->exist('session/option')) {
             $option = App::get('config')->session->option->value();
         }
         $instance = new $driver($option);

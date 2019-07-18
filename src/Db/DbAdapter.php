@@ -21,15 +21,15 @@ class DbAdapter
     public static function getDriverFromConfig(string $name)
     {
 		$path = 'database/'. $name;
-        if (!App::get('config')->exist($path)) {
+        if (!App::init()->config->exist($path)) {
             throw new RuntimeException(Language::format('core.config_not_found', $path));
-        } elseif (!App::get('config')->exist($path. '/driver')) {
+        } elseif (!App::init()->config->exist($path. '/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', $path. '/driver'));
-        } elseif (!App::get('config')->exist($path. '/option/config')) {
+        } elseif (!App::init()->config->exist($path. '/option/config')) {
             throw new RuntimeException(Language::format('core.config_not_found', $path. '/option/config'));
         }
-        $driver = App::get('config')->database->$name->driver->value();
-        $option = App::get('config')->database->$name->option->value();
+        $driver = App::init()->config->database->$name->driver->value();
+        $option = App::init()->config->database->$name->option->value();
         if (Loader::findClass($driver) == "") {
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
