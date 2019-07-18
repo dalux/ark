@@ -5,6 +5,7 @@ namespace Brisk\Http;
 use Brisk\Kernel\Event;
 use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Loader;
 
 class Router
 {
@@ -49,6 +50,29 @@ class Router
     }
 
     /**
+     * 从配置文件加载路由配置
+     *
+     * @access public
+     * @param string $path
+     * @return void
+     */
+    public static function readConfig(string $path)
+    {
+        if (!is_file($path)) {
+            throw new RuntimeException(Language::format('router.file_not_exists'));
+        }
+        $config = Loader::import($path);
+        if (!is_array($config)) {
+            throw new RuntimeException(Language::format('router.config_mustbe_array'));
+        }
+        foreach ($config as $key=> $item) {
+            if ($item['processer']) {
+                self::addRule($key, $item['processer'], $item['blocker']);
+            }
+        }
+    }
+
+    /**
      * 获取已定义的路由规则
      *
      * @access public
@@ -89,7 +113,7 @@ class Router
         }
         self::$_route = $uri;
         //遍历规则
-        $route = $callback = $interceptor = null;
+        $route = $processer = $blocker = null;
         foreach (self::$_rules as $key=> $val) {
             if (strpos($key, ':') !== false) {
                 $pattern = preg_replace_callback('~/\\:([^\\/]+)~', function($matches) {
@@ -116,66 +140,65 @@ class Router
                         }
                     }
                     $route = $key;
-                    $callback = $val[0];
-                    $interceptor = $val[1];
+                    $processer = $val[0];
+                    $blocker = $val[1];
                     break;
                 }
             } elseif (preg_match(sprintf('~^%s$~', $key), $uri, $matches)) {
                 $route = $key;
-                $callback = $val[0];
-                $interceptor = $val[1];
+                $processer = $val[0];
+                $blocker = $val[1];
                 break;
             }
         }
         if (is_null($route)) {
-            throw new RuntimeException(Language::format('http.router_not_defined', $uri));
+            throw new RuntimeException(Language::format('router.route_not_defined', $uri));
         }
         //请求初始化
         Request::init($_GET);
         //路由解析器是否可用
-        if (is_string($callback)
-                && strpos($callback, '@') !== false) {
-            $callback = explode('@', $callback);
+        if (is_string($processer) && strpos($processer, '@') !== false) {
+            $processer = explode('@', $processer);
         }
         //拦截器是否定义
-        $list_interceptor = [];
-        if (is_callable($interceptor)) {
-            $list_interceptor = [$interceptor];
-        } elseif (is_string($interceptor)) {
-            if (strpos($interceptor, '@') !== false) {
-                $interceptor = explode('@', $interceptor);
+        $list_blocker = [];
+        if (is_callable($blocker)) {
+            $list_blocker = [$blocker];
+        } elseif (is_string($blocker)) {
+            if (strpos($blocker, '@') !== false) {
+                $blocker = explode('@', $blocker);
             }
-            $list_interceptor = [$interceptor];
-        } elseif (is_array($interceptor)) {
-            foreach ($interceptor as $key => $val) {
-                $list_interceptor[$key] = $val;
+            $list_blocker = [$blocker];
+        } elseif (is_array($blocker)) {
+            foreach ($blocker as $key => $val) {
+                $list_blocker[$key] = $val;
                 if (is_string($val)) {
                     if (strpos($val, '@') !== false) {
                         $val = explode('@', $val);
-                        $list_interceptor[$key] = $val;
+                        $list_blocker[$key] = $val;
                     }
                 }
             }
         }
         //路由就绪事件
         $data = [
-            'route'         => self::$_route,
-            'callback'      => $callback,
-            'interceptor'   => $list_interceptor,
+            'route'     => self::$_route,
+            'processer' => $processer,
+            'blocker'   => $list_blocker,
         ];
         $data = Event::fire('event.router.ready', $data);
-        $callback = $data['callback'];
-        $list_interceptor = $data['interceptor'];
-        if (!is_callable($callback)) {
-            throw new RuntimeException(Language::format('http.router_not_callable', $uri));
+        $processer = $data['processer'];
+        $list_blocker = $data['blocker'];
+        if (!is_callable($processer)) {
+            throw new RuntimeException(Language::format('router.processer_not_callable', $uri));
         }
-        if ($list_interceptor) {
-            foreach ($list_interceptor as $val) {
+        if ($list_blocker) {
+            foreach ($list_blocker as $val) {
                 if (!is_callable($val)) {
-                    throw new RuntimeException(Language::format('http.interceptor_not_callable', $uri));
+                    throw new RuntimeException(Language::format('router.blocker_not_callable', $uri));
                 }
             }
-            foreach ($list_interceptor as $val) {
+            foreach ($list_blocker as $val) {
                 $result = call_user_func_array($val, []);
                 if (!is_null($result)) {
                     return $result;
@@ -183,7 +206,7 @@ class Router
             }
         }
         //控制器
-        return call_user_func_array($callback, []);
+        return call_user_func_array($processer, []);
     }
 
 }

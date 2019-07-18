@@ -141,12 +141,18 @@ class Loader
      * 加载文件
      *
      * @access public
-     * @param string $spacename
-     * @return string
+     * @param string $path
+     * @return mixed
      */
-    public static function import(string $spacename)
+    public static function import(string $path)
     {
-        return include_once(self::realPath($spacename));
+        $parsed = self::_parse($path);
+        if ($parsed) {
+            return include_once(self::realPath($path));
+        } elseif (is_file($path)) {
+            return include_once($path);
+        }
+        return false;
     }
 
     /**
