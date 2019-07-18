@@ -48,8 +48,6 @@ class Language
             'db.invalid_connection_object'      => '未设置数据库连接对象实例',
             'db.invalid_table_name'             => '无有效的数据库表名称',
 
-            'router.file_not_exists'            => '指定路由配置文件不存在',
-            'router.config_mustbe_array'        => '路由配置文件必须返回一个数组',
             'router.route_not_defined'          => '未定义请求地址[%s]的路由解析器',
             'router.processer_not_callable'     => '路由[%s]解析器不可用',
             'router.blocker_not_callable'       => '路由[%s]拦截器不可用',

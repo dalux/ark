@@ -50,21 +50,14 @@ class Router
     }
 
     /**
-     * 从配置文件加载路由配置
+     * 加载路由配置数组
      *
      * @access public
-     * @param string $path
+     * @param array $config
      * @return void
      */
-    public static function readConfig(string $path)
+    public static function loadConfig(array $config)
     {
-        if (!is_file($path)) {
-            throw new RuntimeException(Language::format('router.file_not_exists'));
-        }
-        $config = Loader::import($path);
-        if (!is_array($config)) {
-            throw new RuntimeException(Language::format('router.config_mustbe_array'));
-        }
         foreach ($config as $key=> $item) {
             if ($item['processer']) {
                 self::addRule($key, $item['processer'], $item['blocker']);
