@@ -19,7 +19,8 @@ class Request
     
     /**
      * 构造函数
-     * 
+     *
+     * @access public
      * @param array $getdata
      * @return void
      */
@@ -53,8 +54,9 @@ class Request
     }
 
     /**
-     * Check if request is post
+     * 检查当前请求是否post
      *
+     * @access public
      * @return bool
      */
 	public static function isPost()
@@ -63,8 +65,9 @@ class Request
 	}
 
     /**
-     * Check if request is ajax
+     * 检查当前请求是否ajax
      *
+     * @access public
      * @return bool
      */
     public static function isAjax()
@@ -75,6 +78,8 @@ class Request
     /**
      * 检查请求是否就绪
      *
+     * @access public
+     * @return void
      */
     public static function checkReady()
     {
@@ -84,10 +89,11 @@ class Request
     }
 
     /**
-     * Get the request data for the GET method
+     * 获取get数据
      *
-     * @param string name
-     * @param string sub
+     * @access public
+     * @param string $name
+     * @param string $sub
      * @return mixed
      */
     public static function get(string $name = null, $sub = null)
@@ -98,10 +104,11 @@ class Request
     }
 
     /**
-     * Get the request data for the POST method
+     * 获取post数据
      *
-     * @param string name
-     * @param string sub
+     * @access public
+     * @param string $name
+     * @param string $sub
      * @return mixed
      */
     public static function post(string $name = null, $sub = null)
@@ -112,10 +119,11 @@ class Request
     }
 
     /**
-     * Get the request data for the POST method
+     * 获取cookie数据
      *
-     * @param string name
-     * @param string sub
+     * @access public
+     * @param string $name
+     * @param string $sub
      * @return mixed
      */
     public static function cookie(string $name = null, $sub = null)
@@ -126,9 +134,10 @@ class Request
     }
 
     /**
-     * Get the request data for the files method
+     * 获取上传文件数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public static function files(string $name = null)
@@ -139,10 +148,11 @@ class Request
     }
 
     /**
-     * Get the request data
+     * 获取request数据
      *
-     * @param string name
-     * @param string sub
+     * @access public
+     * @param string $name
+     * @param string $sub
      * @return mixed
      */
     public static function data(string $name = null, $sub = null)
@@ -155,9 +165,10 @@ class Request
     /**
      * 添加request请求数据项
      *
-     * @param string type
-     * @param string name
-     * @param mixed data
+     * @access public
+     * @param string $type
+     * @param string $name
+     * @param mixed $data
      * @return bool
      */
     public static function add(string $type, string $name, $data)
@@ -185,9 +196,10 @@ class Request
     /**
      * 删除request请求数据项
      *
-     * @param string type
-     * @param string name
-     * @param mixed data
+     * @access public
+     * @param string $type
+     * @param string $name
+     * @param mixed $data
      * @return bool
      */
     public static function delete(string $type, string $name)
@@ -213,10 +225,11 @@ class Request
     }
 
     /**
-     * Get client IP Address
+     * 获取当前客户端的IP地址
      *
+     * @access public
      * @param bool $convert
-     * @return string
+     * @return string|float
      */
     public static function getIpAddress($convert = false)
     {

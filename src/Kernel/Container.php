@@ -6,15 +6,18 @@ class Container
 {
 
     /**
+     * 数据数组
+     * 
      * @var array
      */
     private $_container;
 
     /**
-     * construct
+     * 构造函数
      *
+     * @access public
      * @param mixed $data
-     * @return null
+     * @return void
      */
     public function __construct($data = null)
     {
@@ -29,8 +32,9 @@ class Container
     }
 
     /**
-     * Check if key exists
+     * 检查指定key是否存在
      *
+     * @access public
      * @param string $key
      * @return bool
      */
@@ -58,8 +62,9 @@ class Container
     }
 
     /**
-     * Get data from the current node
+     * 获取指定节点数据
      *
+     * @access public
      * @return mixed
      */
     public function value()
@@ -86,8 +91,9 @@ class Container
     }
 
     /**
-     * 取值
+     * 取指定节点数据
      *
+     * @access public
      * @param string $key
      * @return mixed
      */
@@ -101,8 +107,9 @@ class Container
     }
 
     /**
-     * 设值
+     * 设置节点数据
      *
+     * @access public
      * @param string $key
      * @param mixed $value
      * @return $this

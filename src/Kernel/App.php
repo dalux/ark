@@ -14,19 +14,24 @@ class App
     const VERSION	= '1.0.0';
 
     /**
+     * app对象实例
+     *
      * @var App
      */
 	private static $_instance;
 
     /**
+     * 数据存储
+     *
      * @var array
      */
     private static $_storage    = [];
     
     /**
-     * Construct
+     * 构造函数
      *
-     * @return null
+     * @access public
+     * @return void
      */
     private function __construct()
     {
@@ -35,6 +40,7 @@ class App
     /**
      * 初始化
      *
+     * @access public
      * @return App
      */
     public static function init()
@@ -71,7 +77,8 @@ class App
 
     /**
      * 设置异常处理句柄
-     * 
+     *
+     * @access public
      * @param callable $handler
      * @return void
      */
@@ -84,6 +91,7 @@ class App
     /**
      * 设置错误处理句柄
      *
+     * @access public
      * @param callable $handler
      * @param int $type
      * @return void
@@ -95,8 +103,9 @@ class App
     }
 
     /**
-     * Start the application
+     * 开始运行
      *
+     * @access public
      * @param callable $config
      * @return mixed
      */
@@ -126,8 +135,9 @@ class App
     }
 
     /**
-     * Set up custom singleton components
+     * 设置单例对象
      *
+     * @access public
      * @param string $name
      * @param callable $value
      * @return void
@@ -141,8 +151,9 @@ class App
     }
 
     /**
-     * get custom singleton components
+     * 获取自定义对象
      *
+     * @access public
      * @param string $name
      * @return mixed
      */
@@ -166,9 +177,10 @@ class App
     }
 
     /**
-     * Get custom singleton components
+     * 获取自定义对象
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public function __get(string $name)
@@ -177,8 +189,9 @@ class App
     }
 
     /**
-     * destruct
+     * 析构函数
      *
+     * @access public
      * @return void
      */
     public function __destruct()

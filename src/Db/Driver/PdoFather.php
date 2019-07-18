@@ -11,23 +11,28 @@ abstract class PdoFather extends DbFather
 {
 
     /**
+     * pdo连接实例
+     * 
      * @var \PDO
      */
     protected $_instance;
 
     /**
+     * 最近影响行数
+     *
      * @var int
      */
     protected $_row_count = 0;
 
     /**
-     * Construct
+     * 构造函数
      *
-     * @param string dsn
-     * @param string username
-     * @param string password
-     * @param array option
-     * @return null
+     * @access public
+     * @param string $dsn
+     * @param string $username
+     * @param string $password
+     * @param array $option
+     * @return void
      */
 	public function __construct(string $dsn, string $username, string $password, array $option = [])
 	{
@@ -61,10 +66,11 @@ abstract class PdoFather extends DbFather
 	}
 
     /**
-     * Execute a sql with bind options
+     * 执行sql语句
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return bool
      */
     public function query(string $sql, array $bind = [])
@@ -88,10 +94,11 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Execute fetchAll method with bind options
+     * 获取多行数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return array
      */
     public function fetchAll(string $sql, array $bind = [])
@@ -116,8 +123,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Execute fetchRow method with bind options
+     * 获取单行数据
      *
+     * @access public
      * @param string sql
      * @param array bind
      * @return array
@@ -143,10 +151,11 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Execute fetchOne method with bind options
+     * 获取单行单列数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return int
      */
     public function fetchScalar(string $sql, array $bind = [])
@@ -170,8 +179,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Start a new Transaction
+     * 开始事务
      *
+     * @access public
      * @return bool
      */
     public function beginTransaction()
@@ -180,8 +190,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Commit a Transaction
+     * 提交事务
      *
+     * @access public
      * @return bool
      */
     public function commit()
@@ -190,8 +201,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Rollback a Transaction
+     * 回滚事务
      *
+     * @access public
      * @return bool
      */
     public function rollback()
@@ -200,8 +212,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Check if the current sql is in a transaction
+     * 当前是否处于事务中
      *
+     * @access public
      * @return bool
      */
     public function inTransaction()
@@ -210,9 +223,10 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Get last insert id
+     * 获取上一条语句插入的ID
      *
-     * @param string seq
+     * @access public
+     * @param string $seq
      * @return int
      */
     public function lastInsertId(string $seq = null)
@@ -221,8 +235,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Gets the number of rows as a result of the last sql execution
+     * 获取上一条语句影响的行数
      *
+     * @access public
      * @return int
      */
 	public function lastRowCount()
@@ -231,8 +246,9 @@ abstract class PdoFather extends DbFather
 	}
 
     /**
-     * Get current driver name
+     * 获取当前数据库连接驱动名称
      *
+     * @access public
      * @return string
      */
     public function getDriverName()
@@ -241,8 +257,9 @@ abstract class PdoFather extends DbFather
     }
 
     /**
-     * Get pdo instance
+     * 获取数据库连接实例
      *
+     * @access public
      * @return \PDO
      */
     public function getInstance()
@@ -253,6 +270,7 @@ abstract class PdoFather extends DbFather
     /**
      * 执行查询并返回statement对象
      *
+     * @access private
      * @param string $sql
      * @param array $bind
      * @return \PDOStatement

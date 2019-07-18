@@ -15,6 +15,7 @@ class Executor
     /**
      * 执行器准备
      *
+     * @access public
      * @param Closure $action
      * @param int $proc_num
      * @param string $proc_dir
@@ -46,6 +47,7 @@ class Executor
     /**
      * 添加任务数据
      *
+     * @access public
      * @param mixed $data
      * @return void
      */
@@ -58,6 +60,7 @@ class Executor
     /**
      * 获取当前任务队列长度
      *
+     * @access public
      * @return int
      */
     public static function getQueueLength()
@@ -71,7 +74,8 @@ class Executor
     /**
      * 清空队列
      *
-     * @return int
+     * @access public
+     * @return void
      */
     public static function cleanQueue()
     {

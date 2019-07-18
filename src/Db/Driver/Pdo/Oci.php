@@ -7,6 +7,14 @@ use Brisk\Db\Driver\PdoFather;
 class Oci extends PdoFather
 {
 
+    /**
+     * 构造函数
+     *
+     * @access public
+     * @param array $config
+     * @param array $setting
+     * @return void
+     */
     public function __construct(array $config, array $setting = [])
     {
         $dsn = $config['host'];
@@ -32,14 +40,15 @@ class Oci extends PdoFather
 
 
     /**
-     * Get next id
+     * 获取下一条数据序列ID
      *
-     * @param string|null $seq
+     * @access public
+     * @param string $seq
      * @return int
      */
     public function nextInsertId($seq)
     {
-        return parent::fetchOne("select $seq.nextval from dual");
+        return parent::fetchScalar("select $seq.nextval from dual");
     }
 
 }

@@ -11,31 +11,43 @@ class DQuery
 {
 
     /**
-     * @var DbFather
+     * 数据库连接实例
+     * 
+     * @var IDbDriver
      */
     private $_conn = null;
 
     /**
+     * 操作表名
+     *
      * @var string
      */
     private $_tb;
 
     /**
+     * 缓存过期时间
+     *
      * @var int
      */
     private $_expire;
 
     /**
+     * 缓存名称
+     *
      * @var string
      */
     private $_cache_name;
 
     /**
+     * 代理缓存器
+     *
      * @var Proxy
      */
     private $_proxy;
 
     /**
+     * where条件
+     *
      * @var array
      */
     private $_where_mark = [
@@ -61,21 +73,23 @@ class DQuery
     ];
 
     /**
-     * Setting database connection objects
+     * 使用数据库连接
      *
-     * @param DbFather $conn
-     * @param null $table
-     * @return $this
+     * @access public
+     * @param IDbDriver $conn
+     * @param string $table
+     * @return DQuery
      */
-    public static function open(DbFather $conn, string $table = null)
+    public static function open(IDbDriver $conn, string $table = null)
     {
         return new self($conn, $table);
     }
 
     /**
-     * Get database connection objects
+     * 获取当前数据库连接实例
      *
-     * @return DbFather
+     * @access public
+     * @return IDbDriver
      */
     public function getConn()
     {
@@ -83,12 +97,14 @@ class DQuery
     }
 
     /**
-     * Construct
+     * 构造函数
      *
-     * @param DbFather $conn
-     * @param null $table
+     * @access public
+     * @param IDbDriver $conn
+     * @param string $table
+     * @return void
      */
-    private function __construct(DbFather $conn, string $table = null)
+    private function __construct(IDbDriver $conn, string $table = null)
     {
         $this->_conn = $conn;
         $this->_tb = $table;
@@ -98,9 +114,10 @@ class DQuery
     }
 
     /**
-     * Set the table that you want to operate on
+     * 设置要操作的表名
      *
-     * @param string tb
+     * @access public
+     * @param string $tb
      * @return DQuery
      */
     public function table(string $tb)
@@ -110,8 +127,9 @@ class DQuery
     }
 
     /**
-     * Set Cache proxy
+     * 设置缓存代理器
      *
+     * @access public
      * @param int $expire
      * @param ICacheDriver $cache
      * @param string $name
@@ -129,6 +147,7 @@ class DQuery
     /**
      * 获取上一次插入的ID
      *
+     * @access public
      * @param string|null $seq
      * @return int
      */
@@ -140,6 +159,7 @@ class DQuery
     /**
      * 获取上一次SQL执行影响的行数
      *
+     * @access public
      * @return int
      */
     public function getLastRowCount()
@@ -148,10 +168,10 @@ class DQuery
     }
 
     /**
-     * Insert new data
+     * 插入数据
      *
-     * @param array data
-     * @param bool return_id
+     * @access public
+     * @param array $data
      * @return bool
      */
     public function insert(array $data)
@@ -164,10 +184,11 @@ class DQuery
     }
 
     /**
-     * Update data with condition
+     * 更新数据
      *
-     * @param array data
-     * @param array condition
+     * @access public
+     * @param array $data
+     * @param array $condition
      * @return bool
      */
     public function update(array $data, array $condition)
@@ -200,9 +221,10 @@ class DQuery
     }
 
     /**
-     * Delete data
+     * 删除数据
      *
-     * @param array condition
+     * @access public
+     * @param array $condition
      * @return bool
      */
     public function delete(array $condition)
@@ -235,10 +257,11 @@ class DQuery
     }
 
     /**
-     * Get single-row data
+     * 获取单行数据
      *
-     * @param array condition
-     * @param array fields
+     * @access public
+     * @param array $condition
+     * @param array $fields
      * @return array
      */
     public function fetchOne(array $condition, array $fields = ['*'])
@@ -270,15 +293,16 @@ class DQuery
         if (!is_null($this->_expire)) {
             return $this->_proxy->do($this->_conn, 'fetchOne', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
-        return $this->_conn->fetchRow($select->getRealSQL());
+        return $this->_conn->fetchOne($select->getRealSQL());
     }
 
     /**
-     * Get single-row and single-colume data
+     * 获取单行单列数据
      *
-     * @param array condition
-     * @param array fields
-     * @return int
+     * @access public
+     * @param array $condition
+     * @param array $fields
+     * @return mixed
      */
     public function fetchScalar(array $condition = [], array $fields = ['count(*)'])
     {
@@ -313,13 +337,14 @@ class DQuery
     }
 
     /**
-     * Get multiple rows of data
+     * 获取多行数据
      *
-     * @param array condition
-     * @param array order
-     * @param int count
-     * @param int offset
-     * @param array fields
+     * @access public
+     * @param array $condition
+     * @param array $order
+     * @param int $count
+     * @param int $offset
+     * @param array $fields
      * @return array
      */
     public function fetchAll(array $condition = [], array $order = [], int $count = 0, int $offset = 0, array $fields = ['*'])

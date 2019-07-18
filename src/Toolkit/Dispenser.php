@@ -76,14 +76,15 @@ class Dispenser
     private $_producer;
 
     /**
-     * Dispenser constructor.
+     * 构造函数 
      *
+     * @access public
      * @param int $proc_num
      * @param int $interval
      * @param bool $wait
      * @param int $proc_timeout
      * @param string $proc_dir
-     *
+     * @return void
      */
     public function __construct(int $proc_num, int $interval, bool $wait = false, int $proc_timeout = 60, string $proc_dir = '/tmp')
     {
@@ -96,13 +97,14 @@ class Dispenser
         $this->_proc_timeout = $proc_timeout;
         $this->_proc_dir = $proc_dir;
         if (!is_dir($this->_proc_dir)) {
-            File::mkDir($this->_proc_dir);
+            Dir::create($this->_proc_dir);
         }
     }
 
     /**
      * 设置任务生产者方法
      *
+     * @access public
      * @param Closure $producer
      * @return $this
      */
@@ -115,6 +117,7 @@ class Dispenser
     /**
      * 设置任务消费者方法
      *
+     * @access public
      * @param Closure $consumer
      * @return $this
      */
@@ -127,6 +130,7 @@ class Dispenser
     /**
      * 启动服务
      *
+     * @access public
      * @return void
      */
     public function start()
@@ -208,6 +212,7 @@ class Dispenser
     /**
      * 创建任务子进程
      *
+     * @access private
      * @return int
      */
     private function _createWorker()
@@ -238,9 +243,10 @@ class Dispenser
     /**
      * 设置进程工作状态
      *
+     * @access private
      * @param int $pid
      * @param int $used
-     * @return null
+     * @return void
      */
     private function _setState(int $pid, int $used = 1)
     {
@@ -251,6 +257,7 @@ class Dispenser
     /**
      * 获取进程工作状态
      *
+     * @access private
      * @param int $pid
      * @return int
      */
@@ -262,6 +269,7 @@ class Dispenser
     /**
      * 删除进程pid状态文件
      *
+     * @access private
      * @param int $pid
      * @return bool
      */
@@ -277,6 +285,7 @@ class Dispenser
     /**
      * 打印日志
      *
+     * @access private
      * @param string $log
      * @param string $level
      */

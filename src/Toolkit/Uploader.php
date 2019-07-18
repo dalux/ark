@@ -79,10 +79,11 @@ class Uploader
      * 设置可上传的文件类型
      *
      * @access public
+     * @access public
      * @param array $types
      * @return Uploader
      */
-    function setLimitTypes(array $types)
+    public function setLimitTypes(array $types)
     {
         $this->_types = $types;
         return $this;
@@ -91,9 +92,10 @@ class Uploader
     /**
      * 取得可上传的文件类型
      *
+     * @access public
      * @return array
      */
-    function getLimitTypes()
+    public function getLimitTypes()
     {
         return $this->_types;
     }
@@ -102,10 +104,11 @@ class Uploader
      * 设置/获取文件上传的最大大小
      *
      * @access public
+     * @access public
      * @param int $size
      * @return Uploader
      */
-    function setMaxBytes(int $size)
+    public function setMaxBytes(int $size)
     {
         $this->_size = $size;
         return $this;
@@ -115,9 +118,10 @@ class Uploader
      * 获取文件上传的最大大小
      *
      * @access public
+     * @access public
      * @return int
      */
-    function getMaxBytes()
+    public function getMaxBytes()
     {
         return $this->_size;
     }
@@ -143,7 +147,7 @@ class Uploader
      * @return string
      * @throws RuntimeException
      */
-    function upload(array $file)
+    public function upload(array $file)
     {
         //检测上传错误
         if ($file['error'] > 0) {
@@ -166,7 +170,7 @@ class Uploader
             throw new RuntimeException(Language::format('tool.upload_filepath_error'));
         }
         $path = call_user_func_array($this->_path, [$file]);
-        if (!file_exists($this->_path) && !File::mkDir(dirname($this->_path))) {
+        if (!file_exists($this->_path) && !Dir::create(dirname($this->_path))) {
             throw new RuntimeException(Language::format('tool.dir_create_failed', dirname($path)));
         }
         //格式化文件名

@@ -14,6 +14,7 @@ class SessionAdapter
     /**
      * 通过配置文件获取session控制器
      *
+     * @access public
      * @return ISessionDriver
      */
     public static function getDriverFromConfig()

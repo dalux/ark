@@ -8,14 +8,17 @@ class Oci extends Delete
 {
 
     /**
+     * 数据库类型
+     *
      * @var string
      */
 	protected $_db_type = 'oci';
 
     /**
-     * Put quotation marks on a field
+     * 为数据添加引号
      *
-     * @param mixed value
+     * @access public
+     * @param mixed $value
      * @return string
      */
 	public function quote($value)

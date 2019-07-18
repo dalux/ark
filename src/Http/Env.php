@@ -6,8 +6,9 @@ class Env
 {
 
     /**
-     * initialize
+     * 初始化环境参数
      *
+     * @access public
      * @return void
      */
     public static function init()
@@ -34,8 +35,9 @@ class Env
     }
 
     /**
-     * Check if it is CLI mode
+     * 检查当前是否cli模式
      *
+     * @access public
      * @return bool
      */
     public static function isCli()

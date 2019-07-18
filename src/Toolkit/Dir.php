@@ -2,17 +2,18 @@
 
 namespace Brisk\Toolkit;
 
-class File
+class Dir
 {
 
     /**
-     * Recursively create a directory
+     * 递归创建目录
      *
+     * @access public
      * @param string $dir
      * @param int $mode
      * @return bool
      */
-    public static function mkDir(string $dir, int $mode = 0755)
+    public static function create(string $dir, int $mode = 0755)
     {
         if ($dir = trim($dir)) {
             $dirs = [$dir];
@@ -35,17 +36,18 @@ class File
     }
 
     /**
-     * Recursively copy a directory
+     * 递归拷贝目录
      *
+     * @access public
      * @param string $src
      * @param string $dst
      * @return bool
      */
-    public static function copyDir(string $src, string $dst)
+    public static function copy(string $src, string $dst)
     {
         if (is_dir($src)) {
             $handle = opendir($src);
-            self::mkDir($dst);
+            self::create($dst);
             $sep = DIRECTORY_SEPARATOR;
             while (true) {
                 $file = readdir($handle);
@@ -54,7 +56,7 @@ class File
                 }
                 if (($file != '.') && ($file != '..')) {
                     if (is_dir($src. $sep. $file)) {
-                        self::copyDir($src. $sep. $file, $dst. $sep. $file);
+                        self::copy($src. $sep. $file, $dst. $sep. $file);
                     } else {
                         copy($src. $sep. $file, $dst. $sep. $file);
                     }
@@ -67,12 +69,13 @@ class File
     }
 
     /**
-     * Recursively remove a directory
+     * 递归删除目录
      *
+     * @access public
      * @param string $dir_name
      * @return bool
      */
-	public static function removeDir(string $dir_name)
+	public static function remove(string $dir_name)
 	{
 		if (is_dir($dir_name)) {
 			$handle = opendir($dir_name);
@@ -84,7 +87,7 @@ class File
 				if (!in_array($file, ['.', '..'])) {
 					$dir = $dir_name. '/' . $file;
 					if (is_dir($dir)) {
-						self::removeDir($dir);
+						self::remove($dir);
 					} else {
 						unlink($dir);
 					}

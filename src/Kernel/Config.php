@@ -130,7 +130,7 @@ class Config
     /**
      * 获取配置文件模板
      *
-     * @param string $router
+     * @access public
      * @param string $session
      * @param string $view
      * @return array
@@ -148,9 +148,12 @@ class Config
     }
 
     /**
+     * 保存配置到文件
      *
+     * @access public
      * @param $file
      * @param array $config
+     * @return void
      */
     public static function saveTo($file, array $config)
     {

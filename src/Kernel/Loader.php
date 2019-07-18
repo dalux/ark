@@ -8,23 +8,26 @@ class Loader
 {
 
     /**
+     * 路径别名
      *
      * @var array
      */
 	private static $_alias = [];
 
     /**
+     * 命名空间
      *
      * @var array
      */
 	private static $_namespaces = [];
 
     /**
-     * Set directory path aliases
+     * 设置路径别名
      *
+     * @access public
      * @param string $alias
      * @param string $path
-     * @return null
+     * @return void
      */
 	public static function setAlias($alias, $path)
 	{
@@ -32,8 +35,9 @@ class Loader
 	}
 
     /**
-     * Set namespace path
+     * 添加命名空间
      *
+     * @access public
      * @param string $nspace
      * @param string $path
      * @return void
@@ -52,8 +56,9 @@ class Loader
 	}
 
     /**
-     * Get aliases
+     * 获取别名路径信息
      *
+     * @access public
      * @param string $alias
      * @return array
      */
@@ -65,8 +70,9 @@ class Loader
     }
 
     /**
-     * Set namespace path
+     * 获取命名空间信息
      *
+     * @access public
      * @param string $nspace
      * @return array
      */
@@ -78,8 +84,9 @@ class Loader
     }
 
     /**
-     * Automatically load class name
+     * 自动加载文件
      *
+     * @access public
      * @param string $classname
      * @return void
      */
@@ -91,8 +98,9 @@ class Loader
     }
 
     /**
-     * Find the class name corresponding file
+     * 根据类名获取文件路径
      *
+     * @access public
      * @param string $classname
      * @return string
      */
@@ -132,6 +140,7 @@ class Loader
     /**
      * 加载文件
      *
+     * @access public
      * @param string $spacename
      * @return string
      */
@@ -141,9 +150,10 @@ class Loader
     }
 
     /**
-     * Find the corresponding file
+     * 获取指定空间路径对应的真实文件路径
      *
-     * @param string spacename
+     * @access public
+     * @param string $spacename
      * @return string
      */
     public static function realPath($spacename)
@@ -159,8 +169,9 @@ class Loader
     }
 
     /**
-     * Convert file path format
+     * 格式化完整路径到空间简略地址
      *
+     * @access public
      * @param string $path
      * @return string
      */
@@ -173,7 +184,9 @@ class Loader
     }
 
     /**
+     * 解析空间路径地址
      *
+     * @access private
      * @param string $nspace
      * @return array
      */

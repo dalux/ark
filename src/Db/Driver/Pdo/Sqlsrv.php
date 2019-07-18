@@ -7,6 +7,14 @@ use Brisk\Db\Driver\PdoFather;
 class Sqlsrv extends PdoFather
 {
 
+    /**
+     * 构造函数
+     *
+     * @access public
+     * @param array $config
+     * @param array $setting
+     * @return void
+     */
     public function __construct(array $config, array $setting = [])
     {
         $dsn = sprintf('sqlsrv:Server=%s,%s;Database=%s;', $config['host'], $config['port'], $config['dbname']);

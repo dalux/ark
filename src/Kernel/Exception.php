@@ -9,8 +9,9 @@ class Exception
 {
 
     /**
-     * Rendering system Exception Trace information
+     * 渲染输出异常信息
      *
+     * @access public
      * @param Throwable $e
      * @return string
      */
@@ -111,7 +112,9 @@ class Exception
     }
 
     /**
+     * 获取相关代码行
      *
+     * @access private
      * @param array $trace
      * @return string
      */
@@ -136,6 +139,12 @@ class Exception
         return $source;
     }
 
+    /**
+     * web异常模板
+     *
+     * @access private
+     * @return string
+     */
     private function _getWebTpl()
     {
         $str = '<!DOCTYPE html><html><head>';
@@ -176,7 +185,9 @@ class Exception
     }
 
     /**
+     * cli模式异常信息
      *
+     * @access private
      * @return string
      */
     private function _getCliTpl()

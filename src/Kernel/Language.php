@@ -6,12 +6,14 @@ class Language
 {
 
     /**
+     * 当前语言
      *
      * @var string
      */
     private static $_lang = 'zh_cn';
 
     /**
+     * 语言包
      *
      * @var array
      */
@@ -77,8 +79,9 @@ class Language
     ];
 
     /**
-     * Add a Language Pack
+     * 添加语言包
      *
+     * @access public
      * @param string $lang
      * @param array $package
      * @return void
@@ -93,8 +96,9 @@ class Language
     }
 
     /**
-     * Gets the language pack for the specified language
+     * 获取指定语言包
      *
+     * @access public
      * @param string $lang
      * @return array
      */
@@ -104,10 +108,11 @@ class Language
     }
 
     /**
-     * Setting the current system language
+     * 应用语言包
      *
+     * @access public
      * @param string $lang
-     * @return null
+     * @return void
      */
     public static function apply(string $lang)
     {
@@ -115,7 +120,7 @@ class Language
     }
 
     /**
-     * Parsing language Tags
+     * 解析语言
      *
      * @param string $label
      * @param array $args

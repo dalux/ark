@@ -6,50 +6,56 @@ interface ISessionDriver
 {
 
     /**
-     * Start the session service
+     * 开启session支持
      *
-     * @param int session_id
-     * @return null
+     * @access public
+     * @param int $session_id
+     * @return void
      */
     public function start(int $session_id = null);
 
     /**
-     * Set the session expire time
+     * 设置session过期时间
      *
-     * @param int expire_time
+     * @access public
+     * @param int $expire_time
      * @return ISessionDriver
      */
     public function setExpireTime(int $expire_time = 1440);
 
     /**
-     * Get Session data
+     * 获取session数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public function get(string $name = null);
     
     /**
-     * Set Session data
+     * 设置session数据
      *
-     * @param string name
-     * @param mixed value
+     * @access public
+     * @param string $name
+     * @param mixed $value
      * @return ISessionDriver
      */
     public function set(string $name, $value);
 
     /**
-     * Delete Session data
+     * 删除session数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return ISessionDriver
      */
     public function delete(string $name);
 
     /**
-     * Clean all Session data
+     * 清空session数据
      *
-     * @return null
+     * @access public
+     * @return void
      */
     public function clean();
 

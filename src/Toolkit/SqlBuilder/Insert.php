@@ -9,10 +9,11 @@ abstract class Insert extends SqlFather
 {
 
     /**
-     * Setting the into field in the sql statement
+     * 设置要插入的表及数据数组
      *
-     * @param string table
-     * @param array data
+     * @access public
+     * @param string $table
+     * @param array $data
      * @return Insert
      */
     public function into(string $table, array $data)
@@ -23,8 +24,9 @@ abstract class Insert extends SqlFather
     }
 
     /**
-     * Get the insert fragment in the sql statement
+     * 获取insert语句片段
      *
+     * @access protected
      * @return string
      */
     protected function pickInsertPart()
@@ -40,8 +42,9 @@ abstract class Insert extends SqlFather
     }
 
     /**
-     * Get the values fragment in the sql statement
+     * 获取values语句片段
      *
+     * @access protected
      * @return string
      */
     protected function pickValuesPart()
@@ -62,8 +65,9 @@ abstract class Insert extends SqlFather
     }
 
     /**
-     * Compile the insert statment
+     * 编译当前sql语句
      *
+     * @access protected
      * @return Insert
      */
     protected function compile()

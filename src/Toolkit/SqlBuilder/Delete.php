@@ -9,9 +9,10 @@ abstract class Delete extends SqlFather
 {
 
     /**
-     * Setting the from field in the sql statement
+     * 设置要删除数据的表名
      *
-     * @param mixed table
+     * @access public
+     * @param mixed $table
      * @return Delete
      */
     public function from($table)
@@ -22,8 +23,9 @@ abstract class Delete extends SqlFather
     }
 
     /**
-     * Compile the delete statment
+     * 编译当前sql
      *
+     * @access protected
      * @return Delete
      */
     protected function compile()

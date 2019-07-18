@@ -4,7 +4,7 @@ namespace Brisk\Toolkit\Executor;
 
 use Closure;
 use swoole_process;
-use Brisk\Toolkit\File;
+use Brisk\Toolkit\Dir;
 
 class Core
 {
@@ -25,6 +25,7 @@ class Core
     /**
      * 设置相关参数
      *
+     * @access public
      * @param Closure $action
      * @param int $proc_num
      * @param string $proc_dir
@@ -36,13 +37,14 @@ class Core
         $this->_proc_num = $proc_num;
         $this->_proc_dir = $proc_dir;
         if (!is_dir($this->_proc_dir)) {
-            File::mkDir($this->_proc_dir);
+            Dir::create($this->_proc_dir);
         }
     }
 
     /**
      * 启动
      *
+     * @access public
      * @return void
      */
     public function start()
@@ -106,6 +108,7 @@ class Core
     /**
      * 添加任务数据
      *
+     * @access public
      * @param mixed $data
      * @return void
      */
@@ -117,6 +120,7 @@ class Core
     /**
      * 获取当前任务队列长度
      *
+     * @access public
      * @return int
      */
     public function getQueueLength()
@@ -126,7 +130,9 @@ class Core
 
     /**
      * 清空队列
-     * 
+     *
+     * @access public
+     * @return void
      */
     public function cleanQueue()
     {
@@ -136,6 +142,7 @@ class Core
     /**
      * 创建任务子进程
      *
+     * @access private
      * @return int
      */
     private function _createWorker()
@@ -146,7 +153,7 @@ class Core
                 $data = json_decode($worker->read(), true);
                 try {
                     call_user_func_array($this->_action, [$data]);
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->_log(sprintf('消费者进程[%s]异常未捕获: %s', getmypid(), $e->getMessage()), self::LOG_WARNING);
                 }
                 $this->_setState(getmypid(), 0);
@@ -166,9 +173,10 @@ class Core
     /**
      * 设置进程工作状态
      *
+     * @access private
      * @param int $pid
      * @param int $used
-     * @return null
+     * @return void
      */
     private function _setState($pid, $used = 1)
     {
@@ -178,6 +186,7 @@ class Core
     /**
      * 获取进程工作状态
      *
+     * @access private
      * @param int $pid
      * @return int
      */
@@ -189,6 +198,7 @@ class Core
     /**
      * 删除进程pid状态文件
      *
+     * @access private
      * @param int $pid
      * @return bool
      */
@@ -204,6 +214,7 @@ class Core
     /**
      * 打印日志
      *
+     * @access private
      * @param string $log
      * @param string $level
      */

@@ -10,14 +10,17 @@ class Oci extends Select
 {
 
     /**
+     * 数据库类型
+     * 
      * @var string
      */
     protected $_db_type = 'Oci';
 
     /**
-     * Put quotation marks on a field
+     * 为数据添加引号
      *
-     * @param mixed value
+     * @access public
+     * @param mixed $value
      * @return string
      */
     public function quote($value)
@@ -37,6 +40,9 @@ class Oci extends Select
     }
 
     /**
+     * 获取limit语句片段
+     *
+     * @access public
      * @return string
      */
     public function pickLimitPart()
@@ -45,8 +51,9 @@ class Oci extends Select
     }
 
     /**
-     * Compile the select statment
+     * 编译当前sql
      *
+     * @access public
      * @return Select
      */
     public function compile()

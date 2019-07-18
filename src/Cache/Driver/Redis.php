@@ -10,6 +10,8 @@ class Redis extends CacheFather
 {
 
     /**
+     * Redis对象实例
+     *
      * @var \Redis
      */
     private $_container;
@@ -17,9 +19,10 @@ class Redis extends CacheFather
     /**
      * 构造器
      *
+     * @access public
      * @param string $save_path
      * @param array $setting
-     * @return null
+     * @return void
      */
     public function __construct(string $save_path, array $setting = [])
     {
@@ -46,8 +49,9 @@ class Redis extends CacheFather
     }
  
     /**
-     * 缓存器设值
+     * 设置缓存数据
      *
+     * @access public
      * @param string $name
      * @param mixed $value
      * @param int $expire
@@ -61,8 +65,9 @@ class Redis extends CacheFather
     }
  
     /**
-     * 缓存器取值
+     * 获取缓存数据
      *
+     * @access public
      * @param string $name
      * @return bool
      */
@@ -81,6 +86,7 @@ class Redis extends CacheFather
     /**
      * 删除缓存数据
      *
+     * @access public
      * @param string $name
      * @return mixed
      */
@@ -92,8 +98,9 @@ class Redis extends CacheFather
     }
  
     /**
-     * 格式化变量名
+     * 获取缓存数据存储路径
      *
+     * @access public
      * @param string $name
      * @return string
      */
@@ -104,7 +111,9 @@ class Redis extends CacheFather
             $path = $path. $this->_flag. '_';
         }
         if (!is_callable($this->_format)) {
-            $this->_format = [$this, '_formatPath'];
+            $this->_format = function($name) {
+                return md5($name);
+            };
         }
 		$part = call_user_func_array($this->_format, [$name]);
         if (is_null($part)) {
@@ -122,15 +131,6 @@ class Redis extends CacheFather
     public function getInstance()
     {
         return $this->_container;
-    }
-
-    /**
-     * @param string $name
-     * @return string
-     */
-	private function _formatPath(string $name)
-	{
-		return md5($name);
     }
     
 }

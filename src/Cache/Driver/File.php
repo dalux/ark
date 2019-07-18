@@ -3,7 +3,7 @@
 namespace Brisk\Cache\Driver;
 
 use Brisk\Kernel\Language;
-use Brisk\Toolkit\File as FileToolkit;
+use Brisk\Toolkit\Dir;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
 
@@ -11,26 +11,31 @@ class File extends CacheFather
 {
 
     /**
+     * 缓存文件后缀名
+     *
      * @var string
      */
 	private $_ext_name = '.cache';
 
     /**
+     * 缓存文件存放目录
+     *
      * @var string
      */
     private $_dir = '';
 
     /**
-     * Construct
+     * 构造器
      *
-     * @param string path
-     * @param array setting
+     * @access public
+     * @param string $path
+     * @param array $setting
      * @return void
      */
     public function __construct(string $path, array $setting = [])
     {
         $this->_dir = $path;
-        if (!is_dir($this->_dir) && !FileToolkit::mkDir($this->_dir)) {
+        if (!is_dir($this->_dir) && !Dir::create($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_create_failed', $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_permission_error', $this->_dir));
@@ -42,11 +47,12 @@ class File extends CacheFather
     }
 
     /**
-     * Set Cache data
+     * 设置缓存数据
      *
-     * @param string name
-     * @param mixed value
-     * @param int expire
+     * @access public
+     * @param string $name
+     * @param mixed $value
+     * @param int $expire
      * @return bool
      */
     public function set(string $name, $value, int $expire = null)
@@ -59,9 +65,10 @@ class File extends CacheFather
     }
 
     /**
-     * Get Cache data
+     * 获取缓存数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public function get(string $name)
@@ -89,9 +96,10 @@ class File extends CacheFather
     }
 
     /**
-     * Delete Cache data
+     * 删除缓存数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return bool
      */
     public function delete(string $name)
@@ -105,9 +113,10 @@ class File extends CacheFather
     }
 
     /**
-     * Get cache data save location
+     * 获取缓存保存完整文件路径
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return string
      */
     public function getCachePath(string $name)
@@ -118,7 +127,10 @@ class File extends CacheFather
         }
         $path = $path. '/';
         if (!is_callable($this->_format)) {
-            $this->_format = [$this, '_formatPath'];
+            $this->_format = function($name) {
+                $name = md5($name);
+                return substr($name, 0, 1). '/'. substr($name, 1, 1). '/'. $name;
+            };
         }
         $part = call_user_func_array($this->_format, [$name]);
         if (is_null($part)) {
@@ -126,21 +138,20 @@ class File extends CacheFather
         }
         $path = $path. $part. $this->_ext_name;
         $path = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, $path);
-        if (!file_exists(dirname($path)) && !FileToolkit::mkDir(dirname($path))) {
+        if (!file_exists(dirname($path)) && !Dir::create(dirname($path))) {
             throw new RuntimeException(Language::format('cache.dir_create_failed', $path));
         }
         return $path;
     }
 
     /**
+     * 获取文件缓存对象实例
      *
-     * @param $name
-     * @return string
+     * @return File
      */
-	private function _formatPath(string $name)
-	{
-		$name = md5($name);
-        return substr($name, 0, 1). '/'. substr($name, 1, 1). '/'. $name;
-	}
-    
+    public function getInstance()
+    {
+        return $this;
+    }
+
 }

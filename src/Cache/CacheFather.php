@@ -6,28 +6,37 @@ abstract class CacheFather implements ICacheDriver
 {
 
     /**
+     * 缓存目录标识
+     * 
      * @var string
      */
     protected $_flag;
 
     /**
+     * 格式化缓存名称函数
+     *
      * @var callable
      */
     protected $_format;
 
     /**
+     * 当前是否缓存模式
+     *
      * @var bool
      */
     protected $_caching = true;
 
     /**
+     * 缓存默认过期时间
+     *
      * @var int
      */
     protected $_expire_time = 86400;
 
     /**
-     * constructor.
+     * 默认构造方法
      *
+     * @access public
      * @param array $setting
      */
     public function __construct(array $setting = [])
@@ -48,8 +57,9 @@ abstract class CacheFather implements ICacheDriver
     }
 
     /**
-     * Set cache flag
+     * 设置缓存标识
      *
+     * @access public
      * @param string $flag
      * @return CacheFather
      */
@@ -60,8 +70,9 @@ abstract class CacheFather implements ICacheDriver
     }
 
     /**
-     * Setting path formatting method
+     * 设置格式化缓存名称的方法
      *
+     * @access public
      * @param callable $format
      * @return CacheFather
      */
@@ -72,8 +83,9 @@ abstract class CacheFather implements ICacheDriver
     }
 
     /**
-     * Setting whether data is cached
+     * 设置当前缓存是否生效
      *
+     * @access public
      * @param bool $caching
      * @return CacheFather
      */
@@ -84,8 +96,9 @@ abstract class CacheFather implements ICacheDriver
     }
 
     /**
-     * Set cache expire time
+     * 设置默认缓存过期时间
      *
+     * @access public
      * @param int $expire_time
      * @return CacheFather
      */
@@ -96,8 +109,9 @@ abstract class CacheFather implements ICacheDriver
     }
 
     /**
-     * Set Cache data
+     * 设置缓存数据
      *
+     * @access public
      * @param string $name
      * @param mixed $value
      * @param int $expire
@@ -106,24 +120,27 @@ abstract class CacheFather implements ICacheDriver
     public abstract function set(string $name, $value, int $expire = 0);
 
     /**
-     * Get Cache data
+     * 获取缓存数据
      *
+     * @access public
      * @param string $name
      * @return mixed
      */
     public abstract function get(string $name);
 
     /**
-     * Delete Cache data
+     * 删除缓存数据
      *
+     * @access public
      * @param string $name
      * @return bool
      */
     public abstract function delete(string $name);
 
     /**
-     * Get cache data save location
+     * 获取缓存存储路径
      *
+     * @access public
      * @param string $name
      * @return string
      */

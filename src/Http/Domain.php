@@ -6,9 +6,10 @@ class Domain
 {
 
     /**
-     * Get current Server domain name
+     * 获取当前域名
      *
-     * @param bool reduce
+     * @access public
+     * @param bool $reduce
      * @return string
     */
     public static function get(bool $reduce = true)
@@ -26,8 +27,9 @@ class Domain
     }
 
     /**
-     * Get server sub-domain name
+     * 获取域名前缀
      *
+     * @access public
      * @return string
     */
     public static function getPrefix()

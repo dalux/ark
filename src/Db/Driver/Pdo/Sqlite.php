@@ -7,6 +7,14 @@ use Brisk\Db\Driver\PdoFather;
 class Sqlite extends PdoFather
 {
 
+    /**
+     * 构造函数
+     *
+     * @access public
+     * @param array $config
+     * @param array $setting
+     * @return void
+     */
     public function __construct(array $config, array $setting = [])
     {
         $dsn = sprintf('sqlite:%s', $config['dbname']);
@@ -18,7 +26,7 @@ class Sqlite extends PdoFather
         if (count($setting)>0) {
             $params = array_merge($params, $setting);
         }
-        parent::__construct($dsn, null, null, $params);
+        parent::__construct($dsn, '', '', $params);
     }
 
 }

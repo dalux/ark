@@ -6,26 +6,29 @@ abstract class ViewFather implements IViewDriver
 {
 
     /**
-     * Set template data
+     * 设置模板变量
      *
-     * @param string name
-     * @param mixed val
+     * @access public
+     * @param string $name
+     * @param mixed $val
      * @return IViewDriver
      */
     public abstract function set(string $name, $val = null);
 
     /**
-     * Get template data
+     * 获取模板变量
      *
+     * @access public
      * @param string name
      * @return mixed
      */
     public abstract function get(string $name = null);
 
     /**
-     * Rendering template data
+     * 渲染模板
      *
-     * @param string template
+     * @access public
+     * @param string $template
      * @return string
      */
     public abstract function render(string $template);

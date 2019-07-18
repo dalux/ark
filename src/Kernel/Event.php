@@ -8,16 +8,19 @@ class Event
 {
 
     /**
+     * 事件监听器列表
+     * 
      * @var array
      */
     private static $_listener = [];
 
     /**
-     * Adding event listeners
+     * 添加事件监听器
      *
+     * @access public
      * @param string $event
      * @param callable $listener
-     * @return null
+     * @return void
      */
     public static function add(string $event, callable $listener)
     {
@@ -38,8 +41,9 @@ class Event
     }
 
     /**
-     * Gets all listeners for the specified event
+     * 获取事件监听器
      *
+     * @access public
      * @param string $event
      * @return array
      */
@@ -49,8 +53,9 @@ class Event
     }
 
     /**
-     * Triggering listener events
+     * 触发监听事件
      *
+     * @access public
      * @param string $event
      * @param array $data
      * @return array

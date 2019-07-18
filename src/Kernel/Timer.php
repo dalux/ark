@@ -6,15 +6,18 @@ class Timer
 {
 
     /**
+     * 时间点数据
+     * 
      * @var array
      */
     private static $_marks = [];
 
     /**
-     * Mark Time Label
+     * 标记
      *
+     * @access public
      * @param string $flag
-     * @return null
+     * @return void
      */
     public static function mark(string $flag)
     {
@@ -22,8 +25,9 @@ class Timer
     }
 
     /**
-     * Check for the presence of a time label
+     * 检查时间点是否已标记
      *
+     * @access public
      * @param string $flag
      * @return bool
      */
@@ -33,8 +37,9 @@ class Timer
 	}
 
     /**
-     * Get the most recent time-consuming
+     * 获取最近两个时间点耗时
      *
+     * @access public
      * @return float
      */
     public static function lastUsed()
@@ -48,8 +53,9 @@ class Timer
     }
 
     /**
-     * Get total time-consuming
+     * 获取总耗时时间
      *
+     * @access public
      * @return float
      */
     public static function totalUsed()
@@ -62,8 +68,9 @@ class Timer
     }
 
     /**
-     * Get time-consuming based on specified tags
+     * 获取指定时间点间的耗时
      *
+     * @access public
      * @param string $start
      * @param string $end
      * @return float

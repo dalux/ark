@@ -10,18 +10,23 @@ class Router
 {
 
     /**
+     * 路由规则
+     * 
      * @var array
      */
     private static $_rules  = [];
 
     /**
+     * 当前路由请求
+     * 
      * @var string
      */
     private static $_route;
 
     /**
-     * get current route
+     * 获取当前路由
      *
+     * @access public
      * @return string
      */
     public static function getRoute()
@@ -30,8 +35,9 @@ class Router
     }
 
     /**
-     * add route operator
+     * 设置路由规则
      *
+     * @access public
      * @param string $pattern
      * @param string|array $callback
      * @param string|array $interceptor
@@ -43,8 +49,9 @@ class Router
     }
 
     /**
-     * get declared route
+     * 获取已定义的路由规则
      *
+     * @access public
      * @return array
      */
     public static function getRules()
@@ -53,8 +60,9 @@ class Router
     }
 
     /**
-     * Routing dispatch
+     * 路由调度
      *
+     * @access public
      * @return string
      */
     public static function dispatch()

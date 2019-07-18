@@ -9,14 +9,17 @@ class Proxy
 {
 
     /**
+     * 缓存器对象
+     * 
      * @var ICacheDriver
      */
     private $_cache;
 
     /**
-     * Set cache instance
+     * 设置缓存对象
      *
-     * @param ICacheDriver cache
+     * @access public
+     * @param ICacheDriver $cache
      * @return Proxy
      */
     public function setCacher(ICacheDriver $cache)
@@ -26,13 +29,14 @@ class Proxy
     }
 
     /**
-     * Execute cache proxy
+     * 执行缓存代理
      *
-     * @param object target
-     * @param string method
-     * @param array args
-     * @param int expire
-     * @param string name
+     * @access public
+     * @param object $target
+     * @param string $method
+     * @param array $args
+     * @param int $expire
+     * @param string $name
      * @return mixed
      */
     public function do(object $target, string $method, array $args, int $expire = 86400, string $name = null)
@@ -59,7 +63,9 @@ class Proxy
     }
 
     /**
+     * 格式化缓存名称
      *
+     * @access public
      * @param object $target
      * @param string $func
      * @param array $args

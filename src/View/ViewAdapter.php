@@ -12,9 +12,10 @@ class ViewAdapter
 {
 
     /**
-     * Get View driver from config
+     * 根据配置生成模板驱动器实例
      *
-     * @return ViewFather
+     * @access public
+     * @return IViewDriver
      */
     public static function getDriverFromConfig()
     {

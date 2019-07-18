@@ -5,6 +5,11 @@ namespace Brisk\Http;
 class Response
 {
 
+    /**
+     * 状态码描述
+     *
+     * @var array
+     */
     private static $_status     = [
         100 => 'Continue',
         101 => 'Switching Protocols',
@@ -50,12 +55,13 @@ class Response
     ];
 
     /**
-    * set header parameter
-    *
-    * @param int code
-    * @param string text
-    * @return void
-    */
+     * 发送状态码
+     *
+     * @access public
+     * @param int $code
+     * @param string $text
+     * @return void
+     */
     public static function status(int $code, string $text = null)
     {
         $status_code = self::$_status[$code] ?? 200;
@@ -66,28 +72,29 @@ class Response
     }
 
     /**
-    * set header parameter
-    *
-    * @param string var
-    * @param mixed val
-    * @param bool replace
-    * @return void
-    */
+     * 设置头信息
+     *
+     * @access public
+     * @param string $header
+     * @param bool $replace
+     * @return void
+     */
     public static function setHeader(string $header, bool $replace = true)
     {
         header($header, $replace);
     }
 
     /**
-     * set cookie
+     * 设置cookie信息
      *
-     * @param string name
-     * @param string value
-     * @param int expire
-     * @param string path
-     * @param string domain
-     * @param bool httponly
-     * @param bool secure
+     * @access public
+     * @param string $name
+     * @param string $value
+     * @param int $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool $httponly
+     * @param bool $secure
      * @return void
      */
     public static function setCookie(string $name, $value, int $expire = 86400, string $path = '/', string $domain = '', bool $httponly = true, bool $secure = false)
@@ -96,8 +103,9 @@ class Response
     }
 
     /**
-     * sets no cache
+     * 设置客户端不缓存数据
      *
+     * @access public
      * @return void
      */
     public static function noCache()
@@ -110,9 +118,10 @@ class Response
     }
 
     /**
-     * set expire time
+     * 设置客户端数据缓存过期时间
      *
-     * @param int sec
+     * @access public
+     * @param int $sec
      * @return void
      */
     public static function setExpires(int $sec = 3600)
@@ -122,7 +131,8 @@ class Response
 
     /**
      * 跳转
-     * 
+     *
+     * @access public
      * @param string $url
      * @param bool $script
      * @param string $msg

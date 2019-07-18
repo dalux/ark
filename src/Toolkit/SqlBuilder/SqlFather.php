@@ -6,35 +6,45 @@ abstract class SqlFather
 {
 
     /**
+     * 数据库类型
+     * 
      * @var string
      */
     protected $_db_type = '';
 
     /**
+     * sql语句片断
+     *
      * @var array
      */
     protected $_parts = [];
 
     /**
+     * 最终生成的sql语句
+     * 
      * @var string
      */
     protected $_sql = '';
 
     /**
+     * sql参数绑定
+     *
      * @var array
      */
     protected $_db_bind = [];
 
     /**
+     * 当前sql是否绑定
+     *
      * @var bool
      */
     protected $_compiled = false;
 
     /**
-     * Put quotation marks on a field
+     * 引号包裹
      *
-     * @param mixed value
-     * @param string dbtype
+     * @access public
+     * @param mixed $value
      * @return string
      */
     public function quote($value)
@@ -54,10 +64,11 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement where condition
+     * 设置where条件
      *
-     * @param string expr
-     * @param mixed dbtype
+     * @access public
+     * @param string $expr
+     * @param mixed $value
      * @return SqlFather
      */
     public function where(string $expr, $value = null)
@@ -71,10 +82,11 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement whereIn condition
+     * 设置where in 条件
      *
-     * @param string field
-     * @param mixed value
+     * @access public
+     * @param string $field
+     * @param mixed $value
      * @return SqlFather
      */
     public function whereIn(string $field, $value)
@@ -95,10 +107,11 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement whereNotIn condition
+     * 设置where not in 条件
      *
-     * @param string field
-     * @param mixed value
+     * @access public
+     * @param string $field
+     * @param mixed $value
      * @return SqlFather
      */
     public function whereNotIn(string $field, $value)
@@ -119,9 +132,10 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement whereExists condition
+     * 设置where exists子查询条件
      *
-     * @param string query
+     * @access public
+     * @param string $query
      * @return SqlFather
      */
     public function whereExists($query)
@@ -135,9 +149,10 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement whereNotExists condition
+     * 设置where not exists子查询条件
      *
-     * @param string query
+     * @access public
+     * @param string $query
      * @return SqlFather
      */
     public function whereNotExists($query)
@@ -151,11 +166,12 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement whereLike condition
+     * 设置like查询条件
      *
-     * @param string field
-     * @param string expr
-     * @param string escape
+     * @access public
+     * @param string $field
+     * @param string $expr
+     * @param string $escape
      * @return SqlFather
      */
     public function whereLike(string $field, string $expr, string $escape = null)
@@ -168,11 +184,12 @@ abstract class SqlFather
     }
 
     /**
-     * Setting the sql statement whereNotLike condition
+     * 设置notlike查询条件
      *
-     * @param string field
-     * @param string expr
-     * @param string escape
+     * @access public
+     * @param string $field
+     * @param string $expr
+     * @param string $escape
      * @return SqlFather
      */
     public function whereNotLike(string $field, string $expr, string $escape = null)
@@ -185,8 +202,9 @@ abstract class SqlFather
     }
 
     /**
-     * Get the where fragment in the sql statement
+     * 获取where条件语句片段
      *
+     * @access protected
      * @return string
      */
     protected function pickWherePart()
@@ -216,8 +234,9 @@ abstract class SqlFather
     }
 
     /**
-     * Get the bind data
+     * 获取当前sql绑定参数
      *
+     * @access public
      * @return array
      */
     public function getBind()
@@ -226,8 +245,9 @@ abstract class SqlFather
     }
 
     /**
-     * Get the full sql statement
+     * 当前当前生成的sql语句，可能含有bind占位符
      *
+     * @access public
      * @return string
      */
     public function getSQL()
@@ -239,8 +259,9 @@ abstract class SqlFather
     }
 
     /**
-     * Get the full sql statement
+     * 获取最终sql语句
      *
+     * @access public
      * @return string
      */
     public function getRealSQL()
@@ -253,21 +274,29 @@ abstract class SqlFather
         return $sql;
     }
 
+    /**
+     * 输出最终sql语句
+     *
+     * @access public
+     * @return string
+     */
     public function __toString()
     {
         return $this->getRealSQL();
     }
 
     /**
-     * Compile the sql statment and query bind parameter
+     * 编译当前sql
      *
+     * @access protected
      * @return SqlFather
      */
     protected abstract function compile();
 
     /**
+     * 解析表达
      *
-     *
+     * @access protected
      * @param string $expr
      * @param null $value
      * @return string

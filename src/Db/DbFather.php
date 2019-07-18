@@ -11,143 +11,159 @@ abstract class DbFather implements IDbDriver
 {
 
     /**
-     * Execute a sql with bind options
+     * 执行sql语句
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return bool
      */
     public abstract function query(string $sql, array $bind = []);
 
     /**
-     * Execute fetchAll method with bind options
+     * 获取多行数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return array
      */
     public abstract function fetchAll(string $sql, array $bind = []);
 
     /**
-     * Execute fetchRow method with bind options
+     * 获取单行数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return array
      */
     public abstract function fetchOne(string $sql, array $bind = []);
 
     /**
-     * Execute fetchOne method with bind options
+     * 获取单行单列数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return mixed
      */
     public abstract function fetchScalar(string $sql, array $bind = []);
 
     /**
-     * Start a new Transaction
+     * 开启事务
      *
+     * @access public
      * @return bool
      */
     public abstract function beginTransaction();
 
     /**
-     * Commit a Transaction
+     * 提交事务
      *
+     * @access public
      * @return bool
      */
     public abstract function commit();
 
     /**
-     * Rollback a Transaction
+     * 回滚事务
      *
+     * @access public
      * @return bool
      */
     public abstract function rollback();
 
     /**
-     * Check if the current sql is in a transaction
+     * 当前是否处于事务中
      *
+     * @access public
      * @return bool
      */
     public abstract function inTransaction();
 
     /**
-     * Get last insert id
+     * 获取最后一次写入的ID
      *
-     * @param string seq
+     * @access public
+     * @param string $seq
      * @return int
      */
     public abstract function lastInsertId(string $seq = null);
 
     /**
-     * Gets the number of rows as a result of the last sql execution
+     * 获取最后一次sql影响的行数
      *
+     * @access public
      * @return int
      */
     public abstract function lastRowCount();
 
     /**
-     * Get current driver name
+     * 获取当前驱动器名称
      *
+     * @access public
      * @return string
      */
     public abstract function getDriverName();
 
     /**
-     * Get db connection instance
-     * 
+     * 获取数据库连接资源对象
+     *
+     * @access public
      * @return resource
      */
     public abstract function getInstance();
 
     /**
-     * select语句sql对象
+     * select语句对象
      *
+     * @access public
      * @return Select
      */
     public function select()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\Brisk\Toolkit\SqlBuilder\Select\\'. $dbtype;
+        $classname = 'Brisk\Toolkit\SqlBuilder\Select\\'. $dbtype;
         return new $classname();
     }
 
     /**
-     * update语句sql对象
+     * update语句对象
      *
+     * @access public
      * @return Update
      */
     public function update()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\Brisk\Toolkit\SqlBuilder\Update\\'. $dbtype;
+        $classname = 'Brisk\Toolkit\SqlBuilder\Update\\'. $dbtype;
         return new $classname();
     }
 
     /**
      * delete语句sql对象
      *
+     * @access public
      * @return Delete
      */
     public function delete()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\Brisk\Toolkit\SqlBuilder\Delete\\'. $dbtype;
+        $classname = 'Brisk\Toolkit\SqlBuilder\Delete\\'. $dbtype;
         return new $classname();
     }
 
     /**
      * insert语句sql对象
      *
+     * @access public
      * @return Insert
      */
     public function insert()
     {
         $dbtype = ucfirst($this->getDriverName());
-        $classname = '\Brisk\Toolkit\SqlBuilder\Insert\\'. $dbtype;
+        $classname = 'Brisk\Toolkit\SqlBuilder\Insert\\'. $dbtype;
         return new $classname();
     }
 

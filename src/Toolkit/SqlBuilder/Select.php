@@ -9,10 +9,11 @@ abstract class Select extends SqlFather
 {
 
     /**
-     * Setting the from field in the sql statement
+     * 设置查询表名及字段
      *
-     * @param mixed table
-     * @param array columns
+     * @access public
+     * @param mixed $table
+     * @param array $columns
      * @return Select
      */
 	public function from(string $table, array $columns = ['*'])
@@ -24,9 +25,10 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the group field in the sql statement
+     * 设置组分条件
      *
-     * @param array columns
+     * @access public
+     * @param array $columns
      * @return Select
      */
     public function group($columns)
@@ -39,9 +41,10 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the having field in the sql statement
+     * 设置分组查询结果过滤条件
      *
-     * @param string cond
+     * @access public
+     * @param string $cond
      * @param array $args
      * @return Select
      */
@@ -52,10 +55,11 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the limit field in the sql statement
+     * 设置查询结果数量限制
      *
-     * @param int count
-     * @param int offset
+     * @access public
+     * @param int $count
+     * @param int $offset
      * @return Select
      */
     public function limit(int $count = 0, int $offset = 0)
@@ -66,10 +70,11 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the order field in the sql statement
+     * 设置排序参数
      *
-     * @param string col
-     * @param bool asc
+     * @access public
+     * @param string $col
+     * @param bool $asc
      * @return Select
      */
     public function order(string $col, bool $asc = true)
@@ -79,11 +84,12 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the joinLeft field in the sql statement
+     * 设置左链接表、关联条件、查询字段
      *
-     * @param string|array table
-     * @param string cond
-     * @param array fields
+     * @access public
+     * @param string|array $table
+     * @param string $cond
+     * @param array $fields
      * @return Select
      */
     public function joinLeft($table, string $cond, array $fields = [])
@@ -92,11 +98,12 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the joinInner field in the sql statement
+     * 设置内联接表、关联条件、查询字段
      *
-     * @param string|array table
-     * @param string cond
-     * @param array fields
+     * @access public
+     * @param string|array $table
+     * @param string $cond
+     * @param array $fields
      * @return Select
      */
     public function joinInner($table, string $cond, array $fields = [])
@@ -105,11 +112,12 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Setting the joinRight field in the sql statement
+     * 设置右联接表、关联条件、查询字段
      *
-     * @param string|array table
-     * @param string cond
-     * @param array fields
+     * @access public
+     * @param string|array $table
+     * @param string $cond
+     * @param array $fields
      * @return Select
      */
     public function joinRight($table, string $cond, array $fields = [])
@@ -118,7 +126,9 @@ abstract class Select extends SqlFather
     }
 
     /**
+     * 联接
      *
+     * @access protected
      * @param string|array $table
      * @param string $cond
      * @param array $fields
@@ -133,8 +143,9 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Get the select fragment in the sql statement
+     * 获取查询语句片段
      *
+     * @access protected
      * @return string
      */
     protected function pickSelectPart()
@@ -250,8 +261,9 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Get the group fragment in the sql statement
+     * 获取分组片段
      *
+     * @access protected
      * @return string
      */
     protected function pickGroupPart()
@@ -267,8 +279,9 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Get the having fragment in the sql statement
+     * 获取having过滤条件片段
      *
+     * @access protected
      * @return string
      */
     protected function pickHavingPart()
@@ -298,8 +311,9 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Get the order fragment in the sql statement
+     * 获取排序语句片段
      *
+     * @access protected
      * @return string
      */
     protected function pickOrderPart()
@@ -320,8 +334,9 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Get the limit fragment in the sql statement
+     * 获取limit限制语句片段
      *
+     * @access protected
      * @return string
      */
     protected function pickLimitPart()
@@ -340,8 +355,9 @@ abstract class Select extends SqlFather
     }
 
     /**
-     * Compile the select statment
+     * 编译sql语句
      *
+     * @access protected
      * @return Select
      */
     protected function compile()

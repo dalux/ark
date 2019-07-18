@@ -6,8 +6,9 @@ class Toolkit
 {
 
     /**
-     * Get array variable string
+     * 以字符串方式获取变量的print_r结果
      *
+     * @access public
      * @param mixed $params
      * @return string
      */
@@ -19,8 +20,9 @@ class Toolkit
     }
 
     /**
-     * Formatted print variable
+     * 格式化输出变量数据
      *
+     * @access public
      * @param mixed $params
      * @return void
      */
@@ -33,8 +35,9 @@ class Toolkit
     }
 
     /**
-     * Get array variable string
+     * 以字符串方式返回变量的var_dump结果
      *
+     * @access public
      * @param mixed $params
      * @return string
      */
@@ -46,8 +49,9 @@ class Toolkit
     }
 
     /**
-     * Formatted print variable
+     * 格式化输出变量
      *
+     * @access public
      * @param mixed $params
      * @return void
      */

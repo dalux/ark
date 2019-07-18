@@ -10,13 +10,16 @@ class Mysql extends Delete
 {
 
     /**
+     * 数据库类型
+     *
      * @var string
      */
     protected $_db_type = 'mysql';
 
     /**
-     * Compile the delete statment
+     * 编译当前sql
      *
+     * @access public
      * @return Delete
      */
     public function compile()

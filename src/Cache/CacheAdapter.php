@@ -12,10 +12,11 @@ class CacheAdapter
 {
 
     /**
-     * Get cache driver from config
+     * 根据配置生成缓存驱动器实例
      *
+     * @access public
      * @param string $name
-     * @return CacheFather
+     * @return ICacheDriver
      */
     public static function getDriverFromConfig(string $name)
     {

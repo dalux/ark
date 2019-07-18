@@ -8,13 +8,16 @@ class Oci extends Insert
 {
 
     /**
+     * 数据库类型
+     *
      * @var string
      */
     protected $_db_type = 'Oci';
 
     /**
-     * Put quotation marks on a field
+     * 为数据添加引号
      *
+     * @access public
      * @param mixed value
      * @return string
      */

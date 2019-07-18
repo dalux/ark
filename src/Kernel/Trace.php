@@ -6,15 +6,18 @@ class Trace
 {
 
     /**
+     * 跟踪数据
+     * 
      * @var array
      */
 	private static $_trace = [];
 
     /**
-     * Set trace data
+     * 设置跟踪数据
      *
+     * @access public
      * @param string $flag
-     * @param $data
+     * @param mixed $data
      * @return void
      */
 	public static function set(string $flag, $data)
@@ -30,8 +33,9 @@ class Trace
 	}
 
     /**
-     * Get trace data
+     * 获取跟踪数据
      *
+     * @access public
      * @param string $flag
      * @return mixed
      */

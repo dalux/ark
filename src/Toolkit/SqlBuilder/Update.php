@@ -9,10 +9,11 @@ abstract class Update extends SqlFather
 {
 
     /**
-     * Setting the set field in the sql statement
+     * 设置更新的表及字段值
      *
-     * @param mixed table
-     * @param array updates
+     * @access public
+     * @param mixed $table
+     * @param array $updates
      * @return Update
      */
     public function set(string $table, array $updates = [])
@@ -24,7 +25,7 @@ abstract class Update extends SqlFather
     }
 
     /**
-     * Compile the update statment
+     * 编译当前update语句
      *
      * @return Update
      */

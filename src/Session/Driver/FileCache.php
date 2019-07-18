@@ -12,14 +12,18 @@ class FileCache extends SessionFather
 {
 
     /**
+     * 文件缓存路径
+     * 
      * @var string
      */
     private $_path;
 
     /**
-     * FileCache constructor.
+     * 构造函数
      *
+     * @access public
      * @param array $option
+     * @return void
      */
     public function __construct(array $option = [])
     {
@@ -33,9 +37,10 @@ class FileCache extends SessionFather
     }
 
     /**
-     * Start the session service
+     * 开启会话处理
      *
-     * @param int session_id
+     * @access public
+     * @param int $session_id
      * @return void
      */
     public function start(int $session_id = null)

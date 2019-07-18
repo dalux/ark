@@ -9,14 +9,20 @@ use Brisk\Exception\RuntimeException;
 class Memcached extends CacheFather
 {
 
+    /**
+     * memcached实例
+     *
+     * @var \Memcached
+     */
     private $_container;
 
     /**
-     * Construct
+     * 构造函数
      *
-     * @param string path
-     * @param array setting
-     * @return null
+     * @access public
+     * @param string $path
+     * @param array $setting
+     * @return void
      */
     public function __construct(string $path, array $setting = [])
     {
@@ -32,11 +38,11 @@ class Memcached extends CacheFather
             }
         }
         $params = [
-            \Memcached::OPT_DISTRIBUTION=> \Memcached::DISTRIBUTION_CONSISTENT,
-            \Memcached::OPT_LIBKETAMA_COMPATIBLE=> true,
-            \Memcached::OPT_CONNECT_TIMEOUT=> 500,
-            \Memcached::OPT_COMPRESSION=> true,
-            \Memcached::OPT_REMOVE_FAILED_SERVERS=> true
+            \Memcached::OPT_DISTRIBUTION            => \Memcached::DISTRIBUTION_CONSISTENT,
+            \Memcached::OPT_LIBKETAMA_COMPATIBLE    => true,
+            \Memcached::OPT_CONNECT_TIMEOUT         => 500,
+            \Memcached::OPT_COMPRESSION             => true,
+            \Memcached::OPT_REMOVE_FAILED_SERVERS   => true
         ];
         if (!is_null($setting['memcached_options']) 
                 && is_array($setting['memcached_options'])) {
@@ -60,11 +66,12 @@ class Memcached extends CacheFather
     }
 
     /**
-     * Set Cache data
+     * 设置缓存数据
      *
-     * @param string name
-     * @param mixed value
-     * @param int expire
+     * @access public
+     * @param string $name
+     * @param mixed $value
+     * @param int $expire
      * @return bool
      */
     public function set(string $name, $value, int $expire = 0)
@@ -77,9 +84,10 @@ class Memcached extends CacheFather
     }
 
     /**
-     * Get Cache data
+     * 获取缓存数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public function get(string $name)
@@ -95,9 +103,10 @@ class Memcached extends CacheFather
     }
 
     /**
-     * Delete Cache data
+     * 删除缓存数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return bool
      */
     public function delete(string $name)
@@ -108,9 +117,10 @@ class Memcached extends CacheFather
     }
 
     /**
-     * Get cache data save location
+     * 获取缓存数据存储路径
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return string
      */
     public function getCachePath(string $name)
@@ -120,7 +130,9 @@ class Memcached extends CacheFather
             $path = $path. $this->_flag. '_';
         }
         if (!is_callable($this->_format)) {
-            $this->_format = [$this, '_formatPath'];
+            $this->_format = function($name) {
+                return md5($name);
+            };
         }
 		$part = call_user_func_array($this->_format, [$name]);
         if (is_null($part)) {
@@ -131,7 +143,7 @@ class Memcached extends CacheFather
     }
 
     /**
-     * Return memcached instance
+     * 返回memcached实例
      *
      * @return \Memcached
      */
@@ -139,14 +151,5 @@ class Memcached extends CacheFather
     {
         return $this->_container;
     }
-
-    /**
-     * @param $name
-     * @return string
-     */
-	private function _formatPath(string $name)
-	{
-		return md5($name);
-	}
 
 }

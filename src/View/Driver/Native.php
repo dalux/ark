@@ -12,24 +12,31 @@ class Native extends ViewFather
 {
 
     /**
+     * 模板数据
+     * 
      * @var array
      */
     private $_storage = [];
 
     /**
-     * @var mixed|string
+     * 模板文件后缀名
+     *
+     * @var string
      */
     private $_template_ext = '.phtml';
 
     /**
+     * 模板文件存储目录
+     *
      * @var string
      */
     private $_template_dir;
 
     /**
-     * Construct
+     * 构造函数
      *
-     * @param array options
+     * @access public
+     * @param array $options
      * @return mixed
      */
     public function __construct(array $options = [])
@@ -43,10 +50,11 @@ class Native extends ViewFather
     }
 
     /**
-     * Set template data
+     * 设置模板变量
      *
-     * @param string name
-     * @param mixed val
+     * @access public
+     * @param string $name
+     * @param mixed $val
      * @return ViewFather
      */
     public function set(string $name, $val = null)
@@ -56,9 +64,10 @@ class Native extends ViewFather
     }
 
     /**
-     * Get template data
+     * 获取模板变量
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public function get(string $name = null)
@@ -67,10 +76,10 @@ class Native extends ViewFather
     }
 
     /**
-     * Rendering template data
+     * 渲染模板
      *
-     * @param string template
-     * @param bool output
+     * @access public
+     * @param string $template
      * @return string
      */
     public function render(string $template)
@@ -96,11 +105,11 @@ class Native extends ViewFather
     }
 
     /**
-     * Import template file
+     * 导入模板文件
      *
-     * @param string path
-     * @param array params
-     * @param bool output
+     * @access public
+     * @param string $path
+     * @param array $params
      * @return string
      */
     public function import(string $path, array $params = [])

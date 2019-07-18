@@ -12,9 +12,10 @@ class DbAdapter
 {
 
     /**
-     * Get Database driver from config
+     * 根据配置文件生成数据库连接实例
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return IDbDriver
      */
     public static function getDriverFromConfig(string $name)

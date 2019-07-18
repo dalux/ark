@@ -6,26 +6,29 @@ interface IViewDriver
 {
 
     /**
-     * Set template data
+     * 设置模板数据
      *
-     * @param string name
-     * @param mixed val
+     * @access public
+     * @param string $name
+     * @param mixed $val
      * @return IViewDriver
      */
     public function set(string $name, $val = null);
 
     /**
-     * Get template data
+     * 获取模板数据
      *
-     * @param string name
+     * @access public
+     * @param string $name
      * @return mixed
      */
     public function get(string $name = null);
 
     /**
-     * Rendering template data
+     * 渲染模板
      *
-     * @param string template
+     * @access public
+     * @param string $template
      * @return string
      */
     public function render(string $template);

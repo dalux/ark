@@ -2,75 +2,84 @@
 
 namespace Brisk\Db;
 
+use Brisk\Toolkit\SqlBuilder\Delete;
+use Brisk\Toolkit\SqlBuilder\Insert;
+use Brisk\Toolkit\SqlBuilder\Select;
+use Brisk\Toolkit\SqlBuilder\Update;
+
 interface IDbDriver
 {
 
     /**
-     * Execute a sql with bind options
+     * 执行SQL
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return bool
      */
     public function query(string $sql, array $bind = []);
 
     /**
-     * Execute fetchAll method with bind options
+     * 获取多行数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return array
      */
     public function fetchAll(string $sql, array $bind = []);
 
     /**
-     * Execute fetchRow method with bind options
+     * 获取单行数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return array
      */
     public function fetchOne(string $sql, array $bind = []);
 
     /**
-     * Execute fetchOne method with bind options
+     * 获取单行单列数据
      *
-     * @param string sql
-     * @param array bind
+     * @access public
+     * @param string $sql
+     * @param array $bind
      * @return mixed
      */
     public function fetchScalar(string $sql, array $bind = []);
 
     /**
-     * Start a new Transaction
+     * 开始事务处理
      *
      * @return bool
      */
     public function beginTransaction();
 
     /**
-     * Commit a Transaction
+     * 提交事务
      *
      * @return bool
      */
     public function commit();
 
     /**
-     * Rollback a Transaction
+     * 回滚事务
      *
      * @return bool
      */
     public function rollback();
 
     /**
-     * Check if the current sql is in a transaction
+     * 检查当前是否处于事务处理中
      *
      * @return bool
      */
     public function inTransaction();
 
     /**
-     * Get last insert id
+     * 获取最后一条插入的记录ID
      *
      * @param string seq
      * @return int
@@ -78,14 +87,14 @@ interface IDbDriver
     public function lastInsertId(string $seq = null);
 
     /**
-     * Gets the number of rows as a result of the last sql execution
+     * 获取上一次sql影响的行数
      *
      * @return int
      */
     public function lastRowCount();
 
     /**
-     * Get current driver name
+     * 获取当前数据库驱动器名称
      *
      * @return string
      */
@@ -97,5 +106,37 @@ interface IDbDriver
      * @return resource
      */
     public function getInstance();
+
+    /**
+     * select语句对象
+     *
+     * @access public
+     * @return Select
+     */
+    public function select();
+
+    /**
+     * update语句对象
+     *
+     * @access public
+     * @return Update
+     */
+    public function update();
+
+    /**
+     * delete语句sql对象
+     *
+     * @access public
+     * @return Delete
+     */
+    public function delete();
+
+    /**
+     * insert语句sql对象
+     *
+     * @access public
+     * @return Insert
+     */
+    public function insert();
 
 }

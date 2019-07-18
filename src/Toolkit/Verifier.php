@@ -2,12 +2,16 @@
 
 namespace Brisk\Toolkit;
 
+use Brisk\Kernel\Language;
+use Brisk\Exception\RuntimeException;
+
 class Verifier
 {
 
     /**
      * 数据校验器
      *
+     * @access public
      * @param array $data
      * @param array $rule
      */

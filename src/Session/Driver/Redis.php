@@ -12,24 +12,32 @@ class Redis extends SessionFather
 {
 
     /**
+     * redis主机
+     * 
      * @var string
      */
     private $_host;
 
     /**
+     * redis端口
+     *
      * @var string
      */
     private $_port;
 
     /**
+     * 密码
+     *
      * @var string
      */
     private $_password;
 
     /**
-     * Redis constructor.
+     * 构造函数
      *
+     * @access public
      * @param array $option
+     * @return void
      */
     public function __construct(array $option = [])
     {
@@ -45,8 +53,9 @@ class Redis extends SessionFather
     }
 
     /**
-     * Start the session service
+     * 开启会话处理
      *
+     * @access public
      * @param int $session_id
      * @return void
      */
