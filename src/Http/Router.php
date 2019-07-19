@@ -56,7 +56,7 @@ class Router
      * @param array $config
      * @return void
      */
-    public static function loadConfig(array $config)
+    public static function setConfig(array $config)
     {
         foreach ($config as $key=> $item) {
             if ($item['processer']) {
