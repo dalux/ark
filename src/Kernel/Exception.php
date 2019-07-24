@@ -67,7 +67,7 @@ class Exception
                 $max = $max - 1;
             }
             //模板文件
-            $debug = App::get('config')->global->debug->value();
+            $debug = App::init()->config->global->debug->value();
             $tplcontent = $this->_getWebTpl();
             if ($debug || is_null($debug)) {
                 $content = str_replace(['{detail}', '{/detail}'], '', $tplcontent);

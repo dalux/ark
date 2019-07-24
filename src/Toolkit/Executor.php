@@ -21,11 +21,11 @@ class Executor
      * @param string $proc_dir
      * @return void
      */
-    public static function init(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp')
+    public static function init(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp', $fast_exit = false)
     {
-        $process = new swoole_process(function(swoole_process $proc) use ($action, $proc_num, $proc_dir) {
+        $process = new swoole_process(function(swoole_process $proc) use ($action, $proc_num, $proc_dir, $fast_exit) {
             $worker = new Core();
-            $worker->set($action, $proc_num, $proc_dir);
+            $worker->set($action, $proc_num, $proc_dir, $fast_exit);
             $worker->start();
             //接收父进程通过管道传输的任务数据
             swoole_event_add($proc->pipe, function($pipe) use ($proc, $worker) {

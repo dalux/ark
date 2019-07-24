@@ -48,9 +48,12 @@ class Language
             'db.invalid_connection_object'      => '未设置数据库连接对象实例',
             'db.invalid_table_name'             => '无有效的数据库表名称',
 
-            'router.route_not_defined'          => '未定义请求地址[%s]的路由解析器',
-            'router.processer_not_callable'     => '路由[%s]解析器不可用',
-            'router.blocker_not_callable'       => '路由[%s]拦截器不可用',
+            'router.rewrite_result_error'       => '重写后的Uri地址必须是一个字符串',
+            'router.controller_is_empty'        => '控制器列表不能为空',
+            'router.controller_not_found'       => '找不到指定的控制器[%s]',
+            'router.controller_is_protected'    => '无法访问受保护的控制器[%s]',
+            'router.action_not_found'           => '在控制器[%s]中找不到指定行为方法[%s]',
+            'router.invalid_controller_name'    => '无效的控制器名称[%s]',
 
             'sql.query_compile_failed'          => 'SQL语句编译失败，缺少必要字段',
 

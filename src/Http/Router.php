@@ -1,205 +1,267 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace Brisk\Http;
 
+use Brisk\Exception\ActionNotFoundException;
 use Brisk\Kernel\Event;
-use Brisk\Kernel\Language;
 use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Language;
 use Brisk\Kernel\Loader;
+use Brisk\Exception\ControllerNotFoundException;
 
 class Router
 {
 
-    /**
-     * 路由规则
-     * 
-     * @var array
-     */
-    private static $_rules  = [];
+    private static $_namespace;
+    private static $_auto_controller    = 'Init';
+    private static $_auto_ation         = '__init';
+    private static $_default_controller = 'Index';
+    private static $_default_action     = '__index';
+    private static $_url_suffix         = '.html';
+    private static $_rules              = [];
+    private static $_namespace_prefix   = 'App\Controller';
+    private static $_request;
 
     /**
-     * 当前路由请求
-     * 
-     * @var string
-     */
-    private static $_route;
-
-    /**
-     * 获取当前路由
+     * 设置控制器命名空间前缀
      *
      * @access public
-     * @return string
-     */
-    public static function getRoute()
-    {
-        return self::$_route;
-    }
-
-    /**
-     * 设置路由规则
-     *
-     * @access public
-     * @param string $pattern
-     * @param string|array $callback
-     * @param string|array $interceptor
+     * @param string $prefix
+     * @param string|null $basedir
      * @return void
      */
-    public static function addRule(string $pattern, $callback, $interceptor = null)
+    public static function setControllerNameSpace(string $prefix, string $basedir = null)
     {
-        self::$_rules[$pattern] = [$callback, $interceptor];
-    }
-
-    /**
-     * 加载路由配置数组
-     *
-     * @access public
-     * @param array $config
-     * @return void
-     */
-    public static function setConfig(array $config)
-    {
-        foreach ($config as $key=> $item) {
-            if ($item['processer']) {
-                self::addRule($key, $item['processer'], $item['blocker']);
-            }
+        self::$_namespace_prefix = trim($prefix, '\\');
+        if ($basedir) {
+            Loader::addNameSpace($prefix, $basedir);
         }
     }
 
     /**
-     * 获取已定义的路由规则
+     * 设置自化访问的拦截控制器名称
      *
      * @access public
-     * @return array
+     * @param string $controller
+     * @return void
      */
-    public static function getRules()
+    public static function setAutoController(string $controller)
     {
-        return self::$_rules;
+        self::$_auto_controller = ucfirst($controller);
+    }
+
+    /**
+     * 设置自动化访问控制器行为名称
+     *
+     * @access public
+     * @param string $action
+     * @return void
+     */
+    public static function setAutoAction(string $action)
+    {
+        self::$_auto_ation = $action;
+    }
+
+    /**
+     * 设置默认控制器名称
+     *
+     * @access public
+     * @param string $controller
+     * @return void
+     */
+    public static function setDefaultController(string $controller)
+    {
+        self::$_default_controller = ucfirst($controller);
+    }
+
+    /**
+     * 设置默认行为名称
+     *
+     * @access public
+     * @param string $action
+     * @return void
+     */
+    public static function setDefaultAction(string $action)
+    {
+        self::$_default_action = $action;
+    }
+
+    /**
+     * 设置默认URL文件后缀名
+     *
+     * @access public
+     * @param string $suffix
+     * @return void
+     */
+    public static function setUrlSuffix(string $suffix)
+    {
+        self::$_url_suffix = $suffix;
+    }
+
+    /**
+     * 设置uri重写规则
+     *
+     * @access public
+     * @param string $pattern
+     * @param callable $callback
+     * @return void
+     */
+    public static function setRewrite(string $pattern, callable $callback)
+    {
+        self::$_rules[$pattern] = $callback;
+    }
+
+    /**
+     * 获取请求
+     *
+     * @access public
+     * @return string
+     */
+    public static function getRequest()
+    {
+        return self::$_request;
     }
 
     /**
      * 路由调度
      *
      * @access public
-     * @return string
+     * @return mixed
+     * @throws \ReflectionException
      */
     public static function dispatch()
     {
-        if (!$uri = $_SERVER['REQUEST_URI']) {
-            throw new RuntimeException(Language::format('http.invalid_require_uri'));
-        }
-        //解析URI
+        $uri = $_SERVER['REQUEST_URI'];
+        $uri == '/' && $uri.= strtolower(self::$_default_controller);
+        //uri处理
+        $query = [];
         if (strpos($uri, '?') !== false) {
+            $query[] = substr($uri, strpos($uri, '?') + 1);
             $uri = substr($uri, 0, strpos($uri, '?'));
-			$query = substr($uri, strpos($uri, '?') + 1);
-			if (Env::isCli() && $query) {
-                $items = explode('&', $query);
-                if (is_array($items)) {
-                    foreach ($items as $item) {
-                        $name = substr($item, 0, strpos($item, '='));
-                        $value = substr($item, strpos($item, '=') + 1);
-                        if (!isset($_GET[$name])) {
-                            $_GET[$name] = $value;
-                        }
-                    }
-                }
-			}
         }
-        self::$_route = $uri;
-        //遍历规则
-        $route = $processer = $blocker = null;
-        foreach (self::$_rules as $key=> $val) {
-            if (strpos($key, ':') !== false) {
-                $pattern = preg_replace_callback('~/\\:([^\\/]+)~', function($matches) {
-                    $result = $matches[1];
-                    if (strpos($result, '@') !== false) {
-                        $result = explode('@', $result);
-                        $name = $result[0];
-                        $type = $result[1];
-                        if ($type == 'int') {  //支持int限定
-                            $p = sprintf('/(?P<%s>\d+)', $name);
-                        } else {
-                            $p = sprintf('/(?P<%s>%s)', $name, $type);
-                        }
-                        return $p;
-                    } else {
-                        return sprintf('/(?P<%s>[^\\/]+)', $result);
-                    }
-                }, $key);
-                if (preg_match(sprintf('~^%s$~i', $pattern), $uri, $matches)) {
-                    //如有别名，则加入_GET全局数组中
-                    foreach ($matches as $k=> $v) {
-                        if (is_string($k)) {
-                            $_GET[$k] = $v;
-                        }
-                    }
-                    $route = $key;
-                    $processer = $val[0];
-                    $blocker = $val[1];
-                    break;
-                }
-            } elseif (preg_match(sprintf('~^%s$~', $key), $uri, $matches)) {
-                $route = $key;
-                $processer = $val[0];
-                $blocker = $val[1];
-                break;
+        //重写uri
+        $uri = self::rewrite($uri);
+        if (strpos($uri, '?') !== false) {
+            $query[] = substr($uri, strpos($uri, '?') + 1);
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }
+        self::$_request = $uri;
+        //整理get参数
+        foreach ($query as $val) {
+            $plist = explode('&', $val);
+            foreach ($plist as $k=> $v) {
+                $pk = substr($v, 0, strpos($v, '='));
+                $pv = substr($v, strpos($v, '=') + 1);
+                $_GET[$pk] = $pv;
             }
         }
-        if (is_null($route)) {
-            throw new RuntimeException(Language::format('router.route_not_defined', $uri));
+        $uri = trim($uri, '/');
+        //文件后缀名
+        $suffix = self::$_url_suffix;
+        if ($suffix && strpos($uri, $suffix) !== false) {
+            $uri = preg_replace(sprintf('~%s$~i', $suffix), '', $uri);
         }
+        $controller = self::$_default_controller;
+        if ($uri != '') {
+            $controller = implode('\\', array_map('ucfirst', explode('/', $uri)));
+        }
+        self::$_namespace = self::$_namespace_prefix. '\\'. $controller;
         //请求初始化
         Request::init($_GET);
-        //路由解析器是否可用
-        if (is_string($processer) && strpos($processer, '@') !== false) {
-            $processer = explode('@', $processer);
-        }
-        //拦截器是否定义
-        $list_blocker = [];
-        if (is_callable($blocker)) {
-            $list_blocker = [$blocker];
-        } elseif (is_string($blocker)) {
-            if (strpos($blocker, '@') !== false) {
-                $blocker = explode('@', $blocker);
-            }
-            $list_blocker = [$blocker];
-        } elseif (is_array($blocker)) {
-            foreach ($blocker as $key => $val) {
-                $list_blocker[$key] = $val;
-                if (is_string($val)) {
-                    if (strpos($val, '@') !== false) {
-                        $val = explode('@', $val);
-                        $list_blocker[$key] = $val;
-                    }
+        //调度
+        $list = [];
+        //自动拦截器
+        if (self::$_auto_controller) {
+            $auto_controller = self::$_auto_controller;
+            //命名空间路径树
+            $part = str_replace(self::$_namespace_prefix. '\\', '', self::$_namespace);
+            $part = explode('\\', $part);
+            $tree = [];
+            $tree[] = self::$_namespace_prefix . '\\' . $auto_controller;
+            if (count($part) > 1) {
+                $basepath = self::$_namespace_prefix . '\\';
+                foreach ($part as $k => $v) {
+                    $basepath = $basepath . $v . '\\';
+                    $tree[] = $basepath . $auto_controller;
                 }
             }
+            foreach ($tree as $ns) {
+                $list[] = [
+                    'namespace'     => $ns,
+                    'is_required'   => false
+                ];
+            }
         }
-        //路由就绪事件
+        $list[] = [
+            'namespace'     => self::$_namespace,
+            'is_required'   => true
+        ];
         $data = [
-            'route'     => self::$_route,
-            'processer' => $processer,
-            'blocker'   => $list_blocker,
+            'uri'           => self::$_request,
+            'controllers'    => $list
         ];
         $data = Event::fire('event.router.ready', $data);
-        $processer = $data['processer'];
-        $list_blocker = $data['blocker'];
-        if (!is_callable($processer)) {
-            throw new RuntimeException(Language::format('router.processer_not_callable', $uri));
+        $list = $data['controllers'];
+        if (!is_array($list)) {
+            throw new RuntimeException(Language::format('router.controller_is_empty'));
         }
-        if ($list_blocker) {
-            foreach ($list_blocker as $val) {
-                if (!is_callable($val)) {
-                    throw new RuntimeException(Language::format('router.blocker_not_callable', $uri));
+        //循环访问控制器方法
+        $auto_action = self::$_auto_ation;
+        $action = self::$_default_action;
+        foreach ($list as $val) {
+            if (!$val['namespace']) {
+                throw new RuntimeException(Language::format('router.invalid_controller_name', $val['namespace']));
+            }
+            //控制器是否存在
+            if (!Loader::findClass($val['namespace'])) {
+                if ($val['is_required']) {
+                    throw new ControllerNotFoundException(Language::format('router.controller_not_found', $val['namespace']));
+                }
+                continue;
+            }
+            //是否被保护对象
+            $ref = new \ReflectionClass($val['namespace']);
+            if ($ref->isAbstract()) {
+                throw new RuntimeException(Language::format('router.controller_is_protected', $val['namespace']));
+            }
+            $instance = new $val['namespace']();
+            if (!method_exists($instance, $action)) {
+                throw new ActionNotFoundException(Language::format('router.action_not_found', $val['namespace'], $action));
+            }
+            $output = null;
+            //自动化类
+            if (method_exists($instance, $auto_action)) {
+                $output = $instance->$auto_action();
+                if (!is_null($output)) {
+                    return $output;
                 }
             }
-            foreach ($list_blocker as $val) {
-                $result = call_user_func_array($val, []);
-                if (!is_null($result)) {
-                    return $result;
+            $output = $instance->$action();
+            if (!is_null($output)) {
+                return $output;
+            }
+        }
+    }
+
+    /**
+     * 重写URI
+     *
+     * @access public
+     * @param string $uri
+     * @return string
+     */
+    public static function rewrite(string $uri)
+    {
+        foreach (self::$_rules as $key=> $val) {
+            $key = '~'. $key. '~i';
+            if (preg_match($key, $uri)) {
+                $uri = preg_replace_callback($key, $val, $uri);
+                if (!is_string($uri)) {
+                    throw new RuntimeException(Language::format('router.rewrite_result_error'));
                 }
             }
         }
-        //控制器
-        return call_user_func_array($processer, []);
+        return $uri;
     }
 
 }

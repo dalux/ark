@@ -139,10 +139,10 @@ class App
      *
      * @access public
      * @param string $name
-     * @param callable $value
+     * @param mixed $value
      * @return void
      */
-    public static function set(string $name, callable $value)
+    public static function set(string $name, $value)
     {
         if (!isset(self::$_storage[$name]) 
                 || !self::$_storage[$name]['system']) {
@@ -157,11 +157,8 @@ class App
      * @param string $name
      * @return mixed
      */
-    public static function get(string $name = null)
+    public function __get(string $name)
     {
-        if (is_null($name)) {
-            return self::$_storage;
-        }
         $instance = self::$_storage[$name]['instance'];
         if (is_null($instance)) {
             throw new RuntimeException(Language::format('core.object_not_found', $name));
@@ -174,18 +171,6 @@ class App
             self::$_storage[$name]['instance'] = $instance;
         }
         return $instance;
-    }
-
-    /**
-     * 获取自定义对象
-     *
-     * @access public
-     * @param string $name
-     * @return mixed
-     */
-    public function __get(string $name)
-    {
-        return $this->get($name);
     }
 
     /**

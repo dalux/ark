@@ -28,7 +28,7 @@ class SessionAdapter
         }
         $option = [];
         if (App::init()->config->exist('session/option')) {
-            $option = App::get('config')->session->option->value();
+            $option = App::init()->config->session->option->value();
         }
         $instance = new $driver($option);
         if (!$instance instanceof ISessionDriver) {

@@ -18,6 +18,7 @@ class Core
     private $_action;
     private $_proc_num;
     private $_proc_dir;
+    private $_fast_exit     = false;
     private $_locked        = false;
     private $_action_timer;
     private $_wait_timer;
@@ -29,9 +30,10 @@ class Core
      * @param Closure $action
      * @param int $proc_num
      * @param string $proc_dir
+     * @param bool $fast_exit
      * @return void
      */
-    public function set(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp')
+    public function set(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp', $fast_exit = false)
     {
         $this->_action = $action;
         $this->_proc_num = $proc_num;
@@ -39,6 +41,7 @@ class Core
         if (!is_dir($this->_proc_dir)) {
             Dir::create($this->_proc_dir);
         }
+        $this->_fast_exit = $fast_exit;
     }
 
     /**
@@ -93,6 +96,7 @@ class Core
             exec($command, $count);
             $count = intval(trim($count[0]));
             if ($count < 1) {
+                if ($this->_queue && !$this->_fast_exit) return;
                 $this->_log('生产者进程已退出,任务中止', self::LOG_ERROR);
                 swoole_timer_clear($this->_action_timer);
                 swoole_timer_clear($this->_wait_timer);
