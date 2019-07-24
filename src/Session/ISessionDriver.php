@@ -9,10 +9,10 @@ interface ISessionDriver
      * 开启session支持
      *
      * @access public
-     * @param int $session_id
+     * @param string $session_id
      * @return void
      */
-    public function start(int $session_id = null);
+    public function start(string $session_id = null);
 
     /**
      * 设置session过期时间

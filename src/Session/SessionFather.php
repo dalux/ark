@@ -21,7 +21,7 @@ abstract class SessionFather implements ISessionDriver
      */
     public function __construct(array $option = [])
     {
-        if (isset($option['setting'])) {
+        if ($option['setting'] && is_array($option['setting'])) {
             foreach ($option['setting'] as $k=> $v) {
                 ini_set($k, $v);
             }
@@ -45,10 +45,10 @@ abstract class SessionFather implements ISessionDriver
      * 开启session会话
      *
      * @access public
-     * @param int $session_id
+     * @param string $session_id
      * @return void
      */
-    public function start(int $session_id = null)
+    public function start(string $session_id = null)
     {
         if (!is_null($session_id)) {
 			session_id($session_id);

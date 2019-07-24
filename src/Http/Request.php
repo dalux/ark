@@ -13,8 +13,6 @@ class Request
     const TYPE_POST             = 2;
     const TYPE_COOKIE           = 3;
     const TYPE_FILES            = 4;
-
-    private static $_data       = [];
     private static $_ready      = false;
     
     /**
@@ -31,24 +29,12 @@ class Request
                 self::TYPE_GET => $getdata,
                 self::TYPE_POST => $_POST,
                 self::TYPE_COOKIE => $_COOKIE,
-                self::TYPE_FILES => $_FILES
             ];
             $data = Event::fire('event.request.ready', $data);
-            $get = $data[self::TYPE_GET];
-            $post = $data[self::TYPE_POST];
-            $cookie = $data[self::TYPE_COOKIE];
-            $files = $data[self::TYPE_FILES];
-            $request = array_merge($get, $post, $cookie);
-            $_GET = [];
-            $_POST = [];
-            $_COOKIE = [];
-            $_REQUEST = [];
-            $_FILES = [];
-            self::$_data['get'] = $get;
-            self::$_data['post'] = $post;
-            self::$_data['cookie'] = $cookie;
-            self::$_data['files'] = $files;
-            self::$_data['request'] = $request;
+            $_GET = $data[self::TYPE_GET];
+            $_POST = $data[self::TYPE_POST];
+            $_COOKIE = $data[self::TYPE_COOKIE];
+            $_REQUEST = array_merge($_GET, $_POST);
             self::$_ready = true;
         }
     }
@@ -99,8 +85,7 @@ class Request
     public static function get(string $name = null, $sub = null)
     {
         self::checkReady();
-        $get = self::$_data['get'];
-        return is_null($name) ? $get : ($get[$name] ?? $sub);
+        return is_null($name) ? $_GET : ($_GET[$name] ?? $sub);
     }
 
     /**
@@ -114,8 +99,7 @@ class Request
     public static function post(string $name = null, $sub = null)
     {
         self::checkReady();
-        $post = self::$_data['post'];
-        return is_null($name) ? $post : ($post[$name] ?? $sub);
+        return is_null($name) ? $_POST : ($_POST[$name] ?? $sub);
     }
 
     /**
@@ -129,8 +113,7 @@ class Request
     public static function cookie(string $name = null, $sub = null)
     {
         self::checkReady();
-        $cookie = self::$_data['cookie'];
-        return is_null($name) ? $cookie : ($cookie[$name] ?? $sub);
+        return is_null($name) ? $_COOKIE : ($_COOKIE[$name] ?? $sub);
     }
 
     /**
@@ -143,8 +126,7 @@ class Request
     public static function files(string $name = null)
     {
         self::checkReady();
-        $files = self::$_data['files'];
-        return is_null($name) ? $files : $files[$name];
+        return is_null($name) ? $_FILES : $_FILES[$name];
     }
 
     /**
@@ -158,8 +140,7 @@ class Request
     public static function data(string $name = null, $sub = null)
     {
         self::checkReady();
-        $request = self::$_data['request'];
-        return is_null($name) ? $request : ($request[$name] ?? $sub);
+        return is_null($name) ? $_REQUEST : ($_REQUEST[$name] ?? $sub);
     }
 
     /**
@@ -174,22 +155,14 @@ class Request
     public static function add(string $type, string $name, $data)
     {
         self::checkReady();
-        $map = [
-            self::TYPE_GET      => 'get',
-            self::TYPE_POST     => 'post',
-            self::TYPE_COOKIE   => 'cookie',
-            self::TYPE_FILES    => 'files',
-        ];
-        if (!isset($map[$type])) {
-            return false;
+        if ($type == self::TYPE_GET) {
+            $_GET[$name] = $data;
+        } elseif ($type == self::TYPE_POST) {
+            $_POST[$name] = $data;
+        } elseif ($type == self::TYPE_COOKIE) {
+            $_COOKIE[$name] = $data;
         }
-        $flag = $map[$type];
-        self::$_data[$flag][$name] = $data;
-        self::$_data['request'] = array_merge(
-            self::$_data['get'],
-            self::$_data['post'],
-            self::$_data['cookie']
-        );
+        $_REQUEST = array_merge($_GET, $_POST);
         return true;
     }
 
@@ -199,28 +172,19 @@ class Request
      * @access public
      * @param string $type
      * @param string $name
-     * @param mixed $data
      * @return bool
      */
     public static function delete(string $type, string $name)
     {
         self::checkReady();
-        $map = [
-            self::TYPE_GET      => 'get',
-            self::TYPE_POST     => 'post',
-            self::TYPE_COOKIE   => 'cookie',
-            self::TYPE_FILES    => 'files',
-        ];
-        if (!isset($map[$type])) {
-            return false;
+        if ($type == self::TYPE_GET) {
+            unset($_GET[$name]);
+        } elseif ($type == self::TYPE_POST) {
+            unset($_POST[$name]);
+        } elseif ($type == self::TYPE_COOKIE) {
+            unset($_COOKIE[$name]);
         }
-        $flag = $map[$type];
-        unset(self::$_data[$flag][$name]);
-        self::$_data['request'] = array_merge(
-            self::$_data['get'],
-            self::$_data['post'],
-            self::$_data['cookie']
-        );
+        $_REQUEST = array_merge($_GET, $_POST);
         return true;
     }
 

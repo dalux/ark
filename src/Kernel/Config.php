@@ -28,6 +28,7 @@ class Config
                 'config'=> [
                     'host'=> '127.0.0.1',
                     'port'=> 11211,
+                    'expire_time'=> 1440,
                 ],
                 'setting'=> []
             ]
@@ -39,6 +40,7 @@ class Config
                     'host'=> '127.0.0.1',
                     'port'=> 6379,
                     'password'=> '123456',	//for redis
+                    'expire_time'=> 1440,
                 ],
                 'setting'=> []
             ]
@@ -47,7 +49,8 @@ class Config
             'driver'=> 'Brisk\Session\Driver\FileCache',
             'option'=> [
                 'config'=> [
-                    'path'=> '/path/to/session_path'
+                    'save_path'     => '/path/to/session_path',
+                    'expire_time'   => 1440,
                 ],
                 'setting'=> []
             ]
@@ -55,7 +58,10 @@ class Config
         'files'=> [
             'driver'=> 'Brisk\Session\Driver\Files',
             'option'=> [
-                'config'=> [],
+                'config'=> [
+                    'save_path'     => '/path/to/session_path',
+                    'expire_time'   => 1440,
+                ],
                 'setting'=> []
             ]
         ]

@@ -13,11 +13,11 @@ class Router
 {
 
     private static $_namespace;
-    private static $_auto_controller    = 'Init';
+    private static $_auto_controller;
     private static $_auto_ation         = '__init';
     private static $_default_controller = 'Index';
     private static $_default_action     = '__index';
-    private static $_url_suffix         = '.html';
+    private static $_url_suffix;
     private static $_rules              = [];
     private static $_namespace_prefix   = 'App\Controller';
     private static $_request;
@@ -229,7 +229,7 @@ class Router
                 throw new ActionNotFoundException(Language::format('router.action_not_found', $val['namespace'], $action));
             }
             //自动化类
-            if (method_exists($instance, $auto_action)) {
+            if ($auto_action && method_exists($instance, $auto_action)) {
                 $output = $instance->$auto_action();
                 if (!is_null($output)) {
                     return $output;

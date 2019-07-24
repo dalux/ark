@@ -30,9 +30,12 @@ class FileCache extends SessionFather
         if (!isset($option['config'])) {
             throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
         }
-        $config = $option['config'];
-        $this->_path = $config['path'];
         ini_set('session.save_handler', 'user');
+        $config = $option['config'];
+        $this->_path = $config['save_path'];
+        if ($config['expire_time']) {
+            $this->_expire_time = $config['expire_time'];
+        }
         parent::__construct($option);
     }
 
@@ -40,10 +43,10 @@ class FileCache extends SessionFather
      * 开启会话处理
      *
      * @access public
-     * @param int $session_id
+     * @param string $session_id
      * @return void
      */
-    public function start(int $session_id = null)
+    public function start(string $session_id = null)
     {
         $cache = new File($this->_path);
         $cache->setFlag('sess');
