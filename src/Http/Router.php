@@ -228,7 +228,6 @@ class Router
             if (!method_exists($instance, $action)) {
                 throw new ActionNotFoundException(Language::format('router.action_not_found', $val['namespace'], $action));
             }
-            $output = null;
             //自动化类
             if (method_exists($instance, $auto_action)) {
                 $output = $instance->$auto_action();

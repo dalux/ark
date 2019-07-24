@@ -107,7 +107,8 @@ class App
      *
      * @access public
      * @param callable $config
-     * @return mixed
+     * @return void
+     * @throws \ReflectionException
      */
     public static function runAs(callable $config)
     {
@@ -131,7 +132,9 @@ class App
         //监听系统启动就绪事件
         Event::fire('event.framework.ready');
         //路由
-        echo Router::dispatch();
+        if ($output = Router::dispatch()) {
+            echo $output;
+        }
     }
 
     /**
