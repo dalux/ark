@@ -126,6 +126,7 @@ class Redis extends CacheFather
     /**
      * 返回redis实例
      *
+     * @access public
      * @return \Redis
      */
     public function getInstance()

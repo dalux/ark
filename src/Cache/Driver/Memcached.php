@@ -145,6 +145,7 @@ class Memcached extends CacheFather
     /**
      * 返回memcached实例
      *
+     * @access public
      * @return \Memcached
      */
     public function getInstance()

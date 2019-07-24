@@ -147,6 +147,7 @@ class File extends CacheFather
     /**
      * 获取文件缓存对象实例
      *
+     * @access public
      * @return File
      */
     public function getInstance()
