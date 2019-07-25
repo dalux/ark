@@ -3,6 +3,7 @@
 namespace Brisk\Cache\Driver;
 
 use Brisk\Kernel\Language;
+use Brisk\Toolkit\Debugger;
 use Brisk\Toolkit\Dir;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
@@ -40,7 +41,7 @@ class File extends CacheFather
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_permission_error', $this->_dir));
         }
-        if (!is_null($setting['ext_name'])) {
+        if (isset($setting['ext_name'])) {
 			$this->_ext_name = $setting["ext_name"];
         }
         parent::__construct($setting);
@@ -60,7 +61,6 @@ class File extends CacheFather
         $path = $this->getCachePath($name);
         $expire || $expire = $this->_expire_time;
         $expire += time();
-        file_put_contents('/tmp/cache.log', $name. ', '. $path. ', '. $expire. ', '. serialize($value). PHP_EOL, FILE_APPEND);
         $writed = file_put_contents($path, $expire. serialize($value));
     	return $writed ? true : false;
     }

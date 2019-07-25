@@ -52,7 +52,6 @@ class FileCache extends SessionFather
         $cache->setExpireTime($this->_expire_time);
         $handler = new UserHandler($cache);
         session_set_save_handler($handler, true);
-        ini_set('session.save_handler', 'user');
         parent::start($session_id);
     }
 

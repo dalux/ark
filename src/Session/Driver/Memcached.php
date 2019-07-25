@@ -37,7 +37,6 @@ class Memcached extends SessionFather
         if (!isset($option['config'])) {
             throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
         }
-        ini_set('session.save_handler', 'user');
         $server = $option['config'];
         $this->_host = $server['host'];
         $this->_port = $server['port'];

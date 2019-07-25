@@ -38,7 +38,6 @@ class UserHandler implements SessionHandlerInterface
      */
     public function open($save_path, $session_name)
     {
-        Debugger::vardump('open', $save_path, $session_name);
     	return true;
     }
 
@@ -58,12 +57,12 @@ class UserHandler implements SessionHandlerInterface
      *
      * @access public
      * @param string $session_id
-     * @return mixed
+     * @return string
      */
     public function read($session_id)
     {
-        Debugger::vardump('read', $session_id);
-        return $this->_cache->get($session_id);
+        $data = $this->_cache->get($session_id);
+        return is_null($data) ? '' : $data;
     }
 
     /**
@@ -76,7 +75,6 @@ class UserHandler implements SessionHandlerInterface
      */
     public function write($session_id, $session_data)
     {
-        Debugger::vardump('write', $session_id, $session_data);
     	return $this->_cache->set($session_id, $session_data);
     }
 
@@ -89,7 +87,6 @@ class UserHandler implements SessionHandlerInterface
      */
     public function destroy($session_id)
     {
-        Debugger::vardump('destroy', $session_id);
     	return $this->_cache->delete($session_id);
     }
 
@@ -98,11 +95,11 @@ class UserHandler implements SessionHandlerInterface
      *
      * @access public
      * @param int $max_lifetime
-     * @return bool
+     * @return int
      */
     public function gc($max_lifetime)
     {
-    	return true;
+    	return 1;
     }
 
 }

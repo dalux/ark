@@ -29,6 +29,7 @@ class Language
             'core.class_extends_error'          => '当前类[%s]必须继承自[%s]类',
             'core.class_implement_error'        => '当前类[%s]必须实现接口[%s]',
             'core.class_not_found'              => '无法加载指定类[%s]',
+            'core.session_start_failed'         => 'Session会话开启失败',
             
             'event.data_must_array'             => '事件监听器[%s]必须返回一个数组',
             'event.data_key_must_equal'         => '事件监听器[%s]返回前后数组项不一致',

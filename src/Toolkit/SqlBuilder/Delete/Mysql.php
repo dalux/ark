@@ -2,6 +2,7 @@
 
 namespace Brisk\Toolkit\SqlBuilder\Delete;
 
+use Brisk\Kernel\Toolkit;
 use Brisk\Toolkit\SqlBuilder\Delete;
 use Brisk\Kernel\Language;
 use Brisk\Exception\SqlCompileException;
@@ -24,13 +25,14 @@ class Mysql extends Delete
      */
     public function compile()
     {
-        $from = $this->_parts['from'];
-        if (count($from) == 0) {
+        if (!isset($this->_parts['from'])
+                || count($this->_parts['from']) == 0) {
             throw new SqlCompileException(Language::format('sql.query_compile_failed'));
         }
-        $from = each($from);
-        $alias = $from[0];
-        $table = $from[1];
+        $from = $this->_parts['from'];
+        $from = Toolkit::each($from);
+        $alias = $from['key'];
+        $table = $from['value'];
         if (is_integer($alias)) {
             $alias = '';
         }

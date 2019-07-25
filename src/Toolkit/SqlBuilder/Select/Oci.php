@@ -69,8 +69,10 @@ class Oci extends Select
         $group && $select = $select. ' GROUP BY '. $group;
         $having && $select = $select. ' HAVING '. $having;
         $order && $select = $select. ' ORDER BY '. $order;
-        if ($limit = $this->_parts['limit']) {
-            if ($offset = $this->_parts['offset']) {
+        if (isset($this->_parts['limit'])) {
+            $limit = $this->_parts['limit'];
+            if (isset($this->_parts['offset'])) {
+                $offset = $this->_parts['offset'];
                 $select = sprintf('select * from (select tmptable1.*, rownum tmprn from (%s) tmptable1 where rownum<=%u) where tmprn>%u', $select, $offset+$limit, $offset);
             } else {
                 $select = sprintf('select tmptable1.* from (%s) tmptable1 where rownum<=%u', $select, $limit);

@@ -2,6 +2,10 @@
 
 namespace Brisk\Session;
 
+use Brisk\Kernel\Language;
+use Brisk\Toolkit\Debugger;
+use Brisk\Exception\SessionStartException;
+
 abstract class SessionFather implements ISessionDriver
 {
 
@@ -13,6 +17,13 @@ abstract class SessionFather implements ISessionDriver
     protected $_expire_time = 1440;
 
     /**
+     * session附加设置项
+     *
+     * @var array
+     */
+    protected $_setting = [];
+
+    /**
      * 构造函数
      *
      * @access public
@@ -21,9 +32,13 @@ abstract class SessionFather implements ISessionDriver
      */
     public function __construct(array $option = [])
     {
-        if ($option['setting'] && is_array($option['setting'])) {
-            foreach ($option['setting'] as $k=> $v) {
-                ini_set($k, $v);
+        if (isset($option['setting'])
+                && is_array($option['setting'])) {
+            foreach ($option['setting'] as $key=> $val) {
+                if (strpos($key, 'session.') !== false) {
+                    $key = str_replace('session.', '', $key);
+                    $this->_setting[$key] = $val;
+                }
             }
         }
     }
@@ -50,11 +65,13 @@ abstract class SessionFather implements ISessionDriver
      */
     public function start(string $session_id = null)
     {
-        if (!is_null($session_id)) {
-			session_id($session_id);
-		}
-		session_cache_limiter('private,must-revalidate');
-        session_start();
+        is_null($session_id) ||  session_id($session_id);
+        //使返回上一页时表单中数据依然可用
+        session_cache_limiter('private,must-revalidate');
+        //会话启动失败时抛出异常
+        if (!session_start($this->_setting)) {
+            throw new SessionStartException(Language::format('core.session_start_failed'));
+        }
     }
 
     /**

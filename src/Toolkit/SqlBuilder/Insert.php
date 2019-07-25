@@ -31,12 +31,15 @@ abstract class Insert extends SqlFather
      */
     protected function pickInsertPart()
     {
-		$table = $this->_parts['table'];
-        $data = $this->_parts['data'];
         $result = '';
-        if ($table && count($data) > 0) {
-            $result = $result. 'INSERT INTO '. $table;
-            $result = $result. '('. implode(', ', array_keys($data)). ')';
+        if (isset($this->_parts['table'])
+                && isset($this->_parts['data'])) {
+            $table = $this->_parts['table'];
+            $data = $this->_parts['data'];
+            if ($table && count($data) > 0) {
+                $result = $result . 'INSERT INTO ' . $table;
+                $result = $result . '(' . implode(', ', array_keys($data)) . ')';
+            }
         }
         return $result;
     }
@@ -49,18 +52,21 @@ abstract class Insert extends SqlFather
      */
     protected function pickValuesPart()
     {
-        $data = $this->_parts['data'];
-        $result = 'VALUES';
-        foreach ($data as $k=> $v) {
-            if (is_string($v) && preg_match('/^\\{\\{.*?\\}\\}$/', $v)) {
-                $v = str_replace(['{{', '}}'], '', $v);
-                $data[$k] = $v;
-            } else {
-                $this->_db_bind[':'. $k] = $v;
-                $data[$k] = ':'. $k;
+        $result = '';
+        if (isset($this->_parts['data'])) {
+            $data = $this->_parts['data'];
+            $result = 'VALUES';
+            foreach ($data as $k => $v) {
+                if (is_string($v) && preg_match('/^\\{\\{.*?\\}\\}$/', $v)) {
+                    $v = str_replace(['{{', '}}'], '', $v);
+                    $data[$k] = $v;
+                } else {
+                    $this->_db_bind[':' . $k] = $v;
+                    $data[$k] = ':' . $k;
+                }
             }
+            $result = $result . '(' . implode(', ', $data) . ')';
         }
-        $result = $result. '('. implode(', ', $data). ')';
         return $result;
     }
 
@@ -72,7 +78,8 @@ abstract class Insert extends SqlFather
      */
     protected function compile()
     {
-        if (count($this->_parts['table']) == 0
+        if (!isset($this->_parts['table'])
+                || !isset($this->_parts['data'])
                 || count($this->_parts['data']) == 0) {
             throw new SqlCompileException(Language::format('sql.query_compile_failed'));
         }

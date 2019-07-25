@@ -68,16 +68,12 @@ abstract class SqlFather
      *
      * @access public
      * @param string $expr
-     * @param mixed $value
-     * @return SqlFather
+     * @param array $value
+     * @return SqlFather|Select|Update|Delete|Insert
      */
-    public function where(string $expr, $value = null)
+    public function where(string $expr, ...$value)
     {
-		$val = [];
-		if (!is_null($value)) {
-		    $val = is_array($value) ? $value : [$value];
-		}
-        $this->_parts['where'][] = ['cond'=> $expr, 'val'=> $val];
+        $this->_parts['where'][] = ['cond'=> $expr, 'val'=> $value];
         return $this;
     }
 
@@ -87,7 +83,7 @@ abstract class SqlFather
      * @access public
      * @param string $field
      * @param mixed $value
-     * @return SqlFather
+     * @return SqlFather|Select|Update|Delete|Insert
      */
     public function whereIn(string $field, $value)
     {
@@ -112,7 +108,7 @@ abstract class SqlFather
      * @access public
      * @param string $field
      * @param mixed $value
-     * @return SqlFather
+     * @return SqlFather|Select|Update|Delete|Insert
      */
     public function whereNotIn(string $field, $value)
     {
@@ -136,7 +132,7 @@ abstract class SqlFather
      *
      * @access public
      * @param string $query
-     * @return SqlFather
+     * @return SqlFather|Select|Update|Delete|Insert
      */
     public function whereExists($query)
     {
@@ -153,7 +149,7 @@ abstract class SqlFather
      *
      * @access public
      * @param string $query
-     * @return SqlFather
+     * @return SqlFather|Select|Update|Delete|Insert
      */
     public function whereNotExists($query)
     {
@@ -172,7 +168,7 @@ abstract class SqlFather
      * @param string $field
      * @param string $expr
      * @param string $escape
-     * @return SqlFather
+     * @return SqlFather|Select|Update|Delete|Insert
      */
     public function whereLike(string $field, string $expr, string $escape = null)
     {
@@ -190,7 +186,7 @@ abstract class SqlFather
      * @param string $field
      * @param string $expr
      * @param string $escape
-     * @return SqlFather
+     * @return SqlFather|Select|Update|Delete|Insert
      */
     public function whereNotLike(string $field, string $expr, string $escape = null)
     {
@@ -224,7 +220,7 @@ abstract class SqlFather
                 } else {
                     $part = $part. $this->_parseExpr($cond, $value);
                 }
-                if (!is_null($where_part[$key+1])) {
+                if (isset($where_part[$key+1]) && !is_null($where_part[$key+1])) {
                     $part = $part. ' AND ';
                 }
                 $where[] = $part;
@@ -319,21 +315,23 @@ abstract class SqlFather
                 if ($v == '?') {
                     $val = $value;
                     if (is_array($value)) {
-                        $val = $value[$k];
+                        $val = isset($value[$k]) ? $value[$k] : null;
                     }
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
                     } elseif (is_string($val) 
                             && (preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\(.*?\)/', $val))) {
                         $val = str_replace(['{{', '}}'], '', $val);
-                    } else {
+                    } elseif ($val) {
                         $val = $this->quote($val);
                     }
-                    $expr = preg_replace('/\?/', $val, $expr, 1);
+                    if ($val) {
+                        $expr = preg_replace('/\?/', $val, $expr, 1);
+                    }
                 } else {
                     $val = $value;
                     if (is_array($value)) {
-                        $val = $value[$k];
+                        $val = isset($value[$k]) ? $value[$k] : null;
                     }
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
@@ -342,7 +340,7 @@ abstract class SqlFather
                             && preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\\(.*?\\)/', $val)) {
                         $val = str_replace(['{{', '}}'], '', $val);
                         $expr = preg_replace('/v/', $val, $expr, 1);
-                    } else {
+                    } elseif ($val) {
                         $this->_db_bind[$v] = $val;
                     }
                 }

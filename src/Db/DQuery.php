@@ -196,7 +196,7 @@ class DQuery
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
-        $update = $this->_conn->update()->set($this->_tb, $data);
+        $update = $this->_conn->update()->set([$this->_tb], $data);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -232,7 +232,7 @@ class DQuery
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
-        $delete = $this->_conn->delete()->from($this->_tb);
+        $delete = $this->_conn->delete()->from([$this->_tb]);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -269,7 +269,7 @@ class DQuery
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
-        $select = $this->_conn->select()->from($this->_tb, $fields);
+        $select = $this->_conn->select()->from([$this->_tb], $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -309,7 +309,7 @@ class DQuery
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
-        $select = $this->_conn->select()->from($this->_tb, $fields);
+        $select = $this->_conn->select()->from([$this->_tb], $fields);
         foreach ($condition as $k=> $v) {
             if (is_array($v)) {
                 $kk = strtoupper(current(array_keys($v)));
@@ -352,10 +352,10 @@ class DQuery
         if (!$this->_tb) {
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
-        $select = $this->_conn->select()->from($this->_tb, $fields)->limit($count, $offset);
+        $select = $this->_conn->select()->from([$this->_tb], $fields)->limit($count, $offset);
         if(!is_null($order) && !empty($order)){
             foreach ($order as $k=> $v) {
-                $select->order($k, $v);
+                $select->orderby($k, $v);
             }
         }
         foreach ($condition as $k=> $v) {

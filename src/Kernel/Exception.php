@@ -129,6 +129,7 @@ class Exception
             $b_line = max(($line - $lines_offset - 1), 0);
             $e_line = min(($line + $lines_offset), count($lines));
             foreach (range($b_line, $e_line) as $i) {
+                if (!isset($lines[$i])) continue;
                 if ($i == ($line - 1)) {
                     $source = $source. '<div class="error">' . htmlspecialchars(sprintf('%04d: %s', $i+1, str_replace('\t', '    ', $lines[$i]))) . '</div>';
                 } else {

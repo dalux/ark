@@ -4,6 +4,7 @@ namespace Brisk\Toolkit\SqlBuilder;
 
 use Brisk\Kernel\Language;
 use Brisk\Exception\SqlCompileException;
+use Brisk\Kernel\Toolkit;
 
 abstract class Update extends SqlFather
 {
@@ -12,13 +13,12 @@ abstract class Update extends SqlFather
      * 设置更新的表及字段值
      *
      * @access public
-     * @param mixed $table
+     * @param array $table
      * @param array $updates
      * @return Update
      */
-    public function set(string $table, array $updates = [])
+    public function set(array $table, array $updates = [])
     {
-        is_array($table) || $table = [$table];
         $this->_parts['update'] = $table;
         $this->_parts['set'] = $updates;
         return $this;
@@ -31,40 +31,43 @@ abstract class Update extends SqlFather
      */
     protected function compile()
     {
-        $update_part = $this->_parts['update'];
-        $set_part = $this->_parts['set'];
-        if (count($update_part) == 0 || count($set_part) == 0) {
+        if (!isset($this->_parts['update'])
+                || count($this->_parts['update']) == 0
+                || !isset($this->_parts['set'])
+                || count($this->_parts['set']) == 0) {
             throw new SqlCompileException(Language::format('sql.query_compile_failed'));
         }
+        $update_part = $this->_parts['update'];
+        $set_part = $this->_parts['set'];
         $update = 'UPDATE';
         $set = [];
-        $update_part = each($update_part);
+        $update_part = Toolkit::each($update_part);
         $k = $update_part['key'];
         $v = $update_part['value'];
         if (is_integer($k)) {
             $alias = '';
-            $sql = $update. ' '. $v;
+            $sql = $update . ' ' . $v;
         } else {
             $alias = $k;
-            $sql = $update. ' '. $v. ' '. $alias;
+            $sql = $update . ' ' . $v . ' ' . $alias;
         }
-        foreach ($set_part as $key=> $val) {
+        foreach ($set_part as $key => $val) {
             if (is_string($val) && preg_match('/^\\{\\{.*?\\}\\}$/', $val)) {
                 $val = str_replace(['{{', '}}'], '', $val);
                 $set[] = $alias
-                    ? $alias. '.'. $key. '='. $val
-                    : $key. '='. $val;
+                    ? $alias . '.' . $key . '=' . $val
+                    : $key . '=' . $val;
             } else {
-                $this->_db_bind[':'. $key] = $val;
+                $this->_db_bind[':' . $key] = $val;
                 $set[] = $alias
-                    ? $alias. '.'. $key. '=:'. $key
-                    : $key. '=:'. $key;
+                    ? $alias . '.' . $key . '=:' . $key
+                    : $key . '=:' . $key;
             }
         }
-        $sql = $sql. ' SET '. implode(', ', $set);
+        $sql = $sql . ' SET ' . implode(', ', $set);
         $where = $this->pickWherePart();
         if ($where) {
-            $sql = $sql. ' WHERE '. $where;
+            $sql = $sql . ' WHERE ' . $where;
         }
         $this->_sql = $sql;
         $this->_compiled = true;
