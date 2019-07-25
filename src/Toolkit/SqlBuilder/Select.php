@@ -33,7 +33,7 @@ abstract class Select extends SqlFather
      */
     public function andFrom(array $table, array $columns = ['*'])
     {
-        $this->_parts['from'][] = [$table, $columns];
+        $this->_parts['andfrom'][] = [$table, $columns];
         return $this;
     }
 
@@ -166,6 +166,9 @@ abstract class Select extends SqlFather
 		$fields = $table = $join = [];
 		if (isset($this->_parts['from'])) {
             $from_part = $this->_parts['from'];
+            if (isset($this->_parts['andfrom'])) {
+                $from_part = array_merge($from_part, $this->_parts['andfrom']);
+            }
             if (count($from_part) > 0) {
                 foreach ($from_part as $key => $val) {
                     //表名及名称
