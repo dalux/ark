@@ -55,11 +55,12 @@ class File extends CacheFather
      * @param int $expire
      * @return bool
      */
-    public function set(string $name, $value, int $expire = null)
+    public function set(string $name, $value, int $expire = 0)
     {
         $path = $this->getCachePath($name);
         $expire || $expire = $this->_expire_time;
         $expire += time();
+        file_put_contents('/tmp/cache.log', $name. ', '. $path. ', '. $expire. ', '. serialize($value). PHP_EOL, FILE_APPEND);
         $writed = file_put_contents($path, $expire. serialize($value));
     	return $writed ? true : false;
     }

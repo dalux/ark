@@ -14,7 +14,6 @@ class Router
 
     private static $_namespace;
     private static $_auto_controller;
-    private static $_auto_ation         = '__init';
     private static $_default_controller = 'Index';
     private static $_default_action     = '__index';
     private static $_url_suffix;
@@ -48,18 +47,6 @@ class Router
     public static function setAutoController(string $controller)
     {
         self::$_auto_controller = ucfirst($controller);
-    }
-
-    /**
-     * 设置自动化访问控制器行为名称
-     *
-     * @access public
-     * @param string $action
-     * @return void
-     */
-    public static function setAutoAction(string $action)
-    {
-        self::$_auto_ation = $action;
     }
 
     /**
@@ -206,7 +193,6 @@ class Router
             throw new RuntimeException(Language::format('router.controller_is_empty'));
         }
         //循环访问控制器方法
-        $auto_action = self::$_auto_ation;
         $action = self::$_default_action;
         foreach ($list as $val) {
             if (!$val['namespace']) {
@@ -228,15 +214,8 @@ class Router
             if (!method_exists($instance, $action)) {
                 throw new ActionNotFoundException(Language::format('router.action_not_found', $val['namespace'], $action));
             }
-            //自动化类
-            if ($auto_action && method_exists($instance, $auto_action)) {
-                $output = $instance->$auto_action();
-                if (!is_null($output)) {
-                    return $output;
-                }
-            }
             $output = $instance->$action();
-            if (!is_null($output)) {
+            if (Response::isEnd() || !is_null($output)) {
                 return $output;
             }
         }
@@ -254,7 +233,11 @@ class Router
         foreach (self::$_rules as $key=> $val) {
             $key = '~'. $key. '~i';
             if (preg_match($key, $uri)) {
-                $uri = preg_replace_callback($key, $val, $uri);
+                if (is_callable($val)) {
+                    $uri = preg_replace_callback($key, $val, $uri);
+                } elseif (is_string($val)) {
+                    $uri = preg_replace($key, $val, $uri);
+                }
                 if (!is_string($uri)) {
                     throw new RuntimeException(Language::format('router.rewrite_result_error'));
                 }

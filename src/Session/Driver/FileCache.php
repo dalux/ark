@@ -30,7 +30,6 @@ class FileCache extends SessionFather
         if (!isset($option['config'])) {
             throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
         }
-        ini_set('session.save_handler', 'user');
         $config = $option['config'];
         $this->_path = $config['save_path'];
         if ($config['expire_time']) {
@@ -53,6 +52,7 @@ class FileCache extends SessionFather
         $cache->setExpireTime($this->_expire_time);
         $handler = new UserHandler($cache);
         session_set_save_handler($handler, true);
+        ini_set('session.save_handler', 'user');
         parent::start($session_id);
     }
 

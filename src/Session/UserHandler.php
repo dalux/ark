@@ -3,6 +3,7 @@
 namespace Brisk\Session;
 
 use Brisk\Cache\ICacheDriver;
+use Brisk\Toolkit\Debugger;
 use SessionHandlerInterface;
 
 class UserHandler implements SessionHandlerInterface
@@ -37,6 +38,7 @@ class UserHandler implements SessionHandlerInterface
      */
     public function open($save_path, $session_name)
     {
+        Debugger::vardump('open', $save_path, $session_name);
     	return true;
     }
 
@@ -60,6 +62,7 @@ class UserHandler implements SessionHandlerInterface
      */
     public function read($session_id)
     {
+        Debugger::vardump('read', $session_id);
         return $this->_cache->get($session_id);
     }
 
@@ -73,6 +76,7 @@ class UserHandler implements SessionHandlerInterface
      */
     public function write($session_id, $session_data)
     {
+        Debugger::vardump('write', $session_id, $session_data);
     	return $this->_cache->set($session_id, $session_data);
     }
 
@@ -85,6 +89,7 @@ class UserHandler implements SessionHandlerInterface
      */
     public function destroy($session_id)
     {
+        Debugger::vardump('destroy', $session_id);
     	return $this->_cache->delete($session_id);
     }
 

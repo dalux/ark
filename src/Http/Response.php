@@ -55,6 +55,13 @@ class Response
     ];
 
     /**
+     * 响应是否结束
+     *
+     * @var bool
+     */
+    private static $_flag;
+
+    /**
      * 发送状态码
      *
      * @access public
@@ -118,6 +125,52 @@ class Response
     }
 
     /**
+     * 是否结束响应流程
+     *
+     * @access public
+     * @return null
+     */
+    public static function end()
+    {
+        self::$_flag = 'end';
+        return null;
+    }
+
+    /**
+     * 是否结束响应流程
+     *
+     * @access public
+     * @return null
+     */
+    public static function stop()
+    {
+        self::$_flag = 'stop';
+        return null;
+    }
+
+    /**
+     * 响应是否结束
+     *
+     * @access public
+     * @return bool
+     */
+    public static function isEnd()
+    {
+        return self::$_flag == 'end';
+    }
+
+    /**
+     * 是否跳出当前响应
+     *
+     * @access public
+     * @return bool
+     */
+    public static function isStop()
+    {
+        return self::$_flag == 'stop';
+    }
+
+    /**
      * 设置客户端数据缓存过期时间
      *
      * @access public
@@ -136,7 +189,7 @@ class Response
      * @param string $url
      * @param bool $script
      * @param string $msg
-     * @return void
+     * @return null
      */
     public static function redirect(string $url, bool $script = false, string $msg = null)
     {
@@ -149,7 +202,7 @@ class Response
         $content.= 'location.href="'. $url. '";';
         $content.= '</script>';
         echo $content;
-        exit();
+        return self::end();
     }
 
 }
