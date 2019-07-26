@@ -13,7 +13,7 @@ class Config
     private static $_global = [
         'debug'=> true,
         'timezone'=> 'Asia/Shanghai',
-        'error_reporting'=> E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED
+        'error_reporting'=> E_ALL //E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED
     ];
 
     /**
