@@ -35,7 +35,7 @@ class DbAdapter
         }
 		$instance = new $driver($option['config'], $option['setting']);
         if (!$instance instanceof IDbDriver) {
-            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\Brisk\Db\IDbDriver'));
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, 'Brisk\Db\IDbDriver'));
         }
         return $instance;
     }

@@ -19,6 +19,7 @@ class Executor
      * @param Closure $action
      * @param int $proc_num
      * @param string $proc_dir
+     * @param bool $fast_exit
      * @return void
      */
     public static function init(Closure $action, int $proc_num = 5, string $proc_dir = '/tmp', $fast_exit = false)

@@ -32,7 +32,7 @@ class SessionAdapter
         }
         $instance = new $driver($option);
         if (!$instance instanceof ISessionDriver) {
-            throw new RuntimeException(Language::format('core.class_implement_error', $driver, '\Brisk\Session\ISessionDriver'));
+            throw new RuntimeException(Language::format('core.class_implement_error', $driver, 'Brisk\Session\ISessionDriver'));
         }
         return $instance;
     }
