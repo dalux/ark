@@ -25,7 +25,7 @@ class Env
                 $val = substr($arg, (strpos($arg, '=') + 1));
                 if ($key == 'domain') {
                     $_SERVER['HTTP_HOST'] = $val;
-                } elseif ($key == 'route') {
+                } elseif ($key == 'request') {
                     $_SERVER['REQUEST_URI'] = $val;
                 } else {
                     $_GET[$key] = $val;
