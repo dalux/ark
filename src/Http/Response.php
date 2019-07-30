@@ -69,7 +69,7 @@ class Response
      * @param string $text
      * @return void
      */
-    public static function status(int $code, string $text = null)
+    public static function code(int $code, string $text = null)
     {
         $status_code = self::$_status[$code] ?? 200;
         $status_text = is_null($text) ? self::$_status[$status_code] : $text;
