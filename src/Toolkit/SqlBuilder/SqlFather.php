@@ -322,12 +322,10 @@ abstract class SqlFather
                     } elseif (is_string($val) 
                             && (preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\(.*?\)/', $val))) {
                         $val = str_replace(['{{', '}}'], '', $val);
-                    } elseif ($val) {
+                    } else {
                         $val = $this->quote($val);
                     }
-                    if ($val) {
-                        $expr = preg_replace('/\?/', $val, $expr, 1);
-                    }
+                    $expr = preg_replace('/\?/', $val, $expr, 1);
                 } else {
                     $val = $value;
                     if (is_array($value)) {
@@ -340,7 +338,7 @@ abstract class SqlFather
                             && preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\\(.*?\\)/', $val)) {
                         $val = str_replace(['{{', '}}'], '', $val);
                         $expr = preg_replace('/v/', $val, $expr, 1);
-                    } elseif ($val) {
+                    } else {
                         $this->_db_bind[$v] = $val;
                     }
                 }

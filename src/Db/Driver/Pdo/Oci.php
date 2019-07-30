@@ -3,6 +3,8 @@
 namespace Brisk\Db\Driver\Pdo;
 
 use Brisk\Db\Driver\PdoFather;
+use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Language;
 
 class Oci extends PdoFather
 {
@@ -17,13 +19,18 @@ class Oci extends PdoFather
      */
     public function __construct(array $config, array $setting = [])
     {
-        $dsn = $config['host'];
-        if ($config['host'] && $config['dbname']) {
-            $port = $config['port'] ?? 1521;
-            $dsn = '//'. $config['host']. ':'. $port. '/'. $config['dbname'];
+        $username   = $config['username']   ?? '';
+        $password   = $config['password']   ?? '';
+        $host       = $config['host']       ?? '';
+        $port       = $config['port']       ?? 1521;
+        $dbname     = $config['dbname']     ?? '';
+        $charset    = $config['charset']    ?? '';
+        if (!$host || !$username) {
+            throw new RuntimeException(Language::format('db.invalid_connect_config', 'host,username'));
         }
+        $dsn = $dbname ? '//'. $host. ':'. $port. '/'. $dbname : $host;
         $dsn = sprintf('oci:dbname=%s;', $dsn);
-        if ($charset = $config['charset']) {
+        if ($charset) {
             $dsn = $dsn. sprintf('charset=%s', $charset);
         }
         $params = [
@@ -35,7 +42,7 @@ class Oci extends PdoFather
         if (count($setting)>0) {
             $params = array_merge($params, $setting);
         }
-        parent::__construct($dsn, $config['username'], $config['password'], $params);
+        parent::__construct($dsn, $username, $password, $params);
     }
 
 

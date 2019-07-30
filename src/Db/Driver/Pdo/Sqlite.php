@@ -3,6 +3,8 @@
 namespace Brisk\Db\Driver\Pdo;
 
 use Brisk\Db\Driver\PdoFather;
+use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Language;
 
 class Sqlite extends PdoFather
 {
@@ -17,7 +19,13 @@ class Sqlite extends PdoFather
      */
     public function __construct(array $config, array $setting = [])
     {
-        $dsn = sprintf('sqlite:%s', $config['dbname']);
+        $username   = $config['username']   ?? '';
+        $password   = $config['password']   ?? '';
+        $dbname     = $config['dbname']     ?? '';
+        if (!$dbname) {
+            throw new RuntimeException(Language::format('db.invalid_connect_config', 'dbname'));
+        }
+        $dsn = sprintf('sqlite:%s', $dbname);
         $params = [
             \PDO::ATTR_ERRMODE              => \PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_ORACLE_NULLS         => \PDO::NULL_EMPTY_STRING,
@@ -26,7 +34,7 @@ class Sqlite extends PdoFather
         if (count($setting)>0) {
             $params = array_merge($params, $setting);
         }
-        parent::__construct($dsn, '', '', $params);
+        parent::__construct($dsn, $username, $password, $params);
     }
 
 }

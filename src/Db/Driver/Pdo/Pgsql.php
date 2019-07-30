@@ -3,6 +3,8 @@
 namespace Brisk\Db\Driver\Pdo;
 
 use Brisk\Db\Driver\PdoFather;
+use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Language;
 
 class Pgsql extends PdoFather
 {
@@ -17,8 +19,17 @@ class Pgsql extends PdoFather
      */
     public function __construct(array $config, array $setting = [])
     {
-        $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s;', $config['host'], $config['port'], $config['dbname']);
-		if ($charset = $config['charset']) {
+        $username   = $config['username']   ?? '';
+        $password   = $config['password']   ?? '';
+        $host       = $config['host']       ?? '';
+        $port       = $config['port']       ?? 5432;
+        $dbname     = $config['dbname']     ?? '';
+        $charset    = $config['charset']    ?? '';
+        if (!$host || !$username) {
+            throw new RuntimeException(Language::format('db.invalid_connect_config', 'host,username'));
+        }
+        $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s;', $host, $port, $dbname);
+		if ($charset) {
             $dsn = $dsn. sprintf('charset=%s', $charset);
         }
         $params = [
@@ -29,7 +40,7 @@ class Pgsql extends PdoFather
         if (count($setting)>0) {
             $params = array_merge($params, $setting);
         }
-        parent::__construct($dsn, $config['username'], $config['password'], $params);
+        parent::__construct($dsn, $username, $password, $params);
     }
 
 }
