@@ -131,8 +131,10 @@ class Router
      */
     public static function dispatch()
     {
-        $uri = $_SERVER['REQUEST_URI'];
-        $uri == '/' && $uri.= strtolower(self::$_default_controller);
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+        if (!$uri || $uri == '/') {
+            $uri = '/'. strtolower(self::$_default_controller);
+        }
         //uri处理
         $query = [];
         if (strpos($uri, '?') !== false) {
