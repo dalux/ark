@@ -121,7 +121,7 @@ class Exception
     private function _getSource(array $trace)
     {
         $source = '';
-        $trace_file = $trace['file'];
+        $trace_file = $trace['file'] ?? '';
         if ($trace_file) {
             $line = $trace['line'];
             $lines = file($trace_file);

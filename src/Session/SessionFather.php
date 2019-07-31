@@ -3,7 +3,6 @@
 namespace Brisk\Session;
 
 use Brisk\Kernel\Language;
-use Brisk\Toolkit\Debugger;
 use Brisk\Exception\SessionStartException;
 
 abstract class SessionFather implements ISessionDriver
@@ -82,7 +81,10 @@ abstract class SessionFather implements ISessionDriver
      */
     public function get(string $name = null)
     {
-        return is_null($name) ? $_SESSION : $_SESSION[$name];
+        if (is_null($name)) {
+            return $_SESSION;
+        }
+        return $_SESSION[$name] ?? null;
     }
 
     /**
