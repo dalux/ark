@@ -126,7 +126,7 @@ class Request
     public static function files(string $name = null)
     {
         self::checkReady();
-        return is_null($name) ? $_FILES : $_FILES[$name];
+        return is_null($name) ? $_FILES : ($_FILES[$name] ?? null);
     }
 
     /**
