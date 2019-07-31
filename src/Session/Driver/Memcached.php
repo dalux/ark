@@ -29,21 +29,22 @@ class Memcached extends SessionFather
      * 构造函数
      *
      * @access public
-     * @param array $option
+     * @param array $setting
      * @return void
      */
-    public function __construct(array $option = [])
+    public function __construct(array $setting = [])
     {
-        if (!isset($option['config'])) {
-            throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
+        if (!isset($setting['save_path'])
+                || strpos($setting['save_path'], ':') === false) {
+            throw new RuntimeException(Language::format('core.config_not_found', 'session/setting/save_path'));
         }
-        $server = $option['config'];
-        $this->_host = $server['host'];
-        $this->_port = $server['port'];
-        if ($server['expire_time']) {
-            $this->_expire_time = $server['expire_time'];
+        $server = explode(':', $setting['save_path']);
+        $this->_host = $server[0];
+        $this->_port = $server[1];
+        if ($setting['expire_time']) {
+            $this->_expire_time = $setting['expire_time'];
         }
-        parent::__construct($option);
+        parent::__construct($setting);
     }
 
     /**

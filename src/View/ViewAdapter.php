@@ -21,15 +21,15 @@ class ViewAdapter
     {
         if (!App::init()->config->exist('view/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', 'view/driver'));
-        } elseif (!App::init()->config->exist('view/option/template_dir')) {
-            throw new RuntimeException(Language::format('core.config_not_found', 'view/option/template_dir'));
+        } elseif (!App::init()->config->exist('view/setting/template_dir')) {
+            throw new RuntimeException(Language::format('core.config_not_found', 'view/setting/template_dir'));
         }
         $driver = App::init()->config->view->driver->value();
-        $option = App::init()->config->view->option->value();
+        $setting = App::init()->config->view->setting->value();
         if (Loader::findClass($driver) == '') {
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
-        $instance = new $driver($option);
+        $instance = new $driver($setting);
         if (!$instance instanceof IViewDriver) {
             throw new RuntimeException(Language::format('core.class_implement_error', $driver, 'Brisk\View\IViewDriver'));
         }

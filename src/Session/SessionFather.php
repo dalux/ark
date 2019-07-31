@@ -21,23 +21,22 @@ abstract class SessionFather implements ISessionDriver
      *
      * @var array
      */
-    protected $_setting = [];
+    protected $_option = [];
 
     /**
      * 构造函数
      *
      * @access public
-     * @param array $option
+     * @param array $setting
      * @return void
      */
-    public function __construct(array $option = [])
+    public function __construct(array $setting = [])
     {
-        if (isset($option['setting'])
-                && is_array($option['setting'])) {
-            foreach ($option['setting'] as $key=> $val) {
+        if (isset($setting['option']) && is_array($setting['option'])) {
+            foreach ($setting['option'] as $key=> $val) {
                 if (strpos($key, 'session.') !== false) {
                     $key = str_replace('session.', '', $key);
-                    $this->_setting[$key] = $val;
+                    $this->_option[$key] = $val;
                 }
             }
         }
@@ -69,7 +68,7 @@ abstract class SessionFather implements ISessionDriver
         //使返回上一页时表单中数据依然可用
         session_cache_limiter('private,must-revalidate');
         //会话启动失败时抛出异常
-        if (!session_start($this->_setting)) {
+        if (!session_start($this->_option)) {
             throw new SessionStartException(Language::format('core.session_start_failed'));
         }
     }

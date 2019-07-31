@@ -20,21 +20,21 @@ class Memcached extends CacheFather
      * 构造函数
      *
      * @access public
-     * @param string $path
-     * @param array $setting
+     * @param string $save_path
+     * @param array $option
      * @return void
      */
-    public function __construct(string $path, array $setting = [])
+    public function __construct(string $save_path, array $option = [])
     {
         if (!extension_loaded('memcached')) {
             throw new RuntimeException(Language::format('cache.extension_load_failed', 'php_memcached'));
         }
         $this->_container = new \Memcached();
-        $servers = is_array($path) ? $path : [$path];
+        $servers = is_array($save_path) ? $save_path : [$save_path];
         foreach ($servers as $k=> $v) {
-            $url = parse_url($v);
-            if ($url['host'] && $url['port']) {
-                $this->_container->addServer($url['host'], $url['port']);
+            $server = explode(':', $v);
+            if (isset($server[0]) && isset($server[1])) {
+                $this->_container->addServer($server[0], $server[1]);
             }
         }
         $params = [
@@ -44,9 +44,9 @@ class Memcached extends CacheFather
             \Memcached::OPT_COMPRESSION             => true,
             \Memcached::OPT_REMOVE_FAILED_SERVERS   => true
         ];
-        if (!is_null($setting['memcached_options']) 
-                && is_array($setting['memcached_options'])) {
-            $params = array_merge($params, $setting['memcached_options']);
+        if (isset($option['memopt'])
+                && is_array($option['memopt'])) {
+            $params = array_merge($params, $option['memopt']);
         }
         foreach ($params as $key=> $val) {
             $this->_container->setOption($key, $val);
@@ -62,7 +62,7 @@ class Memcached extends CacheFather
         if (!$is_valid) {
             throw new RuntimeException(Language::format('cache.cacher_create_failed', 'Memcached'));
         }
-        parent::__construct($setting);
+        parent::__construct($option);
     }
 
     /**

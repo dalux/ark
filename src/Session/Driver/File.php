@@ -22,20 +22,19 @@ class File extends SessionFather
      * 构造函数
      *
      * @access public
-     * @param array $option
+     * @param array $setting
      * @return void
      */
-    public function __construct(array $option = [])
+    public function __construct(array $setting = [])
     {
-        if (!isset($option['config'])) {
-            throw new RuntimeException(Language::format('core.config_not_found', 'session/option/config'));
+        if (!isset($setting['save_path'])) {
+            throw new RuntimeException(Language::format('core.config_not_found', 'session/setting/save_path'));
         }
-        $config = $option['config'];
-        $this->_path = $config['save_path'];
-        if ($config['expire_time']) {
-            $this->_expire_time = $config['expire_time'];
+        $this->_path = $setting['save_path'];
+        if (isset($setting['expire_time'])) {
+            $this->_expire_time = $setting['expire_time'];
         }
-        parent::__construct($option);
+        parent::__construct($setting);
     }
 
     /**

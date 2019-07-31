@@ -3,7 +3,6 @@
 namespace Brisk\Cache\Driver;
 
 use Brisk\Kernel\Language;
-use Brisk\Toolkit\Debugger;
 use Brisk\Toolkit\Dir;
 use Brisk\Cache\CacheFather;
 use Brisk\Exception\RuntimeException;
@@ -29,22 +28,22 @@ class File extends CacheFather
      * 构造器
      *
      * @access public
-     * @param string $path
-     * @param array $setting
+     * @param string $save_path
+     * @param array $option
      * @return void
      */
-    public function __construct(string $path, array $setting = [])
+    public function __construct(string $save_path, array $option = [])
     {
-        $this->_dir = $path;
+        $this->_dir = $save_path;
         if (!is_dir($this->_dir) && !Dir::create($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_create_failed', $this->_dir));
         } elseif (!is_readable($this->_dir) || !is_writable($this->_dir)) {
             throw new RuntimeException(Language::format('cache.dir_permission_error', $this->_dir));
         }
-        if (isset($setting['ext_name'])) {
-			$this->_ext_name = $setting["ext_name"];
+        if (isset($option['ext_name'])) {
+			$this->_ext_name = $option["ext_name"];
         }
-        parent::__construct($setting);
+        parent::__construct($option);
     }
 
     /**

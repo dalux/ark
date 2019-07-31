@@ -7,7 +7,7 @@ use Brisk\Kernel\Timer;
 use Brisk\Db\DbFather;
 use Brisk\Exception\PdoException;
 
-abstract class PdoFather extends DbFather
+class Pdo extends DbFather
 {
 
     /**
@@ -37,8 +37,15 @@ abstract class PdoFather extends DbFather
 	public function __construct(string $dsn, string $username, string $password, array $option = [])
 	{
 		try {
+            $option = array_merge([
+                \PDO::ATTR_ERRMODE              => \PDO::ERRMODE_EXCEPTION,
+                \PDO::ATTR_ORACLE_NULLS         => \PDO::NULL_EMPTY_STRING,
+                \PDO::ATTR_CASE                 => \PDO::CASE_LOWER,
+                \PDO::ATTR_EMULATE_PREPARES     => false
+            ], $option);
 		    $data = [
-		        'object'    => $this,
+		        'driver'    => $this,
+                'method'    => __METHOD__,
                 'dsn'       => $dsn,
                 'username'  => $username,
                 'password'  => $password,
@@ -49,13 +56,12 @@ abstract class PdoFather extends DbFather
             $instance = new \PDO($data['dsn'], $data['username'], $data['password'], $data['option']);
             Timer::mark('db_connect_end');
             $data = [
-                'object'    => $this,
+                'driver'    => $this,
                 'dsn'       => $dsn,
                 'username'  => $username,
                 'password'  => $password,
                 'option'    => $option,
                 'instance'  => $instance,
-                'driver'    => $instance->getAttribute(\PDO::ATTR_DRIVER_NAME),
                 'timeused'  => Timer::lastUsed()
             ];
             $data = Event::fire('event.dbconnect.finish', $data);
@@ -76,11 +82,10 @@ abstract class PdoFather extends DbFather
     public function query(string $sql, array $bind = [])
     {
 		$data = [
-            'object'    => $this,
+            'driver'    => $this,
             'method'    => __METHOD__,
             'sql'       => $sql,
             'bind'      => $bind,
-            'driver'    => $this->getDriverName()
         ];
         $data = Event::fire('event.dbquery.before', $data);
         Timer::mark('db_query_before');
@@ -104,11 +109,10 @@ abstract class PdoFather extends DbFather
     public function fetchAll(string $sql, array $bind = [])
     {
 		$data = [
-            'object'    => $this,
+            'driver'    => $this,
             'method'    => __METHOD__,
             'sql'       => $sql,
             'bind'      => $bind,
-            'driver'    => $this->getDriverName()
         ];
         $data = Event::fire('event.dbquery.before', $data);
         Timer::mark('db_query_before');
@@ -133,11 +137,10 @@ abstract class PdoFather extends DbFather
     public function fetchOne(string $sql, array $bind = [])
     {
 		$data = [
-            'object'    => $this,
+            'driver'    => $this,
             'method'    => __METHOD__,
             'sql'       => $sql,
             'bind'      => $bind,
-            'driver'    => $this->getDriverName()
         ];
         $data = Event::fire('event.dbquery.before', $data);
         Timer::mark('db_query_before');
@@ -161,11 +164,10 @@ abstract class PdoFather extends DbFather
     public function fetchScalar(string $sql, array $bind = [])
     {
         $data = [
-            'object'    => $this,
+            'driver'    => $this,
             'method'    => __METHOD__,
             'sql'       => $sql,
             'bind'      => $bind,
-            'driver'    => $this->getDriverName()
         ];
         $data = Event::fire('event.dbquery.before', $data);
         Timer::mark('db_query_before');
@@ -295,11 +297,10 @@ abstract class PdoFather extends DbFather
             return $smt;
         } catch (\PDOException $e) {
             $data = [
-                'object'    => $this,
+                'driver'    => $this,
                 'method'    => __METHOD__,
                 'sql'       => $smt->queryString,
                 'error'     => $e->getMessage(),
-                'driver'    => $this->getDriverName()
             ];
             $data = Event::fire('event.dbquery.failed', $data);
             throw new PdoException($data['error']);

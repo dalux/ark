@@ -25,15 +25,19 @@ class DbAdapter
             throw new RuntimeException(Language::format('core.config_not_found', $path));
         } elseif (!App::init()->config->exist($path. '/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', $path. '/driver'));
-        } elseif (!App::init()->config->exist($path. '/option/config')) {
-            throw new RuntimeException(Language::format('core.config_not_found', $path. '/option/config'));
+        } elseif (!App::init()->config->exist($path. '/setting')) {
+            throw new RuntimeException(Language::format('core.config_not_found', $path. '/option'));
         }
         $driver = App::init()->config->database->$name->driver->value();
-        $option = App::init()->config->database->$name->option->value();
+        $setting = App::init()->config->database->$name->setting->value();
         if (Loader::findClass($driver) == "") {
             throw new ClassNotFoundException(Language::format('core.class_not_found', $driver));
         }
-		$instance = new $driver($option['config'], $option['setting']);
+        $dsn = $setting['dsn'];
+        $username = $setting['username'];
+        $password = $setting['password'];
+        $option = $setting['option'];
+		$instance = new $driver($dsn, $username, $password, $option);
         if (!$instance instanceof IDbDriver) {
             throw new RuntimeException(Language::format('core.class_implement_error', $driver, 'Brisk\Db\IDbDriver'));
         }

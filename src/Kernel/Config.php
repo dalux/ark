@@ -24,45 +24,35 @@ class Config
     private static $_session = [
         'memcache'=> [
             'driver'=> 'Brisk\Session\Driver\Memcached',
-            'option'=> [
-                'config'=> [
-                    'host'=> '127.0.0.1',
-                    'port'=> 11211,
-                    'expire_time'=> 1440,
-                ],
-                'setting'=> []
+            'setting'=> [
+                'save_path'=> '127.0.0.1:11211',
+                'expire_time'=> 1440,
+                'option'=> []
             ]
         ],
         'redis'=> [
             'driver'=> 'Brisk\Session\Driver\Redis',
-            'option'=> [
-                'config'=> [
-                    'host'=> '127.0.0.1',
-                    'port'=> 6379,
-                    'password'=> '123456',	//for redis
-                    'expire_time'=> 1440,
-                ],
-                'setting'=> []
+            'setting'=> [
+                'save_path'=> '127.0.0.1:6379',
+                'password'=> '123456',	//for redis
+                'expire_time'=> 1440,
+                'option'=> []
             ]
         ],
         'file'=> [
             'driver'=> 'Brisk\Session\Driver\File',
-            'option'=> [
-                'config'=> [
-                    'save_path'     => '/path/to/session_path',
-                    'expire_time'   => 1440,
-                ],
-                'setting'=> []
+            'setting'=> [
+                'save_path'=> '/path/to/session_path',
+                'expire_time'=> 1440,
+                'option'=> []
             ]
         ],
         'native'=> [
             'driver'=> 'Brisk\Session\Driver\Native',
-            'option'=> [
-                'config'=> [
-                    'save_path'     => '/path/to/session_path',
-                    'expire_time'   => 1440,
-                ],
-                'setting'=> []
+            'setting'=> [
+                'save_path'=> '/path/to/session_path',
+                'expire_time'=> 1440,
+                'option'=> []
             ]
         ]
     ];
@@ -74,17 +64,12 @@ class Config
      */
     private static $_database = [
         'default'=> [
-            'driver'=> 'Brisk\Db\Driver\Pdo\Mysql',
-            'option'=> [
-                'config'=> [
-                    'host'		=> '127.0.0.1',
-                    'username'	=> 'user',
-                    'password'	=> 'pass',
-                    'port'		=> 1521,
-                    'dbname'	=> 'dbname',
-                    'charset'	=> 'utf8'
-                ],
-                'setting'=> ['type'=> 'new']
+            'driver'=> 'Brisk\Db\Driver\Pdo',
+            'setting'=> [
+                'dsn'=> 'mysql:host=127.0.0.1;port=3306;dbname=test;charset=utf8',
+                'username'=> '',
+                'password'=> '',
+                'option'=> []
             ]
         ]
     ];
@@ -97,23 +82,33 @@ class Config
     private static $_cache = [
         'file'=> [
             'driver'=> 'Brisk\Cache\Driver\File',
-            'option'=> [
-                'path'=> '/path/to/cachedir',
-                'setting'=> ['ext_name'=> '.cache']
+            'setting'=> [
+                'save_path'=> '/path/to/cachedir',
+                'option'=> [
+                    'ext_name'=> '.cache',
+                    'expire_time'=> 86400,
+                ]
             ]
         ],
         'memcache'=> [
             'driver'=> 'Brisk\Cache\Driver\Memcached',
-            'option'=> [
-                'path'=> ['127.0.0.1:11211'],
-                'setting'=> []
+            'setting'=> [
+                'save_path'=> ['127.0.0.1:11211'],
+                'option'=> [
+                    'expire_time'=> 86400,
+                    'memopt'=> [],
+                ]
             ]
         ],
         'redis'=> [
             'driver'=> 'Brisk\Cache\Driver\Redis',
-            'option'=> [
-                'path'=> '127.0.0.1:6379',
-                'setting'=> []
+            'setting'=> [
+                'save_path'=> '127.0.0.1:6379',
+                'option'=> [
+                    'expire_time'=> 86400,
+                    'timeout'=> 5,
+                    'password'=> '',
+                ]
             ]
         ]
     ];
@@ -126,7 +121,7 @@ class Config
     private static $_view = [
         'native'=> [
             'driver'=> 'Brisk\View\Driver\Native',
-            'option'=> [
+            'setting'=> [
                 'template_ext'=> '.phtml',
                 'template_dir'=> '/path/to/tpldir'
             ]

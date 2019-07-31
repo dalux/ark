@@ -21,10 +21,10 @@ class Redis extends CacheFather
      *
      * @access public
      * @param string $save_path
-     * @param array $setting
+     * @param array $option
      * @return void
      */
-    public function __construct(string $save_path, array $setting = [])
+    public function __construct(string $save_path, array $option = [])
     {
         if (!extension_loaded('redis')) {
             throw new RuntimeException(Language::format('cache.extension_load_failed', 'php_redis'));
@@ -32,17 +32,17 @@ class Redis extends CacheFather
         try {
             $server = explode(':', $save_path);
             $host = $server[0];
-            $port = $server[1];
+            $port = $server[1] ?? 6379;
             $timeout = 5;
-            if (isset($setting['connect_timeout'])) {
-                $timeout = $setting['connect_timeout'];
+            if (isset($option['timeout'])) {
+                $timeout = $option['timeout'];
             }
             $this->_container = new \Redis();
             $this->_container->connect($host, $port, $timeout);
-            if (isset($setting['password'])) {
-                $this->_container->auth($setting['password']);
+            if (isset($option['password'])) {
+                $this->_container->auth($option['password']);
             }
-            parent::__construct($setting);
+            parent::__construct($option);
         } catch (\Exception $e) {
             throw new RuntimeException(Language::format('cache.cacher_create_failed', 'Redis'));
         }
