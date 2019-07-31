@@ -6,6 +6,7 @@ use Brisk\Kernel\Event;
 use Brisk\Kernel\Timer;
 use Brisk\Db\DbFather;
 use Brisk\Exception\PdoException;
+use Brisk\Kernel\Toolkit;
 
 class Pdo extends DbFather
 {
@@ -15,14 +16,16 @@ class Pdo extends DbFather
      * 
      * @var \PDO
      */
-    protected $_instance;
+    private $_instance;
+
+    private $_dsn;
 
     /**
      * 最近影响行数
      *
      * @var int
      */
-    protected $_row_count = 0;
+    private $_row_count = 0;
 
     /**
      * 构造函数
@@ -37,12 +40,13 @@ class Pdo extends DbFather
 	public function __construct(string $dsn, string $username, string $password, array $option = [])
 	{
 		try {
-            $option = array_merge([
+            $default = [
                 \PDO::ATTR_ERRMODE              => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_ORACLE_NULLS         => \PDO::NULL_EMPTY_STRING,
                 \PDO::ATTR_CASE                 => \PDO::CASE_LOWER,
                 \PDO::ATTR_EMULATE_PREPARES     => false
-            ], $option);
+            ];
+            $option = $default + $option;
 		    $data = [
 		        'driver'    => $this,
                 'method'    => __METHOD__,
@@ -65,6 +69,7 @@ class Pdo extends DbFather
                 'timeused'  => Timer::lastUsed()
             ];
             $data = Event::fire('event.dbconnect.finish', $data);
+            $this->_dsn = $data['dsn'];
             $this->_instance = $data['instance'];
 		} catch (\PDOException $e) {
 			throw new PdoException($e->getMessage());
