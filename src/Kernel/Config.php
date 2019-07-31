@@ -45,8 +45,8 @@ class Config
                 'setting'=> []
             ]
         ],
-        'filecache'=> [
-            'driver'=> 'Brisk\Session\Driver\FileCache',
+        'file'=> [
+            'driver'=> 'Brisk\Session\Driver\File',
             'option'=> [
                 'config'=> [
                     'save_path'     => '/path/to/session_path',
@@ -55,8 +55,8 @@ class Config
                 'setting'=> []
             ]
         ],
-        'files'=> [
-            'driver'=> 'Brisk\Session\Driver\Files',
+        'native'=> [
+            'driver'=> 'Brisk\Session\Driver\Native',
             'option'=> [
                 'config'=> [
                     'save_path'     => '/path/to/session_path',
@@ -141,7 +141,7 @@ class Config
      * @param string $view
      * @return array
      */
-    public static function getConfigTpl($session = 'files', $view = 'native')
+    public static function getConfigTpl($session = 'native', $view = 'native')
     {
         $result = [
             'global'    => self::$_global,

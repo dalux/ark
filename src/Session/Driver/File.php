@@ -5,10 +5,10 @@ namespace Brisk\Session\Driver;
 use Brisk\Kernel\Language;
 use Brisk\Session\UserHandler;
 use Brisk\Session\SessionFather;
-use Brisk\Cache\Driver\File;
+use Brisk\Cache\Driver\File as FileCache;
 use Brisk\Exception\RuntimeException;
 
-class FileCache extends SessionFather
+class File extends SessionFather
 {
 
     /**
@@ -47,7 +47,7 @@ class FileCache extends SessionFather
      */
     public function start(string $session_id = null)
     {
-        $cache = new File($this->_path);
+        $cache = new FileCache($this->_path);
         $cache->setFlag('sess');
         $cache->setExpireTime($this->_expire_time);
         $handler = new UserHandler($cache);

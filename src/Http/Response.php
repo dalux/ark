@@ -6,7 +6,22 @@ class Response
 {
 
     /**
-     * 状态码描述
+     * 状态
+     *
+     * @var string
+     */
+    const FLAG_END      = 'end';
+    const FLAG_STOP     = 'stop';
+
+    /**
+     * 响应是否结束
+     *
+     * @var bool
+     */
+    private static $_flag;
+
+    /**
+     * 状态码映射表
      *
      * @var array
      */
@@ -55,26 +70,17 @@ class Response
     ];
 
     /**
-     * 响应是否结束
-     *
-     * @var bool
-     */
-    private static $_flag;
-
-    /**
      * 发送状态码
      *
      * @access public
      * @param int $code
-     * @param string $text
      * @return void
      */
-    public static function code(int $code, string $text = null)
+    public static function code(int $code)
     {
         $status_code = self::$_status[$code] ?? 200;
-        $status_text = is_null($text) ? self::$_status[$status_code] : $text;
-        $protocol = $_SERVER['SERVER_PROTOCOL'];
-        is_null($protocol) && $protocol = 'HTTP/1.1';
+        $status_text = self::$_status[$status_code];
+        $protocol = $_SERVER['SERVER_PROTOCOL'] ?? 'HTTP/1.1';
         self::setHeader($protocol. ' '. $status_code. ' '. $status_text);
     }
 
@@ -132,7 +138,7 @@ class Response
      */
     public static function end()
     {
-        self::$_flag = 'end';
+        self::$_flag = self::FLAG_END;
         return null;
     }
 
@@ -144,30 +150,18 @@ class Response
      */
     public static function stop()
     {
-        self::$_flag = 'stop';
+        self::$_flag = self::FLAG_STOP;
         return null;
     }
 
     /**
-     * 响应是否结束
+     * 获取当前状态标识
      *
-     * @access public
      * @return bool
      */
-    public static function isEnd()
+    public static function getFlag()
     {
-        return self::$_flag == 'end';
-    }
-
-    /**
-     * 是否跳出当前响应
-     *
-     * @access public
-     * @return bool
-     */
-    public static function isStop()
-    {
-        return self::$_flag == 'stop';
+        return self::$_flag;
     }
 
     /**

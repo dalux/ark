@@ -233,12 +233,14 @@ class Router
             //自动化类
             if (method_exists($instance, $auto_action)) {
                 $output = $instance->$auto_action();
-                if (Response::isEnd() || !is_null($output)) {
+                $flag = Response::getFlag();
+                if ($output || $flag == Response::FLAG_END) {
                     return $output;
                 }
             }
             $output = $instance->$action();
-            if (Response::isEnd() || !is_null($output)) {
+            $flag = Response::getFlag();
+            if ($output || $flag == Response::FLAG_END) {
                 return $output;
             }
         }
