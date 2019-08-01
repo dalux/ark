@@ -6,6 +6,7 @@ use Brisk\Kernel\Language;
 use Brisk\Cache\Proxy;
 use Brisk\Cache\ICacheDriver;
 use Brisk\Exception\RuntimeException;
+use Brisk\Toolkit\SqlBuilder\SqlFather;
 
 class DQuery
 {
@@ -44,33 +45,6 @@ class DQuery
      * @var Proxy
      */
     private $_proxy;
-
-    /**
-     * where条件
-     *
-     * @var array
-     */
-    private $_where_mark = [
-        '='         => ' = ',
-        'EQ'        => ' = ',
-        '!='        => ' != ',
-        'NEQ'       => ' != ',
-        '>'         => '>',
-        'GT'        => ' > ',
-        '>='        => ' >= ',
-        'GTE'       => ' >= ',
-        '<'         => ' < ',
-        'LT'        => ' < ',
-        '<='        => ' <= ',
-        'LTE'       => ' <= ',
-        'LIKE'      => ' LIKE ',
-        'NOTLIKE'   => ' NOT LIKE ',
-        'BETWEEN'   => ' BETWEEN ',
-        'IN'        => ' IN ',
-        'NOTIN'     => ' NOT IN ',
-        'IS'        => ' IS ',
-        'ISNOT'     => ' IS NOT '
-    ];
 
     /**
      * 使用数据库连接
@@ -197,25 +171,14 @@ class DQuery
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
         $update = $this->_conn->update()->set([$this->_tb], $data);
-        foreach ($condition as $k=> $v) {
-            if (is_array($v)) {
-                $kk = strtoupper(current(array_keys($v)));
-                $vv = current($v);
-                if ($this->_where_mark[$kk] && $vv != '') {
-                    if (preg_match('/^(IS|ISNOT)/i', $kk)) {
-                        $update->where($k. $this->_where_mark[$kk]. $vv);
-                    } elseif (preg_match('/^(BETWEEN)/i', $kk) && $vv[0] != '' && $vv[1] != '') {
-                        $update->where($k. $this->_where_mark[$kk]. $vv[0] . ' AND ' . $vv[1]);
-                    } elseif (preg_match('/^(IN|NOTIN)/i', $kk)) {
-                        $vv = $update->quote($vv);
-                        $update->where($k. $this->_where_mark[$kk]. '('. $vv. ')');
-                    } else {
-                        $update->where($k. $this->_where_mark[$kk]. ' ?', $vv);
-                    }
-                    continue;
+        foreach ($condition as $key=> $val) {
+            if (is_array($val)) {
+                foreach ($val as $k=> $v) {
+                    $update = $this->_parseExtendWhere($update, $key, $k, $v);
                 }
+                continue;
             }
-            $update->whereIn($k, $v);
+            $update->whereIn($key, $val);
         }
         return $this->_conn->query($update->getRealSQL());
     }
@@ -233,25 +196,14 @@ class DQuery
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
         $delete = $this->_conn->delete()->from([$this->_tb]);
-        foreach ($condition as $k=> $v) {
-            if (is_array($v)) {
-                $kk = strtoupper(current(array_keys($v)));
-                $vv = current($v);
-                if ($this->_where_mark[$kk] && $vv != '') {
-                    if (preg_match('/^(IS|ISNOT)/i', $kk)) {
-                        $delete->where($k. $this->_where_mark[$kk]. $vv);
-                    } elseif (preg_match('/^(BETWEEN)/i', $kk) && $vv[0] != '' && $vv[1] != '') {
-                        $delete->where($k. $this->_where_mark[$kk]. $vv[0]. ' AND '. $vv[1]);
-                    } elseif (preg_match('/^(IN|NOTIN)/i', $kk)) {
-                        $vv = $delete->quote($vv);
-                        $delete->where($k. $this->_where_mark[$kk]. '('. $vv. ')');
-                    } else {
-                        $delete->where($k. $this->_where_mark[$kk]. ' ?', $vv);
-                    }
-                    continue;
+        foreach ($condition as $key=> $val) {
+            if (is_array($val)) {
+                foreach ($val as $k=> $v) {
+                    $delete = $this->_parseExtendWhere($delete, $key, $k, $v);
                 }
+                continue;
             }
-            $delete->whereIn($k, $v);
+            $delete->whereIn($key, $val);
         }
         return $this->_conn->query($delete->getRealSQL());
     }
@@ -270,25 +222,14 @@ class DQuery
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
         $select = $this->_conn->select()->from([$this->_tb], $fields);
-        foreach ($condition as $k=> $v) {
-            if (is_array($v)) {
-                $kk = strtoupper(current(array_keys($v)));
-                $vv = current($v);
-                if ($this->_where_mark[$kk] && $vv != '') {
-                    if (preg_match('/^(IS|ISNOT)/i', $kk)) {
-                        $select->where($k. $this->_where_mark[$kk]. $vv);
-                    } elseif (preg_match('/^(BETWEEN)/i', $kk) && $vv[0] != '' && $vv[1] != '') {
-                        $select->where($k. $this->_where_mark[$kk]. $vv[0]. ' AND '. $vv[1]);
-                    } elseif (preg_match('/^(IN|NOTIN)/i', $kk)) {
-                        $vv = $select->quote($vv);
-                        $select->where($k. $this->_where_mark[$kk]. '('. $vv. ')');
-                    } else {
-                        $select->where($k. $this->_where_mark[$kk]. ' ?', $vv);
-                    }
-                    continue;
+        foreach ($condition as $key=> $val) {
+            if (is_array($val)) {
+                foreach ($val as $k=> $v) {
+                    $select = $this->_parseExtendWhere($select, $key, $k, $v);
                 }
+                continue;
             }
-            $select->whereIn($k, $v);
+            $select->whereIn($key, $val);
         }
         if (!is_null($this->_expire)) {
             return $this->_proxy->do($this->_conn, 'fetchOne', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
@@ -310,25 +251,14 @@ class DQuery
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
         $select = $this->_conn->select()->from([$this->_tb], $fields);
-        foreach ($condition as $k=> $v) {
-            if (is_array($v)) {
-                $kk = strtoupper(current(array_keys($v)));
-                $vv = current($v);
-                if ($this->_where_mark[$kk] && $vv != '') {
-                    if (preg_match('/^(IS|ISNOT)/i', $kk)) {
-                        $select->where($k. $this->_where_mark[$kk]. $vv);
-                    } elseif (preg_match('/^(BETWEEN)/i', $kk) && $vv[0] != '' && $vv[1] != '') {
-                        $select->where($k. $this->_where_mark[$kk]. $vv[0]. ' AND '. $vv[1]);
-                    } elseif (preg_match('/^(IN|NOTIN)/i', $kk)) {
-                        $vv = $select->quote($vv);
-                        $select->where($k. $this->_where_mark[$kk]. '('. $vv. ')');
-                    } else {
-                        $select->where($k. $this->_where_mark[$kk]. ' ?', $vv);
-                    }
-                    continue;
+        foreach ($condition as $key=> $val) {
+            if (is_array($val)) {
+                foreach ($val as $k=> $v) {
+                    $select = $this->_parseExtendWhere($select, $key, $k, $v);
                 }
+                continue;
             }
-            $select->whereIn($k, $v);
+            $select->whereIn($key, $val);
         }
         if (!is_null($this->_expire)) {
             return $this->_proxy->do($this->_conn, 'fetchScalar', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
@@ -353,35 +283,68 @@ class DQuery
             throw new RuntimeException(Language::format('db.invalid_table_name'));
         }
         $select = $this->_conn->select()->from([$this->_tb], $fields)->limit($count, $offset);
-        if(!is_null($order) && !empty($order)){
-            foreach ($order as $k=> $v) {
-                $select->orderby($k, $v);
+        if(!is_null($order) && is_array($order)){
+            foreach ($order as $key=> $val) {
+                $select->orderby($key, $val);
             }
         }
-        foreach ($condition as $k=> $v) {
-            if (is_array($v)) {
-                $kk = strtoupper(current(array_keys($v)));
-                $vv = current($v);
-                if ($this->_where_mark[$kk] && $vv != '') {
-                    if (preg_match('/^(IS|ISNOT)/i', $kk)) {
-                        $select->where($k. $this->_where_mark[$kk]. $vv);
-                    } elseif (preg_match('/^(BETWEEN)/i', $kk) && $vv[0] != '' && $vv[1] != '') {
-                        $select->where($k. $this->_where_mark[$kk]. $vv[0]. ' AND '. $vv[1]);
-                    } elseif (preg_match('/^(IN|NOTIN)/i', $kk)) {
-                        $vv = $select->quote($vv);
-                        $select->where($k. $this->_where_mark[$kk]. '('. $vv. ')');
-                    } else {
-                        $select->where($k. $this->_where_mark[$kk]. ' ?', $vv);
-                    }
-                    continue;
+        foreach ($condition as $key=> $val) {
+            if (is_array($val)) {
+                foreach ($val as $k=> $v) {
+                    $select = $this->_parseExtendWhere($select, $key, $k, $v);
                 }
+                continue;
             }
-            $select->whereIn($k, $v);
+            $select->whereIn($key, $val);
         }
         if (!is_null($this->_expire)) {
             return $this->_proxy->do($this->_conn, 'fetchAll', ['sql'=> $select->getRealSQL()], $this->_expire, $this->_cache_name);
         }
         return $this->_conn->fetchAll($select->getRealSQL());
+    }
+
+    /**
+     * 解析扩展Where条件
+     *
+     * @access private
+     * @param SqlFather $sqlbuilder
+     * @param string $field
+     * @param string $operator
+     * @param $value
+     * @return SqlFather
+     */
+    private function _parseExtendWhere(SqlFather $sqlbuilder, string $field, string $operator, $value)
+    {
+        $operator = strtolower(trim($operator));
+        if ($operator == 'is') {
+            $sqlbuilder->where($field. ' IS '. $value);
+        } elseif ($operator == 'isnot') {
+            $sqlbuilder->where($field. ' IS NOT '. $value);
+        } elseif ($operator == 'between') {
+            if (!is_array($value)) {
+                throw new RuntimeException(Language::format('db.invalid_where_condition', 'between操作仅支持数组'));
+            }
+            $sqlbuilder->where($field. ' BETWEEN '. $value[0]. ' AND '. $value[1]);
+        } elseif ($operator == 'in') {
+            if (!is_array($value)) {
+                throw new RuntimeException(Language::format('db.invalid_where_condition', 'in操作仅支持数组'));
+            }
+            $sqlbuilder->whereIn($field, $value);
+        } elseif ($operator == 'notin') {
+            if (!is_array($value)) {
+                throw new RuntimeException(Language::format('db.invalid_where_condition', 'notin操作仅支持数组'));
+            }
+            $sqlbuilder->whereNotIn($field, $value);
+        } elseif ($operator == 'like') {
+            $sqlbuilder->whereLike($field, $value);
+        } elseif ($operator == 'notlike') {
+            $sqlbuilder->whereNotLike($field, $value);
+        } elseif (in_array($operator, ['>', '<', '>=', '<=', '!=', '<>', '='])) {
+            $sqlbuilder->where($field. $operator. '?', $value);
+        } else {
+            throw new RuntimeException(Language::format('db.invalid_where_condition', '不支持的操作符('. $operator. ')'));
+        }
+        return $sqlbuilder;
     }
 
 }

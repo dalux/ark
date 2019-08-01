@@ -50,6 +50,7 @@ class Language
             'db.invalid_connection_object'      => '未设置数据库连接对象实例',
             'db.invalid_table_name'             => '无有效的数据库表名称',
             'db.invalid_connect_config'         => '无效的数据库配置项[%s]',
+            'db.invalid_where_condition'        => '无效的where条件子句[%s]',
 
             'router.rewrite_result_error'       => '重写后的Uri地址必须是一个字符串',
             'router.controller_is_empty'        => '控制器列表不能为空',

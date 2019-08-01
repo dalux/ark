@@ -49,15 +49,15 @@ abstract class SqlFather
      */
     public function quote($value)
     {
-        if (is_int($value) || is_float($value)
+        if (is_array($value)) {
+            foreach ($value as $key=> $val) {
+                $value[$key] = $this->quote($val);
+            }
+            return implode(',', $value);
+        } elseif (is_int($value) || is_float($value)
                 || preg_match('/^\\{\\{.*?\\}\\}$/', $value)
                 || preg_match('/^[a-zA-Z0-9\-\_]*?\(.*?\)$/', $value)) {
             return $value;
-        } elseif (is_array($value)) {
-            foreach ($value as $key=> $val) {
-				$value[$key] = $this->quote($val);
-			}
-            return implode(',', $value);
         } else {
             return '\'' . addslashes($value) . '\'';
         }
