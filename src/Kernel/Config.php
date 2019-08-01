@@ -22,6 +22,14 @@ class Config
      * @var array
      */
     private static $_session = [
+        'file'=> [
+            'driver'=> 'Brisk\Session\Driver\File',
+            'setting'=> [
+                'save_path'=> '/path/to/session_path',
+                'expire_time'=> 1440,
+                'option'=> []
+            ]
+        ],
         'memcache'=> [
             'driver'=> 'Brisk\Session\Driver\Memcached',
             'setting'=> [
@@ -39,22 +47,6 @@ class Config
                 'option'=> []
             ]
         ],
-        'file'=> [
-            'driver'=> 'Brisk\Session\Driver\File',
-            'setting'=> [
-                'save_path'=> '/path/to/session_path',
-                'expire_time'=> 1440,
-                'option'=> []
-            ]
-        ],
-        'native'=> [
-            'driver'=> 'Brisk\Session\Driver\Native',
-            'setting'=> [
-                'save_path'=> '/path/to/session_path',
-                'expire_time'=> 1440,
-                'option'=> []
-            ]
-        ]
     ];
 
     /**
@@ -136,7 +128,7 @@ class Config
      * @param string $view
      * @return array
      */
-    public static function getConfigTpl($session = 'native', $view = 'native')
+    public static function getConfigTpl($session = 'file', $view = 'native')
     {
         $result = [
             'global'    => self::$_global,
