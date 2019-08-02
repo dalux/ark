@@ -167,7 +167,7 @@ abstract class Select extends SqlFather
 		if (isset($this->_parts['from'])) {
             $from_part = $this->_parts['from'];
             if (isset($this->_parts['andfrom'])) {
-                $from_part = array_merge($from_part, $this->_parts['andfrom']);
+                $from_part = $from_part + $this->_parts['andfrom'];
             }
             if (count($from_part) > 0) {
                 foreach ($from_part as $key => $val) {

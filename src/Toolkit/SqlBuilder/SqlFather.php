@@ -2,6 +2,8 @@
 
 namespace Brisk\Toolkit\SqlBuilder;
 
+use Brisk\Kernel\Toolkit;
+
 abstract class SqlFather
 {
 
@@ -54,9 +56,7 @@ abstract class SqlFather
                 $value[$key] = $this->quote($val);
             }
             return implode(',', $value);
-        } elseif (is_int($value) || is_float($value)
-                || preg_match('/^\\{\\{.*?\\}\\}$/', $value)
-                || preg_match('/^[a-zA-Z0-9\-\_]*?\(.*?\)$/', $value)) {
+        } elseif (is_int($value) || is_float($value) || preg_match('/.*?\(.*?\)/', $value)) {
             return $value;
         } else {
             return '\'' . addslashes($value) . '\'';
@@ -209,18 +209,13 @@ abstract class SqlFather
 		$where_part = $this->_parts['where'];
         if (!is_null($where_part)) {
             foreach ($where_part as $key=> $val) {
-                $part = '';
                 $cond = $val['cond'];
                 $value = $val['val'];
-                if (is_null($value)) {
-                    $part = $cond;
-                    if ($cond instanceof SqlFather) {
-                        $part = $part. '(' . $cond->pickWherePart() . ')';
-                    }
-                } else {
-                    $part = $part. $this->_parseExpr($cond, $value);
-                }
-                if (isset($where_part[$key+1]) && !is_null($where_part[$key+1])) {
+                $part = $cond instanceof SqlFather
+                    ? '(' . $cond->pickWherePart() . ')'
+                    : $this->_parseExpr($cond, $value);
+                if (isset($where_part[$key+1])
+                        && !is_null($where_part[$key+1])) {
                     $part = $part. ' AND ';
                 }
                 $where[] = $part;
@@ -302,45 +297,34 @@ abstract class SqlFather
         //特殊处理
         if (is_null($value)
                 || is_array($value) && count($value) == 0) {
-            if (preg_match('/^\\{\\{.*?\\}\\}/', $expr) || preg_match('/.*?\(.*?\)/', $expr)) {
+            if (preg_match('/^\{\{.*?\}\}/', $expr)) {
                 return str_replace(['{{', '}}'], '', $expr);
             }
             return $expr;
         }
 		$matches = [];
-		$is_match = preg_match_all('/(\\?|\\:[\\w\\d]+)/i', $expr, $matches);
+		$is_match = preg_match_all('/(\?|\:[\w\d]+)/i', $expr, $matches);
         if ($is_match > 0) {
             $matches = $matches[1];
             foreach ($matches as $k=> $v) {
+                $val = $value;
+                if (is_array($value)) {
+                    $val = isset($value[$k]) ? $value[$k] : null;
+                }
                 if ($v == '?') {
-                    $val = $value;
-                    if (is_array($value)) {
-                        $val = isset($value[$k]) ? $value[$k] : null;
-                    }
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
-                    } elseif (is_string($val) 
-                            && (preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\(.*?\)/', $val))) {
+                    } elseif (is_string($val) && (preg_match('/^\{\{.*?\}\}/', $val))) {
                         $val = str_replace(['{{', '}}'], '', $val);
                     } else {
                         $val = $this->quote($val);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
-                } else {
-                    $val = $value;
-                    if (is_array($value)) {
-                        $val = isset($value[$k]) ? $value[$k] : null;
-                    }
-                    if ($val instanceof SqlFather) {
-                        $val = $val->getRealSQL();
-                        $expr = preg_replace('/v/', $val, $expr, 1);
-                    } elseif (is_string($val) 
-                            && preg_match('/^\\{\\{.*?\\}\\}/', $val) || preg_match('/.*?\\(.*?\\)/', $val)) {
-                        $val = str_replace(['{{', '}}'], '', $val);
-                        $expr = preg_replace('/v/', $val, $expr, 1);
-                    } else {
-                        $this->_db_bind[$v] = $val;
-                    }
+                } elseif (strpos($v, ':') !== false) {
+                    $this->_db_bind[$v] = [
+                        'type'  => gettype($val),
+                        'value' => $val
+                    ];
                 }
             }
         }

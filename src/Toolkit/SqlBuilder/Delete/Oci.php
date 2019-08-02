@@ -24,14 +24,15 @@ class Oci extends Delete
 	public function quote($value)
 	{
         if (is_array($value)) {
-			foreach ($value as $key=> $val) {
-				$value[$key] = $this->quote($val);
-			}
+            foreach ($value as $key=> $val) {
+                $value[$key] = $this->quote($val);
+            }
             return implode(',', $value);
-        } elseif (is_int($value) || is_float($value)) {
+        } elseif (is_int($value) || is_float($value) || preg_match('/.*?\(.*?\)/', $value)) {
             return $value;
+        } else {
+            return '\'' . str_replace('\'', '\'\'', $value) . '\'';
         }
-		return '\'' . str_replace('\'', '\'\'', $value) . '\'';
 	}
 	
 }

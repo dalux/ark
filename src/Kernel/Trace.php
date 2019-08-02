@@ -41,7 +41,7 @@ class Trace
      */
 	public static function get(string $flag)
 	{
-        return self::$_trace[$flag];
+        return self::$_trace[$flag] ?? null;
 	}
 
 }

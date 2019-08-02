@@ -20,6 +20,8 @@ class Pdo extends DbFather
 
     private $_dsn;
 
+    private $_user;
+
     /**
      * 最近影响行数
      *
@@ -70,6 +72,7 @@ class Pdo extends DbFather
             ];
             $data = Event::fire('event.dbconnect.finish', $data);
             $this->_dsn = $data['dsn'];
+            $this->_user = $data['username'];
             $this->_instance = $data['instance'];
 		} catch (\PDOException $e) {
 			throw new PdoException($e->getMessage());
@@ -97,7 +100,6 @@ class Pdo extends DbFather
 		$smt = $this->_query($data['sql'], $data['bind']);
 		Timer::mark('db_query_finish');
         $data['result'] = true;
-        $data['query'] = $smt->queryString;
         $data['timeused'] = Timer::lastUsed();
         $data = Event::fire('event.dbquery.finish', $data);
         return $data['result'];
@@ -125,7 +127,6 @@ class Pdo extends DbFather
         $result = $smt->fetchAll();
         Timer::mark('db_query_finish');
         $data['result'] = $result;
-        $data['query'] = $smt->queryString;
         $data['timeused'] = Timer::lastUsed();
         $data = Event::fire('event.dbquery.finish', $data);
         return $data['result'];
@@ -152,7 +153,6 @@ class Pdo extends DbFather
         $smt = $this->_query($data['sql'], $data['bind']);
         $data['result'] = $smt->fetch();
         Timer::mark('db_query_finish');
-        $data['query'] = $smt->queryString;
         $data['timeused'] = Timer::lastUsed();
         $data = Event::fire('event.dbquery.finish', $data);
         return $data['result'];
@@ -179,7 +179,6 @@ class Pdo extends DbFather
         $smt = $this->_query($data['sql'], $data['bind']);
         $data['result'] = $smt->fetchColumn(0);
         Timer::mark('db_query_finish');
-        $data['query'] = $smt->queryString;
         $data['timeused'] = Timer::lastUsed();
         $data = Event::fire('event.dbquery.finish', $data);
         return $data['result'];
@@ -288,10 +287,28 @@ class Pdo extends DbFather
 			$smt = $this->_instance->prepare($sql);
             if (count($bind) > 0) {
                 foreach ($bind as $key=> $val) {
+                    $idx = $key;
 					if (!is_string($key)) {
-						$key = $key + 1;
+						$idx = $idx + 1;
 					}
-                    $smt->bindParam($key, $bind[$key]);
+                    switch ($bind[$key]['type']) {
+                        case 'string':
+                            $smt->bindValue($idx, $bind[$key]['value'], \PDO::PARAM_STR);
+                            break;
+                        case 'float':
+                        case 'integer':
+                        case 'int':
+                        case 'double':
+                            $smt->bindValue($idx, $bind[$key]['value'], \PDO::PARAM_INT);
+                            break;
+                        case 'boolean':
+                        case 'bool':
+                            $smt->bindValue($idx, $bind[$key]['value'], \PDO::PARAM_BOOL);
+                            break;
+                        case 'null':
+                            $smt->bindValue($idx, 'NULL', \PDO::PARAM_NULL);
+                            break;
+                    }
                 }
             }
             if (!$smt->execute()) {
@@ -304,7 +321,8 @@ class Pdo extends DbFather
             $data = [
                 'driver'    => $this,
                 'method'    => __METHOD__,
-                'sql'       => $smt->queryString,
+                'sql'       => $sql,
+                'bind'      => $bind,
                 'error'     => $e->getMessage(),
             ];
             $data = Event::fire('event.dbquery.failed', $data);

@@ -2,8 +2,16 @@
 
 namespace Brisk\Kernel;
 
+use Brisk\Cache\CacheAdapter;
+use Brisk\Cache\ICacheDriver;
+use Brisk\Db\DbAdapter;
+use Brisk\Db\IDbDriver;
 use Brisk\Http\Env;
 use Brisk\Http\Router;
+use Brisk\Session\ISessionDriver;
+use Brisk\Session\SessionAdapter;
+use Brisk\View\IViewDriver;
+use Brisk\View\ViewAdapter;
 use Brisk\Exception\RuntimeException;
 
 class App
@@ -46,15 +54,14 @@ class App
     public static function init()
     {
         if (is_null(self::$_instance)) {
-            $libdir = dirname(__DIR__);
-            require $libdir. '/Kernel/Loader.php';
-            require $libdir. '/Kernel/Container.php';
-            require $libdir. '/Kernel/Exception.php';
-            require $libdir. '/Http/Env.php';
-            require $libdir. '/Exception/RuntimeException.php';
+            require dirname(__DIR__). '/Kernel/Loader.php';
+            require dirname(__DIR__). '/Kernel/Container.php';
+            require dirname(__DIR__). '/Kernel/Exception.php';
+            require dirname(__DIR__). '/Http/Env.php';
+            require dirname(__DIR__). '/Exception/RuntimeException.php';
             //框架路径别名
-            Loader::setAlias('*', $libdir);
-            Loader::addNameSpace('Brisk', $libdir);
+            Loader::setAlias('*', dirname(__DIR__));
+            Loader::addNameSpace('Brisk', dirname(__DIR__));
             //初始化环境数据
             Env::init();
             //配置项默认为空对象
@@ -138,6 +145,67 @@ class App
     }
 
     /**
+     * 获取数据库驱动器
+     *
+     * @access public
+     * @param string $name
+     * @return IDbDriver
+     */
+    public static function getDbDriver(string $name)
+    {
+        $instname = '__db_'. $name. '__';
+        if (!self::has($instname)) {
+            self::set($instname, DbAdapter::getDriverFromConfig($name));
+        }
+        return self::get($instname);
+    }
+
+    /**
+     * 获取会话驱动器对象
+     *
+     * @access public
+     * @return ISessionDriver
+     */
+    public static function getSessionDriver()
+    {
+        $instname = '__session__';
+        if (!self::has($instname)) {
+            self::set($instname, SessionAdapter::getDriverFromConfig());
+        }
+        return self::get($instname);
+    }
+
+    /**
+     * 获取缓存驱动器对象
+     *
+     * @param string $name
+     * @return ICacheDriver
+     */
+    public static function getCacheDriver(string $name)
+    {
+        $instname = '__cache_'. $name. '__';
+        if (!self::has($instname)) {
+            self::set($instname, CacheAdapter::getDriverFromConfig($name));
+        }
+        return self::get($instname);
+    }
+
+    /**
+     * 获取视图驱动器对象
+     *
+     * @access public
+     * @return IViewDriver
+     */
+    public static function getViewDriver()
+    {
+        $instname = '__view__';
+        if (!self::has($instname)) {
+            self::set($instname, ViewAdapter::getDriverFromConfig());
+        }
+        return self::get($instname);
+    }
+
+    /**
      * 设置单例对象
      *
      * @access public
@@ -154,18 +222,18 @@ class App
     }
 
     /**
-     * 获取自定义对象
+     * 获取自定义对象实例
      *
      * @access public
      * @param string $name
      * @return mixed
      */
-    public function __get(string $name)
+    public static function get(string $name)
     {
-        $instance = self::$_storage[$name]['instance'];
-        if (is_null($instance)) {
+        if (!self::has($name)) {
             throw new RuntimeException(Language::format('core.object_not_found', $name));
         }
+        $instance = self::$_storage[$name]['instance'];
         if (is_callable($instance)) {
             $instance = call_user_func_array($instance, []);
             if (!$instance) {
@@ -174,6 +242,30 @@ class App
             self::$_storage[$name]['instance'] = $instance;
         }
         return $instance;
+    }
+
+    /**
+     * 是否存在自定义对象实例
+     *
+     * @access public
+     * @param string $name
+     * @return bool
+     */
+    public static function has(string $name)
+    {
+        return isset(self::$_storage[$name]);
+    }
+
+    /**
+     * 获取自定义对象实例
+     *
+     * @access public
+     * @param string $name
+     * @return mixed
+     */
+    public function __get(string $name)
+    {
+        return self::get($name);
     }
 
     /**
