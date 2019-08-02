@@ -285,7 +285,7 @@ class DQuery
         $select = $this->_conn->select()->from([$this->_tb], $fields)->limit($count, $offset);
         if(!is_null($order) && is_array($order)){
             foreach ($order as $key=> $val) {
-                $select->orderby($key, $val);
+                $select->order($key, $val);
             }
         }
         foreach ($condition as $key=> $val) {

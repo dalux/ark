@@ -2,8 +2,6 @@
 
 namespace Brisk\Toolkit\SqlBuilder;
 
-use Brisk\Kernel\Toolkit;
-
 abstract class SqlFather
 {
 
@@ -297,7 +295,7 @@ abstract class SqlFather
         //特殊处理
         if (is_null($value)
                 || is_array($value) && count($value) == 0) {
-            if (preg_match('/^\{\{.*?\}\}/', $expr)) {
+            if (preg_match('/\{\{.*?\}\}/', $expr)) {
                 return str_replace(['{{', '}}'], '', $expr);
             }
             return $expr;
@@ -314,7 +312,7 @@ abstract class SqlFather
                 if ($v == '?') {
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
-                    } elseif (is_string($val) && (preg_match('/^\{\{.*?\}\}/', $val))) {
+                    } elseif (is_string($val) && (preg_match('/\{\{.*?\}\}/', $val))) {
                         $val = str_replace(['{{', '}}'], '', $val);
                     } else {
                         $val = $this->quote($val);

@@ -57,7 +57,7 @@ abstract class Insert extends SqlFather
             $data = $this->_parts['data'];
             $result = 'VALUES';
             foreach ($data as $k => $v) {
-                if (is_string($v) && preg_match('/^\\{\\{.*?\\}\\}$/', $v)) {
+                if (is_string($v) && preg_match('/\{\{.*?\}\}/', $v)) {
                     $v = str_replace(['{{', '}}'], '', $v);
                     $data[$k] = $v;
                 } else {
