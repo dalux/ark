@@ -30,7 +30,7 @@ abstract class Delete extends SqlFather
      */
     protected function compile()
     {
-        if (isset($this->_parts['from'])
+        if (!isset($this->_parts['from'])
                 || count($this->_parts['from']) == 0) {
             throw new SqlCompileException(Language::format('sql.query_compile_failed'));
         }

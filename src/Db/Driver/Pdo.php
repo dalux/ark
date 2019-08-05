@@ -59,7 +59,7 @@ class Pdo extends DbFather
             ];
 		    $data = Event::fire('event.dbconnect.before', $data);
             Timer::mark('db_connect_begin');
-            $instance = new \PDO($data['dsn'], $data['username'], $data['password'], $data['option']);
+            $this->_instance = new \PDO($data['dsn'], $data['username'], $data['password'], $data['option']);
             Timer::mark('db_connect_end');
             $data = [
                 'driver'    => $this,
@@ -67,7 +67,7 @@ class Pdo extends DbFather
                 'username'  => $username,
                 'password'  => $password,
                 'option'    => $option,
-                'instance'  => $instance,
+                'instance'  => $this->_instance,
                 'timeused'  => Timer::lastUsed()
             ];
             $data = Event::fire('event.dbconnect.finish', $data);
