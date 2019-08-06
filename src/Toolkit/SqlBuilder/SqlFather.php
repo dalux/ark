@@ -204,7 +204,7 @@ abstract class SqlFather
     protected function pickWherePart()
     {
         $where = [];
-		$where_part = $this->_parts['where'];
+		$where_part = $this->_parts['where'] ?? null;
         if (!is_null($where_part)) {
             foreach ($where_part as $key=> $val) {
                 $cond = $val['cond'];

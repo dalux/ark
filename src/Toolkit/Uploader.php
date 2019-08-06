@@ -42,6 +42,7 @@ class Uploader
         'file/xlsx'                                                                 => 'xlsx',
         'file/xls'                                                                  => 'xls',
         'file/csv'                                                                  => 'csv',
+        'text/csv'                                                                  => 'csv',
         'file/docx'                                                                 => 'docx',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document'   => 'docx',
         'text/plain'                                                                => 'txt',
@@ -170,7 +171,7 @@ class Uploader
             throw new RuntimeException(Language::format('tool.upload_filepath_error'));
         }
         $path = call_user_func_array($this->_path, [$file]);
-        if (!file_exists($this->_path) && !Dir::create(dirname($this->_path))) {
+        if (!file_exists($path) && !Dir::create(dirname($path))) {
             throw new RuntimeException(Language::format('tool.dir_create_failed', dirname($path)));
         }
         //格式化文件名
