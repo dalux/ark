@@ -103,7 +103,7 @@ interface IDbDriver
     /**
      * 获取数据连接资源实例
      * 
-     * @return resource
+     * @return \PDO
      */
     public function getInstance();
 

@@ -54,7 +54,7 @@ abstract class SqlFather
                 $value[$key] = $this->quote($val);
             }
             return implode(',', $value);
-        } elseif (is_int($value) || is_float($value) || preg_match('/.*?\(.*?\)/', $value)) {
+        } elseif (is_int($value) || is_float($value) || preg_match('/.*?\(.*?\)$/', $value)) {
             return $value;
         } else {
             return '\'' . addslashes($value) . '\'';
