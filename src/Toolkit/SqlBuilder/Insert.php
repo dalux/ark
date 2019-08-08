@@ -32,10 +32,9 @@ abstract class Insert extends SqlFather
     protected function pickInsertPart()
     {
         $result = '';
-        if (isset($this->_parts['table'])
-                && isset($this->_parts['data'])) {
+        if (isset($this->_parts['table']) && isset($this->_parts['data'])) {
             $table = $this->_parts['table'];
-            $data = $this->_parts['data'];
+            $data  = $this->_parts['data'];
             if ($table && count($data) > 0) {
                 $result = $result . 'INSERT INTO ' . $table;
                 $result = $result . '(' . implode(', ', array_keys($data)) . ')';
@@ -61,7 +60,7 @@ abstract class Insert extends SqlFather
                     $v = str_replace(['{{', '}}'], '', $v);
                     $data[$k] = $v;
                 } else {
-                    $this->_db_bind[':' . $k] = $v;
+                    $this->_db_bind[':' . $k] = ['type'=> gettype($v), 'value'=> $v];
                     $data[$k] = ':' . $k;
                 }
             }

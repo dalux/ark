@@ -60,6 +60,7 @@ class Language
             'router.invalid_controller_name'    => '无效的控制器名称[%s]',
 
             'sql.query_compile_failed'          => 'SQL语句编译失败，缺少必要字段',
+            'sql.query_not_compiled'            => 'SQL语句尚未通过编译',
 
             'view.template_not_found'           => '未找到模板文件[%s]',
             'view.include_file_not_found'       => '未找到要引入的文件路径[%s]',

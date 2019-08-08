@@ -58,7 +58,7 @@ abstract class Update extends SqlFather
                     ? $alias . '.' . $key . '=' . $val
                     : $key . '=' . $val;
             } else {
-                $this->_db_bind[':' . $key] = $val;
+                $this->_db_bind[':' . $key] = ['type'=> gettype($val), 'value'=> $val];
                 $set[] = $alias
                     ? $alias . '.' . $key . '=:' . $key
                     : $key . '=:' . $key;

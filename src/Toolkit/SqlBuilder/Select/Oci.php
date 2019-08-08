@@ -30,8 +30,10 @@ class Oci extends Select
                 $value[$key] = $this->quote($val);
             }
             return implode(',', $value);
-        } elseif (is_int($value) || is_float($value) || preg_match('/.*?\(.*?\)$/', $value)) {
+        } elseif (is_int($value) || is_float($value)) {
             return $value;
+        } elseif (preg_match('/\{\{.*?\}\}/', $value)) {
+            return str_replace(['{{', '}}'], '', $value);
         } else {
             return '\'' . str_replace('\'', '\'\'', $value) . '\'';
         }

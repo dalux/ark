@@ -2,6 +2,9 @@
 
 namespace Brisk\Toolkit\SqlBuilder;
 
+use Brisk\Exception\RuntimeException;
+use Brisk\Kernel\Language;
+
 abstract class SqlFather
 {
 
@@ -54,8 +57,10 @@ abstract class SqlFather
                 $value[$key] = $this->quote($val);
             }
             return implode(',', $value);
-        } elseif (is_int($value) || is_float($value) || preg_match('/.*?\(.*?\)$/', $value)) {
+        } elseif (is_int($value) || is_float($value)) {
             return $value;
+        } elseif (preg_match('/\{\{.*?\}\}/', $value)) {
+            return str_replace(['{{', '}}'], '', $value);
         } else {
             return '\'' . addslashes($value) . '\'';
         }
@@ -207,13 +212,8 @@ abstract class SqlFather
 		$where_part = $this->_parts['where'] ?? null;
         if (!is_null($where_part)) {
             foreach ($where_part as $key=> $val) {
-                $cond = $val['cond'];
-                $value = $val['val'];
-                $part = $cond instanceof SqlFather
-                    ? '(' . $cond->pickWherePart() . ')'
-                    : $this->_parseExpr($cond, $value);
-                if (isset($where_part[$key+1])
-                        && !is_null($where_part[$key+1])) {
+                $part = $this->_parseExpr($val['cond'], $val['val']);
+                if (isset($where_part[$key+1]) && !is_null($where_part[$key+1])) {
                     $part = $part. ' AND ';
                 }
                 $where[] = $part;
@@ -230,6 +230,9 @@ abstract class SqlFather
      */
     public function getBind()
     {
+        if (!$this->_compiled) {
+            throw new RuntimeException(Language::format('sql.query_not_compiled'));
+        }
         return $this->_db_bind;
     }
 
@@ -255,10 +258,10 @@ abstract class SqlFather
      */
     public function getRealSQL()
     {
-        $sql = $this->getSQL();
+        $sql  = $this->getSQL();
         $bind = $this->getBind();
         foreach ($bind as $key=> $val) {
-            $sql = preg_replace('/'. $key. '/', $this->quote($val), $sql, 1);
+            $sql = preg_replace('/'. $key. '/', $this->quote($val['value']), $sql, 1);
         }
         return $sql;
     }
@@ -293,15 +296,11 @@ abstract class SqlFather
     protected function _parseExpr(string $expr, $value = null)
     {
         //特殊处理
-        if (is_null($value)
-                || is_array($value) && count($value) == 0) {
-            if (preg_match('/\{\{.*?\}\}/', $expr)) {
-                return str_replace(['{{', '}}'], '', $expr);
-            }
+        if (is_null($value) || is_array($value) && count($value) == 0) {
             return $expr;
         }
 		$matches = [];
-		$is_match = preg_match_all('/(\?|\:[\w\d]+)/i', $expr, $matches);
+		$is_match = preg_match_all('/(\?|\{\:([\w\d]+?)\:\})/i', $expr, $matches);
         if ($is_match > 0) {
             $matches = $matches[1];
             foreach ($matches as $k=> $v) {
@@ -312,16 +311,17 @@ abstract class SqlFather
                 if ($v == '?') {
                     if ($val instanceof SqlFather) {
                         $val = $val->getRealSQL();
-                    } elseif (is_string($val) && (preg_match('/\{\{.*?\}\}/', $val))) {
-                        $val = str_replace(['{{', '}}'], '', $val);
                     } else {
                         $val = $this->quote($val);
                     }
                     $expr = preg_replace('/\?/', $val, $expr, 1);
-                } elseif (strpos($v, ':') !== false) {
-                    $this->_db_bind[$v] = [
-                        'type'  => gettype($val),
-                        'value' => $val
+                } elseif (strpos($v, '{:') !== false) {
+                    $pattern = str_replace(['{', ':', '}'], ['\{', '\:', '\}'], $v);
+                    $idx = ':'. str_replace(['{:', ':}'], '', $v);
+                    $expr = preg_replace(sprintf('/%s/', $pattern), $idx, $expr, 1);
+                    $this->_db_bind[$idx] = [
+                        'type'=> gettype($val),
+                        'value'=> $val
                     ];
                 }
             }
