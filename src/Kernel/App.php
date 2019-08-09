@@ -149,10 +149,14 @@ class App
      *
      * @access public
      * @param string $name
+     * @param bool $reuse
      * @return IDbDriver
      */
-    public static function getDbDriver(string $name)
+    public static function getDbDriver(string $name, bool $reuse = true)
     {
+        if (!$reuse) {
+            return DbAdapter::getDriverFromConfig($name);
+        }
         $instname = '__db_'. $name. '__';
         if (!self::has($instname)) {
             self::set($instname, DbAdapter::getDriverFromConfig($name));
