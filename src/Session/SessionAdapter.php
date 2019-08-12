@@ -19,9 +19,9 @@ class SessionAdapter
      */
     public static function getDriverFromConfig()
     {
-        if (!App::init()->config->exist('session/driver')) {
+        if (!App::init()->config->has('session/driver')) {
             throw new RuntimeException(Language::format('core.config_not_found', 'session/driver'));
-        } elseif (!App::init()->config->exist('session/setting/save_path')) {
+        } elseif (!App::init()->config->has('session/setting/save_path')) {
             throw new RuntimeException(Language::format('core.config_not_found', 'session/setting/save_path'));
         }
         $driver = App::init()->config->session->driver->value();

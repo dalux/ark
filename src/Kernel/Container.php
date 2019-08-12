@@ -38,7 +38,7 @@ class Container
      * @param string $key
      * @return bool
      */
-    public function exist(string $key)
+    public function has(string $key)
     {
         $key = trim($key, '/');
         if (strpos($key, '/') === false) {
@@ -47,18 +47,47 @@ class Container
                 : false;
         }
         $nodes = explode('/', $key);
-        $node = array_shift($nodes);
-        if (!$this->exist($node)) {
+        $first = array_shift($nodes);
+        if (!$this->has($first)) {
             return false;
         }
-        $instance = $this->$node;
+        $instance = $this->$first;
         foreach ($nodes as $k=> $v) {
-            if (!$instance->exist($v)) {
+            if (!$instance->has($v)) {
                 return false;
             }
             $instance = $instance->$v;
         }
         return true;
+    }
+
+    /**
+     * 获取节点数据
+     *
+     * @access public
+     * @param string $key
+     * @return mixed
+     */
+    public function get(string $key)
+    {
+        $key = trim($key, '/');
+        if (strpos($key, '/') === false) {
+            return $this->$key->value();
+        }
+        $nodes = explode('/', $key);
+        $first = array_shift($nodes);
+        if ($this->has($first)) {
+            $instance = $this->$first;
+            foreach ($nodes as $k=> $v) {
+                if ($instance->has($v)) {
+                    $instance = $instance->$v;
+                } else {
+                    return null;
+                }
+            }
+            return $instance->value();
+        }
+        return null;
     }
 
     /**
@@ -99,7 +128,7 @@ class Container
      */
     public function __get(string $key)
     {
-        if ($this->exist($key)) {
+        if ($this->has($key)) {
             return $this->_container[$key];
         } else {
             return new self();

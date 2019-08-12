@@ -83,8 +83,23 @@ abstract class SessionFather implements ISessionDriver
     {
         if (is_null($name)) {
             return $_SESSION;
+        } elseif (strpos($name, '/') !== false) {
+            $session = $_SESSION;
+            $result = null;
+            $names = explode('/', trim($name, '/'));
+            foreach ($names as $item) {
+                if (is_array($session) && isset($session[$item])) {
+                    $session = $session[$item];
+                    $result = $session;
+                } else {
+                    $result = null;
+                }
+            }
+            return $result;
+        } elseif (isset($_SESSION[$name])) {
+            return $_SESSION[$name];
         }
-        return $_SESSION[$name] ?? null;
+        return null;
     }
 
     /**
