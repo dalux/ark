@@ -52,7 +52,9 @@ abstract class SqlFather
      */
     public function quote($value)
     {
-        if (is_array($value)) {
+        if (is_null($value)) {
+            return '';
+        } elseif (is_array($value)) {
             foreach ($value as $key=> $val) {
                 $value[$key] = $this->quote($val);
             }
