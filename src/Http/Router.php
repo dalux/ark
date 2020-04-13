@@ -112,6 +112,29 @@ class Router
     }
 
     /**
+     * 设置请求URI
+     * 
+     * @param string $request
+     * @return Router
+     */
+    public static function setRequest(string $request)
+    {
+        self::$_request = $request;
+        //设置命名空间
+        $request = trim($request, '/');
+        //文件后缀名
+        $suffix = self::$_url_suffix;
+        if ($suffix && strpos($request, $suffix) !== false) {
+            $request = preg_replace(sprintf('~%s$~i', $suffix), '', $request);
+        }
+        $controller = self::$_default_controller;
+        if ($request != '') {
+            $controller = implode('\\', array_map('ucfirst', explode('/', $request)));
+        }
+        self::$_namespace = self::$_namespace_prefix. '\\'. $controller;
+    }
+
+    /**
      * 获取请求
      *
      * @access public
@@ -123,13 +146,11 @@ class Router
     }
 
     /**
-     * 路由调度
-     *
-     * @access public
-     * @return mixed
-     * @throws \ReflectionException
+     * 准备
+     * 
+     * @return Router
      */
-    public static function dispatch()
+    public static function ready()
     {
         $uri = $_SERVER['REQUEST_URI'] ?? '';
         if (!$uri || $uri == '/') {
@@ -147,7 +168,7 @@ class Router
             $query[] = substr($uri, strpos($uri, '?') + 1);
             $uri = substr($uri, 0, strpos($uri, '?'));
         }
-        self::$_request = $uri;
+        self::setRequest($uri);
         //整理get参数
         foreach ($query as $val) {
             $plist = explode('&', $val);
@@ -157,21 +178,29 @@ class Router
                 $_GET[$pk] = $pv;
             }
         }
-        $uri = trim($uri, '/');
-        //文件后缀名
-        $suffix = self::$_url_suffix;
-        if ($suffix && strpos($uri, $suffix) !== false) {
-            $uri = preg_replace(sprintf('~%s$~i', $suffix), '', $uri);
-        }
-        $controller = self::$_default_controller;
-        if ($uri != '') {
-            $controller = implode('\\', array_map('ucfirst', explode('/', $uri)));
-        }
-        self::$_namespace = self::$_namespace_prefix. '\\'. $controller;
         //请求初始化
-        Request::init($_GET);
-        //调度
+        $data = [
+            'uri'           => self::$_request,
+            'namespace'     => self::$_namespace,
+            'get'           => $_GET
+        ];
+        $data = Event::fire('event.router.ready', $data);
+        Request::init($data['get']);
+    }
+
+    /**
+     * 获取控制器列表树
+     * 
+     * @return array
+     */
+    public static function getControllerList()
+    {
         $list = [];
+        if (!self::$_request) {
+            throw new RuntimeException(Language::format('router.request_is_empty'));
+        } elseif (!self::$_namespace) {
+            throw new RuntimeException(Language::format('router.namespace_is_empty'));
+        }
         //自动拦截器
         if (self::$_auto_controller) {
             $auto_controller = self::$_auto_controller;
@@ -198,18 +227,31 @@ class Router
             'namespace'     => self::$_namespace,
             'is_required'   => true
         ];
+        return $list;
+    }
+
+    /**
+     * 调度
+     * 
+     * @return mixed
+     */
+    public static function dispatch()
+    {
+        //控制器行为
+        $auto_action = self::$_auto_ation;
+        $action = self::$_default_action;
+        //控制器列表树
+        $list = self::getControllerList();
         $data = [
             'uri'           => self::$_request,
-            'controllers'    => $list
+            'namespace'     => self::$_namespace,
+            'controllers'   => $list
         ];
-        $data = Event::fire('event.router.ready', $data);
+        $data = Event::fire('event.router.dispatch', $data);
         $list = $data['controllers'];
         if (!is_array($list)) {
             throw new RuntimeException(Language::format('router.controller_is_empty'));
         }
-        //循环访问控制器方法
-        $auto_action = self::$_auto_ation;
-        $action = self::$_default_action;
         foreach ($list as $val) {
             if (!$val['namespace']) {
                 throw new RuntimeException(Language::format('router.invalid_controller_name', $val['namespace']));
@@ -233,17 +275,16 @@ class Router
             //自动化类
             if (method_exists($instance, $auto_action)) {
                 $output = $instance->$auto_action();
-                $flag = Response::getFlag();
-                if ($output || $flag == Response::FLAG_END) {
+                if (!is_null($output)) {
                     return $output;
                 }
             }
             $output = $instance->$action();
-            $flag = Response::getFlag();
-            if ($output || $flag == Response::FLAG_END) {
+            if (!is_null($output)) {
                 return $output;
             }
         }
+        return null;
     }
 
     /**

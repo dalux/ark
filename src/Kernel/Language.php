@@ -54,6 +54,8 @@ class Language
 
             'router.rewrite_result_error'       => '重写后的Uri地址必须是一个字符串',
             'router.controller_is_empty'        => '控制器列表不能为空',
+            'router.namespace_is_empty'         => '当前请求的命名空间未生成',
+            'router.request_is_empty'           => '当前请求路径不能为空',
             'router.controller_not_found'       => '找不到指定的控制器[%s]',
             'router.controller_is_protected'    => '无法访问受保护的控制器[%s]',
             'router.action_not_found'           => '在控制器[%s]中找不到指定行为方法[%s]',
